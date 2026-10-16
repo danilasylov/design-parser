@@ -4,6 +4,7 @@
 sections.json (пишет analyze_sections.js) + all_styles.json + classification.json.
 Данные встраиваются в страницу как JSON. Категории/таксономия — из taxonomy.py."""
 import json, os
+from gallery_ui import navigation
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 styles = {s["id"]: s for s in json.load(open(os.path.join(ROOT, "all_styles.json"), encoding="utf-8"))}
@@ -88,18 +89,17 @@ html = """<!DOCTYPE html>
   .empty{padding:18px 16px;color:var(--mut);font-size:13px}
   #none{color:var(--mut);text-align:center;padding:60px 0;display:none}
 </style>
+<link rel="stylesheet" href="../ui/gallery.css">
 </head>
-<body>
+<body class="gallery-app">
 <header>
-  <button class="navToggle" id="navToggle" type="button" aria-expanded="false" aria-controls="topnav">☰ Меню</button>
-  <nav class="topnav" id="topnav">
-    <a class="nav-item" href="../site-copy/index.html">← Референсы</a>
-    <a class="nav-item" href="../generated-sites/index.html">Мои сайты</a>
-    <a class="nav-item on" href="index.html">Секции</a>
-    <a class="nav-item" href="../motion_reference/index.html">Анимации</a>
-  </nav>
+  <h1>Анатомия страниц</h1>
   <div class="bar">
-    <div><h1>Секции референсов</h1><div class="sub">__N_OK__ / __N_TOTAL__ сайтов разобрано · анатомия страниц</div></div>
+  <button class="navToggle" id="navToggle" type="button" aria-expanded="false" aria-controls="filterBar">Фильтры</button>
+  __NAVIGATION__
+    <div class="sub">__N_OK__ / __N_TOTAL__ сайтов разобрано · анатомия страниц</div>
+  </div>
+  <div class="bar" id="filterBar">
     <input type="search" id="q" placeholder="Поиск: сайт, тип секции, заголовок…" autocomplete="off">
     <span class="count" id="count"></span>
   </div>
@@ -118,7 +118,7 @@ const noneEl = document.getElementById('none');
 // Мобильное меню: пилюли нав-бара на узких экранах прячутся за кнопку «☰ Меню»
 (function(){
   const btn = document.getElementById('navToggle');
-  const nav = document.getElementById('topnav');
+  const nav = document.getElementById('filterBar');
   if(!btn || !nav) return;
   btn.addEventListener('click', () => {
     const open = nav.classList.toggle('open');
@@ -169,5 +169,6 @@ html = (html.replace("__DATA__", data_json)
 out_dir = os.path.join(ROOT, "sections")
 os.makedirs(out_dir, exist_ok=True)
 out = os.path.join(out_dir, "index.html")
+html = html.replace("__NAVIGATION__", navigation("sections"))
 open(out, "w", encoding="utf-8").write(html)
 print(f"wrote {out}  ({n_total} сайтов, {n_ok} с секциями, {len(html)//1024} KB)")

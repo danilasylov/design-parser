@@ -65,7 +65,7 @@ def main():
         if args.with_browser:
             call([NPM, "exec", "--", "playwright", "install", "chromium"])
     if args.command in ("setup", "build"):
-        for script in ["build_gallery.py", "build_generated.py", "build_sections.py"]:
+        for script in ["build_gallery.py", "build_generated.py", "build_sections.py", "build_motion.py"]:
             call([sys.executable, script])
         call(["node", "motion_reference/scripts/export-patterns.mjs"])
         call(["node", "motion_reference/scripts/check-patterns.mjs"])

@@ -1,0 +1,26 @@
+/* Canonical library tokens, taken from the Motion Reference interface. */
+:root {
+  --bg: #f5f4f0;
+  --paper: #fff;
+  --ink: #171a1f;
+  --muted: #777a80;
+  --line: #e4e4df;
+  --accent: #e75331;
+  --side: #161a21;
+  --font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --radius-card: 10px;
+  --radius-control: 7px;
+  --accent-ink: #a63b20;
+  --accent-tint: #fff0e9;
+  /* Compatibility names used by the three original gallery templates. */
+  --card: var(--paper);
+  --card2: #faf9f6;
+  --txt: var(--ink);
+  --mut: var(--muted);
+  --acc: var(--accent);
+  --bd: var(--line);
+  --green: #28734b;
+  --yellow: #8b6812;
+  --red: #b94141;
+  --star: #a7650b;
+}

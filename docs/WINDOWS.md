@@ -110,7 +110,7 @@ node scripts/storyboard.cjs 'C:\Videos\reference.mp4' '.cache\reference'
 
 Prism BI уже входит в скачанный проект: открой
 `http://localhost:8080/generated-sites/prism-bi/` после запуска сервера.
-Он также выделен на стартовой странице и показан первым в галерее.
+Он показан первым в галерее; на карточке доступна кнопка скачивания ZIP.
 Для просмотра только этого примера распакуй `demo/prism-bi.zip` и дважды нажми
 `prism-bi/index.html`. Python, Node.js и Chromium для отдельного HTML не нужны.
 Второй пример — VESPER: `http://localhost:8080/generated-sites/vesper/index.html`.

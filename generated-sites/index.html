@@ -158,18 +158,14 @@
   footer a{color:var(--acc);text-decoration:none}
   @media(max-width:640px){.grid{grid-template-columns:1fr}}
 </style>
+<link rel="stylesheet" href="../ui/gallery.css">
 </head>
-<body>
+<body class="gallery-app">
 <header>
   <h1>Мои сайты</h1>
   <div class="bar">
-    <button class="navToggle" id="navToggle" type="button" aria-expanded="false" aria-controls="topnav">☰ Меню</button>
-    <nav class="topnav" id="topnav">
-      <a class="nav-item" href="../site-copy/index.html">← Референсы</a>
-      <a class="nav-item on" href="index.html">Мои сайты</a>
-      <a class="nav-item" href="../sections/index.html">Секции</a>
-      <a class="nav-item" href="../motion_reference/index.html">Анимации</a>
-    </nav>
+    <button class="navToggle" id="navToggle" type="button" aria-expanded="false" aria-controls="filterBar">Фильтры</button>
+    <nav class="topnav" id="topnav" aria-label="Разделы библиотеки"><a class="nav-item" href="../site-copy/index.html">Референсы</a><a class="nav-item on" href="../generated-sites/index.html" aria-current="page">Мои сайты</a><a class="nav-item" href="../sections/index.html">Анатомия страниц</a><a class="nav-item" href="../motion_reference/index.html">Анимации</a></nav>
     <div class="sub">86 лендингов · 18 категорий · ИИ-слоп 56 · ролик 30 · пост 86 · твиттер 6 · <span id="rated"></span></div>
     <span id="save" title="Где сохраняются метки"></span>
   </div>
@@ -240,7 +236,7 @@
         <input class="note" type="text" maxlength="200" value=""
                title="Зачем: по красным меткам я должен понимать, какую именно тему обходить"
                placeholder="Заметка к метке: чем хорош / что не так с темой…">
-        <div class="status"><span class="st off" title="Клона нет — /site-slop vesper">ИИ-слоп</span><span class="st off" title="Ролика нет — /site-comparison vesper">Видео</span><button type="button" class="st on post-t" aria-expanded="false" title="Текст поста для X к сравнительному ролику">Пост</button><button type="button" class="pin" data-slug="vesper" title="Отметить: сайт уже запощен в X/Twitter" aria-pressed="false">🐦 Twitter</button>
+        <div class="status"><span class="st off" title="Клона нет — /site-slop vesper">ИИ-слоп</span><span class="st off" title="Ролика нет — /site-comparison vesper">Видео</span><button type="button" class="st on post-t" aria-expanded="false" title="Текст поста для X к сравнительному ролику">Пост</button><button type="button" class="pin" data-slug="vesper" title="Отметить: сайт уже запощен в X/Twitter" aria-pressed="false">🐦 Twitter</button><a class="st on" href="../demo/vesper.zip" download>Скачать ZIP</a>
           <button class="del" data-slug="vesper" title="Скопировать команду удаления сайта со всем, что с ним связано">Удалить ⧉</button>
         </div>
         <div class="post"><pre class="post-text">Seven moving orbits, thirteen petals, one restless kinetic art studio.
@@ -279,7 +275,7 @@ Drop me a DM to claim a spot! 📩</pre><div class="post-foot"><span class="post
         <input class="note" type="text" maxlength="200" value=""
                title="Зачем: по красным меткам я должен понимать, какую именно тему обходить"
                placeholder="Заметка к метке: чем хорош / что не так с темой…">
-        <div class="status"><span class="st off" title="Клона нет — /site-slop prism-bi">ИИ-слоп</span><span class="st off" title="Ролика нет — /site-comparison prism-bi">Видео</span><button type="button" class="st on post-t" aria-expanded="false" title="Текст поста для X к сравнительному ролику">Пост</button><button type="button" class="pin" data-slug="prism-bi" title="Отметить: сайт уже запощен в X/Twitter" aria-pressed="false">🐦 Twitter</button>
+        <div class="status"><span class="st off" title="Клона нет — /site-slop prism-bi">ИИ-слоп</span><span class="st off" title="Ролика нет — /site-comparison prism-bi">Видео</span><button type="button" class="st on post-t" aria-expanded="false" title="Текст поста для X к сравнительному ролику">Пост</button><button type="button" class="pin" data-slug="prism-bi" title="Отметить: сайт уже запощен в X/Twitter" aria-pressed="false">🐦 Twitter</button><a class="st on" href="../demo/prism-bi.zip" download>Скачать ZIP</a>
           <button class="del" data-slug="prism-bi" title="Скопировать команду удаления сайта со всем, что с ним связано">Удалить ⧉</button>
         </div>
         <div class="post"><pre class="post-text">A BI notebook with 3 working sample questions: regions, channels, and retention.
@@ -3626,7 +3622,7 @@ document.querySelectorAll('.thumb').forEach(t => ro.observe(t));
 // так высота не зависит от того, сколько в rfilter активных фильтров).
 (function(){
   const btn = document.getElementById('navToggle');
-  const panels = [document.getElementById('topnav'), document.getElementById('filterBar')].filter(Boolean);
+  const panels = [document.getElementById('filterBar')].filter(Boolean);
   if(!btn || !panels.length) return;
   function setOpen(open){
     panels.forEach(p => p.classList.toggle('open', open));

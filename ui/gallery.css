@@ -1,0 +1,168 @@
+@import url("./tokens.css");
+
+html:has(.gallery-app), .gallery-app {
+  background: var(--bg);
+  color: var(--ink);
+  font: 14px/1.5 var(--font-ui);
+}
+.gallery-app header, .gallery-nav {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  padding: 8px 20px;
+  background: rgb(245 244 240 / 96%);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--line);
+}
+.gallery-app header .bar, .gallery-nav .bar {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+.gallery-app header .bar + .bar { margin-top: 7px; }
+.gallery-app header h1 {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+.gallery-app .topnav, .gallery-nav .topnav {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  margin: 0;
+}
+.gallery-app .nav-item, .gallery-nav .nav-item {
+  padding: 5px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-control);
+  background: var(--paper);
+  color: #555b64;
+  font: 600 12px/1.4 var(--font-ui);
+  white-space: nowrap;
+  text-decoration: none;
+}
+.gallery-app .nav-item:hover, .gallery-nav .nav-item:hover {
+  color: var(--ink);
+  border-color: #bbbeb7;
+}
+.gallery-app .nav-item.on, .gallery-nav .nav-item.on {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+.gallery-app .navToggle {
+  border-radius: var(--radius-control);
+  padding: 5px 12px;
+  margin: 0;
+  background: var(--paper);
+  border-color: var(--line);
+  color: var(--ink);
+  font-size: 12px;
+}
+.gallery-app header .sub {
+  flex: 1;
+  min-width: 0;
+  color: var(--muted);
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.gallery-app input[type=search], .gallery-app select, .gallery-app .note {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  border-radius: var(--radius-control);
+  padding: 7px 10px;
+  font-family: var(--font-ui);
+}
+.gallery-app input::placeholder { color: var(--muted); }
+.gallery-app :focus-visible, .gallery-nav :focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+.gallery-app .card {
+  background: var(--paper);
+  border-color: var(--line);
+  border-radius: var(--radius-card);
+}
+.gallery-app .card:hover {
+  border-color: #ced0c8;
+  box-shadow: 0 8px 23px #171a1f0a;
+}
+.gallery-app .cat, .gallery-app .chead .cat {
+  color: var(--accent-ink);
+  background: var(--accent-tint);
+  border-radius: 4px;
+}
+.gallery-app .ref, .gallery-app .brief, .gallery-app .open,
+.gallery-app .pfilter, .gallery-app .pin, .gallery-app .post-copy,
+.gallery-app .delete, .gallery-app .seg, .gallery-app .rfilter {
+  color: var(--ink);
+  background: var(--paper);
+  border-color: var(--line);
+  border-radius: var(--radius-control);
+}
+.gallery-app .ref:hover { color: var(--accent-ink); border-color: var(--accent); }
+.gallery-app .brief:hover, .gallery-app .open:hover,
+.gallery-app .seg button.on, .gallery-app .rfilter button.on {
+  color: white;
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.gallery-app .st.on {
+  color: #28734b;
+  background: #edf7ef;
+  border-color: #c5dfca;
+}
+.gallery-app .pin.on, .gallery-app .pfilter[aria-pressed=true] {
+  color: #22668a;
+  background: #ecf5fa;
+  border-color: #bed9e8;
+}
+.gallery-app .post { background: var(--card2); }
+.gallery-app .sec .lab {
+  color: var(--accent-ink);
+  background: var(--accent-tint);
+  border-color: #f3cdbd;
+}
+.gallery-app .sec .lab.footer, .gallery-app .sec .lab[class*="nav"] {
+  color: #636972;
+  background: #f2f2ee;
+  border-color: var(--line);
+}
+.gallery-app .sec:hover { background: #f6f5f1; }
+.gallery-app .head { flex-wrap: wrap; }
+.gallery-app .head h3 { flex: 1; min-width: 70px; }
+@media(max-width:680px) {
+  .gallery-app .topnav {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    position: static;
+    width: 100%;
+    order: -1;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    overflow-x: auto;
+    box-shadow: none;
+  }
+  .gallery-app .topnav.open { display: flex; }
+  .gallery-app .nav-item { text-align: center; }
+  .gallery-app #filterBar { display: none; }
+  .gallery-app #filterBar.open { display: flex; }
+  .gallery-nav .bar { overflow-x: auto; flex-wrap: nowrap; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .gallery-app .card, .gallery-app .nav-item { transition: none; }
+  .gallery-app .card:hover { transform: none; }
+}

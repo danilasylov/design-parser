@@ -30,6 +30,7 @@
 import json, os
 
 from taxonomy import CAT_ORDER
+from gallery_ui import navigation
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 GEN = os.path.join(ROOT, "generated-sites")
@@ -183,6 +184,8 @@ for idx, p in enumerate(projects):
            f'title="{"Запощено в X — клик снимет отметку" if posted else "Отметить: сайт уже запощен в X/Twitter"}" '
            f'aria-pressed="{"true" if posted else "false"}">🐦 Twitter</button>')
     )
+    if p.get("demo"):
+        status_html += f'<a class="st on" href="../demo/{esc(slug)}.zip" download>Скачать ZIP</a>'
     post_html = (
         f'<div class="post">'
         f'<pre class="post-text">{esc(post)}</pre>'
@@ -421,18 +424,14 @@ html = f"""<!DOCTYPE html>
   footer a{{color:var(--acc);text-decoration:none}}
   @media(max-width:640px){{.grid{{grid-template-columns:1fr}}}}
 </style>
+<link rel="stylesheet" href="../ui/gallery.css">
 </head>
-<body>
+<body class="gallery-app">
 <header>
   <h1>Мои сайты</h1>
   <div class="bar">
-    <button class="navToggle" id="navToggle" type="button" aria-expanded="false" aria-controls="topnav">☰ Меню</button>
-    <nav class="topnav" id="topnav">
-      <a class="nav-item" href="../site-copy/index.html">← Референсы</a>
-      <a class="nav-item on" href="index.html">Мои сайты</a>
-      <a class="nav-item" href="../sections/index.html">Секции</a>
-      <a class="nav-item" href="../motion_reference/index.html">Анимации</a>
-    </nav>
+    <button class="navToggle" id="navToggle" type="button" aria-expanded="false" aria-controls="filterBar">Фильтры</button>
+    {navigation("generated")}
     <div class="sub">{n} {plural(n, 'лендинг', 'лендинга', 'лендингов')} · {n_cat} {plural(n_cat, 'категория', 'категории', 'категорий')} · ИИ-слоп {n_slop} · ролик {n_video} · пост {n_post} · твиттер {n_posted} · <span id="rated"></span></div>
     <span id="save" title="Где сохраняются метки"></span>
   </div>
@@ -517,7 +516,7 @@ document.querySelectorAll('.thumb').forEach(t => ro.observe(t));
 // так высота не зависит от того, сколько в rfilter активных фильтров).
 (function(){{
   const btn = document.getElementById('navToggle');
-  const panels = [document.getElementById('topnav'), document.getElementById('filterBar')].filter(Boolean);
+  const panels = [document.getElementById('filterBar')].filter(Boolean);
   if(!btn || !panels.length) return;
   function setOpen(open){{
     panels.forEach(p => p.classList.toggle('open', open));

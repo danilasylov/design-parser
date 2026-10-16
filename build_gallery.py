@@ -4,6 +4,7 @@
 import json, os
 
 from taxonomy import CAT_ORDER, TAG_ORDER, host
+from gallery_ui import navigation
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 SITE = os.path.join(ROOT, "site-copy")
@@ -55,30 +56,34 @@ html = """<!DOCTYPE html>
   :root{ --bg:#0b0b0d; --card:#15151a; --card2:#1d1d24; --txt:#f4f4f6; --mut:#9a9aa6; --acc:#6c8cff; --bd:#2a2a33;}
   *{box-sizing:border-box}
   html,body{margin:0;background:var(--bg);color:var(--txt);font:15px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
-  header{position:sticky;top:0;z-index:20;background:rgba(11,11,13,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--bd);padding:14px 20px}
-  .topnav{display:flex;gap:8px;align-items:center;max-width:1600px;margin:0 auto 12px}
-  .nav-item{text-decoration:none;color:var(--mut);font-size:13px;font-weight:600;padding:6px 15px;border-radius:999px;border:1px solid var(--bd);background:var(--card2);transition:color .15s,border-color .15s,background .15s}
+  header{position:sticky;top:0;z-index:20;background:rgba(11,11,13,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--bd);padding:8px 20px}
+  .bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;max-width:1600px;margin:0 auto}
+  .bar+.bar{margin-top:7px}
+  .topnav{display:flex;gap:6px;align-items:center;flex-shrink:0}
+  .nav-item{text-decoration:none;color:var(--mut);font-size:12px;font-weight:600;padding:5px 12px;border-radius:999px;border:1px solid var(--bd);background:var(--card2);white-space:nowrap;transition:color .15s,border-color .15s,background .15s}
   .nav-item:hover{color:var(--txt);border-color:#3a3a48}
   .nav-item.on{background:var(--acc);color:#fff;border-color:var(--acc)}
-  .navToggle{display:none;background:var(--card2);border:1px solid var(--bd);color:var(--txt);border-radius:999px;padding:6px 15px;font-size:13px;font-weight:600;cursor:pointer;align-items:center;gap:6px;margin-bottom:12px}
+  .navToggle{display:none;background:var(--card2);border:1px solid var(--bd);color:var(--txt);border-radius:999px;padding:5px 12px;font-size:12px;font-weight:600;cursor:pointer;align-items:center;gap:6px;flex-shrink:0}
   @media(max-width:680px){
-    .topnav{display:none;flex-direction:column;align-items:stretch;position:absolute;left:20px;right:20px;top:100%;margin-top:8px;background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:8px;z-index:30;box-shadow:0 12px 28px rgba(0,0,0,.5)}
+    .topnav{display:none;flex-direction:column;align-items:stretch;background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:8px;gap:6px;width:100%;order:9}
     .topnav.open{display:flex}
     .navToggle{display:inline-flex}
     .nav-item{text-align:center}
+    #filterBar{display:none}
+    #filterBar.open{display:flex;flex-direction:column;align-items:stretch;gap:8px}
+    #filterBar select{max-width:none}
+    #filterBar .seg{justify-content:space-between}
   }
-  .bar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;max-width:1600px;margin:0 auto}
-  .title{min-width:120px}
-  h1{font-size:18px;margin:0;font-weight:650;letter-spacing:-.01em;white-space:nowrap}
-  .sub{color:var(--mut);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  input[type=search]{background:var(--card2);border:1px solid var(--bd);color:var(--txt);border-radius:10px;padding:9px 13px;font-size:14px;flex:1 1 180px;min-width:0;outline:none}
+  h1{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+  .sub{color:var(--mut);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;flex:1}
+  input[type=search]{background:var(--card2);border:1px solid var(--bd);color:var(--txt);border-radius:9px;padding:7px 11px;font-size:13px;flex:1 1 180px;min-width:0;outline:none}
   input[type=search]:focus{border-color:var(--acc)}
-  select{background:var(--card2);border:1px solid var(--bd);color:var(--txt);border-radius:10px;padding:9px 10px;font-size:13px;outline:none;max-width:230px;cursor:pointer}
+  select{background:var(--card2);border:1px solid var(--bd);color:var(--txt);border-radius:9px;padding:7px 9px;font-size:12px;outline:none;max-width:240px;cursor:pointer}
   select:focus{border-color:var(--acc)}
-  .seg{display:flex;background:var(--card2);border:1px solid var(--bd);border-radius:10px;overflow:hidden;flex-shrink:0}
-  .seg button{background:none;border:0;color:var(--mut);padding:9px 13px;cursor:pointer;font-size:13px}
+  .seg{display:flex;gap:3px;background:var(--card2);border:1px solid var(--bd);border-radius:9px;padding:2px;overflow:hidden;flex-shrink:0}
+  .seg button{font:inherit;line-height:1;background:none;border:0;color:var(--mut);border-radius:7px;padding:5px 8px;cursor:pointer;font-size:11px;white-space:nowrap}
   .seg button.on{background:var(--acc);color:#fff}
-  .toggle{display:flex;align-items:center;gap:7px;color:var(--mut);font-size:13px;cursor:pointer;user-select:none;white-space:nowrap;flex-shrink:0}
+  .toggle{display:flex;align-items:center;gap:7px;color:var(--mut);font-size:12px;cursor:pointer;user-select:none;white-space:nowrap;flex-shrink:0}
   .toggle input{accent-color:var(--acc);width:15px;height:15px}
   main{max-width:1600px;margin:0 auto;padding:22px 20px 80px}
   .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:22px}
@@ -108,23 +113,19 @@ html = """<!DOCTYPE html>
   .refero:hover{color:var(--acc)}
   .foot{padding:0 14px 12px;display:flex;justify-content:space-between;align-items:center}
   #empty{color:var(--mut);text-align:center;padding:60px 0;display:none}
-  .count{color:var(--mut);font-size:13px;white-space:nowrap;flex-shrink:0}
+  .count{color:var(--mut);font-size:12px;white-space:nowrap;flex-shrink:0}
 </style>
+<link rel="stylesheet" href="../ui/gallery.css">
 </head>
-<body>
+<body class="gallery-app">
 <header>
-  <button class="navToggle" id="navToggle" type="button" aria-expanded="false" aria-controls="topnav">☰ Меню</button>
-  <nav class="topnav" id="topnav">
-    <a class="nav-item on" href="index.html">Референсы</a>
-    <a class="nav-item" href="../generated-sites/index.html">Мои сайты</a>
-    <a class="nav-item" href="../sections/index.html">Секции</a>
-    <a class="nav-item" href="../motion_reference/index.html">Анимации</a>
-  </nav>
+  <h1>Референсы — Refero Styles</h1>
   <div class="bar">
-    <div class="title">
-      <h1>Refero Styles — локальная копия</h1>
-      <div class="sub">__N_TOTAL__ сайтов · __N_VIDEO__ с видео · клик по «Открыть оригинал» ведёт на исходный сайт</div>
-    </div>
+  <button class="navToggle" id="navToggle" type="button" aria-expanded="false" aria-controls="filterBar">Фильтры</button>
+  __NAVIGATION__
+    <div class="sub">__N_TOTAL__ сайтов · __N_VIDEO__ с видео · дизайн-референсы</div>
+  </div>
+  <div class="bar" id="filterBar">
     <input type="search" id="q" placeholder="Поиск: название, домен, категория, стиль…" autocomplete="off">
     <select id="catSel" title="Категория сайта"><option value="">Все категории</option></select>
     <select id="tagSel" title="Стиль дизайна"><option value="">Все стили</option></select>
@@ -154,16 +155,18 @@ const emptyEl = document.getElementById('empty');
 // Мобильное меню: пилюли нав-бара на узких экранах прячутся за кнопку «☰ Меню»
 (function(){
   const btn = document.getElementById('navToggle');
-  const nav = document.getElementById('topnav');
-  if(!btn || !nav) return;
-  btn.addEventListener('click', () => {
-    const open = nav.classList.toggle('open');
+  const panels = [document.getElementById('filterBar')].filter(Boolean);
+  if(!btn || !panels.length) return;
+  function setOpen(open){
+    panels.forEach(panel => panel.classList.toggle('open', open));
     btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  }
+  btn.addEventListener('click', () => {
+    setOpen(!panels.some(panel => panel.classList.contains('open')));
   });
   document.addEventListener('click', e => {
-    if(nav.classList.contains('open') && !nav.contains(e.target) && e.target !== btn){
-      nav.classList.remove('open');
-      btn.setAttribute('aria-expanded', 'false');
+    if(panels.some(panel => panel.classList.contains('open')) && !panels.some(panel => panel.contains(e.target)) && e.target !== btn){
+      setOpen(false);
     }
   });
 })();
@@ -375,5 +378,6 @@ html = (html.replace("__DATA__", data_json)
 
 os.makedirs(SITE, exist_ok=True)
 out = os.path.join(SITE, "index.html")
+html = html.replace("__NAVIGATION__", navigation("references"))
 open(out, "w", encoding="utf-8").write(html)
 print(f"wrote {out}  ({n_total} cards, {n_video} with video, {len(html)//1024} KB)")
