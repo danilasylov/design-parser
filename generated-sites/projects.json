@@ -1589,6 +1589,7 @@
   {
     "slug": "prism-bi",
     "demo": true,
+    "demo_order": 1,
     "name": "Prism",
     "cat": "SaaS / веб-приложение",
     "cs": "light",
@@ -1612,6 +1613,8 @@
   },
   {
     "slug": "vesper",
+    "demo": true,
+    "demo_order": 2,
     "name": "VESPER®",
     "cat": "агентство / студия",
     "cs": "light",

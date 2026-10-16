@@ -218,7 +218,7 @@ for idx, p in enumerate(projects):
     )
 
     cards_html.append(f"""
-    <article class="card" data-cat="{esc(cat)}" data-search="{search}" data-slug="{esc(slug)}" data-demo="{1 if p.get('demo') else 0}"
+    <article class="card" data-cat="{esc(cat)}" data-search="{search}" data-slug="{esc(slug)}" data-demo="{1 if p.get('demo') else 0}" data-demo-order="{p.get('demo_order', 999)}"
              data-i="{idx}" data-name="{esc((p.get('name') or slug).lower())}"{f' data-rating="{rate}"' if rate else ''}>
       <div class="thumb-wrap">
         <a class="thumb" href="{href}" target="_blank" rel="noopener noreferrer" title="Открыть {name}">
@@ -636,7 +636,7 @@ function render(){{
   }}
   const i = c => +c.dataset.i;                       // порядок сборки = сначала новые
   const cmp = {{
-    demo:   (a, b) => (+b.dataset.demo) - (+a.dataset.demo) || i(a) - i(b),
+    demo:   (a, b) => (+b.dataset.demo) - (+a.dataset.demo) || (+a.dataset.demoOrder) - (+b.dataset.demoOrder) || i(a) - i(b),
     new:    (a, b) => i(a) - i(b),
     old:    (a, b) => i(b) - i(a),
     name:   (a, b) => a.dataset.name.localeCompare(b.dataset.name, 'ru'),

@@ -55,6 +55,16 @@ CSS/JS встроены в HTML; Google Fonts загружаются из инт
 
 ### Новый сайт
 
+Второй готовый пример — **VESPER®**, студия кинетических скульптур и световых
+инсталляций с WebGL-сценами, интерактивными объектами и EN/RU. Он также включён
+в проект и закреплён сразу после Prism BI в галерее.
+[Открыть локально](http://localhost:8080/generated-sites/vesper/index.html) ·
+[Скачать VESPER ZIP](https://github.com/danilasylov/design-parser/raw/refs/heads/main/demo/vesper.zip).
+Распакуй и открой `vesper/index.html`; сборка и установка зависимостей для просмотра
+не требуются. Для 3D-сцен нужен обычный браузер с поддержкой WebGL.
+
+### Создание своего сайта
+
 Открой **всю папку проекта** в своём агенте и отправь:
 
 > Прочитай AGENTS.md и .agents/skills/site-from-ref-motion/SKILL.md.
