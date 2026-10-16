@@ -97,6 +97,22 @@ class Handler(SimpleHTTPRequestHandler):
     def do_GET(self):
         if self._private_path():
             return self._json(404, {"error": "not found"})
+        if self.path.split("?")[0] == "/api/reference-media":
+            try:
+                with open(os.path.join(ROOT, "all_styles.json"), encoding="utf-8") as f:
+                    styles = json.load(f)
+                counts = {"videos": 0, "posters": 0, "expected_videos": 0, "expected_posters": len(styles)}
+                for site in styles:
+                    sid = site["id"]
+                    if site.get("previewVideoUrl"):
+                        counts["expected_videos"] += 1
+                        file = os.path.join(ROOT, "site-copy", "media", "videos", sid + ".mp4")
+                        counts["videos"] += int(os.path.isfile(file) and os.path.getsize(file) > 0)
+                    file = os.path.join(ROOT, "site-copy", "media", "thumbs", sid + ".jpg")
+                    counts["posters"] += int(os.path.isfile(file) and os.path.getsize(file) > 0)
+                return self._json(200, counts)
+            except (OSError, ValueError, KeyError):
+                return self._json(503, {"error": "reference catalog unavailable"})
         if self.path.split("?")[0] == "/api/motion-availability":
             try:
                 base = os.path.join(ROOT, "motion_reference")

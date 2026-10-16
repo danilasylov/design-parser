@@ -92,6 +92,11 @@
   </div>
 </header>
 <main>
+  <p id="mediaNotice" hidden style="padding:12px 16px;border:1px solid var(--bd);border-radius:7px;background:var(--card)">
+    Видео-превью ещё не установлены полностью.
+    <a href="https://github.com/danilasylov/design-parser/releases/tag/reference-media-v1" target="_blank" rel="noopener noreferrer">Скачать сохранённый медиапакет проекта</a> (1,56 ГБ).
+    После установки видео проигрываются прямо в карточках.
+  </p>
   <div class="grid" id="grid"></div>
   <div id="empty">Ничего не найдено</div>
 </main>
@@ -103,6 +108,9 @@ const grid = document.getElementById('grid');
 const qEl = document.getElementById('q');
 const countEl = document.getElementById('count');
 const emptyEl = document.getElementById('empty');
+if(location.protocol !== 'file:') fetch('/api/reference-media').then(r=>r.ok?r.json():null).then(data=>{
+  if(data && (data.videos < data.expected_videos || data.posters < data.expected_posters)) document.getElementById('mediaNotice').hidden=false;
+}).catch(()=>{});
 
 // Мобильное меню: пилюли нав-бара на узких экранах прячутся за кнопку «☰ Меню»
 (function(){

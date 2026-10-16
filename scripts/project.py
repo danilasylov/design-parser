@@ -55,6 +55,7 @@ def main():
     parser.add_argument("--port", type=int, default=8080)
     parser.add_argument("--no-open", action="store_true")
     parser.add_argument("--with-browser", action="store_true", help="Explicitly install optional Chromium for Playwright automation")
+    parser.add_argument("--without-reference-media", action="store_true", help="Skip the 1.56 GB saved reference preview pack during setup")
     args = parser.parse_args()
     if args.command == "doctor":
         return doctor()
@@ -70,6 +71,8 @@ def main():
         call(["node", "motion_reference/scripts/export-patterns.mjs"])
         call(["node", "motion_reference/scripts/check-patterns.mjs"])
         call([sys.executable, "scripts/package_demo.py"])
+        if args.command == "setup" and not args.without_reference_media:
+            call([sys.executable, "scripts/install_reference_media.py"])
     if args.command == "start":
         url = f"http://localhost:{args.port}/"
         try:

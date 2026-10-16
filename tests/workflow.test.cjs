@@ -90,3 +90,7 @@ with tempfile.TemporaryDirectory(prefix='assets spaces-') as folder:
   except ValueError:pass
 `]);
 });
+
+test('full reference media installer restores files, resumes downloads and rejects bad archives',()=>{
+  python(['-m','unittest','discover','-s','tests','-p','test_reference_media.py']);
+});

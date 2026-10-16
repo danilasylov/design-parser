@@ -17,8 +17,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 `.agents/skills/site-from-ref-motion/SKILL.md` (Claude: `/site-from-ref-motion`).
 Он расширяет исходный процесс: поиск по всей базе, просмотр видео через FFmpeg,
 полная прокрутка Playwright и QA движения. Направления — варианты одного паттерна.
-Каталог анимаций: `/motion_reference/`. В публичном репозитории нет Refero-медиа
-и компонентов React Bits; выбранное скачивается `scripts/fetch_assets.py`.
+Каталог анимаций: `/motion_reference/`. Refero-медиа опубликованы отдельным
+медиапакетом в GitHub Releases проекта: 1031 видео и 1288 постеров; восстановление —
+`scripts/install_reference_media.py`. Видео проигрываются прямо в карточках.
+Компоненты React Bits не распространяются; выбранное скачивается `scripts/fetch_assets.py`.
 Локальная полная копия остаётся на диске.
 На Windows используй `py -3` вместо `python3`, либо `setup-windows.cmd`/`start-windows.cmd`.
 Старые примеры ниже с `curl`, `lsof`, симлинками и shell-хуком относятся к macOS;
