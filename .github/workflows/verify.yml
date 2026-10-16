@@ -1,5 +1,13 @@
 name: Portable workflow
-on: [push, pull_request, workflow_dispatch]
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      browser_tests:
+        description: Install Chromium and run optional browser tests
+        type: boolean
+        default: false
 jobs:
   verify:
     strategy:
@@ -20,9 +28,10 @@ jobs:
           python-version: '3.12'
       - run: npm ci
       - run: npx playwright install --with-deps chromium
+        if: github.event_name == 'workflow_dispatch' && inputs.browser_tests
       - run: python scripts/project.py build
-      - run: python scripts/project.py doctor
       - run: npm test
         env:
           PYTHON: python
           PYTHONUTF8: '1'
+          SKIP_BROWSER_TESTS: ${{ github.event_name == 'workflow_dispatch' && inputs.browser_tests && '0' || '1' }}

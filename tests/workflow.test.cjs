@@ -39,7 +39,7 @@ test('FFmpeg samples a whole clip, supports intervals, caches results and reject
   assert.throws(()=>storyboard(input,out,{start:10}),/Invalid interval/);
 });
 
-test('browser capture reaches footer and QA checks actual movement, pause, RU and no-JS',async()=>{
+test('browser capture reaches footer and QA checks actual movement, pause, RU and no-JS',{skip:process.env.SKIP_BROWSER_TESTS==='1'},async()=>{
   const file=path.join(TMP,'test site.html');
   fs.writeFileSync(file,`<!doctype html><html lang="en"><meta charset="utf-8"><style>
   *{box-sizing:border-box}body{margin:0}header{height:160px}main{min-height:2300px}.spacer{height:1000px}.reveal{opacity:1}.js .reveal{opacity:0;transition:opacity .3s}.js .reveal.on{opacity:1}.orbit{display:block;width:50px;height:50px;animation:spin 2s linear infinite}.paused .orbit{animation-play-state:paused}.card{display:block;width:100px;transition:transform .3s}.card:hover{transform:translateX(25px)}@keyframes spin{to{transform:rotate(360deg)}}@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}

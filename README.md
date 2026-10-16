@@ -16,7 +16,7 @@
    открой новое окно терминала.
 2. Нажми **Code → Download ZIP** на GitHub и распакуй проект, например в
    `C:\Projects\design-parser`. Git необязателен.
-3. Дважды нажми **`setup-windows.cmd`**. Он установит зависимости, Chromium и
+3. Дважды нажми **`setup-windows.cmd`**. Он установит зависимости и
    соберёт галереи. Для этой первой установки нужен интернет.
 4. Дважды нажми **`start-windows.cmd`**. Откроется [Design Parser](http://localhost:8080/).
    Оставь окно сервера открытым. Остановка — Ctrl+C.
@@ -32,8 +32,28 @@ python3 scripts/project.py start
 
 FFmpeg устанавливается пакетом `ffmpeg-static` под текущую ОС. Копировать macOS-
 бинарник на Windows не требуется. Git LFS, Docker, API-ключи и платная БД не нужны.
+Для просмотра библиотеки достаточно Python: `py -3 scripts/project.py start`
+на Windows или `python3 scripts/project.py start` на macOS/Linux. Открой адрес
+в своём обычном браузере. Chromium автоматически не устанавливается; он нужен
+только для необязательных скриптов записи/тестирования Playwright. Если такие
+скрипты действительно понадобятся: `python3 scripts/project.py setup --with-browser`.
 
 ## Как попросить агента сделать сайт
+
+### Первый готовый пример — Prism BI
+
+Prism BI уже включён в проект и показан первым в галерее. После запуска открой
+[демонстрационный сайт](http://localhost:8080/generated-sites/prism-bi/).
+Это интерактивный BI-блокнот с EN/RU, анимациями, выбором вопросов и CSV-экспортом.
+Ничего генерировать или скачивать из каталога для этого примера не требуется.
+
+Можно скачать только [Prism BI в ZIP](https://github.com/danilasylov/design-parser/raw/refs/heads/main/demo/prism-bi.zip),
+распаковать и открыть `prism-bi/index.html` в обычном браузере Windows или macOS.
+В архиве находятся HTML, дизайн-токены, описание референса и лицензии.
+CSS/JS встроены в HTML; Google Fonts загружаются из интернета с системным fallback.
+Файлы исходного примера: [`generated-sites/prism-bi/`](generated-sites/prism-bi/).
+
+### Новый сайт
 
 Открой **всю папку проекта** в своём агенте и отправь:
 
@@ -122,7 +142,8 @@ node scripts/qa_motion.cjs <site.html> <motion-plan.json> .cache/qa
 разобрать отдельно. Полный сайт записывает Playwright с прокруткой до футера.
 Это не проверка всех скрытых меню/hover-состояний: их агент смотрит дополнительно.
 Бесконечный скролл и недоступные страницы отмечаются как ограничение.
-Автотесты запускаются в GitHub Actions на Windows и Linux; статус смотри во вкладке Actions.
+Проверки сборки, поиска, FFmpeg и загрузчика запускаются в GitHub Actions на Windows
+и Linux; браузерные тесты включаются отдельно при ручном запуске workflow.
 
 Локальный сервер сохраняет оценки в `generated-sites/ratings.json`; GitHub Pages
 для этого не подходит. Ссылка GitHub позволяет другу скачать проект и дать его

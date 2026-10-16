@@ -6,6 +6,7 @@ generated-sites/_videos/
 *.mp4
 *.webm
 *.zip
+!/demo/prism-bi.zip
 .cache/
 .stfolder/
 .stignore

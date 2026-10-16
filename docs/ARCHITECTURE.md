@@ -66,5 +66,6 @@ Python — stdlib, минимум 3.9. Node — 22+. `package-lock.json` в Git.
 доступны в `../originals/magic-ui`, без обязательного симлинка `official`.
 
 Проверки: `npm test`, `npm run patterns`, `python3 scripts/project.py doctor`.
-CI выполняет сборку и проверки на Windows/Linux. Тесты не скачивают весь архив,
+CI выполняет сборку и проверки на Windows/Linux; Chromium и браузерные тесты
+включаются только отдельным ручным параметром workflow. Тесты не скачивают весь архив,
 не генерируют новые сайты с LLM и не обещают доступность внешних источников.

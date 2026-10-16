@@ -1588,6 +1588,7 @@
   },
   {
     "slug": "prism-bi",
+    "demo": true,
     "name": "Prism",
     "cat": "SaaS / веб-приложение",
     "cs": "light",

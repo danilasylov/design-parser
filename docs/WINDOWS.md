@@ -12,12 +12,17 @@ Python Launcher (`py`) и добавление Python в PATH, если уста
 в `C:\Projects\design-parser`. Не запускай файлы из окна просмотра ZIP.
 Можно использовать путь с пробелами: запускатели заключают путь в кавычки.
 
-Дважды нажми `setup-windows.cmd`. Установка запускает `npm ci`, скачивает Chromium
-для Playwright и собирает три галереи и индекс паттернов. Первый запуск требует
+Дважды нажми `setup-windows.cmd`. Установка запускает `npm ci`
+и собирает три галереи и индекс паттернов. Первый запуск требует
 интернета. Затем нажми `start-windows.cmd`: браузер откроет `http://localhost:8080/`.
 Все разделы, включая анимации, доступны на одном сервере. Окно терминала должно
 оставаться открытым. Ctrl+C завершает сервер; повторный запуск использует уже
 работающий экземпляр Design Parser на этом порту.
+
+Для одного просмотра достаточно `start-windows.cmd` и установленного Python.
+Chromium не требуется и автоматически не устанавливается. Скрипты Playwright —
+необязательный способ автоматизации для агента. Только если они нужны, установи
+браузер явно: `py -3 scripts/project.py setup --with-browser`.
 
 ## Через PowerShell
 
@@ -101,6 +106,14 @@ $env:FFMPEG_PATH = 'C:\Tools\ffmpeg\bin\ffmpeg.exe'
 node scripts/storyboard.cjs 'C:\Videos\reference.mp4' '.cache\reference'
 ```
 
-Второй способ установки — стандартные команды, без CMD-файлов:
-`npm.cmd ci`, `npx.cmd playwright install chromium`, затем
+## Первый демонстрационный сайт
+
+Prism BI уже входит в скачанный проект: открой
+`http://localhost:8080/generated-sites/prism-bi/` после запуска сервера.
+Он также выделен на стартовой странице и показан первым в галерее.
+Для просмотра только этого примера распакуй `demo/prism-bi.zip` и дважды нажми
+`prism-bi/index.html`. Python, Node.js и Chromium для отдельного HTML не нужны.
+
+Второй способ установки всего проекта — стандартные команды, без CMD-файлов:
+`npm.cmd ci`, затем
 `py -3 scripts/project.py build` и `py -3 scripts/project.py start`.

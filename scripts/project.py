@@ -32,9 +32,9 @@ def doctor():
             call([executable, "--version"])
     if (ROOT / "node_modules").is_dir():
         try:
-            call(["node", "-e", "const f=require('ffmpeg-static');if(!require('fs').existsSync(f))throw Error('FFmpeg missing');console.log('FFmpeg:',f);console.log('Chromium:',require('playwright').chromium.executablePath());if(!require('fs').existsSync(require('playwright').chromium.executablePath()))throw Error('Run npx playwright install chromium')"])
+            call(["node", "-e", "const f=require('ffmpeg-static');if(!require('fs').existsSync(f))throw Error('FFmpeg missing');console.log('FFmpeg:',f);const b=require('playwright').chromium.executablePath();console.log('Optional browser:',require('fs').existsSync(b)?'available':'not installed; use your normal browser')"])
         except subprocess.CalledProcessError:
-            failures.append("Browser or FFmpeg missing; run setup")
+            failures.append("FFmpeg missing; run setup")
     else:
         failures.append("Run setup to install npm dependencies")
     for name in ["all_styles.json", "classification.json", "sections.json", "motion_reference/motion_catalog.json", "motion_reference/pattern_catalog.json"]:
@@ -54,6 +54,7 @@ def main():
     parser.add_argument("command", choices=["setup", "doctor", "build", "start"])
     parser.add_argument("--port", type=int, default=8080)
     parser.add_argument("--no-open", action="store_true")
+    parser.add_argument("--with-browser", action="store_true", help="Explicitly install optional Chromium for Playwright automation")
     args = parser.parse_args()
     if args.command == "doctor":
         return doctor()
@@ -61,12 +62,14 @@ def main():
         if not NPM:
             raise SystemExit("Install Node.js 22+ (including npm), then restart your terminal.")
         call([NPM, "ci"])
-        call([NPM, "exec", "--", "playwright", "install", "chromium"])
+        if args.with_browser:
+            call([NPM, "exec", "--", "playwright", "install", "chromium"])
     if args.command in ("setup", "build"):
         for script in ["build_gallery.py", "build_generated.py", "build_sections.py"]:
             call([sys.executable, script])
         call(["node", "motion_reference/scripts/export-patterns.mjs"])
         call(["node", "motion_reference/scripts/check-patterns.mjs"])
+        call([sys.executable, "scripts/package_demo.py"])
     if args.command == "start":
         url = f"http://localhost:{args.port}/"
         try:

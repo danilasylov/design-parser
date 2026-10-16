@@ -218,7 +218,7 @@ for idx, p in enumerate(projects):
     )
 
     cards_html.append(f"""
-    <article class="card" data-cat="{esc(cat)}" data-search="{search}" data-slug="{esc(slug)}"
+    <article class="card" data-cat="{esc(cat)}" data-search="{search}" data-slug="{esc(slug)}" data-demo="{1 if p.get('demo') else 0}"
              data-i="{idx}" data-name="{esc((p.get('name') or slug).lower())}"{f' data-rating="{rate}"' if rate else ''}>
       <div class="thumb-wrap">
         <a class="thumb" href="{href}" target="_blank" rel="noopener noreferrer" title="Открыть {name}">
@@ -231,6 +231,7 @@ for idx, p in enumerate(projects):
       <div class="body">
         <div class="head">
           <h3 title="{name}">{name}</h3>
+          {('<span class="cat">Демо проекта</span>') if p.get('demo') else ''}
           {f'<span class="cat">{esc(cat)}</span>' if cat else ''}
         </div>
         {f'<div class="tagline">{sub}</div>' if sub else ''}
@@ -441,6 +442,7 @@ html = f"""<!DOCTYPE html>
       {cat_options}
     </select>
     <select id="sortSel" title="Сортировка">
+      <option value="demo">Сначала демо проекта</option>
       <option value="new">Сначала новые</option>
       <option value="old">Сначала старые</option>
       <option value="rate">Метка: топ → красные</option>
@@ -605,7 +607,7 @@ const pfilter = document.getElementById('pfilter');
 const countEl = document.getElementById('count');
 const ratedEl = document.getElementById('rated');
 const emptyEl = document.getElementById('empty');
-let query = '', cat = '', rate = '', sort = 'new', unpostedOnly = false;
+let query = '', cat = '', rate = '', sort = 'demo', unpostedOnly = false;
 
 const RANK = {{star: 0, green: 1, yellow: 2, red: 3}};   // звезда — топ, неоценённые всегда в хвосте
 function rankOf(c, rev){{
@@ -634,6 +636,7 @@ function render(){{
   }}
   const i = c => +c.dataset.i;                       // порядок сборки = сначала новые
   const cmp = {{
+    demo:   (a, b) => (+b.dataset.demo) - (+a.dataset.demo) || i(a) - i(b),
     new:    (a, b) => i(a) - i(b),
     old:    (a, b) => i(b) - i(a),
     name:   (a, b) => a.dataset.name.localeCompare(b.dataset.name, 'ru'),
