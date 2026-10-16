@@ -1,0 +1,3 @@
+/* Original keyframes: Animista, Ana Travas. https://animista.net/play/entrances/swing-in/swing-in-left-fwd */
+.swing-in-left-fwd{animation:swing-in-left-fwd 0.5s cubic-bezier(.175,.885,.32,1.275) 0s 1 normal both;}
+@keyframes swing-in-left-fwd{0%{-webkit-transform:rotateY(100deg);transform:rotateY(100deg);-webkit-transform-origin:left;transform-origin:left;opacity:0}to{-webkit-transform:rotateY(0);transform:rotateY(0);-webkit-transform-origin:left;transform-origin:left;opacity:1}}

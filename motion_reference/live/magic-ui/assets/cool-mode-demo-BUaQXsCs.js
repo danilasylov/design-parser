@@ -1,0 +1,1 @@
+import{j as o}from"./index-WM7-nNXq.js";import{B as r}from"./button-CLeK08vN.js";import{C as e}from"./cool-mode-CvvMZfcL.js";import"./index-D4omu1s7.js";import"./index-CFN0zKgi.js";function n(){return o.jsx("div",{className:"relative justify-center",children:o.jsx(e,{children:o.jsx(r,{children:"Click Me!"})})})}export{n as default};

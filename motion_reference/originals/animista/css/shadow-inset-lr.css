@@ -1,0 +1,3 @@
+/* Original keyframes: Animista, Ana Travas. https://animista.net/play/basic/shadow-inset/shadow-inset-lr */
+.shadow-inset-lr{animation:shadow-inset-lr 0.4s cubic-bezier(.25,.46,.45,.94) 0s 1 normal both;}
+@keyframes shadow-inset-lr{0%{-webkit-box-shadow:inset 0 0 0 0 transparent,inset 0 0 0 0 transparent;box-shadow:inset 0 0 0 0 transparent,inset 0 0 0 0 transparent}to{-webkit-box-shadow:inset -6px 0 14px -6px rgba(0,0,0,.5),inset 6px 0 14px -6px rgba(0,0,0,.5);box-shadow:inset -6px 0 14px -6px rgba(0,0,0,.5),inset 6px 0 14px -6px rgba(0,0,0,.5)}}

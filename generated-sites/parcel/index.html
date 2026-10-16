@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>Parcel — houses assembled from six module types</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500&family=Sofia+Sans:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════════════════════════════
+   Дизайн-система Enter GmbH — styles.refero.design/style/87da9872-f6cc-4354-bf6a-1c02f0394d45
+   :root ниже вставлен ДОСЛОВНО со вкладки CSS Variables.
+   ══════════════════════════════════════════════════════════════════ */
+:root {
+  /* Colors */
+  --color-signal-orange: #ff5000;
+  --color-seafoam-panel: #a5d3d4;
+  --color-cream-stock: #f9f8ea;
+  --color-charcoal: #282828;
+  --color-ink: #000000;
+  --color-pebble: #6a6a6a;
+  --color-paper: #ffffff;
+
+  /* Typography — Font Families */
+  --font-maax-mono: 'Maax Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-sofia-regular: 'Sofia-Regular', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-helvetica: 'Helvetica', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* Typography — Scale */
+  --text-caption: 10px;
+  --leading-caption: 1.15;
+  --text-body: 16px;
+  --leading-body: 1.5;
+  --text-heading: 28px;
+  --leading-heading: 1.3;
+
+  /* Typography — Weights */
+  --font-weight-regular: 400;
+  --font-weight-bold: 700;
+
+  /* Spacing */
+  --spacing-unit: 4px;
+  --spacing-12: 12px;
+  --spacing-16: 16px;
+  --spacing-20: 20px;
+  --spacing-24: 24px;
+  --spacing-28: 28px;
+  --spacing-44: 44px;
+  --spacing-48: 48px;
+  --spacing-60: 60px;
+  --spacing-80: 80px;
+  --spacing-100: 100px;
+  --spacing-120: 120px;
+
+  /* Layout */
+  --page-max-width: 1200px;
+  --section-gap: 24px;
+  --card-padding: 20px;
+  --element-gap: 24px;
+
+  /* Border Radius */
+  --radius-3xl: 25px;
+
+  /* Named Radii */
+  --radius-tags: 25px;
+  --radius-cards: 25px;
+  --radius-buttons: 25px;
+
+  /* Surfaces */
+  --surface-paper: #ffffff;
+  --surface-cream-stock: #f9f8ea;
+  --surface-seafoam-panel: #a5d3d4;
+  --surface-signal-orange: #ff5000;
+}
+
+/* Подстановки шрифтов. Maax Mono → Roboto Mono (из трёх замен DESIGN.md; кириллица есть
+   у всех трёх, взят третий ради разнообразия галереи). Sofia-Regular → Sofia Sans —
+   прямая замена, кириллица есть (у Quicksand её нет). Helvetica для микротекста 10px
+   заменена на ту же Sofia Sans, чтобы не заводить четвёртую гарнитуру. */
+:root {
+  --font-mono: 'Roboto Mono', var(--font-maax-mono);
+  --font-disp: 'Sofia Sans', var(--font-sofia-regular);
+}
+
+* { box-sizing: border-box; }
+html { -webkit-font-smoothing: antialiased; }
+body {
+  margin: 0;
+  background: var(--surface-paper);
+  color: var(--color-ink);
+  font-family: var(--font-mono);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  font-weight: var(--font-weight-regular);
+}
+svg { display: block; }
+a { color: inherit; }
+h1, h2, h3, h4, p, ul { margin: 0; padding: 0; }
+ul { list-style: none; }
+
+.wrap { max-width: var(--page-max-width); margin: 0 auto; padding: 0 var(--spacing-24); }
+.band { padding: var(--spacing-100) 0; }
+.b-paper { background: var(--surface-paper); }
+.b-cream { background: var(--surface-cream-stock); }
+.b-foam { background: var(--surface-seafoam-panel); }
+.b-orange { background: var(--surface-signal-orange); }
+
+/* дисплей — единственный не-моноширинный момент системы */
+.h { font-family: var(--font-disp); font-size: var(--text-heading); line-height: var(--leading-heading); font-weight: var(--font-weight-regular); }
+.h-big { font-family: var(--font-disp); font-size: 52px; line-height: 1.1; font-weight: var(--font-weight-bold); }
+.cap { font-size: var(--text-caption); line-height: var(--leading-caption); text-transform: uppercase; letter-spacing: .08em; }
+.muted { color: var(--color-pebble); }
+
+/* кнопка — единственная заливка в системе */
+.btn {
+  display: inline-block;
+  background: var(--color-charcoal);
+  color: var(--color-paper);
+  border: none;
+  border-radius: var(--radius-buttons);
+  padding: 13px 25px;
+  font-family: var(--font-mono);
+  font-size: var(--text-body);
+  line-height: 1.2;
+  cursor: pointer;
+  text-decoration: none;
+}
+.btn:hover { background: var(--color-ink); }
+.btn-icon { padding: 13px 17px; }
+
+/* ссылки — только типографские, со стрелкой и подчёркиванием */
+.lnk { text-decoration: underline; text-underline-offset: 4px; }
+.lnk::before { content: "→ "; }
+.links { display: flex; flex-direction: column; gap: var(--spacing-16); }
+
+/* шапка */
+header { display: flex; align-items: center; gap: var(--spacing-24); padding: var(--spacing-20) var(--spacing-24); }
+header .logo { font-weight: 500; letter-spacing: .02em; }
+.marquee {
+  flex: 1; overflow: hidden;
+  background: var(--color-paper);
+  border-radius: var(--radius-tags);
+  padding: 6px 20px;
+}
+.marquee .track { display: flex; gap: var(--spacing-48); white-space: nowrap; width: max-content; animation: run 30s linear infinite; }
+@keyframes run { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.lang { display: inline-flex; gap: 6px; align-items: center; }
+.lang button { font: inherit; border: none; background: none; padding: 0; cursor: pointer; color: var(--color-pebble); }
+.lang button[aria-pressed="true"] { color: var(--color-ink); text-decoration: underline; text-underline-offset: 4px; }
+
+/* герой */
+.hero { padding-bottom: var(--spacing-80); }
+.hero .mid { text-align: center; padding: var(--spacing-48) 0 var(--spacing-60); }
+.hero .h-big { max-width: 18ch; margin: 0 auto; }
+.hero .sub { max-width: 56ch; margin: var(--spacing-24) auto 0; }
+.hero .acts { display: flex; gap: var(--spacing-16); justify-content: center; margin-top: var(--spacing-28); }
+.blocks { display: flex; justify-content: center; }
+
+/* полоса-разделитель */
+.divider { padding: var(--spacing-44) 0; text-align: center; }
+
+/* две колонки */
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-80); }
+
+/* карточки модулей */
+.mods { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-24); margin-top: var(--spacing-48); }
+.mod { background: var(--color-paper); border-radius: var(--radius-cards); padding: var(--spacing-20); }
+.mod .top { display: flex; justify-content: space-between; margin-bottom: var(--spacing-16); }
+.mod .art { margin: var(--spacing-16) 0; }
+.mod h3 { font-family: var(--font-disp); font-size: 22px; margin-bottom: 6px; }
+
+/* таблица сроков */
+.rows { margin-top: var(--spacing-48); }
+.row { display: grid; grid-template-columns: 120px 1fr 200px; gap: var(--spacing-24); padding: var(--spacing-20) 0; border-top: 1px solid var(--color-ink); }
+.row:last-child { border-bottom: 1px solid var(--color-ink); }
+
+footer { background: var(--surface-cream-stock); padding: var(--spacing-60) 0 var(--spacing-24); }
+.fcols { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: var(--spacing-24); }
+.fcols h4 { margin-bottom: var(--spacing-16); font-family: var(--font-disp); font-size: 20px; }
+.fcols li { margin-bottom: var(--spacing-12); }
+.flegal { display: flex; justify-content: space-between; margin-top: var(--spacing-60); border-top: 1px solid var(--color-pebble); padding-top: var(--spacing-16); }
+</style>
+</head>
+<body>
+
+<!-- ── морская полоса: шапка и герой ────────────────────────────── -->
+<section class="b-foam hero">
+  <header>
+    <div class="logo">Parcel</div>
+    <div class="marquee">
+      <div class="track">
+        <span data-i18n="mq1">Eleven houses standing · six module types · winter assembly runs until 14 March</span>
+        <span data-i18n="mq2">Eleven houses standing · six module types · winter assembly runs until 14 March</span>
+      </div>
+    </div>
+    <div class="lang"><button data-set="en" aria-pressed="true">EN</button><span>/</span><button data-set="ru" aria-pressed="false">RU</button></div>
+    <a class="btn" href="#ask" data-i18n="navb">Ask a question</a>
+    <a class="btn btn-icon" href="#modules" aria-label="Modules">+</a>
+  </header>
+
+  <div class="mid">
+    <h1 class="h-big" data-i18n="h1">A house is six kinds of block and one crane day</h1>
+    <p class="sub" data-i18n="hsub">We build timber modules in a shop outside Tver, drive them out on a Tuesday and stand the house in a day. What takes the other four months is the ground, the water and the paperwork — and we do that part with you, in writing.</p>
+    <div class="acts">
+      <a class="btn" href="#modules" data-i18n="hb1">See the six modules</a>
+      <a class="lnk" href="#built" data-i18n="hb2">Eleven built so far</a>
+    </div>
+  </div>
+
+  <!-- обязательная скульптурная иллюстрация: столбы, кубы, оранжевые шапки -->
+  <div class="blocks">
+    <svg width="760" height="300" viewBox="0 0 760 300" fill="none">
+      <rect x="70" y="150" width="52" height="150" fill="#f9f8ea"/>
+      <rect x="52" y="118" width="88" height="32" fill="#282828"/>
+      <rect x="52" y="86" width="88" height="32" fill="#ff5000"/>
+
+      <rect x="215" y="96" width="52" height="204" fill="#282828"/>
+      <rect x="197" y="64" width="88" height="32" fill="#f9f8ea"/>
+      <rect x="197" y="32" width="88" height="32" fill="#ff5000"/>
+
+      <rect x="360" y="186" width="52" height="114" fill="#f9f8ea"/>
+      <rect x="342" y="154" width="88" height="32" fill="#282828"/>
+      <rect x="342" y="122" width="88" height="32" fill="#ff5000"/>
+
+      <rect x="505" y="130" width="52" height="170" fill="#282828"/>
+      <rect x="487" y="98" width="88" height="32" fill="#f9f8ea"/>
+      <rect x="487" y="66" width="88" height="32" fill="#ff5000"/>
+
+      <rect x="650" y="210" width="52" height="90" fill="#f9f8ea"/>
+      <rect x="632" y="178" width="88" height="32" fill="#282828"/>
+      <rect x="632" y="146" width="88" height="32" fill="#ff5000"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ── кремовый разделитель ─────────────────────────────────────── -->
+<div class="b-cream divider">
+  <span data-i18n="dv1">Parcel: the boring part is the ground</span>
+</div>
+
+<!-- ── белая полоса: две колонки ────────────────────────────────── -->
+<section class="b-paper band" id="how">
+  <div class="wrap two">
+    <div>
+      <h2 class="h" style="margin-bottom:var(--spacing-24)" data-i18n="w1">How it actually goes</h2>
+      <p data-i18n="w2">You come to us with a plot and, usually, with a drawing somebody else made. We do not start from the drawing — we start from the survey, the water table and where the electricity actually comes in, because those three decide more about the house than any elevation.</p>
+      <p style="margin-top:var(--spacing-24)" data-i18n="w3">Then we lay it out from six module types. Not a catalogue of houses: a catalogue of blocks, which you can put together in about forty sensible ways and a few silly ones we will talk you out of.</p>
+      <p style="margin-top:var(--spacing-24)" data-i18n="w4">The shop builds for eleven weeks. On the day, a crane sets the modules on the piles, and by evening the house is closed and dry. Everything after that is inside work you can watch.</p>
+    </div>
+    <div class="links" style="padding-top:60px">
+      <a class="lnk" href="#modules" data-i18n="l1">The six modules and what they cost</a>
+      <a class="lnk" href="#built" data-i18n="l2">Eleven houses, with the ones that went wrong</a>
+      <a class="lnk" href="#time" data-i18n="l3">What happens in which week</a>
+      <a class="lnk" href="#ask" data-i18n="l4">Bring us a plot to look at</a>
+      <a class="lnk" href="#ask" data-i18n="l5">Prices, and why they move</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── морская полоса: модули ───────────────────────────────────── -->
+<section class="b-foam band" id="modules">
+  <div class="wrap">
+    <h2 class="h" data-i18n="m0">Six blocks, one crane day</h2>
+    <div class="mods">
+      <div class="mod">
+        <div class="top"><span class="cap">01</span><span class="cap" data-i18n="md1s">18 m²</span></div>
+        <div class="art">
+          <svg width="100%" height="90" viewBox="0 0 300 90" fill="none">
+            <rect x="20" y="26" width="120" height="52" fill="#282828"/>
+            <rect x="150" y="26" width="60" height="52" fill="#f9f8ea" stroke="#282828"/>
+            <rect x="20" y="10" width="190" height="16" fill="#ff5000"/>
+          </svg>
+        </div>
+        <h3 data-i18n="md1t">Living block</h3>
+        <p class="muted" data-i18n="md1d">Six metres by three, one long window wall, no internal posts. Two of these make the main room.</p>
+      </div>
+      <div class="mod">
+        <div class="top"><span class="cap">02</span><span class="cap" data-i18n="md2s">9 m²</span></div>
+        <div class="art">
+          <svg width="100%" height="90" viewBox="0 0 300 90" fill="none">
+            <rect x="60" y="26" width="90" height="52" fill="#282828"/>
+            <rect x="150" y="42" width="36" height="36" fill="#ff5000"/>
+            <rect x="60" y="10" width="126" height="16" fill="#f9f8ea" stroke="#282828"/>
+          </svg>
+        </div>
+        <h3 data-i18n="md2t">Wet block</h3>
+        <p class="muted" data-i18n="md2d">Bathroom, boiler and all the pipework, finished and tested in the shop. It arrives working.</p>
+      </div>
+      <div class="mod">
+        <div class="top"><span class="cap">03</span><span class="cap" data-i18n="md3s">12 m²</span></div>
+        <div class="art">
+          <svg width="100%" height="90" viewBox="0 0 300 90" fill="none">
+            <rect x="40" y="26" width="70" height="52" fill="#f9f8ea" stroke="#282828"/>
+            <rect x="118" y="26" width="70" height="52" fill="#282828"/>
+            <rect x="40" y="10" width="148" height="16" fill="#ff5000"/>
+          </svg>
+        </div>
+        <h3 data-i18n="md3t">Sleeping block</h3>
+        <p class="muted" data-i18n="md3d">One room, one window, one door, and a wall thick enough that you cannot hear the other one.</p>
+      </div>
+      <div class="mod">
+        <div class="top"><span class="cap">04</span><span class="cap" data-i18n="md4s">6 m²</span></div>
+        <div class="art">
+          <svg width="100%" height="90" viewBox="0 0 300 90" fill="none">
+            <rect x="90" y="34" width="60" height="44" fill="#282828"/>
+            <rect x="150" y="34" width="60" height="44" fill="#f9f8ea" stroke="#282828"/>
+            <rect x="120" y="14" width="60" height="20" fill="#ff5000"/>
+          </svg>
+        </div>
+        <h3 data-i18n="md4t">Entry block</h3>
+        <p class="muted" data-i18n="md4d">Cold porch, boots, drying rail. In this climate the house starts here or it does not work.</p>
+      </div>
+      <div class="mod">
+        <div class="top"><span class="cap">05</span><span class="cap" data-i18n="md5s">14 m²</span></div>
+        <div class="art">
+          <svg width="100%" height="90" viewBox="0 0 300 90" fill="none">
+            <rect x="30" y="40" width="160" height="38" fill="#f9f8ea" stroke="#282828"/>
+            <rect x="190" y="26" width="46" height="52" fill="#282828"/>
+            <rect x="30" y="24" width="160" height="16" fill="#ff5000"/>
+          </svg>
+        </div>
+        <h3 data-i18n="md5t">Deck block</h3>
+        <p class="muted" data-i18n="md5d">Unheated, roofed, and structurally identical to the others, so you can close it in later.</p>
+      </div>
+      <div class="mod">
+        <div class="top"><span class="cap">06</span><span class="cap" data-i18n="md6s">4 m²</span></div>
+        <div class="art">
+          <svg width="100%" height="90" viewBox="0 0 300 90" fill="none">
+            <rect x="120" y="30" width="46" height="48" fill="#282828"/>
+            <rect x="166" y="46" width="30" height="32" fill="#f9f8ea" stroke="#282828"/>
+            <rect x="120" y="14" width="76" height="16" fill="#ff5000"/>
+          </svg>
+        </div>
+        <h3 data-i18n="md6t">Stair block</h3>
+        <p class="muted" data-i18n="md6d">Only needed if you go up. Half the houses we have built stayed on one floor.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── оранжевая полоса-зрелище ─────────────────────────────────── -->
+<section class="b-orange" id="built" style="padding: var(--spacing-120) 0;">
+  <div class="wrap">
+    <div class="h-big" style="max-width:20ch" data-i18n="or1">Eleven houses. Two we would build differently.</div>
+    <p style="max-width:56ch;margin-top:var(--spacing-24)" data-i18n="or2">Both of those had the same fault and it was ours: we put the wet block on the north wall to save pipe, and in February the owners found out why that was cheap.</p>
+  </div>
+</section>
+
+<!-- ── кремовый разделитель ─────────────────────────────────────── -->
+<div class="b-cream divider">
+  <span data-i18n="dv2">Parcel: what happens in which week</span>
+</div>
+
+<!-- ── белая полоса: сроки ──────────────────────────────────────── -->
+<section class="b-paper band" id="time">
+  <div class="wrap">
+    <h2 class="h" data-i18n="t0">The whole thing, in weeks</h2>
+    <div class="rows">
+      <div class="row">
+        <span class="cap" data-i18n="tw1">Weeks 1–3</span>
+        <span data-i18n="td1">Survey, water table, where the power comes in, and an honest answer about whether this plot should be built on at all.</span>
+        <span class="muted" data-i18n="tp1">Paid, refundable</span>
+      </div>
+      <div class="row">
+        <span class="cap" data-i18n="tw2">Weeks 4–6</span>
+        <span data-i18n="td2">Layout from the six blocks. Two rounds of changes are included; the third costs, because by then it is a redesign.</span>
+        <span class="muted" data-i18n="tp2">Fixed price</span>
+      </div>
+      <div class="row">
+        <span class="cap" data-i18n="tw3">Weeks 7–17</span>
+        <span data-i18n="td3">Shop build. Photographs every Friday, and you may come and stand in the modules any working day.</span>
+        <span class="muted" data-i18n="tp3">60% of the total</span>
+      </div>
+      <div class="row">
+        <span class="cap" data-i18n="tw4">Week 18</span>
+        <span data-i18n="td4">Piles, crane, house standing and closed by evening. This is the day people take the photograph.</span>
+        <span class="muted" data-i18n="tp4">Crane day</span>
+      </div>
+      <div class="row">
+        <span class="cap" data-i18n="tw5">Weeks 19–24</span>
+        <span data-i18n="td5">Inside work, water, heating, and the snagging list you write yourself, item by item, until it is empty.</span>
+        <span class="muted" data-i18n="tp5">Balance on the list</span>
+      </div>
+    </div>
+    <div style="margin-top:var(--spacing-48);display:flex;gap:var(--spacing-16);align-items:center" id="ask">
+      <a class="btn" href="#ask" data-i18n="cta1">Send us a plot</a>
+      <a class="lnk" href="#ask" data-i18n="cta2">Or just ask what it would cost</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="fcols">
+      <div>
+        <div class="h" style="margin-bottom:var(--spacing-16)">Parcel</div>
+        <p class="muted" style="max-width:32ch" data-i18n="fa">Timber modules built outside Tver and stood on your plot in a day. Eleven houses since 2022.</p>
+      </div>
+      <div>
+        <h4 data-i18n="fh1">Building</h4>
+        <ul><li><a class="lnk" href="#modules" data-i18n="fl1">Modules</a></li><li><a class="lnk" href="#time" data-i18n="fl2">Weeks</a></li><li><a class="lnk" href="#built" data-i18n="fl3">Built</a></li></ul>
+      </div>
+      <div>
+        <h4 data-i18n="fh2">Before you build</h4>
+        <ul><li><a class="lnk" href="#ask" data-i18n="fl4">Plot survey</a></li><li><a class="lnk" href="#ask" data-i18n="fl5">Permits</a></li><li><a class="lnk" href="#ask" data-i18n="fl6">Prices</a></li></ul>
+      </div>
+      <div>
+        <h4 data-i18n="fh3">Us</h4>
+        <ul><li><a class="lnk" href="#ask" data-i18n="fl7">The shop</a></li><li><a class="lnk" href="#ask" data-i18n="fl8">Write to us</a></li><li><a class="lnk" href="#ask" data-i18n="fl9">Come on Friday</a></li></ul>
+      </div>
+    </div>
+    <div class="flegal cap">
+      <span>© 2026 Parcel</span>
+      <span data-i18n="fn">Tver region · modules in the shop, decisions on paper</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ── RU/EN. Английский — исходный, русский — перевод под него ── */
+var RU = {
+  mq1:'Одиннадцать домов стоят · шесть типов модулей · зимняя сборка идёт до 14 марта',
+  mq2:'Одиннадцать домов стоят · шесть типов модулей · зимняя сборка идёт до 14 марта',
+  navb:'Задать вопрос',
+  h1:'Дом — это шесть видов блоков и один день крана',
+  hsub:'Мы собираем деревянные модули в цеху под Тверью, вывозим их во вторник и ставим дом за день. Остальные четыре месяца уходят на грунт, воду и бумаги — и эту часть мы проходим вместе с вами, письменно.',
+  hb1:'Смотреть шесть модулей', hb2:'Одиннадцать уже стоят',
+  dv1:'Parcel: самое скучное здесь — это грунт',
+  w1:'Как это идёт на самом деле',
+  w2:'Вы приходите с участком и, как правило, с чертежом, который сделал кто-то другой. Мы начинаем не с чертежа, а с изысканий, уровня грунтовых вод и точки, где реально заходит электричество: эти три вещи решают о доме больше, чем любой фасад.',
+  w3:'Дальше раскладываем дом из шести типов модулей. Это не каталог домов, а каталог блоков: из них складывается примерно сорок разумных вариантов и несколько глупых, от которых мы вас отговорим.',
+  w4:'Цех строит одиннадцать недель. В день сборки кран ставит модули на сваи, и к вечеру дом закрыт и сухой. Всё, что дальше, — внутренние работы, за которыми можно наблюдать.',
+  l1:'Шесть модулей и сколько они стоят',
+  l2:'Одиннадцать домов, включая те, что вышли неудачно',
+  l3:'Что происходит на какой неделе',
+  l4:'Принесите нам участок посмотреть',
+  l5:'Цены и почему они двигаются',
+  m0:'Шесть блоков, один день крана',
+  md1s:'18 м²', md1t:'Жилой блок', md1d:'Шесть на три, одна стена — сплошное окно, внутри ни одной стойки. Два таких дают главную комнату.',
+  md2s:'9 м²', md2t:'Мокрый блок', md2d:'Санузел, котёл и вся разводка — собраны и опрессованы в цеху. Приезжает работающим.',
+  md3s:'12 м²', md3t:'Спальный блок', md3d:'Одна комната, одно окно, одна дверь и стена такой толщины, что соседнюю не слышно.',
+  md4s:'6 м²', md4t:'Входной блок', md4d:'Холодные сени, обувь, сушилка. В этом климате дом начинается отсюда, иначе он не работает.',
+  md5s:'14 м²', md5t:'Террасный блок', md5d:'Без отопления, под крышей и конструктивно такой же, как остальные, — потом можно зашить.',
+  md6s:'4 м²', md6t:'Лестничный блок', md6d:'Нужен, только если идёте вверх. Половина построенных нами домов осталась в один этаж.',
+  or1:'Одиннадцать домов. Два мы бы построили иначе.',
+  or2:'У обоих была одна и та же ошибка, и она наша: мы поставили мокрый блок к северной стене, чтобы сэкономить трубу, и в феврале хозяева выяснили, почему это было дёшево.',
+  dv2:'Parcel: что происходит на какой неделе',
+  t0:'Всё целиком, по неделям',
+  tw1:'Недели 1–3', td1:'Изыскания, грунтовые воды, точка ввода электричества и честный ответ, стоит ли вообще строить на этом участке.', tp1:'Платно, возвращается',
+  tw2:'Недели 4–6', td2:'Раскладка из шести блоков. Два круга правок включены; третий стоит денег, потому что это уже перепроектирование.', tp2:'Фиксированная цена',
+  tw3:'Недели 7–17', td3:'Сборка в цеху. Фотографии каждую пятницу, и постоять внутри модулей можно в любой рабочий день.', tp3:'60% суммы',
+  tw4:'Неделя 18', td4:'Сваи, кран, к вечеру дом стоит и закрыт. Именно в этот день все делают фотографию.', tp4:'День крана',
+  tw5:'Недели 19–24', td5:'Внутренние работы, вода, отопление и список недоделок, который вы пишете сами — пункт за пунктом, пока он не опустеет.', tp5:'Остаток по списку',
+  cta1:'Прислать участок', cta2:'Или просто спросить, сколько выйдет',
+  fa:'Деревянные модули из цеха под Тверью, которые ставят на ваш участок за день. Одиннадцать домов с 2022 года.',
+  fh1:'Стройка', fl1:'Модули', fl2:'Недели', fl3:'Построено',
+  fh2:'До стройки', fl4:'Изыскания', fl5:'Разрешения', fl6:'Цены',
+  fh3:'О нас', fl7:'Цех', fl8:'Написать нам', fl9:'Приехать в пятницу',
+  fn:'Тверская область · модули в цеху, решения на бумаге'
+};
+var EN = {};
+document.querySelectorAll('[data-i18n]').forEach(function (el) { EN[el.dataset.i18n] = el.innerHTML; });
+function setLang(l) {
+  var dict = l === 'ru' ? RU : EN;
+  document.querySelectorAll('[data-i18n]').forEach(function (el) {
+    var v = dict[el.dataset.i18n];
+    if (v !== undefined) el.innerHTML = v;
+  });
+  document.documentElement.lang = l;
+  document.documentElement.dataset.lang = l;
+  document.querySelectorAll('.lang button').forEach(function (b) {
+    b.setAttribute('aria-pressed', b.dataset.set === l ? 'true' : 'false');
+  });
+}
+document.querySelectorAll('.lang button').forEach(function (b) {
+  b.addEventListener('click', function () { setLang(b.dataset.set); });
+});
+</script>
+</body>
+</html>

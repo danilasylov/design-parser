@@ -1,0 +1,1 @@
+import{j as e}from"./index-WM7-nNXq.js";import{S as r}from"./striped-pattern-CgLUKO5R.js";function o(){return e.jsx("div",{className:"relative flex h-[300px] w-full flex-col items-center justify-center overflow-hidden rounded-lg border",children:e.jsx(r,{direction:"right"})})}export{o as default};

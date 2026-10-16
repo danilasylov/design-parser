@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>asyl-book — Справочник (Fonts In Use)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Golos+Text:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ==== Дизайн-система Fonts In Use — токены со страницы стиля, дословно ==== */
+:root {
+  /* Colors */
+  --color-carbon: #000000;
+  --color-paper: #ffffff;
+  --color-bone: #f0f0f0;
+  --color-mist: #dddddd;
+  --color-ash: #999999;
+
+  /* Typography — Font Families (подстановки с кириллицей:
+     BentonSansRE → Golos Text, RelayCond → Roboto Condensed) */
+  --font-bentonsansre: 'Golos Text', ui-sans-serif, system-ui, sans-serif;
+  --font-relaycond: 'Roboto Condensed', ui-sans-serif, system-ui, sans-serif;
+
+  /* Typography — Scale */
+  --text-caption: 10px;
+  --leading-caption: 1.2;
+  --text-body-sm: 12px;
+  --leading-body-sm: 1.2;
+  --text-body: 14px;
+  --leading-body: 1.2;
+  --text-body-lg: 16px;
+  --leading-body-lg: 1.2;
+  /* расширения системы: заголовки-«флаги» в RelayCond — тот же приём, что и мачта,
+     только крупнее; проза набирается с leading 1.45, иначе кириллица слипается */
+  --text-flag: 44px;
+  --text-flag-sm: 22px;
+  --leading-prose: 1.45;
+
+  /* Typography — Weights */
+  --font-weight-regular: 400;
+  --font-weight-bold: 700;
+
+  /* Spacing */
+  --spacing-unit: 6px;
+  --spacing-5: 5px;
+  --spacing-7: 7px;
+  --spacing-8: 8px;
+  --spacing-10: 10px;
+  --spacing-20: 20px;
+  --spacing-30: 30px;
+  --spacing-123: 123px;
+  --spacing-220: 220px;
+
+  /* Layout */
+  --page-max-width: 1200px;
+  --section-gap: 30px;
+  --card-padding: 5px;
+  --element-gap: 5px;
+
+  /* Border Radius */
+  --radius-sm: 2px;
+  --radius-cards: 0px;
+  --radius-inputs: 2px;
+  --radius-buttons: 2px;
+
+  /* Surfaces */
+  --surface-paper: #ffffff;
+  --surface-bone: #f0f0f0;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--surface-paper);
+  color: var(--color-carbon);
+  font-family: var(--font-bentonsansre);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  font-weight: var(--font-weight-regular);
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; }
+p { margin: 0; }
+
+.page { max-width: var(--page-max-width); margin: 0 auto; padding: 0 var(--spacing-20); }
+.rule { border-top: 1px solid var(--color-carbon); }
+.rule-thin { border-top: 1px solid var(--color-mist); }
+
+/* ---- Мачта ---- */
+.masthead { display: grid; grid-template-columns: 210px 1fr 215px; gap: var(--spacing-20); padding: var(--spacing-20) 0 var(--spacing-10); align-items: start; }
+.flag {
+  font-family: var(--font-relaycond); font-weight: var(--font-weight-bold);
+  font-size: 36px; line-height: 1; text-transform: uppercase; letter-spacing: -0.01em;
+  text-decoration: none; display: block;
+}
+.masthead .about { font-size: var(--text-body-sm); line-height: 1.35; padding-top: 3px; max-width: 52ch; }
+.masthead .about b { font-weight: var(--font-weight-bold); }
+.masthead .signin { font-size: var(--text-body-sm); text-align: right; padding-top: 3px; }
+
+/* ---- Вкладки ---- */
+.tabs { display: flex; align-items: flex-end; gap: 0; padding-bottom: var(--spacing-10); }
+.tabs a { font-size: var(--text-body-lg); padding: 0 var(--spacing-20) 0 0; text-decoration: none; }
+.tabs a.on { font-weight: var(--font-weight-bold); }
+.tabs .spacer { flex: 1; }
+.search {
+  background: var(--color-bone); border: 1px solid var(--color-ash); border-radius: var(--radius-inputs);
+  font-family: var(--font-bentonsansre); font-size: var(--text-body); color: var(--color-ash);
+  padding: 6px var(--spacing-10); width: 300px; display: flex; justify-content: space-between;
+}
+/* ---- Подшапка-фильтр ---- */
+.subnav { display: flex; gap: var(--spacing-30); padding: var(--spacing-8) 0; font-size: var(--text-body); }
+.subnav a { text-decoration: none; }
+.controls { display: flex; justify-content: space-between; font-size: var(--text-body-sm); padding: var(--spacing-8) 0 var(--spacing-20); }
+.controls b { font-weight: var(--font-weight-bold); }
+
+/* ---- Лид ---- */
+.lead { display: grid; grid-template-columns: 1fr 380px; gap: var(--spacing-30); padding-bottom: var(--spacing-30); }
+h1 {
+  font-family: var(--font-relaycond); font-weight: var(--font-weight-bold);
+  font-size: var(--text-flag); line-height: 1; text-transform: uppercase; margin: 0 0 var(--spacing-10);
+}
+.lead .deck { font-size: var(--text-body-lg); line-height: var(--leading-prose); max-width: 56ch; margin-bottom: var(--spacing-20); }
+.btnrow { display: flex; gap: var(--spacing-10); }
+.btn {
+  border: 1px solid var(--color-carbon); border-radius: var(--radius-buttons);
+  padding: 7px var(--spacing-10); font-size: var(--text-body); text-decoration: none; background: var(--surface-paper);
+}
+.btn.strong { background: var(--color-carbon); color: var(--color-paper); font-weight: var(--font-weight-bold); }
+
+/* ---- Поле под изображение/ролик ---- */
+.field { background: var(--color-bone); aspect-ratio: 16 / 10; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+.field.wide { aspect-ratio: 21 / 9; }
+.field.vert { aspect-ratio: 9 / 16; }
+.field .mark { font-size: var(--text-caption); text-transform: uppercase; letter-spacing: 0.04em; color: var(--color-ash); }
+.ribbon {
+  position: absolute; top: 14px; right: -30px; transform: rotate(30deg);
+  background: var(--color-carbon); color: var(--color-paper);
+  font-family: var(--font-relaycond); font-size: 18px; line-height: 22px; text-transform: uppercase;
+  padding: 0 30px;
+}
+
+/* ---- Заголовки разделов ---- */
+h2 {
+  font-family: var(--font-relaycond); font-weight: var(--font-weight-bold);
+  font-size: var(--text-flag-sm); line-height: 1.05; text-transform: uppercase; margin: 0;
+}
+.sechead { display: flex; justify-content: space-between; align-items: baseline; border-top: 1px solid var(--color-carbon); padding: var(--spacing-8) 0 var(--spacing-20); margin-top: var(--spacing-30); }
+.sechead .count { font-size: var(--text-body-sm); color: var(--color-ash); }
+
+/* ---- Каталог возможностей: 3 колонки, плотно ---- */
+.cat { display: grid; grid-template-columns: repeat(3, 1fr); column-gap: var(--spacing-20); row-gap: var(--spacing-30); }
+.rec .field { margin-bottom: var(--spacing-8); }
+.rec .name { font-size: var(--text-body-lg); font-weight: var(--font-weight-bold); line-height: 1.15; margin-bottom: 3px; }
+.rec .tag { font-size: var(--text-body-sm); color: var(--color-ash); margin-bottom: var(--spacing-8); }
+.rec p { font-size: var(--text-body); line-height: var(--leading-prose); }
+.rec .shot { font-size: var(--text-body-sm); line-height: 1.35; color: var(--color-ash); margin-top: var(--spacing-8); border-top: 1px solid var(--color-mist); padding-top: var(--spacing-5); }
+.rec.tall { grid-column: span 1; }
+
+/* ---- Таблицы ---- */
+table { width: 100%; border-collapse: collapse; font-size: var(--text-body); }
+tr:nth-child(odd) td { background: var(--color-bone); }
+td { padding: var(--spacing-8) var(--spacing-10); line-height: var(--leading-prose); vertical-align: top; }
+td.k { width: 300px; font-weight: var(--font-weight-bold); }
+td.n { width: 44px; color: var(--color-ash); font-variant-numeric: tabular-nums; }
+
+/* ---- Зачем это: три колонки-разбора ---- */
+.why { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: var(--spacing-20); }
+.why > div { border-top: 1px solid var(--color-carbon); padding-top: var(--spacing-8); }
+.why .h { font-weight: var(--font-weight-bold); font-size: var(--text-body-lg); margin-bottom: var(--spacing-5); }
+.why p { font-size: var(--text-body); line-height: var(--leading-prose); }
+.prose { font-size: var(--text-body); line-height: var(--leading-prose); max-width: 92ch; margin-bottom: var(--spacing-20); }
+.claimbar { border-top: 1px solid var(--color-carbon); border-bottom: 1px solid var(--color-carbon); padding: var(--spacing-10) 0; margin-top: var(--spacing-20); font-family: var(--font-relaycond); font-size: var(--text-flag-sm); text-transform: uppercase; line-height: 1.1; }
+
+/* ---- Шаги ---- */
+.steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-20); }
+.steps > div { border-top: 1px solid var(--color-carbon); padding-top: var(--spacing-8); }
+.steps .n { font-family: var(--font-relaycond); font-size: var(--text-flag-sm); line-height: 1; }
+.steps .h { font-weight: var(--font-weight-bold); font-size: var(--text-body-lg); margin: var(--spacing-5) 0; }
+.steps p { font-size: var(--text-body); line-height: var(--leading-prose); }
+
+/* ---- Доступ ---- */
+.access { display: grid; grid-template-columns: 1fr 380px; gap: var(--spacing-30); }
+.access p { font-size: var(--text-body); line-height: var(--leading-prose); max-width: 72ch; margin-bottom: var(--spacing-20); }
+.contacts { border: 1px solid var(--color-carbon); }
+.contacts a { display: flex; justify-content: space-between; padding: var(--spacing-10); text-decoration: none; font-size: var(--text-body); border-bottom: 1px solid var(--color-mist); }
+.contacts a:last-child { border-bottom: 0; }
+.contacts .l { color: var(--color-ash); }
+
+footer { border-top: 1px solid var(--color-carbon); margin-top: var(--spacing-30); padding: var(--spacing-10) 0 var(--spacing-30); display: flex; justify-content: space-between; font-size: var(--text-body-sm); color: var(--color-ash); }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <header class="masthead">
+    <a class="flag" href="#">Asyl<br>Book</a>
+    <div class="about">
+      Читалка английских книг со словарём внутри.<br>
+      Перевод по клику, фразовые глаголы целиком, разбор предложения, повторение по <b>FSRS</b>.
+    </div>
+    <div class="signin"><a href="#">Войти</a> — если аккаунт уже есть</div>
+  </header>
+
+  <div class="rule"></div>
+  <nav class="tabs">
+    <a class="on" href="#">Обзор</a>
+    <a href="#">Продукт</a>
+    <span class="spacer"></span>
+    <span class="search"><span>Найти слово, правило, книгу…</span><span>⌕</span></span>
+  </nav>
+
+  <div class="rule"></div>
+  <nav class="subnav">
+    <a href="#why">Зачем это ▾</a>
+    <a href="#how">Как работает ▾</a>
+    <a href="#inside">Возможности ▾</a>
+    <a href="#privacy">Приватность ▾</a>
+    <a href="#access">Доступ ▾</a>
+  </nav>
+  <div class="rule-thin"></div>
+
+  <div class="controls">
+    <span>Записей в каталоге: <b>9 возможностей</b> · <b>61 правило</b> грамматики в <b>12</b> темах · <b>3</b> книги в каждом аккаунте</span>
+    <span>Сортировка: <b>по порядку чтения</b> ▾</span>
+  </div>
+
+  <section class="lead">
+    <div>
+      <h1>Английская книга,<br>в которой словарь<br>уже внутри</h1>
+      <p class="deck">Клик по незнакомому слову — перевод прямо в тексте, не выходя из книги. Слово попадает в ваш список и само возвращается на повторение, когда вы начинаете его забывать. Трудное предложение разбирается по кнопке.</p>
+      <div class="btnrow">
+        <a class="btn strong" href="#">Открыть продукт</a>
+        <a class="btn" href="https://t.me/dasylov" target="_blank" rel="noopener noreferrer">Написать за доступом</a>
+      </div>
+    </div>
+    <div>
+      <div class="field wide">
+        <span class="mark">Слот под обзорный ролик</span>
+        <span class="ribbon">Обзор</span>
+      </div>
+      <p class="rec shot" style="margin-top:5px">Библиотека → книга → чтение с переводом → сохранённое слово → повторение. 60–90 секунд, монтаж из коротких сцен.</p>
+    </div>
+  </section>
+
+  <section id="why">
+    <div class="sechead"><h2>Зачем это</h2><span class="count">Три способа, которые не работают</span></div>
+    <p class="prose">Чтение на английском ломается всегда в одном месте — на незнакомом слове. Полезть в словарь значит выйти из книги, и через десяток слов книга закрывается. Перевести страницу целиком значит перестать читать по-английски. Учить готовую колоду слов значит учить чужой список без книги, ради которой всё затевалось.</p>
+    <div class="why">
+      <div>
+        <div class="h">Словарь в соседней вкладке</div>
+        <p>Перевод есть, но чтение рвётся на каждом слове — и ни одно из них не остаётся в голове.</p>
+      </div>
+      <div>
+        <div class="h">Перевод всей страницы</div>
+        <p>Понятно сразу и всё — только английского в таком чтении уже нет.</p>
+      </div>
+      <div>
+        <div class="h">Готовая колода слов</div>
+        <p>Чужие слова без контекста: половина не встретится вам ещё год.</p>
+      </div>
+    </div>
+    <div class="claimbar">Слово встретилось в книге → перевод пришёл туда же → слово легло в ваш список → вернулось на повторение вовремя</div>
+  </section>
+
+  <section id="how">
+    <div class="sechead"><h2>Как это работает</h2><span class="count">Три шага, один цикл</span></div>
+    <div class="steps">
+      <div>
+        <div class="n">01</div>
+        <div class="h">Берёте книгу</div>
+        <p>Загружаете свой .epub или открываете одну из тех, что уже лежат в библиотеке.</p>
+      </div>
+      <div>
+        <div class="n">02</div>
+        <div class="h">Читаете и кликаете</div>
+        <p>Перевод, часть речи, озвучка — на месте. Фразовый глагол переводится целиком, трудное предложение разбирается по кнопке.</p>
+      </div>
+      <div>
+        <div class="n">03</div>
+        <div class="h">Слова возвращаются сами</div>
+        <p>Сохранённое встаёт в очередь повторения по FSRS и приходит в тот день, когда начинает забываться.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="inside">
+    <div class="sechead"><h2>Что внутри</h2><span class="count">Показано: все (9)</span></div>
+    <div class="cat">
+
+      <article class="rec">
+        <div class="field"><span class="mark">Слот под ролик</span></div>
+        <div class="name">Перевод по клику, не выходя из книги</div>
+        <div class="tag">01 · Словарь</div>
+        <p>Клик по слову — часть речи и несколько значений, тут же кнопка озвучки. Ничего не открывается поверх текста: на широком экране перевод появляется в шапке, страница не дёргается, место в абзаце не теряется. Словарь ищет и по исходной форме: walked найдётся через walk, children — через child.</p>
+        <p class="shot">Ролик: клик по незнакомому слову в тексте — в шапке появляется часть речи и переводы, текст не сдвигается.</p>
+      </article>
+
+      <article class="rec">
+        <div class="field"><span class="mark">Слот под ролик</span></div>
+        <div class="name">Фразовые глаголы — целиком, а не по кускам</div>
+        <div class="tag">02 · Сочетания</div>
+        <p>give up, look after, put up with — по отдельности эти слова врут: «дать» и «вверх» не складываются в «сдаться». Читалка узнаёт устойчивое сочетание прямо в предложении и переводит его как одно целое.</p>
+        <p class="shot">Ролик: клик по give в «give up» — подсвечиваются оба слова, перевод приходит на всё сочетание.</p>
+      </article>
+
+      <article class="rec">
+        <div class="field"><span class="mark">Слот под ролик</span></div>
+        <div class="name">Разбор трудного предложения</div>
+        <div class="tag">03 · Синтаксис</div>
+        <p>Иногда все слова знакомы, а предложение всё равно не складывается. Кнопка разбора даёт точный перевод и одну-три коротких заметки: инверсия, сослагательное наклонение, идиома, устаревшая форма. Если предложение простое, так и будет сказано одной фразой.</p>
+        <p class="shot">Ролик: кнопка разбора на длинном предложении — перевод и две-три заметки о том, что в нём необычного.</p>
+      </article>
+
+      <article class="rec">
+        <div class="field"><span class="mark">Слот под ролик</span></div>
+        <div class="name">Свой список слов — из книги, которую вы читаете</div>
+        <div class="tag">04 · Список</div>
+        <p>Понравившееся слово сохраняется в один клик и остаётся в той форме, в какой стояло в тексте: London не превращается в london. Список — отдельная страница: посмотреть, послушать, убрать лишнее.</p>
+        <p class="shot">Ролик: страница «Мои слова» — список сохранённого, озвучка, удаление лишнего.</p>
+      </article>
+
+      <article class="rec">
+        <div class="field"><span class="mark">Слот под ролик</span></div>
+        <div class="name">Повторение, которое само знает, когда вернуться</div>
+        <div class="tag">05 · Память</div>
+        <p>Сохранённые слова выстраиваются в очередь по FSRS — современному алгоритму интервального повторения. Он смотрит, как вы отвечали именно на это слово, и показывает его в тот день, когда оно начинает забываться: не раньше и не позже. Сколько карточек ждёт сегодня, видно в верхнем меню.</p>
+        <p class="shot">Ролик: карточка, ответ, оценка — и следующий показ назначается на день, когда слово начнёт забываться.</p>
+      </article>
+
+      <article class="rec">
+        <div class="field"><span class="mark">Слот под ролик</span></div>
+        <div class="name">Справочник грамматики под рукой</div>
+        <div class="tag">06 · Грамматика</div>
+        <p>61 правило в 12 темах — времена, артикли, модальные, условные, пассив, косвенная речь — написанных для читателя книг, а не для экзамена: коротко и с примерами. Каждое правило отмечается как изученное, оглавление сбоку всё время показывает, где вы.</p>
+        <p class="shot">Ролик: прокрутка по урокам, оглавление справа следит за местом, отметка «изучено».</p>
+      </article>
+
+      <article class="rec">
+        <div class="field"><span class="mark">Слот под ролик</span></div>
+        <div class="name">Видно, что происходит</div>
+        <div class="tag">07 · Статистика</div>
+        <p>Сколько читали по дням, скорость в словах в минуту, сколько новых слов добавили, когда придут ближайшие повторения, календарь-тепловая карта за год. И главная цифра: сколько времени осталось до конца каждой книги — при вашей собственной скорости, а не при средней по больнице.</p>
+        <p class="shot">Ролик: графики по дням, скорость чтения, сколько осталось до конца книги, календарь.</p>
+      </article>
+
+      <article class="rec">
+        <div class="field"><span class="mark">Слот под ролик</span></div>
+        <div class="name">Своя книга — за секунду</div>
+        <div class="tag">08 · Библиотека</div>
+        <p>Загружаете .epub до 30 МБ, и книга разбирается на главы с обложкой примерно за секунду — никаких «идёт обработка, зайдите позже». Начать можно и без своей книги: «Алиса в Стране чудес», рассказы о Шерлоке Холмсе и «Вокруг света за 80 дней» уже лежат в библиотеке каждого аккаунта.</p>
+        <p class="shot">Ролик: выбор файла — и через секунду книга уже в библиотеке с обложкой.</p>
+      </article>
+
+      <article class="rec tall">
+        <div class="field vert"><span class="mark">Слот под ролик 9:16</span></div>
+        <div class="name">Телефон — полноценное место для чтения</div>
+        <div class="tag">09 · Телефон</div>
+        <p>На телефоне перевод показывается полосой снизу, под большой палец, а не всплывашкой под самым пальцем, которая закрывает то, что вы читаете. Тёмная тема и размер шрифта — в два касания.</p>
+        <p class="shot">Ролик: перевод выезжает полосой снизу, читать и листать можно одной рукой.</p>
+      </article>
+
+    </div>
+  </section>
+
+  <section>
+    <div class="sechead"><h2>Мелочи</h2><span class="count">Четыре записи</span></div>
+    <table>
+      <tr><td class="n">01</td><td class="k">Время считается честно</td><td>Счётчик идёт, только пока вкладка перед вами и вы правда листаете. Забытая на ночь вкладка не дорисует вам три часа чтения — поэтому цифре в дашборде можно верить.</td></tr>
+      <tr><td class="n">02</td><td class="k">Продолжает с того места</td><td>Закрыли на середине главы — вернётесь ровно туда же, а не к её началу. Отдельно ничего сохранять не нужно.</td></tr>
+      <tr><td class="n">03</td><td class="k">Работает в метро</td><td>Без сети слова сохраняются как обычно и уходят на сервер, когда связь вернётся. Ничего не задваивается и не теряется по дороге.</td></tr>
+      <tr><td class="n">04</td><td class="k">Тёмная тема и кегль</td><td>Светлая, тёмная или как в системе; размер текста — под ваши глаза и экран. Настройки живут в браузере, за ними не надо идти в аккаунт.</td></tr>
+    </table>
+  </section>
+
+  <section id="privacy">
+    <div class="sechead"><h2>Где лежат ваши книги</h2><span class="count">Пять фактов</span></div>
+    <table>
+      <tr><td class="n">01</td><td class="k">Загруженная книга видна только вам</td><td>Общей библиотеки из чужих загрузок здесь нет и не будет — кроме нескольких классиков в общественном достоянии, которые лежат у всех сразу.</td></tr>
+      <tr><td class="n">02</td><td class="k">Сервер в Москве</td><td>Ни книги, ни списки слов, ни статистика не уезжают за границу.</td></tr>
+      <tr><td class="n">03</td><td class="k">Пароль не хранится в открытом виде</td><td>И утечка базы сама по себе не даёт войти в аккаунт.</td></tr>
+      <tr><td class="n">04</td><td class="k">Счётчик посещений не пишет ни адрес, ни браузер</td><td>Только сам факт захода.</td></tr>
+      <tr><td class="n">05</td><td class="k">Удаление аккаунта стирает и файлы книг</td><td>А не только строчки в базе.</td></tr>
+    </table>
+    <p class="rec shot" style="margin-top:10px;border-top:0">Словарь — <a href="https://www.wikdict.com/" target="_blank" rel="noopener noreferrer">WikDict</a>, переводы из английского Викисловаря, лицензия CC BY-SA.</p>
+  </section>
+
+  <section id="access">
+    <div class="sechead"><h2>Как получить доступ</h2><span class="count">Регистрации нет</span></div>
+    <div class="access">
+      <div>
+        <p>Кнопки «зарегистрироваться» здесь нет намеренно: аккаунт открывает владелец сервиса вручную. Напишите — и придёт ссылка, по которой вы зададите себе пароль. Первые 14 дней — пробный доступ со всеми возможностями.</p>
+        <div class="btnrow">
+          <a class="btn strong" href="https://t.me/dasylov" target="_blank" rel="noopener noreferrer">Написать за доступом</a>
+          <a class="btn" href="#">У меня уже есть аккаунт</a>
+        </div>
+      </div>
+      <div class="contacts">
+        <a href="https://t.me/dasylov" target="_blank" rel="noopener noreferrer"><span class="l">Telegram</span><span>@dasylov</span></a>
+        <a href="https://www.instagram.com/danil.asylovich" target="_blank" rel="noopener noreferrer"><span class="l">Instagram</span><span>@danil.asylovich</span></a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>asyl-book — читалка английских книг</span>
+    <span>Словарь WikDict, CC BY-SA</span>
+    <span>2026</span>
+  </footer>
+
+</div>
+
+</body>
+</html>

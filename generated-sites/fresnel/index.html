@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>Fresnel — seven rooms in a lighthouse keeper's house</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Nunito+Sans:wght@400&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════════════════════════════
+   Дизайн-система BelArosa Chalet — styles.refero.design/style/46c8dbc5-47c8-4796-b94c-5e46dcda3532
+   :root ниже вставлен ДОСЛОВНО со вкладки CSS Variables.
+   ══════════════════════════════════════════════════════════════════ */
+:root {
+  /* Colors */
+  --color-mountain-slate: #193741;
+  --color-deep-teal: #1d414d;
+  --color-honey-gold: #eac486;
+  --color-snow-white: #ffffff;
+  --color-warm-parchment: #ebe7e1;
+  --color-stone-gray: #8c9ba0;
+  --color-charcoal: #222222;
+  --color-ink-black: #000000;
+
+  /* Typography — Font Families */
+  --font-avenir-lt-pro-roman: 'Avenir LT Pro Roman', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-itc-giovanni-std-bold: 'ITC Giovanni Std Bold', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* Typography — Scale */
+  --text-caption: 12px;
+  --leading-caption: 1.5;
+  --tracking-caption: 1.5px;
+  --text-body-sm: 14px;
+  --leading-body-sm: 1.43;
+  --tracking-body-sm: 2.34px;
+  --text-body: 16px;
+  --leading-body: 1.4;
+  --tracking-body: 2px;
+  --text-subheading: 20px;
+  --leading-subheading: 1.25;
+  --text-heading-sm: 24px;
+  --leading-heading-sm: 1.2;
+  --text-heading: 28px;
+  --leading-heading: 1.2;
+  --text-heading-lg: 40px;
+  --leading-heading-lg: 1.25;
+  --text-display: 48px;
+  --leading-display: 1.2;
+  --text-display-lg: 64px;
+  --leading-display-lg: 1.1;
+
+  /* Typography — Weights */
+  --font-weight-regular: 400;
+  --font-weight-bold: 700;
+
+  /* Spacing */
+  --spacing-unit: 8px;
+  --spacing-8: 8px;
+  --spacing-16: 16px;
+  --spacing-24: 24px;
+  --spacing-32: 32px;
+  --spacing-48: 48px;
+  --spacing-64: 64px;
+  --spacing-80: 80px;
+  --spacing-120: 120px;
+  --spacing-160: 160px;
+  --spacing-240: 240px;
+
+  /* Layout */
+  --page-max-width: 1200px;
+  --section-gap: 64-80px;
+  --card-padding: 32-48px;
+  --element-gap: 24px;
+
+  /* Border Radius */
+  --radius-xl: 12px;
+  --radius-full: 80px;
+
+  /* Named Radii */
+  --radius-links: 12px;
+  --radius-badges: 80px;
+  --radius-buttons: 80px;
+  --radius-nav-pills: 80px;
+
+  /* Surfaces */
+  --surface-snow-white-canvas: #ffffff;
+  --surface-warm-parchment: #ebe7e1;
+  --surface-mountain-slate: #193741;
+  --surface-deep-teal: #1d414d;
+}
+
+/* Подстановки шрифтов. Avenir → Nunito Sans (первая замена DESIGN.md, кириллица есть,
+   у Mulish тоже). ITC Giovanni → Playfair Display 700 (первая замена, кириллица есть;
+   у DM Serif Display её нет). --section-gap и --card-padding в токенах нечисловые
+   («64-80px»), поэтому ритм задан --spacing-80 и --spacing-48. */
+:root {
+  --font-ui: 'Nunito Sans', var(--font-avenir-lt-pro-roman);
+  --font-serif: 'Playfair Display', var(--font-itc-giovanni-std-bold);
+}
+
+* { box-sizing: border-box; }
+html { -webkit-font-smoothing: antialiased; }
+body {
+  margin: 0;
+  background: var(--surface-snow-white-canvas);
+  color: var(--color-mountain-slate);
+  font-family: var(--font-ui);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  font-weight: var(--font-weight-regular);
+}
+svg { display: block; }
+a { color: inherit; text-decoration: none; }
+h1, h2, h3, h4, p, ul { margin: 0; padding: 0; }
+ul { list-style: none; }
+
+.wrap { max-width: var(--page-max-width); margin: 0 auto; padding: 0 var(--spacing-32); }
+.sec { padding: var(--spacing-80) 0; }
+
+/* серифный дисплей — только заголовки, никогда ниже 16px */
+.serif { font-family: var(--font-serif); font-weight: var(--font-weight-bold); }
+.d-lg { font-size: var(--text-display-lg); line-height: var(--leading-display-lg); }
+.d { font-size: var(--text-display); line-height: var(--leading-display); }
+.h-lg { font-size: var(--text-heading-lg); line-height: var(--leading-heading-lg); }
+.h { font-size: var(--text-heading); line-height: var(--leading-heading); }
+
+/* капслок всегда с широким трекингом 0.125–0.167em */
+.eyebrow { font-size: var(--text-caption); text-transform: uppercase; letter-spacing: 0.167em; }
+.lbl { font-size: var(--text-body-sm); text-transform: uppercase; letter-spacing: 0.125em; }
+.body { font-size: var(--text-body); line-height: var(--leading-body); }
+.muted { color: var(--color-stone-gray); }
+
+/* CTA — только контурная пилюля 80px, заливок не бывает */
+.btn {
+  display: inline-block;
+  border: 1.5px solid var(--color-mountain-slate);
+  border-radius: var(--radius-buttons);
+  padding: 12px 28px;
+  background: transparent;
+  color: var(--color-mountain-slate);
+  font-family: var(--font-ui);
+  font-size: var(--text-caption);
+  text-transform: uppercase;
+  letter-spacing: 0.167em;
+  cursor: pointer;
+}
+.btn:hover { background: var(--color-mountain-slate); color: var(--color-snow-white); }
+.btn-ghost { border-color: var(--color-snow-white); color: var(--color-snow-white); }
+.btn-ghost:hover { background: var(--color-snow-white); color: var(--color-mountain-slate); }
+
+/* шапка */
+header { background: var(--surface-snow-white-canvas); }
+.topbar { display: flex; align-items: center; justify-content: space-between; padding: var(--spacing-16) var(--spacing-32); }
+.mark { text-align: center; line-height: 1.1; }
+.mark .mono { font-family: var(--font-serif); font-size: 28px; color: var(--color-honey-gold); }
+.mark .word { font-size: 17px; letter-spacing: 0.05em; }
+.mark .sub { font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; }
+.subnav { display: flex; justify-content: center; gap: var(--spacing-32); padding: var(--spacing-16) 0 var(--spacing-24); }
+.subnav a { font-size: var(--text-body-sm); text-transform: uppercase; letter-spacing: 0.125em; padding-bottom: 4px; }
+.subnav a.on { border-bottom: 1.5px solid var(--color-honey-gold); }
+.lang { display: inline-flex; gap: 6px; align-items: center; }
+.lang button { font: inherit; font-size: var(--text-caption); letter-spacing: 0.167em; text-transform: uppercase; border: none; background: none; padding: 0; cursor: pointer; color: var(--color-stone-gray); }
+.lang button[aria-pressed="true"] { color: var(--color-mountain-slate); }
+.lang span { color: var(--color-stone-gray); font-size: var(--text-caption); }
+
+/* герой на mountain slate с двумя круглыми медальонами */
+.hero { background: var(--surface-mountain-slate); color: var(--color-snow-white); position: relative; padding: var(--spacing-120) 0 var(--spacing-80); }
+.hero-in { display: grid; grid-template-columns: 240px 1fr 240px; align-items: center; gap: var(--spacing-48); max-width: var(--page-max-width); margin: 0 auto; padding: 0 var(--spacing-32); }
+.hero .mid { text-align: center; }
+.hero .eyebrow { margin-bottom: var(--spacing-24); }
+.hero .btn { margin-top: var(--spacing-32); }
+.medallion { width: 240px; height: 240px; border-radius: 50%; background: var(--surface-deep-teal); display: flex; align-items: center; justify-content: center; }
+.badge-round {
+  position: absolute; left: var(--spacing-48); top: var(--spacing-48);
+  width: 132px; height: 132px; border-radius: var(--radius-badges);
+  background: var(--surface-deep-teal); border: 1px solid var(--color-honey-gold);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+  font-size: var(--text-caption); letter-spacing: 0.125em; text-transform: uppercase; line-height: 1.6;
+}
+.scroll { position: absolute; left: var(--spacing-48); bottom: var(--spacing-48); display: flex; align-items: center; gap: var(--spacing-16); }
+.scroll .rh { width: 26px; height: 26px; border: 1px solid var(--color-snow-white); transform: rotate(45deg); display: flex; align-items: center; justify-content: center; }
+.scroll .rh svg { transform: rotate(-45deg); }
+
+/* тёмная сплит-секция */
+.dark { background: var(--surface-mountain-slate); color: var(--color-snow-white); }
+.split { display: grid; grid-template-columns: 1fr 1fr; align-items: center; }
+.split .txt { padding: var(--spacing-80); }
+.split .txt .eyebrow { margin-bottom: var(--spacing-24); }
+.split .txt .btn { margin-top: var(--spacing-32); }
+.plate { background: var(--surface-deep-teal); min-height: 520px; display: flex; align-items: center; justify-content: center; }
+
+/* парчментовая полоса */
+.parch { background: var(--surface-warm-parchment); }
+.editorial { max-width: 700px; margin: 0 auto; text-align: center; }
+.editorial .frame { background: var(--color-snow-white); padding: var(--spacing-48); margin-bottom: var(--spacing-48); }
+.editorial p { margin-top: var(--spacing-24); }
+
+/* номера */
+.rooms { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-48); }
+.room { display: flex; flex-direction: column; }
+.room .top { border-top: 1px solid var(--color-mountain-slate); padding-top: var(--spacing-16); display: flex; justify-content: space-between; }
+.room h3 { margin: var(--spacing-24) 0 var(--spacing-16); }
+.room p { margin-bottom: var(--spacing-24); }
+.room .btn { align-self: flex-start; margin-top: auto; }
+
+/* сезоны */
+.seasons { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--spacing-32); margin-top: var(--spacing-64); }
+.seasons > div { border-left: 1px solid rgba(255,255,255,.35); padding-left: var(--spacing-24); }
+.seasons .k { margin-bottom: var(--spacing-8); }
+
+footer { background: var(--surface-mountain-slate); color: var(--color-snow-white); padding: var(--spacing-80) 0 var(--spacing-32); }
+.fcols { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: var(--spacing-48); }
+.fcols h4 { margin-bottom: var(--spacing-24); }
+.fcols li { margin-bottom: var(--spacing-8); font-size: var(--text-body-sm); }
+.flegal { display: flex; justify-content: space-between; margin-top: var(--spacing-80); padding-top: var(--spacing-24); border-top: 1px solid rgba(255,255,255,.3); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="topbar">
+    <div class="eyebrow" data-i18n="menu">Menu</div>
+    <div class="mark">
+      <div class="mono">F</div>
+      <div class="word">Fresnel</div>
+      <div class="sub" data-i18n="markSub">Lighthouse</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:var(--spacing-24)">
+      <div class="lang"><button data-set="en" aria-pressed="true">EN</button><span>/</span><button data-set="ru" aria-pressed="false">RU</button></div>
+      <a class="btn" href="#book" data-i18n="book">Book</a>
+    </div>
+  </div>
+  <nav class="subnav">
+    <a class="on" href="#house" data-i18n="n1">The house</a>
+    <a href="#rooms" data-i18n="n2">Rooms</a>
+    <a href="#table" data-i18n="n3">Table</a>
+    <a href="#light" data-i18n="n4">The light</a>
+    <a href="#season" data-i18n="n5">Seasons</a>
+    <a href="#book" data-i18n="n6">Enquire</a>
+  </nav>
+</header>
+
+<!-- ── герой ────────────────────────────────────────────────────── -->
+<section class="hero">
+  <div class="badge-round">
+    <span data-i18n="bd1">Open</span>
+    <span data-i18n="bd2">all winter</span>
+  </div>
+  <div class="hero-in">
+    <div class="medallion">
+      <!-- разрез линзы Френеля: золото — только декоративная роль -->
+      <svg width="168" height="168" viewBox="0 0 168 168" fill="none" stroke="#eac486" stroke-width="1.2">
+        <circle cx="84" cy="84" r="20"/><circle cx="84" cy="84" r="34"/><circle cx="84" cy="84" r="48"/>
+        <circle cx="84" cy="84" r="62"/><circle cx="84" cy="84" r="76"/>
+        <path d="M84 8 L84 160" stroke-width="0.8" opacity=".5"/>
+        <path d="M8 84 L160 84" stroke-width="0.8" opacity=".5"/>
+      </svg>
+    </div>
+    <div class="mid">
+      <div class="eyebrow" data-i18n="hk">Cape Styrsudden · Gulf of Finland</div>
+      <h1 class="serif d-lg" data-i18n="h1">Seven rooms under a light that still turns</h1>
+      <a class="btn btn-ghost" href="#rooms" data-i18n="hb">See the rooms</a>
+    </div>
+    <div class="medallion">
+      <!-- развёртка луча -->
+      <svg width="168" height="168" viewBox="0 0 168 168" fill="none" stroke="#eac486" stroke-width="1.2">
+        <path d="M84 84 L164 44 L164 124 Z" opacity=".55"/>
+        <path d="M84 84 L4 44 L4 124 Z" opacity=".25"/>
+        <circle cx="84" cy="84" r="12"/>
+        <circle cx="84" cy="84" r="30" stroke-dasharray="3 5"/>
+        <path d="M84 30 L84 12"/><path d="M84 138 L84 156"/>
+      </svg>
+    </div>
+  </div>
+  <div class="scroll">
+    <div class="rh"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="#ffffff" stroke-width="1.2"><path d="M1 3l4 4 4-4"/></svg></div>
+    <span class="eyebrow" data-i18n="scroll">Scroll</span>
+  </div>
+</section>
+
+<!-- ── дом ──────────────────────────────────────────────────────── -->
+<section class="sec parch" id="house">
+  <div class="wrap editorial">
+    <div class="frame">
+      <svg width="100%" height="260" viewBox="0 0 600 260" fill="none" stroke="#193741" stroke-width="1.2">
+        <!-- разрез дома смотрителя и башни -->
+        <path d="M40 220 L560 220" stroke-width="1.5"/>
+        <path d="M120 220 L120 120 L200 78 L280 120 L280 220"/>
+        <path d="M120 120 L200 78 L280 120"/>
+        <rect x="152" y="146" width="34" height="34"/><rect x="212" y="146" width="34" height="34"/>
+        <rect x="182" y="188" width="34" height="32"/>
+        <path d="M392 220 L392 96 L404 76 L436 76 L448 96 L448 220"/>
+        <path d="M392 96 L448 96"/>
+        <path d="M398 60 L442 60 L436 76 L404 76 Z"/>
+        <circle cx="420" cy="46" r="13" stroke="#eac486"/>
+        <path d="M433 46 L520 22" stroke="#eac486" stroke-width="0.9"/>
+        <path d="M433 46 L520 70" stroke="#eac486" stroke-width="0.9"/>
+        <path d="M280 200 L392 200" stroke-dasharray="5 5"/>
+        <path d="M40 232 L560 232" stroke-width="0.8" opacity=".4"/>
+      </svg>
+    </div>
+    <div class="eyebrow" data-i18n="ho0">The house</div>
+    <h2 class="serif h-lg" style="margin-top:var(--spacing-16)" data-i18n="ho1">A keeper's house, kept</h2>
+    <p class="body" data-i18n="ho2">Built in 1911 for the two families who tended the light, empty from 1998, and opened again in 2022 with the same floor plan, the same stove positions and the same view of a sea that freezes for eleven weeks a year. Nothing was moved to make room for a lobby, because there is no lobby.</p>
+  </div>
+</section>
+
+<!-- ── тёмная сплит-секция: стол ────────────────────────────────── -->
+<section class="dark" id="table">
+  <div class="split">
+    <div class="plate">
+      <svg width="300" height="300" viewBox="0 0 300 300" fill="none" stroke="#eac486" stroke-width="1.1">
+        <circle cx="150" cy="150" r="96"/><circle cx="150" cy="150" r="72" stroke-dasharray="2 6"/>
+        <path d="M92 150 L118 150"/><path d="M182 150 L208 150"/>
+        <path d="M150 92 L150 118"/><path d="M150 182 L150 208"/>
+        <circle cx="150" cy="150" r="8"/>
+        <path d="M54 150 L246 150" stroke-width="0.7" opacity=".4"/>
+        <path d="M150 54 L150 246" stroke-width="0.7" opacity=".4"/>
+      </svg>
+    </div>
+    <div class="txt">
+      <div class="eyebrow" data-i18n="tb0">The table</div>
+      <h2 class="serif h-lg" data-i18n="tb1">One dinner, at eight, for everyone staying</h2>
+      <p class="body" style="margin-top:var(--spacing-24)" data-i18n="tb2">There is no menu and no à la carte. The cook drives to the harbour at six, buys what came in, and puts it on one long table at eight. Vegetarians are asked when they book, allergies the week before, and nobody is asked to choose between two fishes that were caught the same morning.</p>
+      <a class="btn btn-ghost" href="#book" data-i18n="tb3">Ask what is in season</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── номера ───────────────────────────────────────────────────── -->
+<section class="sec" id="rooms">
+  <div class="wrap">
+    <div style="text-align:center;margin-bottom:var(--spacing-64)">
+      <div class="eyebrow" data-i18n="rm0">Rooms</div>
+      <h2 class="serif d" style="margin-top:var(--spacing-16)" data-i18n="rm1">Seven, and no two the same</h2>
+    </div>
+    <div class="rooms">
+      <div class="room">
+        <div class="top lbl"><span data-i18n="r1n">Keeper</span><span>1 – 2</span></div>
+        <h3 class="serif h" data-i18n="r1t">The east gable</h3>
+        <p class="body muted" data-i18n="r1d">Corner room with two windows on the water, the original stove, and the ledger desk the last keeper left behind.</p>
+        <a class="btn" href="#book" data-i18n="r1b">From 14 000 ₽</a>
+      </div>
+      <div class="room">
+        <div class="top lbl"><span data-i18n="r2n">Signal</span><span>2</span></div>
+        <h3 class="serif h" data-i18n="r2t">Under the tower</h3>
+        <p class="body muted" data-i18n="r2d">The closest room to the light. The beam passes the window every twelve seconds; the shutters are lined, and most guests stop closing them by the second night.</p>
+        <a class="btn" href="#book" data-i18n="r2b">From 16 500 ₽</a>
+      </div>
+      <div class="room">
+        <div class="top lbl"><span data-i18n="r3n">Boathouse</span><span>2 – 4</span></div>
+        <h3 class="serif h" data-i18n="r3t">Down at the water</h3>
+        <p class="body muted" data-i18n="r3d">A separate building forty steps from the house, with its own stove, a drying room for wet clothes, and no wifi at all.</p>
+        <a class="btn" href="#book" data-i18n="r3b">From 21 000 ₽</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── свет ─────────────────────────────────────────────────────── -->
+<section class="dark sec" id="light">
+  <div class="wrap">
+    <div style="max-width:620px">
+      <div class="eyebrow" data-i18n="lt0">The light</div>
+      <h2 class="serif h-lg" style="margin-top:var(--spacing-16)" data-i18n="lt1">Still a working navigation aid</h2>
+      <p class="body" style="margin-top:var(--spacing-24)" data-i18n="lt2">The tower is not ours and never will be — it belongs to the hydrographic service, and a technician comes twice a year to turn the lens by hand and check the seal. Guests may climb it on Saturdays, six at a time, with him if he is there and with us if he is not.</p>
+    </div>
+    <div class="seasons" id="season">
+      <div>
+        <div class="k lbl" data-i18n="sn1k">December – February</div>
+        <div class="body" data-i18n="sn1v">Ice to the horizon, dinner at four, the beam visible for eleven miles.</div>
+      </div>
+      <div>
+        <div class="k lbl" data-i18n="sn2k">March – May</div>
+        <div class="body" data-i18n="sn2v">The ice goes out in a week. Migrating geese, and the boathouse opens.</div>
+      </div>
+      <div>
+        <div class="k lbl" data-i18n="sn3k">June – August</div>
+        <div class="body" data-i18n="sn3v">Light until midnight, so the lamp barely earns its keep. Booked earliest.</div>
+      </div>
+      <div>
+        <div class="k lbl" data-i18n="sn4k">September – November</div>
+        <div class="body" data-i18n="sn4v">Storms from the south-west, and the best evenings of the year indoors.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── бронирование ─────────────────────────────────────────────── -->
+<section class="sec parch" id="book">
+  <div class="wrap editorial">
+    <div class="eyebrow" data-i18n="bk0">Enquire</div>
+    <h2 class="serif d" style="margin-top:var(--spacing-16)" data-i18n="bk1">We answer by letter, not by form</h2>
+    <p class="body" data-i18n="bk2">Write to us with the nights you want and how you plan to get here. We will tell you honestly whether the road is passable that week, and if it is not, we will say so before you pay anything.</p>
+    <div style="margin-top:var(--spacing-32);display:flex;gap:var(--spacing-16);justify-content:center">
+      <a class="btn" href="#book" data-i18n="bk3">Write to the house</a>
+      <a class="btn" href="#book" data-i18n="bk4">Available nights</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="fcols">
+      <div>
+        <div class="mark" style="text-align:left">
+          <div class="mono">F</div>
+          <div class="word">Fresnel</div>
+          <div class="sub" data-i18n="markSub2">Lighthouse</div>
+        </div>
+        <p class="body" style="max-width:30ch;margin-top:var(--spacing-24)" data-i18n="fa">Seven rooms in the keeper's house at Cape Styrsudden. Open all year, quiet by design.</p>
+      </div>
+      <div>
+        <h4 class="lbl" data-i18n="fh1">The house</h4>
+        <ul><li data-i18n="fl1">Rooms</li><li data-i18n="fl2">The table</li><li data-i18n="fl3">The boathouse</li></ul>
+      </div>
+      <div>
+        <h4 class="lbl" data-i18n="fh2">Getting here</h4>
+        <ul><li data-i18n="fl4">By car</li><li data-i18n="fl5">By train and taxi</li><li data-i18n="fl6">Winter road</li></ul>
+      </div>
+      <div>
+        <h4 class="lbl" data-i18n="fh3">Practical</h4>
+        <ul><li data-i18n="fl7">Rates</li><li data-i18n="fl8">Cancellation</li><li data-i18n="fl9">Write to us</li></ul>
+      </div>
+    </div>
+    <div class="flegal eyebrow">
+      <span>© 2026 Fresnel</span>
+      <span data-i18n="fn">The tower belongs to the hydrographic service</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ── RU/EN. Английский — исходный, русский — перевод под него ── */
+var RU = {
+  menu:'Меню', markSub:'Маяк', markSub2:'Маяк', book:'Бронь',
+  n1:'Дом', n2:'Номера', n3:'Стол', n4:'Свет', n5:'Сезоны', n6:'Написать',
+  bd1:'Открыто', bd2:'всю зиму',
+  hk:'Мыс Стирсудден · Финский залив',
+  h1:'Семь комнат под светом, который всё ещё вращается',
+  hb:'Смотреть номера', scroll:'Вниз',
+  ho0:'Дом', ho1:'Дом смотрителя, оставленный домом',
+  ho2:'Построен в 1911 году для двух семей, которые следили за огнём, пустовал с 1998-го и открыт заново в 2022-м — с той же планировкой, теми же местами печей и тем же видом на море, которое замерзает на одиннадцать недель в году. Ничего не двигали ради лобби, потому что лобби здесь нет.',
+  tb0:'Стол', tb1:'Один ужин, в восемь, для всех, кто остановился',
+  tb2:'Меню нет и à la carte нет. Повар едет в порт в шесть, покупает то, что пришло, и в восемь ставит это на один длинный стол. О вегетарианстве спрашивают при брони, об аллергиях — за неделю, и никого не просят выбирать между двумя рыбами, пойманными одним утром.',
+  tb3:'Спросить, что сейчас в сезоне',
+  rm0:'Номера', rm1:'Семь, и ни одного одинакового',
+  r1n:'Смотритель', r1t:'Восточный фронтон',
+  r1d:'Угловая комната с двумя окнами на воду, родной печью и конторкой, которую оставил последний смотритель.',
+  r1b:'От 14 000 ₽',
+  r2n:'Сигнальная', r2t:'Под башней',
+  r2d:'Ближайшая к огню комната. Луч проходит окно каждые двенадцать секунд; ставни утеплены, и к вторым суткам их перестают закрывать.',
+  r2b:'От 16 500 ₽',
+  r3n:'Лодочная', r3t:'Внизу у воды',
+  r3d:'Отдельная постройка в сорока шагах от дома: своя печь, сушилка для мокрой одежды и полное отсутствие вайфая.',
+  r3b:'От 21 000 ₽',
+  lt0:'Свет', lt1:'Всё ещё действующий навигационный знак',
+  lt2:'Башня не наша и нашей не станет — она принадлежит гидрографической службе, и техник приезжает дважды в год, чтобы вручную провернуть линзу и проверить уплотнение. Подниматься можно по субботам, по шесть человек, с ним — если он на месте, и с нами — если нет.',
+  sn1k:'Декабрь – февраль', sn1v:'Лёд до горизонта, ужин в четыре, луч виден на одиннадцать миль.',
+  sn2k:'Март – май', sn2v:'Лёд уходит за неделю. Гуси на пролёте, открывается лодочная.',
+  sn3k:'Июнь – август', sn3v:'Светло до полуночи, так что лампа едва отрабатывает своё. Разбирают первым.',
+  sn4k:'Сентябрь – ноябрь', sn4v:'Шторма с юго-запада и лучшие вечера в году — в доме.',
+  bk0:'Написать', bk1:'Мы отвечаем письмом, а не формой',
+  bk2:'Напишите, какие ночи вам нужны и как вы собираетесь сюда добраться. Мы честно скажем, проходима ли дорога на этой неделе, и если нет — скажем до того, как вы что-то заплатите.',
+  bk3:'Написать в дом', bk4:'Свободные ночи',
+  fa:'Семь комнат в доме смотрителя на мысе Стирсудден. Открыто круглый год, тихо по замыслу.',
+  fh1:'Дом', fl1:'Номера', fl2:'Стол', fl3:'Лодочная',
+  fh2:'Как добраться', fl4:'На машине', fl5:'Поездом и такси', fl6:'Зимник',
+  fh3:'Практика', fl7:'Цены', fl8:'Отмена', fl9:'Написать нам',
+  fn:'Башня принадлежит гидрографической службе'
+};
+var EN = {};
+document.querySelectorAll('[data-i18n]').forEach(function (el) { EN[el.dataset.i18n] = el.innerHTML; });
+function setLang(l) {
+  var dict = l === 'ru' ? RU : EN;
+  document.querySelectorAll('[data-i18n]').forEach(function (el) {
+    var v = dict[el.dataset.i18n];
+    if (v !== undefined) el.innerHTML = v;
+  });
+  document.documentElement.lang = l;
+  document.documentElement.dataset.lang = l;
+  document.querySelectorAll('.lang button').forEach(function (b) {
+    b.setAttribute('aria-pressed', b.dataset.set === l ? 'true' : 'false');
+  });
+}
+document.querySelectorAll('.lang button').forEach(function (b) {
+  b.addEventListener('click', function () { setLang(b.dataset.set); });
+});
+</script>
+</body>
+</html>

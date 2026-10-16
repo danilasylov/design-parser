@@ -1,0 +1,70 @@
+/* Native adaptations of React Bits and Magic UI; see THIRD-PARTY-NOTICES.txt. */
+.boost-word{display:inline-block;white-space:nowrap;vertical-align:baseline}
+.boost-glyph{display:inline-block;transform-origin:50% 100%}
+.boost-split{perspective:1000px}
+.boost-panel{isolation:isolate}
+.boost-effect-clip,.boost-spot,.boost-border,.boost-ripple-layer{position:absolute;inset:0;pointer-events:none;border-radius:inherit}
+.boost-effect-clip,.boost-ripple-layer{overflow:hidden}
+.boost-effect-clip{z-index:3}
+.boost-spot{z-index:2;background:radial-gradient(420px circle at var(--spot-x,50%) var(--spot-y,50%),color-mix(in srgb,var(--ink) 9%,transparent),transparent 65%);opacity:0;transition:opacity .35s}
+.boost-panel:hover>.boost-spot{opacity:1}
+.boost-glare{position:absolute;inset:-50%;background:linear-gradient(110deg,transparent 40%,color-mix(in srgb,var(--ink) 8%,transparent) 48%,transparent 55%);animation:boost-glare 6.5s ease-in-out infinite}
+.boost-border{z-index:4;overflow:hidden}
+.boost-border svg{width:100%;height:100%;overflow:visible}
+.boost-border rect{fill:none;stroke:var(--ink);stroke-width:1.5;stroke-opacity:.45;stroke-dasharray:7 93;animation:boost-border 7s linear infinite}
+.boost-ripple-layer{z-index:5}
+.boost-click-ripple{position:absolute;border-radius:50%;background:currentColor;opacity:.16;pointer-events:none}
+.boost-magnetic{will-change:translate}
+.boost-tilt{transform-style:preserve-3d;will-change:transform}
+.boost-scramble{position:relative;display:inline-block}
+.boost-scramble-visual{position:absolute;left:0;top:0;white-space:pre;pointer-events:none;font:inherit;letter-spacing:inherit}
+.boost-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none;mask-image:linear-gradient(transparent,#000 8%,#000 60%,transparent 95%)}
+.boost-logo-window{overflow:hidden;position:relative;flex:1;mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
+.boost-logo-track{display:flex;width:max-content;animation:boost-marquee 28s linear infinite}
+.boost-logo-copy{display:flex;gap:50px;align-items:center;padding:0 25px;flex-shrink:0}
+.boost-vector .trust .boost-logo-window{max-width:850px;margin-left:48px}
+.boost-prism .trust .boost-logo-window{width:100%}
+.boost-prism .boost-logo-copy{gap:100px;padding:0 50px}
+.boost-logo-copy>span{white-space:nowrap}
+.boost-scan-clip{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:1;border-radius:inherit}
+.boost-scan-line{position:absolute;left:-10%;width:20%;height:100%;top:0;background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--chart) 11%,transparent),transparent);border-right:1px solid color-mix(in srgb,var(--chart) 35%,transparent);animation:boost-scan 5.8s linear infinite}
+.boost-crosshair{position:absolute;top:12px;bottom:24px;left:var(--cross-x,50%);width:1px;background:var(--chart);opacity:0;z-index:2;pointer-events:none;transition:opacity .2s}
+.chart-wrap:hover>.boost-crosshair{opacity:.35}
+.boost-float{animation:boost-float 6s ease-in-out infinite}
+.boost-float-reverse{animation:boost-float-reverse 7s ease-in-out infinite}
+.boost-orbit{position:absolute;width:132px;height:132px;left:50%;top:50%;translate:-50% -50%;border:1px solid color-mix(in srgb,var(--ink) 12%,transparent);border-radius:50%;pointer-events:none;z-index:-1}
+.boost-orbit i{position:absolute;inset:0;animation:boost-orbit 9s linear infinite;animation-delay:var(--phase,0s)}
+.boost-orbit i:before{content:'';position:absolute;width:6px;height:6px;top:-3px;left:calc(50% - 3px);background:var(--ink);opacity:.5;border-radius:50%}
+.boost-orbit.outer{width:178px;height:178px;opacity:.55}
+.boost-orbit.outer i{animation-direction:reverse;animation-duration:14s}
+.boost-cohort{animation:boost-cohort 3.6s ease-in-out infinite;animation-delay:var(--cohort-delay,0s)}
+.boost-signal{animation:boost-signal 5s ease-in-out infinite;animation-delay:var(--signal-delay,0s)}
+.boost-status-ring{position:relative}
+.boost-status-ring:after{content:'';position:absolute;inset:-5px;border:1px solid currentColor;border-radius:inherit;animation:boost-ring 2.6s ease-out infinite;animation-play-state:inherit}
+.boost-nav-link{position:relative}
+.boost-nav-link:after{content:'';position:absolute;left:0;right:0;bottom:-5px;height:1px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform .3s cubic-bezier(.16,1,.3,1)}
+.boost-nav-link:hover:after,.boost-nav-link:focus-visible:after{transform:scaleX(1)}
+.boost-typing{position:relative}
+.boost-type-overlay{position:absolute;inset:0;pointer-events:none;white-space:pre-wrap;color:inherit;font:inherit;z-index:2}
+.boost-type-source{opacity:0}
+.boost-caret{display:inline-block;width:1px;height:.9em;background:currentColor;vertical-align:baseline;margin-left:1px}
+.boost-scroll-ink .boost-word{transition:color .2s}
+.boost-faq-line{position:absolute;top:0;left:0;right:0;height:1px;background:var(--ink);transform-origin:left;pointer-events:none}
+.boost-node{position:relative}
+.boost-loop{animation-play-state:paused!important}
+.boost-loop[data-running="true"]{animation-play-state:running!important}
+.hero-stage:hover .boost-float,.hero-stage:hover .boost-float-reverse,.hero-stage:focus-within .boost-float,.hero-stage:focus-within .boost-float-reverse{animation-play-state:paused!important}
+body.motion-paused .boost-loop,body.page-hidden .boost-loop{animation-play-state:paused!important}
+body.motion-paused .boost-status-ring:after,body.page-hidden .boost-status-ring:after{animation-play-state:paused!important}
+body.motion-paused .boost-crosshair{opacity:0}
+@keyframes boost-border{to{stroke-dashoffset:-100}}
+@keyframes boost-glare{0%,18%{translate:-65% 0}68%,100%{translate:65% 0}}
+@keyframes boost-marquee{to{transform:translateX(-50%)}}
+@keyframes boost-scan{0%{translate:0 0}100%{translate:600% 0}}
+@keyframes boost-float{0%,100%{translate:0 0}50%{translate:0 -9px}}
+@keyframes boost-float-reverse{0%,100%{translate:0 -3px}50%{translate:0 8px}}
+@keyframes boost-orbit{to{rotate:360deg}}
+@keyframes boost-cohort{0%,100%{scale:1;opacity:.45}50%{scale:1.8;opacity:1}}
+@keyframes boost-signal{0%,55%,100%{translate:0 0;background:transparent}20%,40%{translate:5px 0;background:color-mix(in srgb,var(--ink) 4%,transparent)}}
+@keyframes boost-ring{0%{scale:.65;opacity:.65}100%{scale:2;opacity:0}}
+@media(prefers-reduced-motion:reduce){.boost-loop,.boost-status-ring:after{animation:none!important}.boost-canvas{display:none}.boost-tilt,.boost-magnetic{will-change:auto}.boost-spot,.boost-crosshair{display:none}}

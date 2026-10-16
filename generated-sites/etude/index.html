@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Etude — your practice desk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ─── Токены дизайн-системы School — вставлены дословно ───────────────── */
+:root {
+  /* Colors */
+  --color-charcoal-ink: #303030;
+  --color-paper-white: #ffffff;
+  --color-concrete-gray: #dbdbdb;
+  --color-fog-mist: #f2f2f2;
+  --color-ash-border: #ededed;
+  --color-smoke: #c2c2c2;
+  --color-graphite: #808080;
+  --color-pure-black: #000000;
+  --color-sand-wash: #e2ceb8;
+  --color-slate-veil: #6a728e;
+  --color-highlight-yellow: #f9f5a2;
+  --color-highlight-cyan: #c7f6ff;
+
+  /* Typography — Font Families */
+  --font-ibm-plex-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-helvetica: 'Helvetica', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* Typography — Scale */
+  --text-caption: 11px;
+  --leading-caption: 1.4;
+  --text-body-sm: 14px;
+  --leading-body-sm: 1.4;
+  --text-body: 16px;
+  --leading-body: 1.4;
+  --text-subheading: 18px;
+  --leading-subheading: 1.4;
+  --text-heading-sm: 25px;
+  --leading-heading-sm: 1.4;
+  --text-heading: 43px;
+  --leading-heading: 1.4;
+
+  /* Typography — Weights */
+  --font-weight-light: 300;
+  --font-weight-regular: 400;
+  --font-weight-bold: 700;
+
+  /* Spacing */
+  --spacing-unit: 4px;
+  --spacing-4: 4px;
+  --spacing-8: 8px;
+  --spacing-12: 12px;
+  --spacing-20: 20px;
+  --spacing-24: 24px;
+  --spacing-28: 28px;
+
+  /* Layout */
+  --page-max-width: 1440px;
+  --section-gap: 24px;
+  --card-padding: 18-24px;
+  --element-gap: 8px;
+
+  /* Border Radius */
+  --radius-sm: 2px;
+  --radius-lg: 10px;
+  --radius-2xl: 20px;
+  --radius-3xl: 25px;
+
+  /* Named Radii */
+  --radius-cards: 20px;
+  --radius-badges: 20px;
+  --radius-images: 10px;
+  --radius-inputs: 25px;
+  --radius-buttons: 20px;
+
+  /* Shadows */
+  --shadow-sm: rgba(0, 0, 0, 0.16) 0px 3px 6px 0px;
+  --shadow-sm-2: rgba(0, 0, 0, 0.18) 0px 1px 4px 0px;
+
+  /* Surfaces */
+  --surface-concrete-canvas: #dbdbdb;
+  --surface-paper-white: #ffffff;
+  --surface-fog-mist: #f2f2f2;
+  --surface-ash-input: #ededed;
+  --surface-sand-wash: #e2ceb8;
+  --surface-slate-veil: #6a728;
+}
+
+/* В выгрузке токенов --surface-slate-veil записан пятью символами (#6a728) —
+   опечатка источника. Оставляю строку дословно и пользуюсь --color-slate-veil. */
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  /* Моношрифт — необсуждаемый голос системы: им набрано вообще всё */
+  font-family: var(--font-ibm-plex-mono);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--color-charcoal-ink);
+  background: var(--surface-concrete-canvas);
+  -webkit-font-smoothing: antialiased;
+  padding: var(--spacing-24);
+}
+
+/* ─── Верхняя полоса: статус слева, ряд аватаров справа ───────────────── */
+.top { display: flex; align-items: center; gap: var(--spacing-8); margin-bottom: var(--spacing-24); }
+.pill {
+  background: var(--surface-paper-white);
+  border-radius: var(--radius-badges);
+  box-shadow: var(--shadow-sm-2);
+  padding: var(--spacing-8) var(--spacing-20);
+  font-size: var(--text-caption); line-height: var(--leading-caption);
+  color: var(--color-charcoal-ink);
+  text-decoration: none;
+  display: inline-flex; align-items: center; gap: var(--spacing-8);
+}
+.pill--ghost { background: transparent; box-shadow: none; color: var(--color-graphite); }
+.dot { width: 7px; height: 7px; border-radius: 50%; background: var(--color-charcoal-ink); display: inline-block; }
+.top__right { margin-left: auto; display: flex; align-items: center; gap: var(--spacing-8); }
+.faces { display: flex; }
+.face {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--surface-paper-white);
+  box-shadow: var(--shadow-sm-2);
+  margin-left: -6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: var(--text-caption); color: var(--color-graphite);
+}
+.face:first-child { margin-left: 0; }
+.lang { display: inline-flex; background: var(--surface-paper-white); border-radius: var(--radius-badges); box-shadow: var(--shadow-sm-2); overflow: hidden; }
+.lang button {
+  font-family: var(--font-ibm-plex-mono); font-size: var(--text-caption);
+  padding: var(--spacing-8) var(--spacing-12);
+  border: none; background: transparent; color: var(--color-graphite); cursor: pointer;
+}
+.lang button[aria-pressed="true"] { background: var(--color-charcoal-ink); color: var(--color-paper-white); }
+
+/* ─── Мозаика ─────────────────────────────────────────────────────────── */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--spacing-24);
+  align-items: start;
+}
+/* Карточка: без рамки, край задаёт только тень */
+.card {
+  background: var(--surface-paper-white);
+  border-radius: var(--radius-cards);
+  box-shadow: var(--shadow-sm);
+  padding: var(--spacing-20);
+}
+.card--mist { background: var(--surface-fog-mist); }
+.card--sand { background: var(--surface-sand-wash); }
+/* Скобочная подпись — обязательный элемент каждого виджета */
+.cap {
+  display: block; text-align: center;
+  font-size: var(--text-caption); line-height: var(--leading-caption);
+  color: var(--color-graphite);
+  margin-bottom: var(--spacing-20);
+}
+.w2 { grid-column: span 2; }
+.w3 { grid-column: span 3; }
+
+/* Подсветка ровно одного знака — плоская плашка, без скруглений и теней */
+.hl { background: var(--color-highlight-yellow); }
+.hl--cyan { background: var(--color-highlight-cyan); }
+
+.h-lg { font-size: var(--text-heading); line-height: var(--leading-heading); font-weight: var(--font-weight-light); }
+.h-sm { font-size: var(--text-heading-sm); line-height: var(--leading-heading-sm); font-weight: var(--font-weight-light); }
+.sub { font-size: var(--text-subheading); line-height: var(--leading-subheading); }
+.sm { font-size: var(--text-body-sm); line-height: var(--leading-body-sm); }
+.muted { color: var(--color-graphite); }
+
+/* Поля и кнопки: скругления 20–25px, тонкие однолинейные знаки */
+.input {
+  width: 100%; font-family: var(--font-ibm-plex-mono); font-size: var(--text-body);
+  background: var(--surface-ash-input); border: none;
+  border-radius: var(--radius-inputs);
+  padding: var(--spacing-12) var(--spacing-20);
+  color: var(--color-charcoal-ink); text-align: center;
+}
+.input:focus { outline: none; background: var(--color-concrete-gray); }
+.btn {
+  font-family: var(--font-ibm-plex-mono); font-size: var(--text-body-sm);
+  background: var(--surface-ash-input); border: none;
+  border-radius: var(--radius-buttons);
+  padding: var(--spacing-12) var(--spacing-20);
+  color: var(--color-charcoal-ink); cursor: pointer; width: 100%;
+}
+.btn:hover { background: var(--color-concrete-gray); }
+.btn--ink { background: var(--color-charcoal-ink); color: var(--color-paper-white); }
+.btn--ink:hover { background: var(--color-pure-black); }
+
+/* ─── Приветствие ─────────────────────────────────────────────────────── */
+.hello { display: flex; flex-direction: column; gap: var(--spacing-12); }
+.hello__tags { display: flex; gap: var(--spacing-8); flex-wrap: wrap; margin-top: var(--spacing-8); }
+
+/* ─── Инструмент: перелистываемые пикеры ──────────────────────────────── */
+.pickers { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--spacing-8); }
+.picker {
+  background: var(--surface-fog-mist);
+  border-radius: var(--radius-cards);
+  padding: var(--spacing-12) var(--spacing-8);
+  text-align: center;
+}
+.picker__row { display: flex; align-items: center; justify-content: space-between; gap: var(--spacing-4); }
+.picker__arrow {
+  font-family: var(--font-ibm-plex-mono); font-size: var(--text-caption);
+  background: none; border: none; color: var(--color-smoke); cursor: pointer; padding: 2px 4px;
+}
+.picker__arrow:hover { color: var(--color-charcoal-ink); }
+.picker__val { font-size: var(--text-body-sm); }
+.picker__lbl { font-size: var(--text-caption); color: var(--color-graphite); margin-top: var(--spacing-8); }
+
+/* ─── Метроном ────────────────────────────────────────────────────────── */
+.metro { text-align: center; }
+.metro__bpm { font-size: var(--text-heading); line-height: 1; font-weight: var(--font-weight-light); }
+.metro__beats { display: flex; justify-content: center; gap: var(--spacing-8); margin: var(--spacing-20) 0; }
+.metro__beat { width: 10px; height: 10px; border-radius: 50%; background: var(--color-concrete-gray); }
+.metro__beat.is-on { background: var(--color-charcoal-ink); }
+.metro__range { width: 100%; margin: var(--spacing-12) 0 var(--spacing-20); accent-color: #303030; }
+
+/* ─── Журнал занятий: ахроматическая тепловая карта ───────────────────── */
+.heat { display: grid; grid-template-columns: repeat(14, 1fr); gap: 5px; }
+.heat i { display: block; aspect-ratio: 1; border-radius: var(--radius-sm); background: var(--color-ash-border); }
+.heat i.l1 { background: var(--color-concrete-gray); }
+.heat i.l2 { background: var(--color-smoke); }
+.heat i.l3 { background: var(--color-graphite); }
+.heat i.l4 { background: var(--color-charcoal-ink); }
+.heat__legend { display: flex; align-items: center; justify-content: space-between; margin-top: var(--spacing-12); font-size: var(--text-caption); color: var(--color-graphite); }
+
+/* ─── Репертуар ───────────────────────────────────────────────────────── */
+.rep { display: flex; flex-direction: column; gap: var(--spacing-8); }
+.rep__row {
+  display: flex; align-items: center; gap: var(--spacing-12);
+  background: var(--surface-fog-mist);
+  border-radius: var(--radius-cards);
+  padding: var(--spacing-12) var(--spacing-20);
+  font-size: var(--text-body-sm);
+}
+.rep__row span:last-child { margin-left: auto; color: var(--color-graphite); font-size: var(--text-caption); }
+.bar { height: 4px; border-radius: 2px; background: var(--color-ash-border); flex: none; width: 72px; overflow: hidden; }
+.bar i { display: block; height: 100%; background: var(--color-charcoal-ink); }
+
+/* ─── Счётчик ─────────────────────────────────────────────────────────── */
+.count { text-align: center; }
+.count__n { font-size: var(--text-heading); line-height: 1; font-weight: var(--font-weight-light); margin-bottom: var(--spacing-20); }
+
+/* ─── Заметка педагога ────────────────────────────────────────────────── */
+.note p { font-size: var(--text-body-sm); line-height: 1.6; }
+.note__who { display: flex; align-items: center; gap: var(--spacing-8); margin-top: var(--spacing-20); font-size: var(--text-caption); color: var(--color-graphite); }
+
+/* ─── Расписание ──────────────────────────────────────────────────────── */
+.slots { display: flex; flex-direction: column; gap: var(--spacing-8); }
+.slot {
+  display: flex; align-items: baseline; gap: var(--spacing-12);
+  border-radius: var(--radius-cards);
+  background: var(--surface-fog-mist);
+  padding: var(--spacing-12) var(--spacing-20);
+  font-size: var(--text-body-sm);
+}
+.slot b { font-weight: var(--font-weight-regular); }
+.slot span { margin-left: auto; color: var(--color-graphite); font-size: var(--text-caption); }
+
+/* ─── Нижний ряд пилюль ───────────────────────────────────────────────── */
+.bottom { display: flex; gap: var(--spacing-8); flex-wrap: wrap; margin-top: var(--spacing-24); }
+</style>
+</head>
+<body>
+
+<!-- ─── Верхняя полоса ────────────────────────────────────────────────── -->
+<div class="top">
+  <span class="pill"><span class="dot"></span><span data-i18n="top.status">Etude — practice desk</span></span>
+  <a class="pill pill--ghost" href="#" data-i18n="top.link">Selected students</a>
+  <div class="top__right">
+    <div class="lang">
+      <button type="button" data-set="en" aria-pressed="true">EN</button>
+      <button type="button" data-set="ru" aria-pressed="false">RU</button>
+    </div>
+    <div class="faces">
+      <span class="face">V</span><span class="face">M</span><span class="face">K</span>
+      <span class="face">A</span><span class="face">+9</span>
+    </div>
+  </div>
+</div>
+
+<!-- ─── Мозаика виджетов ──────────────────────────────────────────────── -->
+<div class="grid">
+
+  <!-- Приветствие -->
+  <div class="card hello">
+    <span class="cap" data-i18n="cap.hello">((Y)our desk.)</span>
+    <div class="h-sm">
+      <span data-i18n="hello.a">Hi</span> <span id="who">Vera</span>,<br>
+      <span data-i18n="hello.b">Etude is</span> <span class="hl">(y)</span><span data-i18n="hello.c">our practice desk.</span>
+    </div>
+    <p class="sm muted" data-i18n="hello.p">Everything you played this month, the pieces you are avoiding, and the twelve minutes you still owe today.</p>
+    <div class="hello__tags">
+      <span class="pill" data-i18n="hello.t1">cello · 6 yrs</span>
+      <span class="pill" data-i18n="hello.t2">grade 7</span>
+    </div>
+  </div>
+
+  <!-- Инструмент -->
+  <div class="card w2">
+    <span class="cap" data-i18n="cap.setup">((Y)our setup.)</span>
+    <div class="pickers">
+      <div class="picker">
+        <div class="picker__row">
+          <button class="picker__arrow" data-pick="0" data-d="-1">‹</button>
+          <span class="picker__val" data-pick-val="0">cello</span>
+          <button class="picker__arrow" data-pick="0" data-d="1">›</button>
+        </div>
+        <div class="picker__lbl" data-i18n="pick.1">instrument</div>
+      </div>
+      <div class="picker">
+        <div class="picker__row">
+          <button class="picker__arrow" data-pick="1" data-d="-1">‹</button>
+          <span class="picker__val" data-pick-val="1">A=442</span>
+          <button class="picker__arrow" data-pick="1" data-d="1">›</button>
+        </div>
+        <div class="picker__lbl" data-i18n="pick.2">tuning</div>
+      </div>
+      <div class="picker">
+        <div class="picker__row">
+          <button class="picker__arrow" data-pick="2" data-d="-1">‹</button>
+          <span class="picker__val" data-pick-val="2">45 min</span>
+          <button class="picker__arrow" data-pick="2" data-d="1">›</button>
+        </div>
+        <div class="picker__lbl" data-i18n="pick.3">daily goal</div>
+      </div>
+      <div class="picker">
+        <div class="picker__row">
+          <button class="picker__arrow" data-pick="3" data-d="-1">‹</button>
+          <span class="picker__val" data-pick-val="3">08:00</span>
+          <button class="picker__arrow" data-pick="3" data-d="1">›</button>
+        </div>
+        <div class="picker__lbl" data-i18n="pick.4">reminder</div>
+      </div>
+    </div>
+    <input class="input" id="nameInput" style="margin-top:var(--spacing-20)" placeholder="Input your own name." data-i18n-ph="ph.name">
+  </div>
+
+  <!-- Метроном -->
+  <div class="card metro">
+    <span class="cap" data-i18n="cap.metro">((Y)our metronome.)</span>
+    <div class="metro__bpm"><span id="bpm">72</span></div>
+    <div class="sm muted" data-i18n="metro.unit">bpm · 4/4</div>
+    <div class="metro__beats">
+      <span class="metro__beat is-on"></span><span class="metro__beat"></span>
+      <span class="metro__beat"></span><span class="metro__beat"></span>
+    </div>
+    <input class="metro__range" type="range" min="40" max="208" value="72" id="bpmRange">
+    <button class="btn" id="metroBtn" data-i18n="metro.btn">Start</button>
+  </div>
+
+  <!-- Журнал -->
+  <div class="card w2">
+    <span class="cap" data-i18n="cap.log">((Y)our practice log.)</span>
+    <div class="heat" id="heat"></div>
+    <div class="heat__legend">
+      <span data-i18n="log.from">14 weeks ago</span>
+      <span data-i18n="log.to">today</span>
+    </div>
+  </div>
+
+  <!-- Репертуар -->
+  <div class="card w2">
+    <span class="cap" data-i18n="cap.rep">((Y)our repertoire.)</span>
+    <div class="rep">
+      <div class="rep__row"><span data-i18n="rep.1">Bach · Suite No. 1, Prelude</span><span class="bar"><i style="width:88%"></i></span><span>88%</span></div>
+      <div class="rep__row"><span data-i18n="rep.2">Elgar · Cello Concerto, I</span><span class="bar"><i style="width:41%"></i></span><span>41%</span></div>
+      <div class="rep__row"><span data-i18n="rep.3">Popper · Etude No. 7</span><span class="bar"><i style="width:63%"></i></span><span>63%</span></div>
+      <div class="rep__row"><span data-i18n="rep.4">Fauré · Élégie</span><span class="bar"><i style="width:12%"></i></span><span>12%</span></div>
+    </div>
+  </div>
+
+  <!-- Счётчик -->
+  <div class="card count">
+    <span class="cap" data-i18n="cap.count">((Y)our streak.)</span>
+    <div class="count__n"><span id="streak">31</span></div>
+    <div class="sm muted" style="margin-bottom:var(--spacing-20)" data-i18n="count.unit">days without a gap</div>
+    <button class="btn btn--ink" id="streakBtn" data-i18n="count.btn">Log today</button>
+    <div class="sm muted" style="margin-top:var(--spacing-12)"><span id="streakWho" data-i18n="count.last">Vera logged it last.</span></div>
+  </div>
+
+  <!-- Заметка педагога -->
+  <div class="card note w2 card--mist">
+    <span class="cap" data-i18n="cap.note">((Y)our teacher's note.)</span>
+    <p data-i18n="note.p">“Stop practising the Elgar from the top. Start at bar 54 every second day — the passage you keep getting right is not the one costing you the exam.”</p>
+    <div class="note__who">
+      <span class="face" style="margin:0">M</span>
+      <span data-i18n="note.who">Marta Ivane · Tuesday</span>
+    </div>
+  </div>
+
+  <!-- Слух -->
+  <div class="card">
+    <span class="cap" data-i18n="cap.ear">((Y)our ear.)</span>
+    <div class="h-lg" style="text-align:center">m<span class="hl hl--cyan">3</span></div>
+    <div class="sm muted" style="text-align:center;margin-bottom:var(--spacing-20)" data-i18n="ear.sub">minor third · today's interval</div>
+    <button class="btn" data-i18n="ear.btn">Play it again</button>
+  </div>
+
+  <!-- Расписание -->
+  <div class="card w3">
+    <span class="cap" data-i18n="cap.week">((Y)our week.)</span>
+    <div class="slots">
+      <div class="slot"><b data-i18n="week.1.d">Tue 18:00</b><span data-i18n="week.1.t">Lesson with Marta · room 4</span></div>
+      <div class="slot"><b data-i18n="week.2.d">Thu 19:30</b><span data-i18n="week.2.t">Quartet rehearsal · Popper hall</span></div>
+      <div class="slot"><b data-i18n="week.3.d">Sat 11:00</b><span data-i18n="week.3.t">Recording session · studio B</span></div>
+      <div class="slot"><b data-i18n="week.4.d">Sun 09:00</b><span data-i18n="week.4.t">Scales, slowly, no metronome</span></div>
+    </div>
+  </div>
+
+  <!-- Сегодня -->
+  <div class="card card--sand">
+    <span class="cap" data-i18n="cap.today">((Y)our twelve minutes.)</span>
+    <div class="h-lg" style="text-align:center">12</div>
+    <div class="sm" style="text-align:center;margin-bottom:var(--spacing-20)" data-i18n="today.unit">minutes still owed today</div>
+    <button class="btn" data-i18n="today.btn">Start the timer</button>
+  </div>
+
+</div>
+
+<!-- ─── Нижний ряд ────────────────────────────────────────────────────── -->
+<div class="bottom">
+  <a class="pill" href="#" data-i18n="b.1">hello@etude.school</a>
+  <a class="pill" href="#" data-i18n="b.2">@etude.practice</a>
+  <a class="pill" href="#" data-i18n="b.3">Tbilisi · Vienna</a>
+  <a class="pill pill--ghost" href="#" data-i18n="b.4">© 2026 Etude</a>
+</div>
+
+<script>
+/* Английский — исходный; русский — перевод. Дефолт EN, без автодетекта. */
+var I18N = {
+  ru: {
+    "top.status": "Etude — стол занятий",
+    "top.link": "Избранные ученики",
+
+    "cap.hello": "((В)аш стол.)",
+    "hello.a": "Привет,",
+    "hello.b": "Etude —",
+    "hello.c": "аш стол занятий.",
+    "hello.p": "Всё, что вы играли в этом месяце, пьесы, которых вы избегаете, и двенадцать минут, которые вы сегодня ещё должны.",
+    "hello.t1": "виолончель · 6 лет",
+    "hello.t2": "7 класс",
+
+    "cap.setup": "((В)аши настройки.)",
+    "pick.1": "инструмент",
+    "pick.2": "строй",
+    "pick.3": "норма в день",
+    "pick.4": "напоминание",
+    "ph.name": "Введите своё имя.",
+
+    "cap.metro": "((В)аш метроном.)",
+    "metro.unit": "уд/мин · 4/4",
+    "metro.btn": "Пуск",
+
+    "cap.log": "((В)аш журнал занятий.)",
+    "log.from": "14 недель назад",
+    "log.to": "сегодня",
+
+    "cap.rep": "((В)аш репертуар.)",
+    "rep.1": "Бах · Сюита № 1, прелюдия",
+    "rep.2": "Элгар · Концерт для виолончели, I",
+    "rep.3": "Поппер · Этюд № 7",
+    "rep.4": "Форе · Элегия",
+
+    "cap.count": "((В)аша серия.)",
+    "count.unit": "дней без пропуска",
+    "count.btn": "Отметить сегодня",
+    "count.last": "Последней отметилась Вера.",
+
+    "cap.note": "((В)аша заметка педагога.)",
+    "note.p": "«Перестаньте играть Элгара с начала. Начинайте с 54-го такта через день — то место, которое у вас выходит, не оно стоит вам экзамена».",
+    "note.who": "Марта Иване · вторник",
+
+    "cap.ear": "((В)аш слух.)",
+    "ear.sub": "малая терция · интервал дня",
+    "ear.btn": "Сыграть ещё раз",
+
+    "cap.week": "((В)аша неделя.)",
+    "week.1.d": "Вт 18:00",
+    "week.1.t": "Урок с Мартой · аудитория 4",
+    "week.2.d": "Чт 19:30",
+    "week.2.t": "Репетиция квартета · зал Поппера",
+    "week.3.d": "Сб 11:00",
+    "week.3.t": "Запись · студия Б",
+    "week.4.d": "Вс 09:00",
+    "week.4.t": "Гаммы, медленно, без метронома",
+
+    "cap.today": "((В)аши двенадцать минут.)",
+    "today.unit": "минут вы сегодня ещё должны",
+    "today.btn": "Запустить таймер",
+
+    "b.1": "hello@etude.school",
+    "b.2": "@etude.practice",
+    "b.3": "Тбилиси · Вена",
+    "b.4": "© 2026 Etude"
+  }
+};
+
+(function () {
+  var nameTouched = false;
+  /* ── i18n ── */
+  var nodes = document.querySelectorAll('[data-i18n]');
+  var phNodes = document.querySelectorAll('[data-i18n-ph]');
+  var EN = {}, ENPH = {};
+  nodes.forEach(function (n) { EN[n.getAttribute('data-i18n')] = n.textContent; });
+  phNodes.forEach(function (n) { ENPH[n.getAttribute('data-i18n-ph')] = n.placeholder; });
+
+  function apply(lang) {
+    nodes.forEach(function (n) {
+      var k = n.getAttribute('data-i18n');
+      var v = lang === 'ru' ? I18N.ru[k] : EN[k];
+      if (v) n.textContent = v;
+    });
+    phNodes.forEach(function (n) {
+      var k = n.getAttribute('data-i18n-ph');
+      var v = lang === 'ru' ? I18N.ru[k] : ENPH[k];
+      if (v) n.placeholder = v;
+    });
+    document.documentElement.lang = lang;
+    document.documentElement.setAttribute('data-lang', lang);
+    document.querySelectorAll('.lang [data-set]').forEach(function (b) {
+      b.setAttribute('aria-pressed', String(b.getAttribute('data-set') === lang));
+    });
+    var w = document.getElementById('who');
+    if (!nameTouched) w.textContent = lang === 'ru' ? 'Вера' : 'Vera';
+    paintPickers();
+  }
+  document.querySelectorAll('.lang [data-set]').forEach(function (b) {
+    b.addEventListener('click', function () { apply(b.getAttribute('data-set')); });
+  });
+
+  /* ── журнал занятий: 14 недель × 7 дней ── */
+  var heat = document.getElementById('heat');
+  var seed = 7;
+  function rnd() { seed = (seed * 1103515245 + 12345) % 2147483648; return seed / 2147483648; }
+  for (var i = 0; i < 98; i++) {
+    var el = document.createElement('i');
+    var r = rnd();
+    if (r > 0.86) el.className = 'l4';
+    else if (r > 0.66) el.className = 'l3';
+    else if (r > 0.42) el.className = 'l2';
+    else if (r > 0.2) el.className = 'l1';
+    heat.appendChild(el);
+  }
+
+  /* ── имя ── */
+  var who = document.getElementById('who');
+  document.getElementById('nameInput').addEventListener('input', function (e) {
+    var v = e.target.value.trim();
+    nameTouched = !!v;
+    who.textContent = v || (document.documentElement.getAttribute('data-lang') === 'ru' ? 'Вера' : 'Vera');
+  });
+
+  /* ── пикеры ── */
+  var SETS = {
+    en: [
+      ['cello', 'violin', 'viola', 'bass'],
+      ['A=440', 'A=442', 'A=415'],
+      ['30 min', '45 min', '60 min', '90 min'],
+      ['07:00', '08:00', '18:00', 'off']
+    ],
+    ru: [
+      ['виолончель', 'скрипка', 'альт', 'контрабас'],
+      ['A=440', 'A=442', 'A=415'],
+      ['30 мин', '45 мин', '60 мин', '90 мин'],
+      ['07:00', '08:00', '18:00', 'нет']
+    ]
+  };
+  var pos = [0, 1, 1, 1];
+  function paintPickers() {
+    var L = document.documentElement.getAttribute('data-lang') === 'ru' ? 'ru' : 'en';
+    for (var i = 0; i < 4; i++) {
+      document.querySelector('[data-pick-val="' + i + '"]').textContent = SETS[L][i][pos[i]];
+    }
+  }
+  document.querySelectorAll('[data-pick]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var L = document.documentElement.getAttribute('data-lang') === 'ru' ? 'ru' : 'en';
+      var i = +b.getAttribute('data-pick'), d = +b.getAttribute('data-d');
+      pos[i] = (pos[i] + d + SETS[L][i].length) % SETS[L][i].length;
+      paintPickers();
+    });
+  });
+
+  /* ── метроном ── */
+  var bpmEl = document.getElementById('bpm');
+  var range = document.getElementById('bpmRange');
+  var beats = document.querySelectorAll('.metro__beat');
+  var btn = document.getElementById('metroBtn');
+  var timer = null, beat = 0;
+  range.addEventListener('input', function () {
+    bpmEl.textContent = range.value;
+    if (timer) { start(); }
+  });
+  function tick() {
+    beats.forEach(function (b, i) { b.classList.toggle('is-on', i === beat); });
+    beat = (beat + 1) % beats.length;
+  }
+  function start() {
+    if (timer) clearInterval(timer);
+    timer = setInterval(tick, 60000 / +range.value);
+  }
+  btn.addEventListener('click', function () {
+    if (timer) {
+      clearInterval(timer); timer = null; beat = 0;
+      beats.forEach(function (b, i) { b.classList.toggle('is-on', i === 0); });
+      btn.textContent = document.documentElement.getAttribute('data-lang') === 'ru' ? 'Пуск' : 'Start';
+    } else {
+      start();
+      btn.textContent = document.documentElement.getAttribute('data-lang') === 'ru' ? 'Стоп' : 'Stop';
+    }
+  });
+
+  /* ── серия ── */
+  var streak = document.getElementById('streak');
+  document.getElementById('streakBtn').addEventListener('click', function () {
+    streak.textContent = +streak.textContent + 1;
+    var w = document.getElementById('streakWho');
+    w.textContent = document.documentElement.getAttribute('data-lang') === 'ru'
+      ? 'Последними отметились вы.' : 'You logged it last.';
+  });
+})();
+</script>
+</body>
+</html>

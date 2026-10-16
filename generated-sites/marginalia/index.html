@@ -1,0 +1,106 @@
+<!doctype html><html lang="en" data-lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Marginalia — Small press, big ideas</title><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Oswald:wght@600;700&family=Source+Serif+4:ital,wght@0,400;1,400&display=swap" rel="stylesheet"><style>:root {
+  /* Colors */
+  --color-paper: #fafafa;
+  --color-hairline: #eeeeee;
+  --color-midstone: #9f9f9f;
+  --color-ash: #666666;
+  --color-pebble: #b3b3b3;
+  --color-sepia: #3e3b36;
+  --color-headline-ink: #2a2722;
+
+  /* Typography — Font Families */
+  --font-neue-montreal: 'Neue Montreal', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-louize-display: 'Louize Display', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-louize: 'Louize', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-manuka: 'Manuka', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* Typography — Scale */
+  --text-caption: 12px;
+  --leading-caption: 1.5;
+  --tracking-caption: -0.12px;
+  --text-body: 16px;
+  --leading-body: 1.5;
+  --tracking-body: -0.16px;
+  --text-subheading: 20px;
+  --leading-subheading: 1.3;
+  --tracking-subheading: -0.2px;
+  --text-heading-sm: 24px;
+  --leading-heading-sm: 1.2;
+  --tracking-heading-sm: -0.24px;
+  --text-heading: 32px;
+  --leading-heading: 1.1;
+  --tracking-heading: -0.32px;
+  --text-heading-lg: 77px;
+  --leading-heading-lg: 0.9;
+  --tracking-heading-lg: 0px;
+  --text-display: 132px;
+  --leading-display: 0.8;
+  --tracking-display: 0px;
+  --text-display-xl: 371px;
+  --leading-display-xl: 0.75;
+  --tracking-display-xl: 0px;
+
+  /* Typography — Weights */
+  --font-weight-regular: 400;
+  --font-weight-bold: 700;
+
+  /* Spacing */
+  --spacing-unit: 4px;
+  --spacing-4: 4px;
+  --spacing-8: 8px;
+  --spacing-12: 12px;
+  --spacing-16: 16px;
+  --spacing-20: 20px;
+  --spacing-24: 24px;
+  --spacing-32: 32px;
+  --spacing-64: 64px;
+  --spacing-80: 80px;
+  --spacing-224: 224px;
+
+  /* Layout */
+  --section-gap: 64-96px;
+  --card-padding: 16px;
+  --element-gap: 16px;
+
+  /* Border Radius */
+  --radius-xl: 12px;
+
+  /* Named Radii */
+  --radius-tags: 12px;
+  --radius-cards: 12px;
+  --radius-buttons: 12px;
+
+  /* Surfaces */
+  --surface-paper: #fafafa;
+  --surface-ink: #2a2722;
+}
+
+/* Cyrillic substitutions and geometry adapted to the reference masthead. */
+:root{--ui:'Inter',sans-serif;--serif:'Source Serif 4',serif;--condensed:'Oswald',sans-serif;--masthead-size:clamp(150px,16.2vw,240px);--rail-duration:20s}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--color-paper);color:var(--color-headline-ink);font:var(--text-body)/var(--leading-body) var(--ui);letter-spacing:var(--tracking-body)}a{color:inherit;text-decoration:none}button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}a:hover{text-decoration:underline}button:hover{text-decoration:underline}:focus-visible{outline:2px solid currentColor;outline-offset:5px}h1,h2,p{margin:0}.rail{overflow:hidden;border-bottom:1px solid currentColor;padding:var(--spacing-8) 0;font:var(--text-heading-sm)/1.2 var(--serif)}.rail-track{display:flex;width:max-content;animation:marquee var(--rail-duration) linear infinite}.rail-copy{flex-shrink:0;padding-right:var(--spacing-32)}@keyframes marquee{to{transform:translateX(-50%)}}.motion-paused .rail-track{animation-play-state:paused}.topline{display:flex;justify-content:space-between;padding:var(--spacing-12) var(--spacing-16);text-transform:uppercase;font-size:var(--text-caption)}.languages{display:flex;gap:var(--spacing-8)}[aria-pressed=true]{text-decoration:underline;text-underline-offset:4px}.masthead{padding:0 var(--spacing-16)}h1{font:700 var(--masthead-size)/1.02 var(--condensed);letter-spacing:-.055em;white-space:nowrap;text-align:center;padding-top:var(--spacing-24);padding-bottom:var(--spacing-12);border-bottom:1px solid currentColor}.hero-bottom{display:grid;grid-template-columns:minmax(0,1.75fr) minmax(0,1fr);gap:var(--spacing-16);padding-bottom:var(--spacing-32)}.subtitle{font:400 clamp(48px,5.5vw,84px)/1.1 var(--serif);letter-spacing:-.04em;border-bottom:1px solid currentColor;padding:var(--spacing-12) 0 var(--spacing-20);white-space:nowrap}.meta{font-size:var(--text-caption);border-bottom:1px solid currentColor;padding:var(--spacing-8) 0}.hero-columns{display:grid;grid-template-columns:1fr 1.2fr;gap:var(--spacing-32);padding-top:var(--spacing-24)}nav a{display:block;margin-bottom:var(--spacing-12);font-size:var(--text-body)}.intro{font:var(--text-heading-sm)/var(--leading-heading-sm) var(--serif);max-width:360px}.plate{border:1px solid currentColor;margin-top:var(--spacing-12);overflow:hidden;border-radius:var(--radius-cards)}.plate svg{display:block;width:100%;height:360px}.plate figcaption{padding:var(--spacing-8);border-top:1px solid currentColor;font-size:var(--text-caption)}figure{margin:0}.letter{padding:var(--spacing-80) var(--spacing-32);background:var(--color-headline-ink);color:var(--color-paper);text-align:center}.eyebrow{font-size:var(--text-caption);text-transform:uppercase}.letter h2{font:var(--text-heading-lg)/1.05 var(--serif);margin:var(--spacing-32) auto}.letter p{max-width:720px;margin:auto;font:var(--text-heading-sm)/1.4 var(--serif)}.program{padding:var(--spacing-64) var(--spacing-32)}.program-head{display:flex;align-items:baseline;justify-content:space-between;border-bottom:1px solid currentColor;padding-bottom:var(--spacing-24)}.program h2{font:700 90px/1 var(--condensed);letter-spacing:-.04em}.program-head p{font-family:var(--serif);font-style:italic;font-size:var(--text-heading-sm)}.event{display:grid;grid-template-columns:150px 1fr 1fr;gap:var(--spacing-32);padding:var(--spacing-32) 0;border-bottom:1px solid currentColor}.event h3{margin:0;font:var(--text-heading)/1.1 var(--serif)}.event p{max-width:480px}.event time{font-size:var(--text-caption)}.visit{padding:var(--spacing-64) var(--spacing-32);display:grid;grid-template-columns:1.5fr 1fr;border-top:1px solid currentColor;gap:var(--spacing-64)}.visit h2{font:var(--text-heading-lg)/1.05 var(--serif);letter-spacing:-.04em}.visit p{max-width:420px}.download{display:inline-block;border:1px solid currentColor;border-radius:var(--radius-buttons);padding:var(--spacing-12) var(--spacing-24);margin-top:var(--spacing-32)}footer{display:flex;justify-content:space-between;align-items:center;background:var(--color-headline-ink);color:var(--color-paper);padding:var(--spacing-20) var(--spacing-32);font-size:var(--text-caption)}html[data-lang=ru]{--masthead-size:clamp(130px,14vw,210px)}html[data-lang=ru] .subtitle{font-size:68px}html[data-lang=ru] .visit h2{font-size:64px}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.rail-track{animation:none}}
+</style></head><body><div class="rail"><div class="rail-track"><span class="rail-copy"><span data-i18n="rail" >SMALL PRESSES. BIG IDEAS. INDEPENDENT PUBLISHING, IN PERSON. — </span></span><span class="rail-copy" aria-hidden="true"><span data-i18n="rail" >SMALL PRESSES. BIG IDEAS. INDEPENDENT PUBLISHING, IN PERSON. — </span></span></div></div>
+<header class="topline"><b>MARGINALIA®</b><span data-i18n="date" >21—22 NOVEMBER / EDITION 01</span><div class="languages"><button data-lang="en" aria-pressed="true">EN</button><span>/</span><button data-lang="ru" aria-pressed="false">RU</button></div></header>
+<main><section class="masthead"><h1 data-i18n="title" >SMALL PRESS</h1><div class="hero-bottom"><div><div data-i18n="subtitle" class="subtitle">a world on paper</div><div data-i18n="meta" class="meta">32 PRESSES — 12 CONVERSATIONS — ONE PRINT ROOM</div><div class="hero-columns"><nav><a data-i18n="nav1" href="#programme">The programme</a><a data-i18n="nav2" href="#letter">A note from us</a><a data-i18n="nav3" href="#visit">Plan your visit</a></nav><div><p data-i18n="eyebrow" class="eyebrow">A gathering for people who make books</p><p data-i18n="intro" class="intro">A two-day gathering of independent publishers, patient readers and people with ink on their hands.</p></div></div></div><figure class="plate"><svg viewBox="0 0 600 510" role="img" aria-label="An open book drawn as a monochrome print"><defs><pattern id="dots" width="5" height="5" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".65" fill="currentColor"/></pattern></defs><rect width="600" height="510" fill="url(#dots)" opacity=".25"/><g fill="none" stroke="currentColor" stroke-width="1.5" transform="rotate(-12 300 255)"><path d="M80 130 L245 210 L410 125"/><path d="M83 135 L247 214 L412 130"/><path d="M86 140 L249 218 L414 135"/><path d="M89 145 L251 222 L416 140"/><path d="M92 150 L253 226 L418 145"/><path d="M95 155 L255 230 L420 150"/><path d="M98 160 L257 234 L422 155"/><path d="M101 165 L259 238 L424 160"/><path d="M104 170 L261 242 L426 165"/><path d="M107 175 L263 246 L428 170"/><path d="M110 180 L265 250 L430 175"/><path d="M113 185 L267 254 L432 180"/><path d="M116 190 L269 258 L434 185"/><path d="M119 195 L271 262 L436 190"/><path d="M122 200 L273 266 L438 195"/><path d="M125 205 L275 270 L440 200"/><path d="M128 210 L277 274 L442 205"/><path d="M131 215 L279 278 L444 210"/><path d="M134 220 L281 282 L446 215"/><path d="M137 225 L283 286 L448 220"/><path d="M140 230 L285 290 L450 225"/><path d="M143 235 L287 294 L452 230"/><path d="M146 240 L289 298 L454 235"/><path d="M149 245 L291 302 L456 240"/><path d="M80 130L245 210L410 125L490 355L310 450L150 360Z" stroke-width="3"/><path d="M245 210L310 450" stroke-width="3"/></g><text x="36" y="470" fill="currentColor" font-family="serif" font-size="22">Ex libris. Ex animo.</text></svg><figcaption data-i18n="caption" >PRINTED MATTER / UNLIMITED POSSIBILITIES</figcaption></figure></div></section>
+<section class="letter" id="letter"><div data-i18n="letterlabel" class="eyebrow">A NOTE FROM THE ORGANISERS</div><h2 data-i18n="letter" >Some things deserve<br>to exist on paper.</h2><p data-i18n="letterbody" >The folded corner. The pencilled note. A book passed between friends. Marginalia is a place for the small editions that make a large impression. Come for a title you have never heard of. Stay for the person who made it.</p></section>
+<section class="program" id="programme"><div class="program-head"><h2 data-i18n="program" >THE PROGRAMME</h2><p data-i18n="programnote" >Two days. Take your time.</p></div><article class="event"><time>21—22 / 10:00—18:00</time><h3 data-i18n="p1" >The reading room</h3><p data-i18n="d1" >Open tables, small editions and conversations with their makers. No algorithm between you and your next favourite book.</p></article><article class="event"><time>21 / 14:00—16:00</time><h3 data-i18n="p2" >From plate to paper</h3><p data-i18n="d2" >Watch a print become a page. A hands-on introduction to letterpress, with something to take home.</p></article><article class="event"><time>22 / 12:00—13:00</time><h3 data-i18n="p3" >The unfinished book</h3><p data-i18n="d3" >Publishers share the mock-ups, mistakes and marginal notes that never made it into the final edition.</p></article></section><section class="visit" id="visit"><h2 data-i18n="visit" >Come curious.<br>Leave with a book.</h2><div><p data-i18n="visitcopy" >Explore a sample two-day programme and save it for later. This is a fictional festival concept; no tickets are sold.</p><button data-i18n="save" class="download" id="download">Save the programme ↓</button><p id="status" role="status"></p></div></section></main><footer><span data-i18n="footer" >MARGINALIA / AN INDEPENDENT PUBLISHING FESTIVAL</span><span data-i18n="concept" >DESIGN CONCEPT · EN / RU</span><button id="motion-toggle" aria-pressed="false">Pause motion</button></footer><script>let lang='en';const I18N={"en": {"rail": "SMALL PRESSES. BIG IDEAS. INDEPENDENT PUBLISHING, IN PERSON. — ", "eyebrow": "A gathering for people who make books", "date": "21—22 NOVEMBER / EDITION 01", "title": "SMALL PRESS", "subtitle": "a world on paper", "nav1": "The programme", "nav2": "A note from us", "nav3": "Plan your visit", "intro": "A two-day gathering of independent publishers, patient readers and people with ink on their hands.", "meta": "32 PRESSES — 12 CONVERSATIONS — ONE PRINT ROOM", "caption": "PRINTED MATTER / UNLIMITED POSSIBILITIES", "letterlabel": "A NOTE FROM THE ORGANISERS", "letter": "Some things deserve<br>to exist on paper.", "letterbody": "The folded corner. The pencilled note. A book passed between friends. Marginalia is a place for the small editions that make a large impression. Come for a title you have never heard of. Stay for the person who made it.", "program": "THE PROGRAMME", "programnote": "Two days. Take your time.", "p1": "The reading room", "d1": "Open tables, small editions and conversations with their makers. No algorithm between you and your next favourite book.", "p2": "From plate to paper", "d2": "Watch a print become a page. A hands-on introduction to letterpress, with something to take home.", "p3": "The unfinished book", "d3": "Publishers share the mock-ups, mistakes and marginal notes that never made it into the final edition.", "visit": "Come curious.<br>Leave with a book.", "visitcopy": "Explore a sample two-day programme and save it for later. This is a fictional festival concept; no tickets are sold.", "save": "Save the programme ↓", "saved": "Programme downloaded ✓", "pause": "Pause motion", "resume": "Resume motion", "footer": "MARGINALIA / AN INDEPENDENT PUBLISHING FESTIVAL", "concept": "DESIGN CONCEPT · EN / RU"}, "ru": {"rail": "МАЛЫЕ ТИРАЖИ. БОЛЬШИЕ ИДЕИ. НЕЗАВИСИМЫЕ ИЗДАТЕЛИ — ЛИЧНО. — ", "eyebrow": "Встреча для тех, кто делает книги", "date": "21—22 НОЯБРЯ / ВЫПУСК 01", "title": "МАЛЫЙ ТИРАЖ", "subtitle": "целый мир на бумаге", "nav1": "Программа", "nav2": "От организаторов", "nav3": "Спланировать визит", "intro": "Два дня для независимых издателей, внимательных читателей и людей, у которых руки в типографской краске.", "meta": "32 ИЗДАТЕЛЯ — 12 БЕСЕД — ОДНА ПЕЧАТНАЯ МАСТЕРСКАЯ", "caption": "ПЕЧАТНЫЕ ВЕЩИ / БЕЗГРАНИЧНЫЕ ВОЗМОЖНОСТИ", "letterlabel": "ПИСЬМО ОРГАНИЗАТОРОВ", "letter": "Некоторым вещам<br>нужна бумага.", "letterbody": "Загнутый угол. Заметка карандашом. Книга, которую передают друзьям. Marginalia — место для маленьких тиражей с большим впечатлением. Приходите за незнакомой книгой. Оставайтесь ради человека, который её сделал.", "program": "ПРОГРАММА", "programnote": "Два дня. Не торопитесь.", "p1": "Читальный зал", "d1": "Открытые столы, малые тиражи и разговоры с авторами. Никаких алгоритмов между вами и вашей следующей любимой книгой.", "p2": "От формы к бумаге", "d2": "Посмотрите, как оттиск становится страницей. Знакомство с высокой печатью и работа, которую можно забрать домой.", "p3": "Неоконченная книга", "d3": "Издатели показывают макеты, ошибки и заметки на полях, не попавшие в окончательное издание.", "visit": "Приходите за новым.<br>Уходите с книгой.", "visitcopy": "Изучите пример программы на два дня и сохраните его. Это концепция вымышленного фестиваля; билеты не продаются.", "save": "Сохранить программу ↓", "saved": "Программа скачана ✓", "pause": "Остановить движение", "resume": "Продолжить движение", "footer": "MARGINALIA / ФЕСТИВАЛЬ НЕЗАВИСИМЫХ ИЗДАТЕЛЕЙ", "concept": "ДИЗАЙН-КОНЦЕПЦИЯ · EN / RU"}};let paused=false;function apply(l){lang=l;document.documentElement.lang=l;document.documentElement.dataset.lang=l;document.querySelectorAll('[data-i18n]').forEach(e=>e.innerHTML=I18N[l][e.dataset.i18n]);document.querySelectorAll('button[data-lang]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.lang===l));document.querySelector('#motion-toggle').textContent=I18N[l][paused?'resume':'pause'];document.querySelector('#status').textContent='';}document.querySelectorAll('button[data-lang]').forEach(b=>b.onclick=()=>apply(b.dataset.lang));document.querySelector('#motion-toggle').onclick=()=>{paused=!paused;document.body.classList.toggle('motion-paused',paused);document.querySelector('#motion-toggle').setAttribute('aria-pressed',paused);document.querySelector('#motion-toggle').textContent=I18N[lang][paused?'resume':'pause'];};document.querySelector('#download').onclick=()=>{const d=I18N[lang];const text=['MARGINALIA — '+d.date,d.visitcopy,...[1,2,3].map(i=>d['p'+i]+'\n'+d['d'+i])].join('\n\n');const url=URL.createObjectURL(new Blob([text],{type:'text/plain;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download='marginalia-programme-'+lang+'.txt';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);document.querySelector('#status').textContent=d.saved;};</script><!-- MIT License
+
+Copyright (c) Magic UI
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+ --></body></html>

@@ -1,0 +1,3 @@
+/* Original keyframes: Animista, Ana Travas. https://animista.net/play/background/bg-pan/bg-pan-top */
+.bg-pan-top{animation:bg-pan-top 8s ease 0s 1 normal both;}
+@keyframes bg-pan-top{0%{background-position:50% 100%}to{background-position:50% 0}}

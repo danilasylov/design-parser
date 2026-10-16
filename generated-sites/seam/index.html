@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>Seam — workwear published with its spec sheet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;700&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════════════════════════════
+   Дизайн-система ALIGNE — styles.refero.design/style/4c637873-7632-46c0-ac36-5744efa00444
+   :root ниже вставлен ДОСЛОВНО со вкладки CSS Variables.
+   ══════════════════════════════════════════════════════════════════ */
+:root {
+  /* Colors */
+  --color-warm-charcoal: #24170f;
+  --color-soft-black: #151515;
+  --color-pure-white: #ffffff;
+  --color-ash-gray: #ececec;
+  --color-signal-blue: #0073ff;
+
+  /* Typography — Font Families */
+  --font-gt-america-mono: 'GT America Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-nimbus-sans-extended: 'Nimbus Sans Extended', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-gtamericamonoregular: 'GTAmericaMonoRegular', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Typography — Scale */
+  --text-caption: 10px;
+  --leading-caption: 1.6;
+  --tracking-caption: 0.93px;
+  --text-body: 14px;
+  --leading-body: 1.7;
+  --tracking-body: 0.88px;
+  --text-heading-sm: 24px;
+  --leading-heading-sm: 1.28;
+  --tracking-heading-sm: 0.24px;
+  --text-heading: 40px;
+  --leading-heading: 1.13;
+  --tracking-heading: 4px;
+  --text-display: 60px;
+  --leading-display: 1.07;
+  --tracking-display: 7.98px;
+
+  /* Typography — Weights */
+  --font-weight-light: 300;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Spacing */
+  --spacing-unit: 4px;
+  --spacing-4: 4px;
+  --spacing-8: 8px;
+  --spacing-12: 12px;
+  --spacing-16: 16px;
+  --spacing-20: 20px;
+  --spacing-24: 24px;
+  --spacing-32: 32px;
+  --spacing-36: 36px;
+  --spacing-40: 40px;
+  --spacing-56: 56px;
+  --spacing-60: 60px;
+  --spacing-80: 80px;
+  --spacing-100: 100px;
+
+  /* Layout */
+  --page-max-width: 1200px;
+  --section-gap: 64px;
+  --card-padding: 20px;
+  --element-gap: 20px;
+
+  /* Border Radius */
+  --radius-sm: 3px;
+
+  /* Named Radii */
+  --radius-cards: 0px;
+  --radius-badges: 0px;
+  --radius-images: 0px;
+  --radius-inputs: 0px;
+  --radius-buttons: 0px;
+
+  /* Shadows */
+  --shadow-md: rgba(0, 0, 0, 0.15) 0px 2px 10px 0px;
+
+  /* Surfaces */
+  --surface-warm-white-canvas: #ffffff;
+  --surface-ash-gray-band: #ececec;
+  --surface-warm-charcoal-surface: #24170f;
+}
+
+/* Подстановки шрифтов. GT America Mono → JetBrains Mono (из списка замен, кириллица есть).
+   Nimbus Sans Extended — замены DESIGN.md (Bebas/Oswald/Barlow) все УЗКИЕ и противоречат
+   скриншоту, где дисплей широкий нео-гротеск; кириллицы у Bebas и Barlow тоже нет.
+   Поэтому взят Golos Text 700 — нео-гротеск нормальной ширины с кириллицей, а «extended»
+   отрабатывает обязательный трекинг 4–8px из системы. */
+:root {
+  --font-mono: 'JetBrains Mono', var(--font-gt-america-mono);
+  --font-disp: 'Golos Text', var(--font-nimbus-sans-extended);
+}
+
+* { box-sizing: border-box; }
+html { -webkit-font-smoothing: antialiased; }
+body {
+  margin: 0;
+  background: var(--surface-warm-white-canvas);
+  color: var(--color-soft-black);
+  font-family: var(--font-mono);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  letter-spacing: var(--tracking-body);
+  font-weight: var(--font-weight-regular);
+  font-feature-settings: "kern" on;
+}
+svg { display: block; }
+a { color: inherit; text-decoration: none; }
+h1, h2, h3, h4, p, ul { margin: 0; padding: 0; }
+ul { list-style: none; }
+
+.wrap { max-width: var(--page-max-width); margin: 0 auto; padding: 0 var(--spacing-24); }
+.sec { padding: var(--section-gap) 0; }
+
+/* дисплей: только капслок и обязательный широкий трекинг */
+.disp {
+  font-family: var(--font-disp);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--text-display);
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-display);
+  text-transform: uppercase;
+}
+.h {
+  font-family: var(--font-disp);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--text-heading);
+  line-height: var(--leading-heading);
+  letter-spacing: var(--tracking-heading);
+  text-transform: uppercase;
+}
+.h-sm {
+  font-family: var(--font-disp);
+  font-weight: var(--font-weight-bold);
+  font-size: 16px;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+}
+.eyebrow {
+  font-size: var(--text-caption);
+  letter-spacing: 0.093em;
+  text-transform: uppercase;
+  font-weight: var(--font-weight-medium);
+}
+.lbl { font-size: 12px; letter-spacing: 0.067em; text-transform: uppercase; font-weight: var(--font-weight-medium); }
+.muted { color: #6b6b6b; }
+
+/* кнопки: заливка только warm charcoal, радиус 0 */
+.btn {
+  display: inline-block;
+  background: var(--color-warm-charcoal);
+  color: var(--color-pure-white);
+  border: 1px solid var(--color-warm-charcoal);
+  border-radius: var(--radius-buttons);
+  padding: 17px var(--spacing-40);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: var(--font-weight-medium);
+  letter-spacing: 0.067em;
+  text-transform: uppercase;
+  line-height: 1;
+  cursor: pointer;
+}
+.btn-ghost { background: transparent; border-color: var(--color-pure-white); color: var(--color-pure-white); }
+.btn:hover { box-shadow: var(--shadow-md); }
+
+/* бейдж NEW IN — единственное место синего */
+.badge-new {
+  display: inline-block;
+  border: 1px solid var(--color-signal-blue);
+  color: var(--color-signal-blue);
+  border-radius: var(--radius-badges);
+  padding: 5px 10px;
+  font-size: var(--text-caption);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: 0.093em;
+  text-transform: uppercase;
+}
+
+/* навигация — прозрачная поверх тёмного героя */
+nav {
+  position: absolute; top: 0; left: 0; right: 0; z-index: 2;
+  display: flex; align-items: center; gap: var(--spacing-32);
+  padding: var(--spacing-24) var(--spacing-40);
+  color: var(--color-pure-white);
+}
+nav .links { display: flex; gap: var(--spacing-32); margin-left: auto; }
+nav a:hover { text-decoration: underline; text-underline-offset: 4px; }
+.lang { display: flex; gap: 5px; }
+.lang button { font: inherit; letter-spacing: 0.071em; text-transform: uppercase; border: none; background: none; padding: 0; cursor: pointer; color: rgba(255,255,255,.5); }
+.lang button[aria-pressed="true"] { color: var(--color-pure-white); }
+.lang span { color: rgba(255,255,255,.5); }
+
+/* герой: место полосной съёмки занимает технический чертёж на charcoal */
+.hero {
+  position: relative;
+  background: var(--surface-warm-charcoal-surface);
+  color: var(--color-pure-white);
+  min-height: 720px;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+.hero .flat { position: absolute; right: 8%; top: 50%; transform: translateY(-50%); opacity: .9; }
+.hero .flat-2 { position: absolute; left: 6%; top: 50%; transform: translateY(-50%); opacity: .35; }
+.hero .mid { position: relative; z-index: 1; text-align: center; }
+.hero .disp { max-width: 14ch; margin: 0 auto; }
+.hero .btn { margin-top: var(--spacing-32); }
+.hero .eyebrow { margin-bottom: var(--spacing-24); color: rgba(255,255,255,.65); }
+
+/* заголовок секции: двухъярусный */
+.sechead { text-align: center; margin-bottom: var(--spacing-56); }
+.sechead .eyebrow { margin-bottom: var(--spacing-16); }
+.sechead p { max-width: 62ch; margin: var(--spacing-24) auto 0; }
+
+/* сетка изделий: чертёж во всю ширину ячейки, без чрома */
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-40) var(--spacing-20); }
+.item .plate { background: var(--color-ash-gray); position: relative; }
+.item .plate .plus { position: absolute; right: 12px; bottom: 10px; font-size: 16px; line-height: 1; }
+.item .row { display: flex; align-items: center; gap: var(--spacing-12); margin-top: var(--spacing-12); min-height: 26px; }
+.item .price { margin-top: var(--spacing-4); }
+
+/* полоса ash */
+.band-ash { background: var(--surface-ash-gray-band); }
+.band-dark { background: var(--surface-warm-charcoal-surface); color: var(--color-pure-white); }
+
+/* спецификация — таблица */
+.spec { width: 100%; border-collapse: collapse; }
+.spec th, .spec td { text-align: left; padding: var(--spacing-16) var(--spacing-20); border-bottom: 1px solid rgba(21,21,21,.18); font-weight: var(--font-weight-regular); }
+.spec th { width: 240px; font-weight: var(--font-weight-medium); text-transform: uppercase; font-size: 12px; letter-spacing: 0.067em; }
+.spec tr:first-child th, .spec tr:first-child td { border-top: 1px solid rgba(21,21,21,.18); }
+
+/* два чертежа на тёмной полосе */
+.split { display: grid; grid-template-columns: 1fr 1fr; }
+.split > div { padding: var(--spacing-80) var(--spacing-40); display: flex; flex-direction: column; align-items: center; gap: var(--spacing-24); }
+.split > div + div { border-left: 1px solid rgba(255,255,255,.25); }
+
+footer { padding: var(--spacing-80) 0 var(--spacing-32); }
+.fcols { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: var(--spacing-40); }
+.fcols h4 { margin-bottom: var(--spacing-20); }
+.fcols li { margin-bottom: var(--spacing-8); font-size: 12px; }
+.flegal { display: flex; justify-content: space-between; margin-top: var(--spacing-60); padding-top: var(--spacing-20); border-top: 1px solid rgba(21,21,21,.18); }
+</style>
+</head>
+<body>
+
+<!-- ── герой ────────────────────────────────────────────────────── -->
+<section class="hero">
+  <nav>
+    <div class="lbl" style="letter-spacing:0.12em">SEAM</div>
+    <div class="links lbl">
+      <a href="#catalogue" data-i18n="nav1">Catalogue</a>
+      <a href="#spec" data-i18n="nav2">Spec</a>
+      <a href="#repair" data-i18n="nav3">Repair</a>
+      <div class="lang"><button data-set="en" aria-pressed="true">EN</button><span>/</span><button data-set="ru" aria-pressed="false">RU</button></div>
+      <span data-i18n="navcart">Cart (0)</span>
+    </div>
+  </nav>
+
+  <!-- чертёж-«флэт» вместо полосной съёмки: система разрешает только силуэт -->
+  <svg class="flat-2" width="300" height="420" viewBox="0 0 300 420" fill="none" stroke="#ffffff" stroke-width="1.2">
+    <path d="M75 70 L110 52 L150 70 L190 52 L225 70 L245 150 L215 162 L215 380 L85 380 L85 162 L55 150 Z"/>
+    <path d="M110 52 L150 96 L190 52"/><path d="M150 96 L150 380"/>
+    <path d="M85 230 L120 230 L120 268 L85 268"/><path d="M215 230 L180 230 L180 268 L215 268"/>
+  </svg>
+  <svg class="flat" width="420" height="560" viewBox="0 0 420 560" fill="none" stroke="#ffffff" stroke-width="1.4">
+    <!-- рабочая куртка, технический флэт -->
+    <path d="M108 92 L155 66 L210 92 L265 66 L312 92 L345 210 L300 228 L300 496 L120 496 L120 228 L75 210 Z"/>
+    <path d="M155 66 L210 126 L265 66"/>
+    <path d="M210 126 L210 496" stroke-dasharray="6 6"/>
+    <path d="M120 300 L172 300 L172 352 L120 352"/>
+    <path d="M300 300 L248 300 L248 352 L300 352"/>
+    <path d="M120 228 L172 228"/><path d="M300 228 L248 228"/>
+    <circle cx="210" cy="180" r="5"/><circle cx="210" cy="252" r="5"/><circle cx="210" cy="324" r="5"/><circle cx="210" cy="396" r="5"/>
+    <path d="M75 210 L60 300 L104 316 L120 228" />
+    <path d="M345 210 L360 300 L316 316 L300 228" />
+    <text x="366" y="304" fill="#ffffff" font-family="monospace" font-size="11" letter-spacing="1">62</text>
+    <path d="M356 250 L356 340" stroke-width="1"/><path d="M350 250 L362 250" stroke-width="1"/><path d="M350 340 L362 340" stroke-width="1"/>
+  </svg>
+
+  <div class="mid">
+    <div class="eyebrow" data-i18n="hk">Collection 09 · cotton drill 380 g</div>
+    <h1 class="disp" data-i18n="h1">Cut for eight years</h1>
+    <a class="btn btn-ghost" href="#catalogue" data-i18n="hb">See the spec sheet</a>
+  </div>
+</section>
+
+<!-- ── каталог ──────────────────────────────────────────────────── -->
+<section class="sec" id="catalogue">
+  <div class="wrap">
+    <div class="sechead">
+      <div class="eyebrow" data-i18n="c0">In stock</div>
+      <h2 class="h" data-i18n="c1">Nine garments</h2>
+      <p data-i18n="c2">Every piece is made in one workshop in Ivanovo from three fabrics we have not changed since 2019. Nothing is seasonal, nothing is discontinued, and every seam type is printed on the label.</p>
+    </div>
+    <div class="grid-3">
+      <div class="item">
+        <div class="plate">
+          <svg width="100%" height="320" viewBox="0 0 360 320" fill="none" stroke="#151515" stroke-width="1.2">
+            <path d="M120 60 L150 44 L180 60 L210 44 L240 60 L258 130 L232 140 L232 272 L128 272 L128 140 L102 130 Z"/>
+            <path d="M150 44 L180 82 L210 44"/><path d="M180 82 L180 272" stroke-dasharray="5 5"/>
+            <path d="M128 176 L160 176 L160 210 L128 210"/><path d="M232 176 L200 176 L200 210 L232 210"/>
+            <circle cx="180" cy="120" r="3.4"/><circle cx="180" cy="164" r="3.4"/><circle cx="180" cy="208" r="3.4"/>
+          </svg>
+          <span class="plus">+</span>
+        </div>
+        <div class="row"><span class="lbl" data-i18n="p1n">Chore jacket 01</span><span class="badge-new">New in</span></div>
+        <div class="price">14 900 ₽</div>
+      </div>
+      <div class="item">
+        <div class="plate">
+          <svg width="100%" height="320" viewBox="0 0 360 320" fill="none" stroke="#151515" stroke-width="1.2">
+            <path d="M132 46 L228 46 L238 120 L226 274 L188 274 L180 150 L172 274 L134 274 L122 120 Z"/>
+            <path d="M132 46 L228 46" /><path d="M180 46 L180 150" stroke-dasharray="5 5"/>
+            <path d="M138 96 L168 96 L168 120 L138 120"/><path d="M222 96 L192 96 L192 120 L222 120"/>
+            <path d="M124 70 L236 70"/>
+          </svg>
+          <span class="plus">+</span>
+        </div>
+        <div class="row"><span class="lbl" data-i18n="p2n">Double-knee trouser</span></div>
+        <div class="price">11 400 ₽</div>
+      </div>
+      <div class="item">
+        <div class="plate">
+          <svg width="100%" height="320" viewBox="0 0 360 320" fill="none" stroke="#151515" stroke-width="1.2">
+            <path d="M150 44 L210 44 L214 70 L236 84 L236 250 L124 250 L124 84 L146 70 Z"/>
+            <path d="M150 44 C150 30 210 30 210 44"/>
+            <path d="M124 150 L236 150"/><path d="M180 150 L180 250" stroke-dasharray="5 5"/>
+            <path d="M136 168 L172 168 L172 206 L136 206"/>
+            <path d="M124 84 L92 108"/><path d="M236 84 L268 108"/>
+          </svg>
+          <span class="plus">+</span>
+        </div>
+        <div class="row"><span class="lbl" data-i18n="p3n">Cross-back apron</span><span class="badge-new">New in</span></div>
+        <div class="price">6 800 ₽</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── тёмная полоса: две категории ─────────────────────────────── -->
+<section class="band-dark">
+  <div class="split">
+    <div>
+      <svg width="120" height="150" viewBox="0 0 120 150" fill="none" stroke="#ffffff" stroke-width="1.2">
+        <path d="M30 26 L44 18 L60 26 L76 18 L90 26 L100 58 L86 64 L86 132 L34 132 L34 64 L20 58 Z"/>
+        <path d="M44 18 L60 38 L76 18"/><path d="M60 38 L60 132"/>
+      </svg>
+      <div class="lbl" data-i18n="sp1">Workshop</div>
+      <div class="eyebrow muted" style="color:rgba(255,255,255,.6)" data-i18n="sp1d">Jackets, aprons, sleeves</div>
+    </div>
+    <div>
+      <svg width="120" height="150" viewBox="0 0 120 150" fill="none" stroke="#ffffff" stroke-width="1.2">
+        <path d="M40 18 L80 18 L86 50 L80 132 L64 132 L60 74 L56 132 L40 132 L34 50 Z"/>
+        <path d="M34 32 L86 32"/>
+      </svg>
+      <div class="lbl" data-i18n="sp2">Kitchen</div>
+      <div class="eyebrow muted" style="color:rgba(255,255,255,.6)" data-i18n="sp2d">Trousers, coats, caps</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── спецификация ─────────────────────────────────────────────── -->
+<section class="sec band-ash" id="spec">
+  <div class="wrap">
+    <div class="sechead">
+      <div class="eyebrow" data-i18n="s0">Chore jacket 01</div>
+      <h2 class="h" data-i18n="s1">The whole spec</h2>
+    </div>
+    <table class="spec">
+      <tr><th data-i18n="k1">Fabric</th><td data-i18n="v1">Cotton drill 380 g/m², sanforised, woven in Ivanovo, undyed and then piece-dyed in three colours only.</td></tr>
+      <tr><th data-i18n="k2">Seam</th><td data-i18n="v2">Flat-felled, double needle, 4.2 mm pitch. Shoulders and side seams closed twice; no overlock anywhere on the garment.</td></tr>
+      <tr><th data-i18n="k3">Thread</th><td data-i18n="v3">Polyester core-spun 40/2, tex 40. Rated above the fabric so a seam never tears the cloth when it goes.</td></tr>
+      <tr><th data-i18n="k4">Hardware</th><td data-i18n="v4">Brass shank buttons, 18 mm, replaceable by hand with a pin and a hammer. Rivets at both pocket mouths.</td></tr>
+      <tr><th data-i18n="k5">Shrinkage</th><td data-i18n="v5">Under 2% in length after five washes at 40°. Measured on ten garments, not calculated.</td></tr>
+      <tr><th data-i18n="k6">Repair</th><td data-i18n="v6">Send it back at any age. Pockets, cuffs and elbows are replaced at cost; the first repair in eight years is free.</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ── ремонт ───────────────────────────────────────────────────── -->
+<section class="sec" id="repair">
+  <div class="wrap">
+    <div class="sechead">
+      <div class="eyebrow" data-i18n="r0">Not a warranty</div>
+      <h2 class="h" data-i18n="r1">Wear it out</h2>
+      <p data-i18n="r2">Clothes that are worn every day fail in known places: the elbow, the cuff, the pocket mouth. We keep the patterns and the cloth for every collection, so a jacket from 2019 is repaired in 2026 with the same drill it was cut from.</p>
+    </div>
+    <div class="grid-3">
+      <div>
+        <div class="eyebrow muted">01</div>
+        <h3 class="h-sm" style="margin:var(--spacing-12) 0" data-i18n="r3t">Send it in</h3>
+        <p data-i18n="r3d">Any garment, any age, washed. Postage inside Russia is on us.</p>
+      </div>
+      <div>
+        <div class="eyebrow muted">02</div>
+        <h3 class="h-sm" style="margin:var(--spacing-12) 0" data-i18n="r4t">We quote by seam</h3>
+        <p data-i18n="r4d">A photograph and a price for each repair, before anything is unpicked.</p>
+      </div>
+      <div>
+        <div class="eyebrow muted">03</div>
+        <h3 class="h-sm" style="margin:var(--spacing-12) 0" data-i18n="r5t">Back in ten days</h3>
+        <p data-i18n="r5d">Repaired, pressed, and logged against the garment's number.</p>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:var(--spacing-56)">
+      <a class="btn" href="#repair" data-i18n="rb">Book a repair</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="fcols">
+      <div>
+        <div class="h-sm" style="margin-bottom:var(--spacing-16)">SEAM</div>
+        <p style="max-width:34ch" data-i18n="fa">One workshop, three fabrics, nine garments. Ivanovo, since 2019.</p>
+      </div>
+      <div>
+        <h4 class="h-sm" data-i18n="fh1">Explore</h4>
+        <ul>
+          <li data-i18n="fl1">Catalogue</li><li data-i18n="fl2">Spec sheets</li><li data-i18n="fl3">Fabrics</li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="h-sm" data-i18n="fh2">Customer care</h4>
+        <ul>
+          <li data-i18n="fl4">Sizing</li><li data-i18n="fl5">Repair</li><li data-i18n="fl6">Returns</li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="h-sm" data-i18n="fh3">Follow</h4>
+        <ul>
+          <li data-i18n="fl7">Newsletter</li><li data-i18n="fl8">Workshop diary</li><li data-i18n="fl9">Stockists</li>
+        </ul>
+      </div>
+    </div>
+    <div class="flegal eyebrow">
+      <span>© 2026 Seam</span>
+      <span data-i18n="fn">Ivanovo · cut, sewn and repaired in one room</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ── RU/EN. Английский — исходный, русский — перевод под него ── */
+var RU = {
+  nav1:'Каталог', nav2:'Спецификация', nav3:'Ремонт', navcart:'Корзина (0)',
+  hk:'Коллекция 09 · диагональ 380 г',
+  h1:'Крой на восемь лет',
+  hb:'Смотреть спецификацию',
+  c0:'В наличии', c1:'Девять изделий',
+  c2:'Всё шьётся в одной мастерской в Иванове из трёх тканей, которые мы не меняли с 2019 года. Ничего сезонного, ничего снятого с производства, и тип каждого шва напечатан на этикетке.',
+  p1n:'Куртка рабочая 01', p2n:'Брюки с двойным коленом', p3n:'Фартук с перекрёстной спиной',
+  sp1:'Мастерская', sp1d:'Куртки, фартуки, нарукавники',
+  sp2:'Кухня', sp2d:'Брюки, кители, шапки',
+  s0:'Куртка рабочая 01', s1:'Полная спецификация',
+  k1:'Ткань', v1:'Хлопковая диагональ 380 г/м², санфоризованная, ткётся в Иванове; красится в полотне и только в три цвета.',
+  k2:'Шов', v2:'Запошивочный, двухигольный, шаг 4,2 мм. Плечи и боковые швы закрыты дважды; оверлока на изделии нет нигде.',
+  k3:'Нить', v3:'Полиэфирная армированная 40/2, текс 40. По прочности выше ткани — чтобы шов, расходясь, не рвал полотно.',
+  k4:'Фурнитура', v4:'Латунные пуговицы на ножке, 18 мм, меняются вручную шплинтом и молотком. Заклёпки на входах в оба кармана.',
+  k5:'Усадка', v5:'Меньше 2% по длине после пяти стирок при 40°. Замерено на десяти изделиях, а не рассчитано.',
+  k6:'Ремонт', v6:'Присылайте в любом возрасте. Карманы, манжеты и локти меняем по себестоимости; первый ремонт за восемь лет — бесплатно.',
+  r0:'Это не гарантия', r1:'Носить до дыр',
+  r2:'Одежда, которую носят каждый день, рвётся в известных местах: локоть, манжета, вход в карман. Мы храним лекала и ткань каждой коллекции, поэтому куртка 2019 года чинится в 2026-м той же диагональю, из которой скроена.',
+  r3t:'Пришлите', r3d:'Любое изделие, любого возраста, постиранное. Пересылка по России за наш счёт.',
+  r4t:'Считаем по швам', r4d:'Фотография и цена по каждому ремонту — до того, как что-то распорото.',
+  r5t:'Назад через десять дней', r5d:'Починено, отутюжено и записано в карточку изделия.',
+  rb:'Записаться на ремонт',
+  fa:'Одна мастерская, три ткани, девять изделий. Иваново, с 2019 года.',
+  fh1:'Разделы', fl1:'Каталог', fl2:'Спецификации', fl3:'Ткани',
+  fh2:'Забота', fl4:'Размеры', fl5:'Ремонт', fl6:'Возврат',
+  fh3:'Следить', fl7:'Рассылка', fl8:'Дневник мастерской', fl9:'Где купить',
+  fn:'Иваново · кроим, шьём и чиним в одной комнате'
+};
+var EN = {};
+document.querySelectorAll('[data-i18n]').forEach(function (el) { EN[el.dataset.i18n] = el.innerHTML; });
+function setLang(l) {
+  var dict = l === 'ru' ? RU : EN;
+  document.querySelectorAll('[data-i18n]').forEach(function (el) {
+    var v = dict[el.dataset.i18n];
+    if (v !== undefined) el.innerHTML = v;
+  });
+  document.documentElement.lang = l;
+  document.documentElement.dataset.lang = l;
+  document.querySelectorAll('.lang button').forEach(function (b) {
+    b.setAttribute('aria-pressed', b.dataset.set === l ? 'true' : 'false');
+  });
+}
+document.querySelectorAll('.lang button').forEach(function (b) {
+  b.addEventListener('click', function () { setLang(b.dataset.set); });
+});
+</script>
+</body>
+</html>

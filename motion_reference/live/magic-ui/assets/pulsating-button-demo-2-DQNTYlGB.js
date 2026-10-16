@@ -1,0 +1,1 @@
+import{j as t}from"./index-WM7-nNXq.js";import{P as i}from"./pulsating-button-DxWaCTaj.js";function r(){return t.jsx(i,{variant:"ripple",distance:"10px",className:"bg-blue-400 text-white",children:"Join Affiliate Program"})}export{r as default};

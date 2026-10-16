@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>Buoy — six weekends to a skipper's licence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ─────────────────────────────────────────────────────────────
+   Дизайн-система: Column (refero a76ec6ba) — tokens.css дословно
+   ───────────────────────────────────────────────────────────── */
+:root {
+  /* Colors */
+  --color-indigo-navy: #111a4a;
+  --color-midnight-ink: #011821;
+  --color-slate-ink: #3b3e47;
+  --color-steel: #7c7f88;
+  --color-fog: #a9acb6;
+  --color-mist: #cbcccf;
+  --color-silver-lining: #e3e4e8;
+  --color-cloud-canvas: #f6f6f8;
+  --color-pure-white: #ffffff;
+  --color-charcoal: #232730;
+  --color-obsidian: #12161e;
+  --color-pure-black: #000000;
+  --color-signal-orange: #ec652b;
+  --color-peach-glow: #f2936b;
+  --color-seafoam-600: #44b48b;
+  --color-seafoam-700: #167e6c;
+  --color-seafoam-400: #94efb7;
+  --color-deep-sea: #023247;
+  --color-sky-cyan: #88deeb;
+  --color-cobalt-edge: #1e4199;
+  --color-ocean-depth: #0c6997;
+
+  /* Typography — Font Families */
+  /* SuisseIntl → Onest (300–600, кириллица); SFMono/SuisseIntlMono → JetBrains Mono */
+  --font-suisseintl: 'Onest', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-sfmono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Typography — Scale */
+  --text-micro: 10px;
+  --leading-micro: 1.5;
+  --text-caption: 12px;
+  --leading-caption: 1.5;
+  --text-body: 16px;
+  --leading-body: 1.5;
+  --text-body-lg: 18px;
+  --leading-body-lg: 1.33;
+  --text-subheading-sm: 20px;
+  --leading-subheading-sm: 1.1;
+  --tracking-subheading-sm: -0.2px;
+  --text-subheading-lg: 28px;
+  --leading-subheading-lg: 1.1;
+  --tracking-subheading-lg: -0.28px;
+  --text-heading-sm: 40px;
+  --leading-heading-sm: 1.1;
+  --tracking-heading-sm: -0.8px;
+  --text-heading: 48px;
+  --leading-heading: 1.1;
+  --tracking-heading: -0.96px;
+  --text-heading-lg: 52px;
+  --leading-heading-lg: 1.1;
+  --tracking-heading-lg: -1.56px;
+  --text-display: 60px;
+  --leading-display: 1;
+  --tracking-display: -0.6px;
+
+  /* Typography — Weights */
+  --font-weight-light: 300;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+
+  /* Spacing */
+  --spacing-4: 4px;
+  --spacing-8: 8px;
+  --spacing-12: 12px;
+  --spacing-16: 16px;
+  --spacing-20: 20px;
+  --spacing-24: 24px;
+  --spacing-32: 32px;
+  --spacing-40: 40px;
+  --spacing-48: 48px;
+  --spacing-64: 64px;
+  --spacing-72: 72px;
+  --spacing-80: 80px;
+  --spacing-96: 96px;
+
+  /* Layout */
+  --page-max-width: 1200px;
+  --section-gap: 72px;
+  --card-padding: 24px;
+
+  /* Border Radius */
+  --radius-sm: 2px;
+  --radius-lg: 8px;
+  --radius-full: 9999px;
+  --radius-cards: 8px;
+  --radius-buttons: 8px;
+
+  /* Shadows */
+  --shadow-subtle: rgba(17, 26, 74, 0.1) 0px 1px 3px 0px, rgba(17, 26, 74, 0.05) 0px 1px 0px 0px, rgba(255, 255, 255, 0.5) 0px 1px 0px 0px inset, rgba(255, 255, 255, 0.5) 0px 1px 4px 0px inset;
+  --shadow-sm: rgba(18, 22, 30, 0.024) 0px 1px 4px 0px, rgba(18, 22, 30, 0.05) 0px 1px 0px 0px, rgba(18, 22, 30, 0.024) 0px 0px 0px 1px;
+  --shadow-xl-2: rgba(30, 30, 44, 0.15) 24px 48px 64px 0px, rgb(255, 255, 255) 0px 0px 0px 1px inset;
+
+  /* Surfaces */
+  --surface-page-canvas: #f6f6f8;
+  --surface-card-surface: #ffffff;
+  --surface-frosted-overlay: #ffffff80;
+  --surface-deep-surface: #011821;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--surface-page-canvas);
+  color: var(--color-slate-ink);
+  font-family: var(--font-suisseintl);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  font-weight: var(--font-weight-regular);
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; text-decoration: none; }
+h1, h2, h3, h4, p, ul, ol, figure { margin: 0; }
+ul { list-style: none; padding: 0; }
+
+.wrap { max-width: var(--page-max-width); margin: 0 auto; padding: 0 var(--spacing-24); }
+section { padding: var(--spacing-72) 0; }
+.white { background: var(--color-pure-white); }
+
+h1, h2, h3 { color: var(--color-indigo-navy); font-weight: var(--font-weight-semibold); }
+h2 { font-size: var(--text-heading-sm); line-height: var(--leading-heading-sm); letter-spacing: -0.02em; max-width: 620px; }
+h3 { font-size: var(--text-subheading-sm); line-height: var(--leading-subheading-sm); letter-spacing: var(--tracking-subheading-sm); font-weight: var(--font-weight-medium); }
+p.lead { font-size: var(--text-body-lg); line-height: var(--leading-body-lg); color: var(--color-steel); }
+.mono { font-family: var(--font-sfmono); font-size: var(--text-caption); }
+
+/* ── Навигация ── */
+.nav { position: sticky; top: 0; z-index: 40; background: rgba(246,246,248,0.82); backdrop-filter: blur(8px); }
+.nav .wrap { height: 62px; display: flex; align-items: center; gap: var(--spacing-24); }
+.logo { display: flex; align-items: center; gap: 8px; font-size: var(--text-body-lg); font-weight: var(--font-weight-semibold); color: var(--color-indigo-navy); }
+.nav-mid { display: flex; gap: var(--spacing-8); margin-left: var(--spacing-24); }
+.pill-nav {
+  background: rgba(255,255,255,0.25); border: 1px solid var(--color-pure-white);
+  border-radius: var(--radius-lg); padding: 6px 12px; font-size: 14px; color: var(--color-charcoal);
+}
+.pill-nav:hover { background: var(--color-pure-white); }
+.nav-right { margin-left: auto; display: flex; align-items: center; gap: var(--spacing-12); }
+.nav-right .signin { font-size: 14px; color: var(--color-indigo-navy); }
+
+.btn { display: inline-flex; align-items: center; gap: 8px; border-radius: var(--radius-buttons); font-size: 14px; font-weight: var(--font-weight-medium); font-family: inherit; cursor: pointer; }
+.btn-primary { background: var(--color-indigo-navy); color: var(--color-pure-white); border: 0; padding: 12px 20px; box-shadow: var(--shadow-subtle); }
+.btn-outline { background: transparent; color: var(--color-indigo-navy); border: 1px solid var(--color-indigo-navy); padding: 12px 32px; }
+.btn-orange { background: var(--color-signal-orange); color: var(--color-pure-white); border: 0; padding: 12px 20px; }
+.btn-white { background: var(--color-pure-white); color: var(--color-indigo-navy); border: 0; padding: 12px 20px; box-shadow: var(--shadow-sm); }
+
+.switch { display: inline-flex; border: 1px solid var(--color-silver-lining); border-radius: var(--radius-lg); overflow: hidden; background: var(--color-pure-white); }
+.switch button { background: transparent; border: 0; color: var(--color-steel); font-family: inherit; font-size: var(--text-caption); padding: 7px 9px; cursor: pointer; }
+.switch button[aria-pressed="true"] { background: var(--color-indigo-navy); color: var(--color-pure-white); }
+
+/* ── Хиро ── */
+.hero { position: relative; padding: var(--spacing-64) 0 var(--spacing-96); overflow: hidden; }
+#halftone { position: absolute; top: -40px; right: -60px; width: 820px; height: 640px; pointer-events: none; }
+.hero .wrap { position: relative; }
+.badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,0.8); backdrop-filter: blur(8px);
+  border-radius: var(--radius-full); padding: 4px 12px; font-size: var(--text-caption);
+  color: var(--color-pure-black); margin-bottom: var(--spacing-24);
+}
+.badge b { font-family: var(--font-sfmono); font-weight: var(--font-weight-medium); font-size: 10px; letter-spacing: 0.06em; }
+h1 { font-size: var(--text-heading-lg); line-height: var(--leading-heading-lg); letter-spacing: -0.03em; max-width: 560px; }
+.hero p.lead { margin-top: var(--spacing-20); max-width: 460px; }
+.hero .actions { margin-top: var(--spacing-32); display: flex; gap: var(--spacing-12); }
+.widget {
+  position: absolute; right: 0; top: 96px; width: 380px;
+  background: var(--color-pure-white); border-radius: var(--radius-cards);
+  box-shadow: var(--shadow-xl-2); padding: var(--spacing-20) var(--spacing-24);
+}
+.widget .wrow { display: flex; align-items: center; gap: var(--spacing-12); padding: 10px 0; border-bottom: 1px solid var(--color-silver-lining); }
+.widget .wrow:last-child { border-bottom: 0; }
+.widget .k { font-size: var(--text-caption); color: var(--color-steel); }
+.widget .v { margin-left: auto; font-size: 14px; font-weight: var(--font-weight-medium); color: var(--color-indigo-navy); }
+.widget .v.mono { font-family: var(--font-sfmono); }
+.widget .head { display: flex; align-items: baseline; gap: 8px; padding-bottom: var(--spacing-12); }
+.widget .head b { font-size: var(--text-body-lg); font-weight: var(--font-weight-semibold); color: var(--color-indigo-navy); }
+.widget .head span { font-size: var(--text-caption); color: var(--color-steel); margin-left: auto; }
+.dot { width: 6px; height: 6px; border-radius: 50%; background: var(--color-seafoam-600); display: inline-block; }
+
+/* ── Полоса партнёров ── */
+.partners { background: var(--color-pure-white); padding: var(--spacing-40) 0; }
+.partners ul { display: flex; justify-content: center; gap: 48px; align-items: center; flex-wrap: wrap; }
+.partners li { font-size: 15px; color: var(--color-steel); font-weight: var(--font-weight-medium); letter-spacing: 0.02em; }
+
+/* ── Цифры ── */
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 48px; }
+.stat .n { font-size: var(--text-subheading-lg); line-height: 1.1; letter-spacing: var(--tracking-subheading-lg); font-weight: var(--font-weight-medium); color: var(--color-seafoam-700); }
+.stat p { margin-top: var(--spacing-8); font-size: 14px; color: var(--color-steel); }
+
+/* ── Карточки ── */
+.card { background: var(--color-pure-white); border-radius: var(--radius-cards); box-shadow: var(--shadow-sm); padding: var(--card-padding); }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-24); }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-48); }
+
+/* ── Программа ── */
+.weekend { display: grid; grid-template-columns: 56px 1fr 300px 140px; gap: var(--spacing-24); align-items: start; padding: var(--spacing-24) 0; border-top: 1px solid var(--color-silver-lining); }
+.weekend .num { font-family: var(--font-sfmono); font-size: var(--text-caption); color: var(--color-steel); padding-top: 4px; }
+.weekend h3 { margin-bottom: 6px; }
+.weekend .what { font-size: 14px; color: var(--color-steel); }
+.weekend .where { font-size: 14px; color: var(--color-slate-ink); }
+.weekend .hrs { font-family: var(--font-sfmono); font-size: var(--text-caption); color: var(--color-seafoam-700); text-align: right; }
+
+/* ── Блок «чек-лист» (аналог code block) ── */
+.code { background: var(--color-pure-white); border-radius: var(--radius-cards); box-shadow: var(--shadow-sm); padding: var(--spacing-24); font-family: var(--font-sfmono); font-size: var(--text-caption); line-height: 1.5; }
+.code .key { color: var(--color-seafoam-700); }
+.code .val { color: var(--color-seafoam-600); }
+.code .br { color: var(--color-charcoal); }
+.code .cm { color: var(--color-fog); }
+
+/* ── Тег ── */
+.tag { display: inline-flex; align-items: center; gap: 8px; font-size: var(--text-caption); font-weight: var(--font-weight-medium); text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-indigo-navy); margin-bottom: var(--spacing-16); }
+
+/* ── Экзамен ── */
+.exam-row { display: flex; gap: var(--spacing-16); padding: var(--spacing-16) 0; border-top: 1px solid var(--color-silver-lining); font-size: 15px; }
+.exam-row b { color: var(--color-indigo-navy); font-weight: var(--font-weight-medium); min-width: 220px; }
+.exam-row span { color: var(--color-steel); }
+
+/* ── Цена (единственная оранжевая поверхность) ── */
+.price-card { background: var(--color-signal-orange); color: var(--color-pure-white); border-radius: var(--radius-cards); padding: var(--spacing-40); }
+.price-card h3 { color: var(--color-pure-white); font-size: var(--text-subheading-lg); letter-spacing: var(--tracking-subheading-lg); font-weight: var(--font-weight-semibold); }
+.price-card .amount { font-size: var(--text-heading-sm); line-height: 1.1; letter-spacing: -0.02em; font-weight: var(--font-weight-medium); margin: var(--spacing-16) 0 var(--spacing-24); }
+.price-card ul li { padding: 8px 0; border-top: 1px solid rgba(255,255,255,0.35); font-size: 14px; }
+.price-card .btn { margin-top: var(--spacing-24); }
+.price-note { font-size: 14px; color: var(--color-steel); margin-top: var(--spacing-16); }
+
+/* ── Вопросы ── */
+.faq li { border-top: 1px solid var(--color-silver-lining); padding: var(--spacing-20) 0; }
+.faq b { display: block; color: var(--color-indigo-navy); font-weight: var(--font-weight-medium); margin-bottom: 6px; }
+.faq span { font-size: 15px; color: var(--color-steel); }
+
+/* ── Подвал ── */
+footer { background: var(--surface-deep-surface); color: var(--color-mist); padding: var(--spacing-64) 0 var(--spacing-32); }
+footer .logo { color: var(--color-pure-white); }
+.foot { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: var(--spacing-40); }
+footer h4 { font-size: var(--text-caption); text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-steel); font-weight: var(--font-weight-medium); margin-bottom: var(--spacing-16); }
+footer li { padding: 6px 0; font-size: 14px; }
+footer li a:hover { color: var(--color-pure-white); }
+.foot-note { margin-top: var(--spacing-16); max-width: 300px; font-size: 14px; color: var(--color-steel); }
+.foot-bottom { margin-top: var(--spacing-48); padding-top: var(--spacing-20); border-top: 1px solid rgba(255,255,255,0.12); display: flex; font-size: var(--text-caption); color: var(--color-steel); }
+.foot-bottom .right { margin-left: auto; display: flex; gap: var(--spacing-20); }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap">
+    <a class="logo" href="#">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+        <path d="M10 2 6 9h8l-4-7Z" fill="#ec652b"/>
+        <path d="M4 12h12M6 15h8" stroke="#111a4a" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      buoy
+    </a>
+    <div class="nav-mid">
+      <a class="pill-nav" href="#program" data-i18n="n1">Course</a>
+      <a class="pill-nav" href="#water" data-i18n="n2">On the water</a>
+      <a class="pill-nav" href="#exam" data-i18n="n3">Exam</a>
+      <a class="pill-nav" href="#price" data-i18n="n4">Price</a>
+    </div>
+    <div class="nav-right">
+      <a class="signin" href="#" data-i18n="n5">Student log in</a>
+      <a class="btn btn-primary" href="#price" data-i18n="n6">Join a group →</a>
+      <span class="switch">
+        <button type="button" data-set="en" aria-pressed="true">EN</button>
+        <button type="button" data-set="ru" aria-pressed="false">RU</button>
+      </span>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <svg id="halftone" viewBox="0 0 820 640" aria-hidden="true"></svg>
+  <div class="wrap">
+    <span class="badge"><span class="dot"></span><b>LIC. 77-042</b> <span data-i18n="hb">Accredited by the state small-craft inspectorate</span></span>
+    <h1 data-i18n="h1">Six weekends, and the lake stops being a guess</h1>
+    <p class="lead" data-i18n="h2">A skipper's licence course for motor boats under twenty tons: chart work on Saturday, twenty-four hours at the helm on Sunday, and the state exam booked before you start.</p>
+    <div class="actions">
+      <a class="btn btn-primary" href="#price" data-i18n="h3">Join the 14 September group →</a>
+      <a class="btn btn-outline" href="#program" data-i18n="h4">See the six weekends</a>
+    </div>
+
+    <div class="widget">
+      <div class="head"><b data-i18n="w0">Next group</b><span data-i18n="w0b">Zaton marina, berth 12</span></div>
+      <div class="wrow"><span class="k" data-i18n="w1">Starts</span><span class="v">14.09.2026</span></div>
+      <div class="wrow"><span class="k" data-i18n="w2">Seats left</span><span class="v mono">4 / 12</span></div>
+      <div class="wrow"><span class="k" data-i18n="w3">Hours at the helm</span><span class="v mono">24 h</span></div>
+      <div class="wrow"><span class="k" data-i18n="w4">Exam date, already booked</span><span class="v">26.10.2026</span></div>
+      <div class="wrow"><span class="k" data-i18n="w5">Passed first attempt, 2025</span><span class="v mono" style="color:var(--color-seafoam-700)">96 %</span></div>
+    </div>
+  </div>
+</header>
+
+<div class="partners">
+  <div class="wrap">
+    <ul>
+      <li>Zaton Marina</li><li>Rechflot</li><li>Krutoyar Yacht Club</li><li>Volna Rescue</li><li>Pier 9</li><li>Severny Bereg</li>
+    </ul>
+  </div>
+</div>
+
+<section>
+  <div class="wrap">
+    <div class="stats">
+      <div class="stat"><div class="n">1 240</div><p data-i18n="s1">Graduates since 2017, all of them on our own boats</p></div>
+      <div class="stat"><div class="n">96 %</div><p data-i18n="s2">Passed the state exam on the first attempt last season</p></div>
+      <div class="stat"><div class="n">24 h</div><p data-i18n="s3">At the helm, not in a simulator, not as a passenger</p></div>
+      <div class="stat"><div class="n">12</div><p data-i18n="s4">People in a group — two per boat, four boats, three instructors</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="white" id="program">
+  <div class="wrap">
+    <div class="tag"><span class="dot"></span><span data-i18n="t1">The course</span></div>
+    <h2 data-i18n="p1">Saturday is charts and rules. Sunday is the wheel.</h2>
+    <p class="lead" style="margin-top:var(--spacing-16);max-width:640px" data-i18n="p2">Nothing is taught twice, and nothing is taught only in a classroom. Every rule you learn on Saturday you break — deliberately, under supervision — on Sunday, so you find out what it actually protects.</p>
+
+    <div style="margin-top:var(--spacing-40)">
+      <div class="weekend">
+        <div class="num">01</div>
+        <div><h3 data-i18n="g1h">The boat as a system</h3><div class="what" data-i18n="g1w">Hull, engine, fuel, bilge, battery. What you check before you cast off and why the checklist has fourteen lines.</div></div>
+        <div class="where" data-i18n="g1e">Classroom, then dockside on a boat with the floorboards up</div>
+        <div class="hrs">4 h + 4 h</div>
+      </div>
+      <div class="weekend">
+        <div class="num">02</div>
+        <div><h3 data-i18n="g2h">Charts, buoys, and the depth you cannot see</h3><div class="what" data-i18n="g2w">Lateral and cardinal marks, sectored lights, reading a paper chart against the plotter and noticing when they disagree.</div></div>
+        <div class="where" data-i18n="g2e">Classroom, then a daylight passage across the reservoir</div>
+        <div class="hrs">4 h + 4 h</div>
+      </div>
+      <div class="weekend">
+        <div class="num">03</div>
+        <div><h3 data-i18n="g3h">Right of way, in traffic</h3><div class="what" data-i18n="g3w">Crossing, overtaking, narrow channels, and the barge that legally has all of them. Sound signals you will actually hear.</div></div>
+        <div class="where" data-i18n="g3e">The commercial channel on a Sunday afternoon, on purpose</div>
+        <div class="hrs">3 h + 5 h</div>
+      </div>
+      <div class="weekend">
+        <div class="num">04</div>
+        <div><h3 data-i18n="g4h">Coming alongside without shouting</h3><div class="what" data-i18n="g4w">Wind on, wind off, current, springs, and the moment you accept the approach is wrong and go around again.</div></div>
+        <div class="where" data-i18n="g4e">Four berths, thirty repetitions each, in wind</div>
+        <div class="hrs">2 h + 6 h</div>
+      </div>
+      <div class="weekend">
+        <div class="num">05</div>
+        <div><h3 data-i18n="g5h">Man overboard, fire, no engine</h3><div class="what" data-i18n="g5w">Three drills, run until they are boring. Recovery from the water with one person aboard, which is the hard version.</div></div>
+        <div class="where" data-i18n="g5e">Open water with the rescue service standing by</div>
+        <div class="hrs">2 h + 6 h</div>
+      </div>
+      <div class="weekend">
+        <div class="num">06</div>
+        <div><h3 data-i18n="g6h">Night, and the exam route</h3><div class="what" data-i18n="g6w">Lights recognised from a distance, entering a marina in the dark, then a full rehearsal of the examiner's route.</div></div>
+        <div class="where" data-i18n="g6e">Dusk to 23:00, the same water the exam uses</div>
+        <div class="hrs">3 h + 5 h</div>
+      </div>
+      <div class="weekend" style="border-bottom:1px solid var(--color-silver-lining)">
+        <div class="num">—</div>
+        <div><h3 data-i18n="g7h">The exam itself</h3><div class="what" data-i18n="g7w">Booked for your group before the first weekend. An instructor comes with you and waits outside.</div></div>
+        <div class="where" data-i18n="g7e">State inspectorate, 26 October, 09:00</div>
+        <div class="hrs" data-i18n="g7t">included</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="water">
+  <div class="wrap">
+    <div class="grid-2" style="align-items:start">
+      <div>
+        <div class="tag"><span class="dot"></span><span data-i18n="t2">Pre-departure</span></div>
+        <h2 style="font-size:var(--text-subheading-lg);letter-spacing:var(--tracking-subheading-lg)" data-i18n="c1">The fourteen lines you will know by heart</h2>
+        <p class="lead" style="margin-top:var(--spacing-16);font-size:var(--text-body)" data-i18n="c2">Printed on the boat, laminated, and checked out loud by whoever is at the helm. By the fourth weekend nobody reads it — and we still make them say it.</p>
+        <div class="grid-3" style="grid-template-columns:1fr 1fr;gap:var(--spacing-16);margin-top:var(--spacing-32)">
+          <div class="card"><h3 style="font-size:var(--text-body-lg)" data-i18n="cc1h">Four boats</h3><p style="font-size:14px;color:var(--color-steel);margin-top:6px" data-i18n="cc1p">Two 5.5-metre open boats, one cabin cruiser, one with a tiller so you learn what a wheel hides from you.</p></div>
+          <div class="card"><h3 style="font-size:var(--text-body-lg)" data-i18n="cc2h">Two per boat</h3><p style="font-size:14px;color:var(--color-steel);margin-top:6px" data-i18n="cc2p">You steer half the time and watch the other half, which is where most of the learning happens.</p></div>
+        </div>
+      </div>
+      <div class="code">
+        <div><span class="cm"># pre-departure.check — <span data-i18n="ch0">read aloud, answer aloud</span></span></div>
+        <div><span class="br">01</span> <span class="key" data-i18n="ch1">fuel</span> <span class="br">=</span> <span class="val">"⅓ out, ⅓ back, ⅓ left"</span></div>
+        <div><span class="br">02</span> <span class="key" data-i18n="ch2">bilge</span> <span class="br">=</span> <span class="val" data-i18n="ch2v">"dry / pump works"</span></div>
+        <div><span class="br">03</span> <span class="key" data-i18n="ch3">kill_cord</span> <span class="br">=</span> <span class="val" data-i18n="ch3v">"on the wrist, tested"</span></div>
+        <div><span class="br">04</span> <span class="key" data-i18n="ch4">lifejackets</span> <span class="br">=</span> <span class="val" data-i18n="ch4v">"worn, not stowed"</span></div>
+        <div><span class="br">05</span> <span class="key" data-i18n="ch5">weather</span> <span class="br">=</span> <span class="val" data-i18n="ch5v">"read 30 min ago, gusts &lt; 12 m/s"</span></div>
+        <div><span class="br">06</span> <span class="key" data-i18n="ch6">crew_briefed</span> <span class="br">=</span> <span class="val" data-i18n="ch6v">"who calls, who throws"</span></div>
+        <div><span class="br">07</span> <span class="key" data-i18n="ch7">anchor</span> <span class="br">=</span> <span class="val" data-i18n="ch7v">"free, rode attached to the boat"</span></div>
+        <div><span class="br">08</span> <span class="key" data-i18n="ch8">vhf</span> <span class="br">=</span> <span class="val">"ch 16, squelch set"</span></div>
+        <div><span class="br">09</span> <span class="key" data-i18n="ch9">plotter</span> <span class="br">=</span> <span class="val" data-i18n="ch9v">"chart matches the paper one"</span></div>
+        <div><span class="br">10</span> <span class="key" data-i18n="ch10">lights</span> <span class="br">=</span> <span class="val" data-i18n="ch10v">"all four, before dusk"</span></div>
+        <div><span class="br">11</span> <span class="key" data-i18n="ch11">fire_ext</span> <span class="br">=</span> <span class="val" data-i18n="ch11v">"in date, reachable from the helm"</span></div>
+        <div><span class="br">12</span> <span class="key" data-i18n="ch12">plan_filed</span> <span class="br">=</span> <span class="val" data-i18n="ch12v">"someone ashore knows the return time"</span></div>
+        <div><span class="br">13</span> <span class="key" data-i18n="ch13">papers</span> <span class="br">=</span> <span class="val" data-i18n="ch13v">"licence, registration, insurance"</span></div>
+        <div><span class="br">14</span> <span class="key" data-i18n="ch14">mooring_lines</span> <span class="br">=</span> <span class="val" data-i18n="ch14v">"aboard, not on the pontoon"</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="white" id="exam">
+  <div class="wrap">
+    <div class="grid-2" style="align-items:start">
+      <div>
+        <div class="tag"><span class="dot"></span><span data-i18n="t3">The exam</span></div>
+        <h2 data-i18n="e1">What the examiner actually asks</h2>
+        <p class="lead" style="margin-top:var(--spacing-16);font-size:var(--text-body)" data-i18n="e2">The theory bank is public and has 480 questions. The practical is twenty minutes and has four elements. We publish both, because a course that keeps them mysterious is selling anxiety.</p>
+        <a class="btn btn-outline" style="margin-top:var(--spacing-24)" href="#" data-i18n="e3">Download the question bank</a>
+      </div>
+      <div>
+        <div class="exam-row"><b data-i18n="ex1">Theory, 60 questions</b><span data-i18n="ex1v">Drawn from 480. Five mistakes allowed, one hour, on paper</span></div>
+        <div class="exam-row"><b data-i18n="ex2">Leaving the berth</b><span data-i18n="ex2v">With wind pressing you onto the pontoon — the version people fail</span></div>
+        <div class="exam-row"><b data-i18n="ex3">Man overboard</b><span data-i18n="ex3v">A fender on a line, recovered from the leeward side, engine in neutral</span></div>
+        <div class="exam-row"><b data-i18n="ex4">A marked route</b><span data-i18n="ex4v">Four buoys, correct side, correct speed inside the marina zone</span></div>
+        <div class="exam-row"><b data-i18n="ex5">Coming alongside</b><span data-i18n="ex5v">One approach. A second attempt is allowed and costs nothing but pride</span></div>
+        <div class="exam-row" style="border-bottom:1px solid var(--color-silver-lining)"><b data-i18n="ex6">If you fail</b><span data-i18n="ex6v">Retake in three weeks, we come again, no additional fee from us</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="price">
+  <div class="wrap">
+    <div class="grid-2" style="align-items:start">
+      <div>
+        <div class="tag"><span class="dot"></span><span data-i18n="t4">Price</span></div>
+        <h2 style="font-size:var(--text-subheading-lg);letter-spacing:var(--tracking-subheading-lg)" data-i18n="pr1">One price, and the state fee is inside it</h2>
+        <p class="lead" style="margin-top:var(--spacing-16);font-size:var(--text-body)" data-i18n="pr2">No separate charge for fuel, for the boat, for the exam booking, or for the retake. The only thing you buy separately is a lifejacket that fits you, and we will tell you which one.</p>
+        <ul class="faq" style="margin-top:var(--spacing-32)">
+          <li><b data-i18n="q1">Do I need to be able to swim?</b><span data-i18n="q1a">Yes, and we ask you to demonstrate it in the first weekend — fifty metres in a lifejacket, calmly.</span></li>
+          <li><b data-i18n="q2">What if I miss a weekend?</b><span data-i18n="q2a">You join the same weekend in the next group at no cost. Most people miss one; the schedule assumes it.</span></li>
+          <li><b data-i18n="q3">Is there a boat afterwards?</b><span data-i18n="q3a">Graduates rent ours at half price for the first season, on the condition that the checklist is filed after every trip.</span></li>
+          <li style="border-bottom:1px solid var(--color-silver-lining)"><b data-i18n="q4">Winter groups?</b><span data-i18n="q4a">Theory runs from January, water from late April. The lake decides, not us.</span></li>
+        </ul>
+      </div>
+      <div>
+        <div class="price-card">
+          <h3 data-i18n="pc1">Full course, autumn group</h3>
+          <div class="amount">48 000 ₽</div>
+          <ul>
+            <li data-i18n="pc2">Six weekends, 24 hours at the helm</li>
+            <li data-i18n="pc3">State exam fee and booking</li>
+            <li data-i18n="pc4">Fuel, boats, lifejackets, charts</li>
+            <li data-i18n="pc5">One retake, with an instructor</li>
+            <li data-i18n="pc6">Half-price boat rental for a season</li>
+          </ul>
+          <a class="btn btn-white" href="#" data-i18n="pc7">Reserve one of the four seats →</a>
+        </div>
+        <p class="price-note" data-i18n="pc8">Payment in two parts: half to hold the seat, half before the fourth weekend. If you leave after the second weekend for any reason, the second half is not charged.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <a class="logo" href="#">
+          <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 2 6 9h8l-4-7Z" fill="#ec652b"/><path d="M4 12h12M6 15h8" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round"/></svg>
+          buoy
+        </a>
+        <p class="foot-note" data-i18n="ft1">Three instructors, four boats, one reservoir we have been teaching on since 2017. Two of us still fail to make a berth look elegant in a crosswind.</p>
+      </div>
+      <div>
+        <h4 data-i18n="fh1">Course</h4>
+        <ul><li><a href="#program" data-i18n="fl1">Six weekends</a></li><li><a href="#water" data-i18n="fl2">On the water</a></li><li><a href="#exam" data-i18n="fl3">Exam</a></li><li><a href="#price" data-i18n="fl4">Price</a></li></ul>
+      </div>
+      <div>
+        <h4 data-i18n="fh2">Documents</h4>
+        <ul><li><a href="#" data-i18n="fl5">Licence 77-042</a></li><li><a href="#" data-i18n="fl6">Question bank</a></li><li><a href="#" data-i18n="fl7">Contract</a></li><li><a href="#" data-i18n="fl8">Insurance</a></li></ul>
+      </div>
+      <div>
+        <h4 data-i18n="fh3">Contact</h4>
+        <ul><li><a href="#" data-i18n="fl9">Zaton marina, berth 12</a></li><li><a href="#">+7 900 412-06-14</a></li><li><a href="#">group@buoy.school</a></li><li><a href="#" data-i18n="fl10">Winter timetable</a></li></ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Buoy</span>
+      <span class="right"><a href="#" data-i18n="fb1">Terms</a><a href="#" data-i18n="fb2">Privacy</a><span data-i18n="fb3">Water temperature today: 17 °C</span></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ── Полутоновая карта: подпись системы. Точки складываются в акваторию:
+      размер и цвет — по «глубине», спектр indigo → ocean → seafoam ── */
+(function () {
+  var svg = document.getElementById('halftone');
+  if (!svg) return;
+  var W = 820, H = 640, step = 10, out = [];
+  var cols = ['#111a4a', '#1e4199', '#0c6997', '#88deeb', '#44b48b', '#94efb7'];
+  function depth(x, y) {                     /* 0 — берег, 1 — фарватер */
+    var a = Math.sin(x / 120 + 0.6) * 70 + Math.sin(y / 90) * 40;
+    var d = 1 - Math.min(1, Math.abs(y - (300 + a)) / 210);
+    var lobe = 1 - Math.min(1, Math.abs(x - 430) / 400);
+    return Math.max(0, d * (0.45 + 0.75 * lobe));
+  }
+  for (var y = 20; y < H; y += step) {
+    for (var x = 10; x < W; x += step) {
+      var d = depth(x, y);
+      if (d < 0.06) continue;
+      var r = 1 + d * 2.6;
+      var c = cols[Math.min(cols.length - 1, Math.floor(d * cols.length))];
+      var o = (0.10 + d * 0.55).toFixed(2);
+      out.push('<circle cx="' + x + '" cy="' + y + '" r="' + r.toFixed(1) + '" fill="' + c + '" opacity="' + o + '"/>');
+    }
+  }
+  svg.innerHTML = out.join('');
+})();
+
+/* ── RU/EN. Английский — исходный, русский — перевод под него ── */
+var RU = {
+  n1:'Курс', n2:'На воде', n3:'Экзамен', n4:'Цена', n5:'Кабинет ученика', n6:'Записаться в группу →',
+  hb:'Аккредитация государственной инспекции по маломерным судам',
+  h1:'Шесть выходных — и озеро перестаёт быть догадкой',
+  h2:'Курс на права судоводителя для моторных судов до двадцати тонн: карта и правила в субботу, двадцать четыре часа за штурвалом в воскресенье, экзамен в ГИМС записан до начала занятий.',
+  h3:'В группу от 14 сентября →', h4:'Смотреть шесть выходных',
+  w0:'Ближайшая группа', w0b:'Марина «Затон», причал 12',
+  w1:'Старт', w2:'Свободных мест', w3:'Часов за штурвалом', w4:'Дата экзамена, уже записана', w5:'Сдали с первого раза, 2025',
+  s1:'Выпускников с 2017 года, все — на наших лодках',
+  s2:'Сдали государственный экзамен с первой попытки в прошлом сезоне',
+  s3:'За штурвалом — не в тренажёре и не пассажиром',
+  s4:'Человек в группе: двое на лодку, четыре лодки, три инструктора',
+  t1:'Курс',
+  p1:'Суббота — карта и правила. Воскресенье — штурвал.',
+  p2:'Ничего не рассказывают дважды и ничего не рассказывают только в классе. Любое правило, выученное в субботу, вы нарушаете в воскресенье — намеренно и под присмотром, чтобы понять, от чего оно на самом деле защищает.',
+  g1h:'Лодка как система',
+  g1w:'Корпус, двигатель, топливо, трюм, аккумулятор. Что проверяют перед отходом и почему в чек-листе четырнадцать строк.',
+  g1e:'Класс, потом на причале — на лодке со снятыми пайолами', 
+  g2h:'Карта, буи и глубина, которой не видно',
+  g2w:'Латеральные и кардинальные знаки, секторные огни, чтение бумажной карты рядом с картплоттером и умение заметить, что они расходятся.',
+  g2e:'Класс, потом дневной переход через водохранилище',
+  g3h:'Расхождение в трафике',
+  g3w:'Пересечение курсов, обгон, узкости и баржа, у которой по закону преимущество во всех случаях. Звуковые сигналы, которые вы правда услышите.',
+  g3e:'Судовой ход в воскресенье днём — специально',
+  g4h:'Швартовка без криков',
+  g4w:'Ветер прижимной, ветер отжимной, течение, шпринг — и момент, когда подход признают неудачным и уходят на второй круг.',
+  g4e:'Четыре причала, по тридцать повторов на каждом, на ветру',
+  g5h:'Человек за бортом, пожар, отказ двигателя',
+  g5w:'Три отработки, повторяемые до скуки. Подъём человека из воды в одиночку — это и есть сложный вариант.',
+  g5e:'Открытая вода, рядом дежурит спасательная служба',
+  g6h:'Ночь и экзаменационный маршрут',
+  g6w:'Опознание огней издалека, вход в марину в темноте, потом полная репетиция маршрута инспектора.',
+  g6e:'От сумерек до 23:00, на той же воде, где принимают экзамен',
+  g7h:'Сам экзамен',
+  g7w:'Записан на группу до первых занятий. Инструктор едет с вами и ждёт снаружи.',
+  g7e:'ГИМС, 26 октября, 09:00', g7t:'включено',
+  t2:'Перед отходом',
+  c1:'Четырнадцать строк, которые вы будете знать наизусть',
+  c2:'Напечатан на лодке, заламинирован, и тот, кто у штурвала, проходит его вслух. К четвёртым выходным его уже никто не читает — и мы всё равно заставляем проговаривать.',
+  cc1h:'Четыре лодки',
+  cc1p:'Две открытые по 5,5 метра, один катер с каютой и одна с румпелем — чтобы понять, что именно скрывает от вас штурвал.',
+  cc2h:'Двое на лодку',
+  cc2p:'Половину времени вы управляете, половину — смотрите, как управляет сосед. Именно во второй половине и происходит большая часть обучения.',
+  ch0:'проговаривать вслух, отвечать вслух',
+  ch1:'топливо', ch2:'трюм', ch2v:'"сухо / помпа работает"',
+  ch3:'чека', ch3v:'"на запястье, проверена"',
+  ch4:'жилеты', ch4v:'"надеты, а не сложены"',
+  ch5:'погода', ch5v:'"смотрели 30 мин назад, порывы < 12 м/с"',
+  ch6:'инструктаж', ch6v:'"кто кричит, кто бросает"',
+  ch7:'якорь', ch7v:'"свободен, конец закреплён на лодке"',
+  ch8:'рация', ch9:'плоттер', ch9v:'"карта совпадает с бумажной"',
+  ch10:'огни', ch10v:'"все четыре, до сумерек"',
+  ch11:'огнетушитель', ch11v:'"не просрочен, достаётся от штурвала"',
+  ch12:'план', ch12v:'"на берегу знают время возвращения"',
+  ch13:'документы', ch13v:'"права, судовой билет, страховка"',
+  ch14:'швартовы', ch14v:'"на борту, а не на понтоне"',
+  t3:'Экзамен',
+  e1:'Что на самом деле спрашивает инспектор',
+  e2:'Банк теории открыт, в нём 480 вопросов. Практика — двадцать минут и четыре элемента. Мы публикуем и то и другое, потому что курс, который держит их в тайне, торгует тревогой.',
+  e3:'Скачать банк вопросов',
+  ex1:'Теория, 60 вопросов', ex1v:'Из 480. Пять ошибок допустимо, час времени, на бумаге',
+  ex2:'Отход от причала', ex2v:'С прижимным ветром — тот самый вариант, на котором заваливают',
+  ex3:'Человек за бортом', ex3v:'Кранец на конце, подъём с подветренного борта, двигатель на нейтрали',
+  ex4:'Маршрут по знакам', ex4v:'Четыре буя, правильный борт, правильная скорость в зоне марины',
+  ex5:'Швартовка', ex5v:'Один подход. Второй разрешён и стоит только самолюбия',
+  ex6:'Если не сдали', ex6v:'Пересдача через три недели, мы едем снова, с нас — без доплаты',
+  t4:'Цена',
+  pr1:'Одна цена, и государственная пошлина уже внутри',
+  pr2:'Отдельно не берут ни за топливо, ни за лодку, ни за запись на экзамен, ни за пересдачу. Единственное, что покупают сами, — спасательный жилет по размеру, и мы скажем какой.',
+  q1:'Нужно ли уметь плавать?', q1a:'Да, и это просят показать на первых выходных: пятьдесят метров в жилете, спокойно.',
+  q2:'А если пропущу выходные?', q2a:'Придёте на те же выходные со следующей группой, бесплатно. Большинство пропускает одни — расписание это учитывает.',
+  q3:'Есть ли лодка после курса?', q3a:'Выпускники берут наши в аренду за полцены первый сезон — при условии, что чек-лист сдан после каждого выхода.',
+  q4:'Зимние группы?', q4a:'Теория идёт с января, вода — с конца апреля. Решает озеро, а не мы.',
+  pc1:'Полный курс, осенняя группа',
+  pc2:'Шесть выходных, 24 часа за штурвалом',
+  pc3:'Пошлина и запись на экзамен',
+  pc4:'Топливо, лодки, жилеты, карты',
+  pc5:'Одна пересдача, с инструктором',
+  pc6:'Аренда лодки за полцены на сезон',
+  pc7:'Занять одно из четырёх мест →',
+  pc8:'Оплата в две части: половина держит место, вторая — до четвёртых выходных. Если уйдёте после вторых по любой причине, вторую половину не берут.',
+  ft1:'Три инструктора, четыре лодки и одно водохранилище, на котором мы учим с 2017 года. Двое из нас до сих пор не умеют красиво швартоваться при боковом ветре.',
+  fh1:'Курс', fl1:'Шесть выходных', fl2:'На воде', fl3:'Экзамен', fl4:'Цена',
+  fh2:'Документы', fl5:'Лицензия 77-042', fl6:'Банк вопросов', fl7:'Договор', fl8:'Страховка',
+  fh3:'Контакты', fl9:'Марина «Затон», причал 12', fl10:'Зимнее расписание',
+  fb1:'Условия', fb2:'Приватность', fb3:'Температура воды сегодня: 17 °C'
+};
+var EN = {};
+document.querySelectorAll('[data-i18n]').forEach(function (el) { EN[el.dataset.i18n] = el.innerHTML; });
+
+function setLang(l) {
+  var dict = l === 'ru' ? RU : EN;
+  document.querySelectorAll('[data-i18n]').forEach(function (el) {
+    var v = dict[el.dataset.i18n];
+    if (v !== undefined) el.innerHTML = v;
+  });
+  document.documentElement.lang = l;
+  document.documentElement.dataset.lang = l;
+  document.querySelectorAll('.switch button').forEach(function (b) {
+    b.setAttribute('aria-pressed', b.dataset.set === l ? 'true' : 'false');
+  });
+}
+document.querySelectorAll('.switch button').forEach(function (b) {
+  b.addEventListener('click', function () { setLang(b.dataset.set); });
+});
+</script>
+</body>
+</html>

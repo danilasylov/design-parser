@@ -1,0 +1,3 @@
+/* Original keyframes: Animista, Ana Travas. https://animista.net/play/exits/swing-out/swing-out-left-fwd */
+.swing-out-left-fwd{animation:swing-out-left-fwd 0.55s cubic-bezier(.6,-.28,.735,.045) 0s 1 normal both;}
+@keyframes swing-out-left-fwd{0%{-webkit-transform:rotateY(0);transform:rotateY(0);-webkit-transform-origin:left;transform-origin:left;opacity:1}to{-webkit-transform:rotateY(-70deg);transform:rotateY(-70deg);-webkit-transform-origin:left;transform-origin:left;opacity:0}}

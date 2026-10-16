@@ -1,0 +1,18 @@
+import { j as e, c as r } from "./inline-Mcm4wFdg.js";
+import { H as t } from "./hexagon-pattern-COvP_Kyi.js";
+function i() {
+  return /* @__PURE__ */ e.jsx("div", { className: "bg-background relative flex h-[500px] w-full items-center justify-center overflow-hidden rounded-lg border p-20", children: /* @__PURE__ */ e.jsx(
+    t,
+    {
+      radius: 40,
+      x: -1,
+      y: -1,
+      className: r(
+        "[mask-image:linear-gradient(to_bottom_right,white,transparent,transparent)]"
+      )
+    }
+  ) });
+}
+export {
+  i as default
+};

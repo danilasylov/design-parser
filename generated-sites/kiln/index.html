@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>KILN — seven days of open kilns</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500&family=Playfair+Display:wght@400&display=swap" rel="stylesheet">
+<style>
+/* ─────────────────────────────────────────────────────────────
+   Дизайн-система: FORA (refero 9929101b) — tokens.css дословно
+   ───────────────────────────────────────────────────────────── */
+:root {
+  /* Colors */
+  --color-obsidian: #000000;
+  --color-paper: #ffffff;
+  --color-terracotta: #a9553c;
+  --color-lilac-veil: #ddbdea;
+
+  /* Typography — Font Families */
+  --font-theinhardt: 'Theinhardt', ui-sans-serif, system-ui, sans-serif;
+  --font-theinhardt-medium: 'Theinhardt Medium', ui-sans-serif, system-ui, sans-serif;
+
+  /* Typography — Scale */
+  --text-caption: 15px;      --leading-caption: 1.33;      --tracking-caption: 0.15px;
+  --text-body: 18px;         --leading-body: 1.3;          --tracking-body: 0.29px;
+  --text-subheading: 23px;   --leading-subheading: 1.17;   --tracking-subheading: 0.46px;
+  --text-display: 35px;      --leading-display: 1.17;      --tracking-display: 0.84px;
+
+  /* Typography — Weights */
+  --font-weight-regular: 400; --font-weight-bold: 700;
+
+  /* Spacing */
+  --spacing-5: 5px; --spacing-8: 8px; --spacing-10: 10px;
+  --spacing-20: 20px; --spacing-25: 25px; --spacing-30: 30px; --spacing-50: 50px;
+
+  /* Layout */
+  --card-padding: 25px; --element-gap: 20px;
+
+  /* Border Radius */
+  --radius-md: 5px; --radius-full: 9999px;
+  --radius-tags: 9999px; --radius-cards: 0px; --radius-buttons: 5px;
+
+  /* Surfaces */
+  --surface-paper: #ffffff;
+  --surface-lilac-veil: #ddbdea;
+  --surface-terracotta: #a9553c;
+}
+
+/* Подстановки шрифтов: Theinhardt недоступен — взят гротеск того же
+   швейцарского класса с кириллицей. Логотип на скриншоте набран
+   контрастной антиквой, а не Theinhardt, — держим это отдельной гарнитурой. */
+:root {
+  --font-theinhardt: 'Manrope', 'Theinhardt', sans-serif;
+  --font-wordmark: 'Playfair Display', serif;
+  --size-wordmark: 150px; /* логотип вне шкалы, как на референсе */
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--surface-paper);
+  color: var(--color-obsidian);
+  font-family: var(--font-theinhardt);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--text-body); line-height: var(--leading-body); letter-spacing: var(--tracking-body);
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, p { margin: 0; font-weight: var(--font-weight-regular); }
+a { color: inherit; text-decoration: none; }
+
+/* ── Мозаика ───────────────────────────────────────────────────────── */
+.mosaic { display: grid; grid-template-columns: repeat(3, 1fr); }
+.tile { position: relative; padding: var(--card-padding); min-height: 350px; display: flex; flex-direction: column; }
+.tile.terra { background: var(--surface-terracotta); }
+.tile.lilac { background: var(--surface-lilac-veil); }
+.tile.flush { padding: 0; }
+.tile .spacer { flex: 1; }
+.cap { font-size: var(--text-caption); line-height: var(--leading-caption); letter-spacing: var(--tracking-caption); }
+.disp { font-size: var(--text-display); line-height: var(--leading-display); letter-spacing: var(--tracking-display); }
+.sub { font-size: var(--text-subheading); line-height: var(--leading-subheading); letter-spacing: var(--tracking-subheading); }
+.arrow { font-size: var(--text-caption); letter-spacing: 0.024em; margin-top: var(--spacing-10); display: inline-block; }
+.arrow:hover { text-decoration: underline; }
+.pilltag {
+  position: absolute; top: var(--spacing-20); left: var(--spacing-20); z-index: 2;
+  background: var(--surface-paper); color: var(--color-obsidian);
+  border-radius: var(--radius-tags); padding: var(--spacing-5) var(--spacing-10);
+  font-size: var(--text-caption); line-height: var(--leading-caption);
+  display: inline-flex; align-items: center; gap: var(--spacing-8);
+}
+.pilltag .d { width: 6px; height: 6px; border-radius: 50%; background: var(--color-obsidian); display: inline-block; }
+.wordmark { font-family: var(--font-wordmark); font-size: var(--size-wordmark); line-height: .92; letter-spacing: 0; }
+.spread { display: flex; justify-content: space-between; }
+.center { text-align: center; }
+.tile svg { display: block; width: 100%; height: 100%; }
+
+/* ── Программа ─────────────────────────────────────────────────────── */
+.days { display: grid; grid-template-columns: repeat(3, 1fr); }
+.day { padding: var(--card-padding); min-height: 260px; display: flex; flex-direction: column; }
+.day .n { font-size: var(--text-caption); letter-spacing: var(--tracking-caption); }
+.day h3 { margin-top: var(--spacing-10); font-size: var(--text-display); line-height: var(--leading-display); letter-spacing: var(--tracking-display); }
+.day p { margin-top: var(--spacing-10); font-size: var(--text-body); }
+.day .sp { flex: 1; }
+
+/* ── Полосы ────────────────────────────────────────────────────────── */
+.wide { display: grid; grid-template-columns: 2fr 1fr; }
+.venue { padding: var(--card-padding); border-top: 0; }
+.venues { display: grid; grid-template-columns: repeat(2, 1fr); }
+.v { padding: var(--spacing-20) var(--card-padding); }
+.v .n { font-size: var(--text-subheading); line-height: var(--leading-subheading); letter-spacing: var(--tracking-subheading); }
+.v .a { font-size: var(--text-caption); letter-spacing: var(--tracking-caption); opacity: .7; margin-top: var(--spacing-5); }
+
+.field { display: flex; gap: var(--spacing-10); margin-top: var(--spacing-20); }
+.field input {
+  flex: 1; background: none; border: 0; border-bottom: 1px solid var(--color-obsidian);
+  padding: var(--spacing-8) 0; font-family: inherit; font-size: var(--text-caption); color: var(--color-obsidian);
+  border-radius: 0;
+}
+.field input::placeholder { color: rgba(0,0,0,.5); }
+.btn {
+  border: 0; background: none; border-radius: var(--radius-buttons);
+  font-family: inherit; font-size: var(--text-caption); letter-spacing: 0.024em; color: var(--color-obsidian);
+  cursor: pointer; padding: var(--spacing-8) 0;
+}
+
+/* ── Нижняя навигация ──────────────────────────────────────────────── */
+.footnav {
+  display: flex; align-items: baseline; justify-content: space-between;
+  padding: var(--spacing-25); font-size: var(--text-caption); letter-spacing: var(--tracking-caption);
+}
+.footnav .mid { display: flex; gap: var(--spacing-30); }
+.lang { display: flex; gap: var(--spacing-8); }
+.lang button { background: none; border: 0; padding: 0; cursor: pointer; font-family: inherit; font-size: var(--text-caption); color: rgba(0,0,0,.45); }
+.lang button[aria-pressed="true"] { color: var(--color-obsidian); }
+</style>
+</head>
+<body>
+
+<div class="mosaic">
+  <div class="tile">
+    <div class="spacer"></div>
+    <div class="wordmark">KI<br>LN</div>
+    <div class="spacer"></div>
+  </div>
+
+  <div class="tile terra">
+    <div class="cap" data-i18n="t1c">What this is</div>
+    <div class="spacer"></div>
+    <div class="disp" data-i18n="t1h">Seven days when every kiln in the city is open.</div>
+    <a class="arrow" href="#days" data-i18n="t1l">The programme →</a>
+  </div>
+
+  <div class="tile">
+    <div class="spread"><span class="disp" data-i18n="t2a">CLAY</span><span class="disp" data-i18n="t2b">IN</span></div>
+    <div class="spacer"></div>
+    <div class="center disp" data-i18n="t2c">PUBLIC</div>
+    <div class="spacer"></div>
+    <div class="spread cap"><span data-i18n="t2d">14—20 September</span><span data-i18n="t2e">Porto · 31 studios</span></div>
+  </div>
+
+  <div class="tile flush" style="background:#ddbdea">
+    <span class="pilltag"><span class="d"></span><span data-i18n="p1">The makers</span></span>
+    <svg viewBox="0 0 480 350" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <rect width="480" height="350" fill="#ddbdea"/>
+      <!-- руки на гончарном круге -->
+      <ellipse cx="240" cy="286" rx="150" ry="34" fill="#a9553c"/>
+      <ellipse cx="240" cy="272" rx="150" ry="34" fill="#ffffff"/>
+      <path d="M188 272c0-64 20-104 52-104s52 40 52 104z" fill="#a9553c"/>
+      <path d="M206 258c-14-8-26-26-22-44 4-16 22-10 30 2M274 258c14-8 26-26 22-44-4-16-22-10-30 2" fill="none" stroke="#000" stroke-width="5"/>
+      <path d="M240 168c-18 0-30 12-30 12M240 168c18 0 30 12 30 12" stroke="#000" stroke-width="5" fill="none"/>
+      <rect x="150" y="296" width="180" height="10" fill="#000"/>
+    </svg>
+  </div>
+
+  <div class="tile lilac">
+    <div class="cap" data-i18n="t3c">Newsfeed</div>
+    <div class="spacer"></div>
+    <div style="display:flex;gap:20px;align-items:flex-start">
+      <svg width="86" height="64" viewBox="0 0 86 64" aria-hidden="true" style="flex:none;width:86px;height:64px">
+        <rect width="86" height="64" fill="#ffffff"/>
+        <path d="M20 46h46l-6-24H26z" fill="#a9553c"/>
+        <path d="M30 22c0-8 26-8 26 0" fill="none" stroke="#000" stroke-width="3"/>
+      </svg>
+      <div>
+        <p style="font-size:var(--text-body)" data-i18n="t3p">Third firing of the big anagama starts on Thursday at 04:00 and runs for sixty hours. Bring wood, take a shift…</p>
+        <a class="arrow" style="text-decoration:underline" href="#days" data-i18n="t3l">Read more</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="tile flush">
+    <span class="pilltag"><span class="d"></span><span data-i18n="p2">Open kilns</span></span>
+    <svg viewBox="0 0 480 350" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <rect width="480" height="350" fill="#f2ece6"/>
+      <!-- полка обжига -->
+      <rect x="40" y="250" width="400" height="12" fill="#000"/>
+      <rect x="40" y="140" width="400" height="10" fill="#000"/>
+      <g fill="#a9553c">
+        <path d="M86 250v-46c0-24 12-34 12-46 0-8-6-10-6-16h44c0 6-6 8-6 16 0 12 12 22 12 46v46z"/>
+        <path d="M186 250v-64c0-20 34-20 34 0v64z"/>
+        <ellipse cx="300" cy="250" rx="46" ry="10"/>
+        <path d="M254 250c0-40 20-58 46-58s46 18 46 58z"/>
+        <path d="M382 250v-38c-10-6-10-22 0-28 10 6 10 22 0 28" />
+        <rect x="366" y="212" width="32" height="38"/>
+      </g>
+      <g fill="#ddbdea">
+        <path d="M96 140v-32c0-16 40-16 40 0v32z"/>
+        <ellipse cx="240" cy="140" rx="52" ry="12"/>
+        <path d="M188 140c0-30 24-42 52-42s52 12 52 42z"/>
+        <rect x="356" y="96" width="56" height="44"/>
+      </g>
+    </svg>
+  </div>
+</div>
+
+<div class="days" id="days">
+  <div class="day">
+    <div class="n" data-i18n="d1n">Monday 14</div>
+    <h3 data-i18n="d1h">Wedging</h3>
+    <p data-i18n="d1p">Nine studios open their doors at eight in the morning and let anybody in until the clay runs out. No booking, no fee, aprons provided.</p>
+    <div class="sp"></div>
+    <a class="arrow" href="#tickets" data-i18n="d1l">Nine addresses →</a>
+  </div>
+  <div class="day terra tile" style="min-height:0">
+    <div class="n cap" data-i18n="d2n">Tuesday 15</div>
+    <h3 class="disp" style="margin-top:10px" data-i18n="d2h">Throwing, badly</h3>
+    <p style="margin-top:10px" data-i18n="d2p">Twenty wheels in the market square, twenty potters standing behind them, and a queue of people who have never centred anything.</p>
+    <div class="sp"></div>
+    <a class="arrow" href="#tickets" data-i18n="d2l">Free, all day →</a>
+  </div>
+  <div class="day">
+    <div class="n" data-i18n="d3n">Wednesday 16</div>
+    <h3 data-i18n="d3h">Glaze night</h3>
+    <p data-i18n="d3p">Eleven glaze recipes published, mixed in front of you, brushed onto test tiles you take home. The one that never works is demonstrated too.</p>
+    <div class="sp"></div>
+    <a class="arrow" href="#tickets" data-i18n="d3l">€6, 18:00 →</a>
+  </div>
+  <div class="day lilac tile" style="min-height:0">
+    <div class="n cap" data-i18n="d4n">Thursday 17</div>
+    <h3 class="disp" style="margin-top:10px" data-i18n="d4h">The long firing</h3>
+    <p style="margin-top:10px" data-i18n="d4p">The wood kiln is lit at four in the morning and fed in two-hour shifts for sixty hours. Sign up for a shift; bring gloves and something to read.</p>
+    <div class="sp"></div>
+    <a class="arrow" href="#tickets" data-i18n="d4l">Shifts open →</a>
+  </div>
+  <div class="day">
+    <div class="n" data-i18n="d5n">Friday 18</div>
+    <h3 data-i18n="d5h">Repair table</h3>
+    <p data-i18n="d5p">Bring the broken thing. Gold is not free, staples are, and the answer is sometimes that it should stay broken.</p>
+    <div class="sp"></div>
+    <a class="arrow" href="#tickets" data-i18n="d5l">14:00—20:00 →</a>
+  </div>
+  <div class="day">
+    <div class="n" data-i18n="d6n">Sat 19 — Sun 20</div>
+    <h3 data-i18n="d6h">Opening and market</h3>
+    <p data-i18n="d6p">The kiln is unpacked in front of everybody on Saturday at noon; whatever survived is on the tables by two, priced by whoever made it.</p>
+    <div class="sp"></div>
+    <a class="arrow" href="#tickets" data-i18n="d6l">Both days →</a>
+  </div>
+</div>
+
+<div class="wide">
+  <div class="tile terra" style="min-height:300px">
+    <div class="cap" data-i18n="tk_c">Tickets</div>
+    <div class="spacer"></div>
+    <div class="disp" data-i18n="tk_h">Four of the seven days cost nothing at all.</div>
+    <p style="margin-top:10px;max-width:640px" data-i18n="tk_p">The glaze night and the two workshop afternoons are €6 each, which is what the clay and the electricity cost us. A week pass is €14 and includes a cup you fired yourself, if it survives.</p>
+    <div class="field" id="tickets">
+      <input type="email" placeholder="you@example.com" aria-label="email">
+      <button class="btn" data-i18n="tk_b">Send me the pass →</button>
+    </div>
+  </div>
+  <div class="tile" style="min-height:300px">
+    <div class="cap" data-i18n="nb_c">By the numbers</div>
+    <div class="spacer"></div>
+    <div class="sub" data-i18n="nb1">31 studios</div>
+    <div class="sub" data-i18n="nb2">7 days</div>
+    <div class="sub" data-i18n="nb3">1 wood kiln, 60 hours</div>
+    <div class="sub" data-i18n="nb4">2 300 test tiles fired in 2025</div>
+  </div>
+</div>
+
+<div class="venues">
+  <div class="v"><div class="n" data-i18n="v1">Rua Miguel Bombarda 44</div><div class="a" data-i18n="v1a">Six studios in one courtyard · wheels, hand-building</div></div>
+  <div class="v"><div class="n" data-i18n="v2">Antiga Fábrica de Louça</div><div class="a" data-i18n="v2a">The wood kiln, the shifts, the unpacking on Saturday</div></div>
+  <div class="v"><div class="n" data-i18n="v3">Mercado do Bolhão, south aisle</div><div class="a" data-i18n="v3a">Twenty wheels on Tuesday, the market at the weekend</div></div>
+  <div class="v"><div class="n" data-i18n="v4">Escola Superior, room 2</div><div class="a" data-i18n="v4a">Glaze night, the recipes, the repair table on Friday</div></div>
+</div>
+
+<div class="footnav">
+  <span><b style="font-weight:500">KILN</b> <span data-i18n="fa">Ceramics week, Porto</span></span>
+  <div class="mid">
+    <a href="#days" data-i18n="fl1">Programme</a>
+    <a href="#tickets" data-i18n="fl2">Tickets</a>
+    <a href="#days" data-i18n="fl3">Venues</a>
+    <a href="#tickets" data-i18n="fl4">Volunteer</a>
+  </div>
+  <div class="lang">
+    <button data-set="en" aria-pressed="true">En</button>
+    <button data-set="ru" aria-pressed="false">Ru</button>
+  </div>
+</div>
+
+<script>
+/* ── RU/EN. Английский — исходный, русский — перевод под него ── */
+var RU = {
+  t1c:'Что это', t1h:'Семь дней, когда в городе открыты все печи.', t1l:'Программа →',
+  t2a:'ГЛИНА', t2b:'НА', t2c:'ЛЮДЯХ',
+  t2d:'14—20 сентября', t2e:'Порту · 31 мастерская',
+  p1:'Мастера', p2:'Открытые печи',
+  t3c:'Лента',
+  t3p:'Третий обжиг большой анагамы начинается в четверг в 04:00 и идёт шестьдесят часов. Приносите дрова, берите смену…',
+  t3l:'Читать дальше',
+  d1n:'Понедельник, 14', d1h:'Промин', d1p:'Девять мастерских открывают двери в восемь утра и впускают всех, пока не кончится глина. Без записи, бесплатно, фартуки выдаём.', d1l:'Девять адресов →',
+  d2n:'Вторник, 15', d2h:'Криво на круге', d2p:'Двадцать кругов на рыночной площади, двадцать гончаров за ними и очередь из людей, которые ни разу ничего не центровали.', d2l:'Бесплатно, весь день →',
+  d3n:'Среда, 16', d3h:'Вечер глазурей', d3p:'Одиннадцать рецептов опубликованы, замешиваются при вас и наносятся на пробные плитки, которые вы забираете. Тот, что никогда не выходит, показывают тоже.', d3l:'€6, 18:00 →',
+  d4n:'Четверг, 17', d4h:'Долгий обжиг', d4p:'Дровяную печь разжигают в четыре утра и топят двухчасовыми сменами шестьдесят часов. Записывайтесь на смену, берите перчатки и что-нибудь почитать.', d4l:'Смены открыты →',
+  d5n:'Пятница, 18', d5h:'Стол починки', d5p:'Приносите разбитое. Золото не бесплатно, скобы бесплатны, а иногда ответ такой: пусть остаётся разбитым.', d5l:'14:00—20:00 →',
+  d6n:'Сб 19 — Вс 20', d6h:'Раскрытие и рынок', d6p:'В субботу в полдень печь разбирают при всех; всё, что уцелело, к двум лежит на столах с ценой от того, кто это сделал.', d6l:'Оба дня →',
+  tk_c:'Билеты', tk_h:'Четыре дня из семи не стоят ничего.',
+  tk_p:'Вечер глазурей и два дневных воркшопа — по €6, столько стоят глина и электричество. Абонемент на неделю — €14, и в него входит чашка вашего обжига, если она переживёт печь.',
+  tk_b:'Прислать абонемент →',
+  nb_c:'В цифрах', nb1:'31 мастерская', nb2:'7 дней', nb3:'1 дровяная печь, 60 часов', nb4:'2 300 пробных плиток обожжено в 2025-м',
+  v1:'Руа Мигел Бомбарда, 44', v1a:'Шесть мастерских в одном дворе · круги, ручная лепка',
+  v2:'Старая фаянсовая фабрика', v2a:'Дровяная печь, смены, раскрытие в субботу',
+  v3:'Рынок Больян, южный ряд', v3a:'Двадцать кругов во вторник, рынок на выходных',
+  v4:'Высшая школа, аудитория 2', v4a:'Вечер глазурей, рецепты, стол починки в пятницу',
+  fa:'Неделя керамики, Порту',
+  fl1:'Программа', fl2:'Билеты', fl3:'Площадки', fl4:'Волонтёрам'
+};
+var EN = {};
+document.querySelectorAll('[data-i18n]').forEach(function (el) { EN[el.dataset.i18n] = el.innerHTML; });
+
+function setLang(l) {
+  var dict = l === 'ru' ? RU : EN;
+  document.querySelectorAll('[data-i18n]').forEach(function (el) {
+    var v = dict[el.dataset.i18n];
+    if (v !== undefined) el.innerHTML = v;
+  });
+  document.documentElement.lang = l;
+  document.documentElement.dataset.lang = l;
+  document.querySelectorAll('.lang button').forEach(function (b) {
+    b.setAttribute('aria-pressed', b.dataset.set === l ? 'true' : 'false');
+  });
+}
+document.querySelectorAll('.lang button').forEach(function (b) {
+  b.addEventListener('click', function () { setLang(b.dataset.set); });
+});
+</script>
+</body>
+</html>

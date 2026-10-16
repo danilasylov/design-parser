@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>Latch — migrations that show their locks</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ─────────────────────────────────────────────────────────────
+   Дизайн-система: PostHog (refero 56cd3725) — tokens.css дословно
+   ───────────────────────────────────────────────────────────── */
+:root {
+  /* Colors */
+  --color-sandy-desk: #e1d7c2;
+  --color-paper-white: #ffffff;
+  --color-cream-paper: #fdfdf8;
+  --color-soft-linen: #eeefe9;
+  --color-pale-stone: #e5e7e0;
+  --color-deep-moss: #23251d;
+  --color-olive-char: #4d4f46;
+  --color-sage-gray: #65675e;
+  --color-ash-green: #9ea096;
+  --color-faded-pewter: #b3b3af;
+  --color-warm-mist: #bfc1b7;
+  --color-pure-black: #000000;
+  --color-signal-blue: #2f80fa;
+  --gradient-signal-blue: linear-gradient(90deg, rgb(1, 67, 203), rgb(43, 111, 244) 24.04%, rgb(210, 52, 1) 46.63%, rgb(255, 101, 31) 65.87%, rgb(251, 160, 0) 83.17%, rgb(1, 67, 203));
+  --color-amber-glow: #eb9d2a;
+  --color-dark-amber: #cd8407;
+  --color-burnished-gold: #b17816;
+  --color-marigold: #f1a82c;
+  --color-flame-orange: #f54e00;
+  --color-moss-green: #6aa84f;
+
+  /* Typography — Font Families */
+  --font-open-runde: 'Open Runde', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-ibm-plex-sans-variable: 'IBM Plex Sans Variable', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-ui-monospace: 'ui-monospace', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-source-code-pro: 'Source Code Pro', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Typography — Scale */
+  --text-micro: 12px;
+  --leading-micro: 1.33;
+  --text-caption: 14px;
+  --leading-caption: 1.43;
+  --text-body: 16px;
+  --leading-body: 1.5;
+  --text-subheading: 19px;
+  --leading-subheading: 1.56;
+  --tracking-subheading: -0.475px;
+  --text-heading: 21px;
+  --leading-heading: 1.4;
+  --tracking-heading: -0.525px;
+  --text-heading-lg: 24px;
+  --leading-heading-lg: 1.33;
+  --tracking-heading-lg: -0.6px;
+  --text-display: 36px;
+  --leading-display: 1.5;
+
+  /* Typography — Weights */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+
+  /* Spacing */
+  --spacing-4: 4px;
+  --spacing-5: 5px;
+  --spacing-6: 6px;
+  --spacing-8: 8px;
+  --spacing-9: 9px;
+  --spacing-10: 10px;
+  --spacing-12: 12px;
+  --spacing-14: 14px;
+  --spacing-16: 16px;
+  --spacing-17: 17px;
+  --spacing-20: 20px;
+  --spacing-24: 24px;
+  --spacing-32: 32px;
+  --spacing-34: 34px;
+  --spacing-64: 64px;
+  --spacing-144: 144px;
+
+  /* Layout */
+  --page-max-width: 958px;
+  --section-gap: 48px;
+  --card-padding: 16px;
+  --element-gap: 8px;
+
+  /* Border Radius */
+  --radius-md: 4px;
+  --radius-lg: 8px;
+  --radius-full: 9999px;
+
+  /* Named Radii */
+  --radius-tags: 9999px;
+  --radius-cards: 4px;
+  --radius-inputs: 4px;
+  --radius-buttons: 4px;
+  --radius-windows: 6px;
+
+  /* Shadows */
+  --shadow-xl: rgba(0, 0, 0, 0.25) 0px 25px 50px -12px;
+
+  /* Surfaces */
+  --surface-sandy-desk: #e1d7c2;
+  --surface-pale-stone: #e5e7e0;
+  --surface-soft-linen: #eeefe9;
+  --surface-cream-paper: #fdfdf8;
+  --surface-paper-white: #ffffff;
+}
+
+/* Мои подстановки: Open Runde закрыт лицензией — по DESIGN.md берётся Inter Tight
+   (первая из предложенных замен, с кириллицей). IBM Plex Sans Variable → IBM Plex Sans,
+   ui-monospace → IBM Plex Mono, чтобы моно тоже знал кириллицу. */
+:root {
+  --font-open-runde: 'Inter Tight', ui-sans-serif, system-ui, sans-serif;
+  --font-ibm-plex-sans-variable: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-ui-monospace: 'IBM Plex Mono', ui-monospace, monospace;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background-color: var(--surface-sandy-desk);
+  /* фактура стола — на скриншоте песчаный холст зернистый, не плоский */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.16'/%3E%3C/svg%3E");
+  color: var(--color-deep-moss);
+  font-family: var(--font-open-runde);
+  font-size: 15px; line-height: var(--leading-body);
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, h4, p, figure { margin: 0; font-weight: var(--font-weight-regular); }
+a { color: inherit; }
+.ui { font-family: var(--font-ibm-plex-sans-variable); }
+.mono { font-family: var(--font-ui-monospace); }
+.micro { font-size: var(--text-micro); line-height: var(--leading-micro); }
+.cap { font-size: var(--text-caption); line-height: var(--leading-caption); }
+.mute { color: var(--color-sage-gray); }
+.tight { letter-spacing: -0.025em; }
+.num { font-variant-numeric: tabular-nums; }
+
+/* ── Верхняя навигация: прозрачная, без границы ─────────────────────── */
+.topnav { display: flex; align-items: center; gap: var(--spacing-16); padding: var(--spacing-10) var(--spacing-16); }
+.topnav .logo { width: 22px; height: 14px; }
+.topnav a { font-family: var(--font-ibm-plex-sans-variable); font-size: 13px; font-weight: 500; color: var(--color-olive-char); text-decoration: none; padding: var(--spacing-4) var(--spacing-8); }
+.topnav a:hover { color: var(--color-deep-moss); }
+.topnav a.on { color: var(--color-deep-moss); border-bottom: 1px solid var(--color-deep-moss); }
+.topnav .sp { margin-left: auto; }
+
+.btn {
+  font-family: var(--font-ibm-plex-sans-variable); font-size: var(--text-caption); font-weight: 500;
+  border-radius: var(--radius-buttons); padding: var(--spacing-6) var(--spacing-12);
+  border: 0; cursor: pointer; background: var(--color-amber-glow); color: var(--color-deep-moss);
+  text-decoration: none; display: inline-block;
+}
+.btn:hover { background: var(--color-dark-amber); }
+.btn.out { background: transparent; border: 1.5px solid var(--color-burnished-gold); color: var(--color-burnished-gold); }
+.btn.out:hover { background: transparent; color: var(--color-dark-amber); }
+.btn.lg { font-size: 15px; padding: var(--spacing-9) var(--spacing-16); }
+
+.switch { display: inline-flex; align-items: center; gap: var(--spacing-4); font-family: var(--font-ibm-plex-sans-variable); font-size: 13px; }
+.switch button { background: none; border: 0; padding: 2px 4px; border-radius: var(--radius-md); cursor: pointer; font: inherit; color: var(--color-sage-gray); }
+.switch button[aria-pressed="true"] { color: var(--color-deep-moss); background: var(--color-pale-stone); }
+
+/* ── Стол: сайдбар-файлы, окно, сайдбар-ссылки ─────────────────────── */
+.desk { display: grid; grid-template-columns: 112px minmax(0, 1fr) 118px; gap: var(--spacing-24); padding: 0 var(--spacing-20) var(--spacing-64); align-items: start; }
+.files { display: flex; flex-direction: column; gap: var(--spacing-16); padding-top: var(--spacing-12); }
+.fentry { display: flex; flex-direction: column; align-items: center; gap: var(--spacing-8); text-align: center; text-decoration: none; padding: var(--spacing-6) var(--spacing-4); border-radius: var(--radius-md); }
+.fentry:hover { background: var(--color-pale-stone); }
+.fentry span { font-family: var(--font-ibm-plex-sans-variable); overflow-wrap: anywhere; font-size: 13px; font-weight: 500; color: var(--color-olive-char); line-height: 1.25; }
+.fentry.on span { color: var(--color-signal-blue); }
+.fentry svg { width: 26px; height: 30px; display: block; }
+
+/* ── Окно приложения ───────────────────────────────────────────────── */
+.win {
+  max-width: var(--page-max-width); margin: 0 auto;
+  background: var(--surface-paper-white);
+  border: 1px solid var(--color-warm-mist); border-radius: var(--radius-windows);
+  overflow: hidden;
+}
+.titlebar {
+  display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
+  height: 36px; padding: 0 var(--spacing-12);
+  border-bottom: 1px solid var(--color-warm-mist);
+  font-family: var(--font-ibm-plex-sans-variable); font-size: 13px; font-weight: 500;
+}
+.titlebar .dots { justify-self: end; display: flex; gap: var(--spacing-14); color: var(--color-olive-char); }
+.toolbar { display: flex; align-items: center; gap: var(--spacing-6); padding: var(--spacing-8) var(--spacing-12); border-bottom: 1px solid var(--color-warm-mist); }
+.tb { font-family: var(--font-ibm-plex-sans-variable); font-size: 13px; color: var(--color-deep-moss); background: transparent; border: 0; border-radius: var(--radius-md); padding: 2px 6px; cursor: pointer; }
+.tb:hover { background: var(--color-pale-stone); }
+.tb.box { border: 1px solid var(--color-warm-mist); color: var(--color-sage-gray); padding: 2px 8px; }
+.tb.sep { color: var(--color-faded-pewter); padding: 0 2px; }
+
+.pad { padding: var(--spacing-24) var(--spacing-32); }
+
+/* ── Герой внутри окна ─────────────────────────────────────────────── */
+.wordmark { display: flex; align-items: center; gap: var(--spacing-10); }
+.wordmark b { font-size: var(--text-heading-lg); letter-spacing: var(--tracking-heading-lg); font-weight: var(--font-weight-extrabold); }
+.hero { display: grid; grid-template-columns: 1fr 300px; gap: var(--spacing-16); align-items: start; }
+.hero h1 { margin-top: var(--spacing-17); font-size: var(--text-heading-lg); line-height: var(--leading-heading-lg); letter-spacing: var(--tracking-heading-lg); font-weight: var(--font-weight-extrabold); }
+.hero p { margin-top: var(--spacing-14); max-width: 480px; }
+.hero .acts { display: flex; gap: var(--spacing-8); margin-top: var(--spacing-20); }
+.hero .mini { display: flex; gap: var(--spacing-12); margin-top: var(--spacing-16); align-items: center; }
+.hero .mini a { text-decoration-thickness: 1.5px; text-underline-offset: 3px; }
+.iso { margin-right: -56px; }
+.iso svg { width: 100%; height: auto; display: block; }
+
+/* ── Вкладки и панель ──────────────────────────────────────────────── */
+.tabs { display: flex; gap: var(--spacing-4); padding: 0 var(--spacing-32); margin-top: var(--spacing-32); }
+.tab { font-family: var(--font-ibm-plex-sans-variable); font-size: 13px; font-weight: 500; color: var(--color-sage-gray); background: transparent; border: 0; border-radius: 6px 6px 0 0; padding: var(--spacing-10) var(--spacing-12); cursor: pointer; }
+/* Скриншот главнее прозы: в DESIGN.md активная вкладка «белая с синей чертой»,
+   на живом сайте она залита Signal Blue с белым текстом — беру пиксели. */
+.tab.on { background: var(--color-signal-blue); color: var(--color-paper-white); }
+.panel { margin: 0 var(--spacing-32) var(--spacing-32); border: 2px solid var(--color-signal-blue); border-radius: var(--radius-md); padding: var(--spacing-20); }
+.panel h2 { font-size: var(--text-heading); line-height: var(--leading-heading); letter-spacing: var(--tracking-heading); font-weight: var(--font-weight-bold); }
+.panel .lead { margin-top: var(--spacing-8); color: var(--color-olive-char); }
+
+table.plan { width: 100%; border-collapse: collapse; margin-top: var(--spacing-16); }
+table.plan th { text-align: left; font-family: var(--font-ibm-plex-sans-variable); font-size: var(--text-micro); font-weight: 500; color: var(--color-sage-gray); padding-bottom: var(--spacing-6); border-bottom: 1px solid var(--color-warm-mist); }
+table.plan td { padding: var(--spacing-10) 0; border-bottom: 1px solid var(--color-warm-mist); vertical-align: top; font-size: var(--text-caption); }
+table.plan td.stmt { font-family: var(--font-ui-monospace); font-size: 13px; color: var(--color-deep-moss); padding-right: var(--spacing-16); }
+table.plan td.r { text-align: right; white-space: nowrap; padding-left: var(--spacing-12); }
+.pill { display: inline-block; border-radius: var(--radius-tags); padding: 2px 8px; font-size: var(--text-micro); }
+.pill.warn { background: var(--color-flame-orange); color: var(--color-paper-white); }
+.pill.ok { background: var(--color-moss-green); color: var(--color-paper-white); }
+.pill.mild { background: var(--color-marigold); color: var(--color-deep-moss); }
+
+/* ── Карточки возможностей ─────────────────────────────────────────── */
+.rule { height: 1px; background: var(--color-warm-mist); margin: 0 var(--spacing-32); }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-12); }
+.fcard { background: var(--surface-paper-white); border: 1px solid var(--color-warm-mist); border-radius: var(--radius-cards); padding: var(--card-padding); }
+.fcard:hover { background: var(--surface-soft-linen); }
+.fcard h3 { font-size: var(--text-subheading); line-height: var(--leading-subheading); letter-spacing: var(--tracking-subheading); font-weight: var(--font-weight-semibold); margin-top: var(--spacing-8); }
+.fcard p { margin-top: var(--spacing-6); color: var(--color-olive-char); }
+.ico { width: 20px; height: 20px; display: block; }
+
+/* ── Журнал изменений: строки-файлы ────────────────────────────────── */
+.log { border: 1px solid var(--color-warm-mist); border-radius: var(--radius-cards); overflow: hidden; }
+.log .r { display: grid; grid-template-columns: 96px 1fr auto; gap: var(--spacing-16); align-items: baseline; padding: var(--spacing-10) var(--spacing-14); }
+.log .r + .r { border-top: 1px solid var(--color-warm-mist); }
+.log .r:nth-child(odd) { background: var(--surface-cream-paper); }
+
+/* ── Подвал внутри окна ────────────────────────────────────────────── */
+.foot { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: var(--spacing-24); }
+.foot h4 { font-family: var(--font-ibm-plex-sans-variable); font-size: var(--text-micro); font-weight: 500; color: var(--color-sage-gray); margin-bottom: var(--spacing-8); }
+.foot a { display: block; font-size: var(--text-caption); line-height: 1.9; text-decoration: none; color: var(--color-olive-char); }
+.foot a:hover { color: var(--color-signal-blue); }
+.spectrum { background: var(--gradient-signal-blue); -webkit-background-clip: text; background-clip: text; color: transparent; font-weight: var(--font-weight-extrabold); font-size: var(--text-heading); letter-spacing: var(--tracking-heading); }
+</style>
+</head>
+<body>
+
+<svg style="position:absolute;width:0;height:0" aria-hidden="true">
+  <symbol id="i-sql" viewBox="0 0 26 30">
+    <path d="M3 1h13l7 7v21H3z" fill="#fdfdf8" stroke="#4d4f46" stroke-width="2"/>
+    <path d="M16 1v7h7" fill="none" stroke="#4d4f46" stroke-width="2"/>
+    <path d="M7 15h12M7 19h12M7 23h7" stroke="#2f80fa" stroke-width="2"/>
+  </symbol>
+  <symbol id="i-sh" viewBox="0 0 26 30">
+    <rect x="2" y="4" width="22" height="22" rx="2" fill="#23251d" stroke="#4d4f46" stroke-width="2"/>
+    <path d="M7 11l4 4-4 4M14 19h5" stroke="#f1a82c" stroke-width="2" fill="none"/>
+  </symbol>
+  <symbol id="i-json" viewBox="0 0 26 30">
+    <path d="M3 1h13l7 7v21H3z" fill="#fdfdf8" stroke="#4d4f46" stroke-width="2"/>
+    <path d="M16 1v7h7" fill="none" stroke="#4d4f46" stroke-width="2"/>
+    <path d="M11 14c-2 0-2 3-2 4s0 4-2 4c2 0 2 3 2 4M15 14c2 0 2 3 2 4s0 4 2 4c-2 0-2 3-2 4" stroke="#f54e00" stroke-width="2" fill="none"/>
+  </symbol>
+  <symbol id="i-log" viewBox="0 0 26 30">
+    <rect x="2" y="3" width="22" height="24" rx="2" fill="#eeefe9" stroke="#4d4f46" stroke-width="2"/>
+    <path d="M7 10h12M7 15h12M7 20h8" stroke="#4d4f46" stroke-width="2"/>
+  </symbol>
+  <symbol id="i-db" viewBox="0 0 26 30">
+    <ellipse cx="13" cy="7" rx="10" ry="4" fill="#fdfdf8" stroke="#4d4f46" stroke-width="2"/>
+    <path d="M3 7v14c0 2.2 4.5 4 10 4s10-1.8 10-4V7" fill="#fdfdf8" stroke="#4d4f46" stroke-width="2"/>
+    <path d="M3 14c0 2.2 4.5 4 10 4s10-1.8 10-4" fill="none" stroke="#6aa84f" stroke-width="2"/>
+  </symbol>
+  <symbol id="i-trash" viewBox="0 0 26 30">
+    <path d="M5 8h16l-2 19H7z" fill="#eeefe9" stroke="#4d4f46" stroke-width="2"/>
+    <path d="M3 8h20M10 5h6" stroke="#4d4f46" stroke-width="2"/>
+  </symbol>
+  <symbol id="i-lock" viewBox="0 0 20 20">
+    <rect x="3" y="8" width="14" height="10" rx="2" fill="#f1a82c" stroke="#4d4f46" stroke-width="2"/>
+    <path d="M6 8V6a4 4 0 018 0v2" fill="none" stroke="#4d4f46" stroke-width="2"/>
+  </symbol>
+  <symbol id="i-copy" viewBox="0 0 20 20">
+    <rect x="2" y="2" width="12" height="12" rx="1" fill="#fff" stroke="#4d4f46" stroke-width="2"/>
+    <rect x="6" y="6" width="12" height="12" rx="1" fill="#2f80fa" stroke="#4d4f46" stroke-width="2"/>
+  </symbol>
+  <symbol id="i-undo" viewBox="0 0 20 20">
+    <path d="M7 5L3 9l4 4M3 9h9a5 5 0 010 10" fill="none" stroke="#4d4f46" stroke-width="2"/>
+  </symbol>
+  <symbol id="i-clock" viewBox="0 0 20 20">
+    <circle cx="10" cy="10" r="8" fill="none" stroke="#4d4f46" stroke-width="2"/>
+    <path d="M10 5v5l4 2" fill="none" stroke="#f54e00" stroke-width="2"/>
+  </symbol>
+</svg>
+
+<nav class="topnav">
+  <svg class="logo" viewBox="0 0 22 14" aria-hidden="true"><rect x="0" y="2" width="5" height="12" fill="#2f80fa"/><rect x="6" y="6" width="5" height="8" fill="#f1a82c"/><rect x="12" y="0" width="5" height="14" fill="#f54e00"/><rect x="18" y="8" width="4" height="6" fill="#6aa84f"/></svg>
+  <a href="#plan" class="on" data-i18n="n1">Product</a>
+  <a href="#feat" data-i18n="n2">How it works</a>
+  <a href="#log" data-i18n="n3">Changelog</a>
+  <a href="#foot" data-i18n="n4">Docs</a>
+  <a href="#foot" data-i18n="n5">Pricing</a>
+  <span class="sp"></span>
+  <span class="switch"><button data-set="en" aria-pressed="true">EN</button><button data-set="ru" aria-pressed="false">RU</button></span>
+  <a href="#plan" class="btn" data-i18n="n6">Get started – free</a>
+</nav>
+
+<div class="desk">
+
+  <aside class="files">
+    <a class="fentry on" href="#plan"><svg><use href="#i-sql"/></svg><span>0042_index.sql</span></a>
+    <a class="fentry" href="#plan"><svg><use href="#i-sql"/></svg><span>0041_orders.sql</span></a>
+    <a class="fentry" href="#plan"><svg><use href="#i-sh"/></svg><span>rollback.sh</span></a>
+    <a class="fentry" href="#plan"><svg><use href="#i-json"/></svg><span>plan.json</span></a>
+    <a class="fentry" href="#plan"><svg><use href="#i-log"/></svg><span>locks.log</span></a>
+    <a class="fentry" href="#plan"><svg><use href="#i-db"/></svg><span data-i18n="f6">snapshot</span></a>
+    <a class="fentry" href="#log"><svg><use href="#i-trash"/></svg><span data-i18n="f7">Trash</span></a>
+  </aside>
+
+  <main class="win">
+    <div class="titlebar">
+      <span class="mute">↩ latch</span>
+      <span class="mono">0042_add_index.sql ⌄</span>
+      <span class="dots">— □ ✕</span>
+    </div>
+
+    <div class="toolbar">
+      <button class="tb" aria-label="undo"><svg class="ico" style="width:16px;height:16px"><use href="#i-undo"/></svg></button>
+      <span class="tb sep">│</span>
+      <button class="tb box" data-i18n="tb1">postgres 16 ⌄</button>
+      <button class="tb box" data-i18n="tb2">prod replica ⌄</button>
+      <span class="tb sep">│</span>
+      <button class="tb" data-i18n="tb3">Plan</button>
+      <button class="tb" data-i18n="tb4">Explain</button>
+      <button class="tb" data-i18n="tb5">Diff</button>
+      <span class="tb sep">│</span>
+      <button class="tb mono">⌘K</button>
+      <span style="margin-left:auto"></span>
+      <a href="#plan" class="btn" data-i18n="tb6">Get started – free</a>
+    </div>
+
+    <div class="pad">
+      <div class="wordmark">
+        <svg style="width:26px;height:26px" viewBox="0 0 20 20" aria-hidden="true"><use href="#i-lock"/></svg>
+        <b class="tight">Latch</b>
+      </div>
+
+      <div class="hero">
+        <div>
+          <h1 data-i18n="h1">Migrations that show their locks.</h1>
+          <p data-i18n="h2">Shipping a schema change used to mean guessing: which rows go under lock, for how long, and whether the deploy will hold the table while ten thousand requests queue up behind it.</p>
+          <p data-i18n="h3">Latch reads the statement, replays it against last night's snapshot, and prints the lock it will take — <i>before</i> the deploy, not during the incident.</p>
+          <div class="acts">
+            <a href="#plan" class="btn lg" data-i18n="h4">Run a dry migration</a>
+            <a href="#foot" class="btn lg out" data-i18n="h5">Install the CLI</a>
+          </div>
+          <div class="mini cap">
+            <a href="#plan" data-i18n="h6">Read a sample plan</a><span class="mute">·</span>
+            <a href="#log" data-i18n="h7">Changelog</a><span class="mute">·</span>
+            <a href="#foot" data-i18n="h8">Talk to a human</a>
+          </div>
+        </div>
+        <div class="iso">
+          <svg viewBox="0 0 320 250" aria-hidden="true">
+            <!-- изометрическая «таблица»: плита строк, одна строка под замком -->
+            <g stroke="#4d4f46" stroke-width="2" stroke-linejoin="round">
+              <path d="M160 40 300 110 160 180 20 110z" fill="#fdfdf8"/>
+              <path d="M20 110v26l140 70v-26z" fill="#eeefe9"/>
+              <path d="M300 110v26l-140 70v-26z" fill="#e5e7e0"/>
+              <path d="M76 82 216 152" fill="none"/>
+              <path d="M104 96 244 166" fill="none" stroke="#bfc1b7"/>
+              <path d="M132 68 272 138" fill="none" stroke="#bfc1b7"/>
+              <path d="M104 54 48 82 188 152 244 124z" fill="#f1a82c" opacity=".95"/>
+              <path d="M188 152v22l56-28v-22z" fill="#cd8407"/>
+              <path d="M48 82v22l140 70v-22z" fill="#b17816"/>
+            </g>
+            <g stroke="#4d4f46" stroke-width="2">
+              <rect x="196" y="36" width="56" height="40" rx="4" fill="#f54e00"/>
+              <path d="M208 36V24a16 16 0 0132 0v12" fill="none"/>
+              <circle cx="224" cy="56" r="5" fill="#fdfdf8"/>
+            </g>
+            <g stroke="#4d4f46" stroke-width="2" fill="none">
+              <circle cx="52" cy="42" r="18" fill="#fdfdf8"/>
+              <path d="M52 30v12l8 4" stroke="#2f80fa"/>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="tabs" id="plan">
+      <button class="tab on" data-i18n="p1">The plan</button>
+      <button class="tab" data-i18n="p2">Locks &amp; waits</button>
+      <button class="tab" data-i18n="p3">Rollback</button>
+      <button class="tab" data-i18n="p4">On a copy</button>
+    </div>
+
+    <section class="panel">
+      <h2 data-i18n="p5">What this migration will hold, and for how long</h2>
+      <p class="lead cap" data-i18n="p6">Replayed against a 41 GB snapshot restored at 03:12. Times are measured on that copy, not estimated by the planner.</p>
+      <table class="plan">
+        <thead>
+          <tr>
+            <th style="width:24px">#</th>
+            <th data-i18n="th1">Statement</th>
+            <th data-i18n="th2">Lock</th>
+            <th class="r" data-i18n="th3">Holds</th>
+            <th class="r" data-i18n="th4">Rows</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="mono mute">1</td>
+            <td class="stmt">CREATE INDEX CONCURRENTLY idx_orders_created …</td>
+            <td><span class="pill ok" data-i18n="l1">ShareUpdateExclusive</span></td>
+            <td class="r num mono">2 m 14 s</td><td class="r num mono">8.4 M</td>
+          </tr>
+          <tr>
+            <td class="mono mute">2</td>
+            <td class="stmt">ALTER TABLE orders ADD COLUMN paid_at timestamptz</td>
+            <td><span class="pill mild">AccessExclusive</span></td>
+            <td class="r num mono">4 ms</td><td class="r num mono">—</td>
+          </tr>
+          <tr>
+            <td class="mono mute">3</td>
+            <td class="stmt">UPDATE orders SET paid_at = created_at WHERE …</td>
+            <td><span class="pill ok">RowExclusive</span></td>
+            <td class="r num mono" data-i18n="d3">6 m 02 s, batched</td><td class="r num mono">8.4 M</td>
+          </tr>
+          <tr>
+            <td class="mono mute">4</td>
+            <td class="stmt">ALTER TABLE orders ALTER COLUMN paid_at SET NOT NULL</td>
+            <td><span class="pill warn">AccessExclusive</span></td>
+            <td class="r num mono">1.9 s</td><td class="r num mono">8.4 M</td>
+          </tr>
+          <tr>
+            <td class="mono mute">5</td>
+            <td class="stmt">DROP INDEX idx_orders_created_old</td>
+            <td><span class="pill mild">AccessExclusive</span></td>
+            <td class="r num mono">12 ms</td><td class="r num mono">—</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="cap" style="margin-top:16px">
+        <svg class="ico" style="display:inline-block;vertical-align:-4px;width:16px;height:16px"><use href="#i-clock"/></svg>
+        <span data-i18n="p7">Statement 4 is the one that costs you: at 14:00 traffic, 1.9 s of AccessExclusive queues about 320 requests. At 04:00 it queues eleven.</span>
+      </p>
+    </section>
+
+    <div class="rule"></div>
+
+    <div class="pad" id="feat">
+      <h2 class="tight" style="font-size:var(--text-heading);letter-spacing:var(--tracking-heading);font-weight:700" data-i18n="s1">Four things it does before you merge</h2>
+      <div class="grid2" style="margin-top:16px">
+        <div class="fcard">
+          <svg class="ico"><use href="#i-copy"/></svg>
+          <h3 data-i18n="c1h">Replay on a copy</h3>
+          <p class="cap" data-i18n="c1p">Restores last night's snapshot, runs the migration against it, reports the real duration instead of the planner's guess.</p>
+        </div>
+        <div class="fcard">
+          <svg class="ico"><use href="#i-lock"/></svg>
+          <h3 data-i18n="c2h">Lock queue preview</h3>
+          <p class="cap" data-i18n="c2p">Shows which queries would pile up behind the statement, and how deep the queue gets at the traffic you actually have.</p>
+        </div>
+        <div class="fcard">
+          <svg class="ico"><use href="#i-undo"/></svg>
+          <h3 data-i18n="c3h">A rollback that exists</h3>
+          <p class="cap" data-i18n="c3p">Every generated migration ships with its down-script, and the check refuses to pass without one that has been run at least once.</p>
+        </div>
+        <div class="fcard">
+          <svg class="ico"><use href="#i-clock"/></svg>
+          <h3 data-i18n="c4h">A window, not a night</h3>
+          <p class="cap" data-i18n="c4p">Reads four weeks of traffic and marks the hours when an exclusive lock costs the fewest queued requests. Usually not 3 a.m.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="rule"></div>
+
+    <div class="pad" id="log">
+      <h2 class="tight" style="font-size:var(--text-heading);letter-spacing:var(--tracking-heading);font-weight:700" data-i18n="s2">Changelog</h2>
+      <div class="log" style="margin-top:16px">
+        <div class="r cap"><span class="mono mute">2026-08-11</span><span data-i18n="g1">MySQL 8 plans, including online DDL detection</span><span class="mono mute">v0.14.0</span></div>
+        <div class="r cap"><span class="mono mute">2026-07-29</span><span data-i18n="g2">Queue depth is now measured per hour, not per day</span><span class="mono mute">v0.13.2</span></div>
+        <div class="r cap"><span class="mono mute">2026-07-04</span><span data-i18n="g3">Snapshots can be pinned so two migrations replay against the same copy</span><span class="mono mute">v0.13.0</span></div>
+        <div class="r cap"><span class="mono mute">2026-06-16</span><span data-i18n="g4">The CLI refuses to print a plan it could not verify. It used to guess.</span><span class="mono mute">v0.12.1</span></div>
+      </div>
+    </div>
+
+    <div class="rule"></div>
+
+    <div class="pad" id="foot">
+      <div class="foot">
+        <div>
+          <span class="spectrum tight">Latch</span>
+          <p class="cap mute" style="margin-top:8px" data-i18n="ft0">Built by four people who have all held a table for longer than they meant to.</p>
+        </div>
+        <div>
+          <h4 data-i18n="fh1">Product</h4>
+          <a href="#plan" data-i18n="fl1">Plans</a>
+          <a href="#feat" data-i18n="fl2">Lock preview</a>
+          <a href="#feat" data-i18n="fl3">Snapshots</a>
+        </div>
+        <div>
+          <h4 data-i18n="fh2">Docs</h4>
+          <a href="#plan" data-i18n="fl4">CLI reference</a>
+          <a href="#plan" data-i18n="fl5">Postgres notes</a>
+          <a href="#plan" data-i18n="fl6">MySQL notes</a>
+        </div>
+        <div>
+          <h4 data-i18n="fh3">Contact</h4>
+          <a href="#foot">hey@latch.sh</a>
+          <a href="#foot" data-i18n="fl7">Status page</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <aside class="files">
+    <a class="fentry" href="#feat"><svg><use href="#i-db"/></svg><span data-i18n="r1">Why Latch</span></a>
+    <a class="fentry" href="#log"><svg><use href="#i-log"/></svg><span data-i18n="r2">Changelog</span></a>
+    <a class="fentry" href="#foot"><svg><use href="#i-json"/></svg><span data-i18n="r3">Handbook</span></a>
+    <a class="fentry" href="#foot"><svg><use href="#i-sh"/></svg><span data-i18n="r4">Status</span></a>
+    <a class="fentry" href="#foot"><svg><use href="#i-sql"/></svg><span data-i18n="r5">Work here</span></a>
+  </aside>
+
+</div>
+
+<script>
+/* ── RU/EN. Английский — исходный, русский — перевод под него ── */
+var RU = {
+  n1:'Продукт', n2:'Как устроено', n3:'Изменения', n4:'Документация', n5:'Цены', n6:'Начать — бесплатно',
+  f6:'снимок', f7:'Корзина',
+  tb1:'postgres 16 ⌄', tb2:'реплика прода ⌄', tb3:'План', tb4:'Разбор', tb5:'Дифф', tb6:'Начать — бесплатно',
+  h1:'Миграции, которые показывают свои блокировки.',
+  h2:'Выкатить изменение схемы до сих пор значит гадать: какие строки уйдут под блокировку, надолго ли и удержит ли деплой таблицу, пока за ней выстраивается очередь из десяти тысяч запросов.',
+  h3:'Latch читает оператор, прогоняет его на ночном снимке базы и печатает блокировку, которую он возьмёт, — <i>до</i> деплоя, а не во время аварии.',
+  h4:'Прогнать вхолостую', h5:'Поставить CLI',
+  h6:'Посмотреть готовый план', h7:'Изменения', h8:'Написать человеку',
+  p1:'План', p2:'Блокировки и ожидания', p3:'Откат', p4:'На копии',
+  p5:'Что эта миграция удержит и как долго',
+  p6:'Прогнано на снимке 41 ГБ, восстановленном в 03:12. Время измерено на этой копии, а не предсказано планировщиком.',
+  th1:'Оператор', th2:'Блокировка', th3:'Держит', th4:'Строк',
+  d3:'6 м 02 с, пачками',
+  p7:'Дороже всего обходится четвёртый: на дневном трафике 1,9 с AccessExclusive выстраивают около 320 запросов. В четыре утра — одиннадцать.',
+  s1:'Четыре вещи, которые он делает до слияния',
+  c1h:'Прогон на копии',
+  c1p:'Поднимает ночной снимок, выполняет на нём миграцию и сообщает реальную длительность вместо оценки планировщика.',
+  c2h:'Предпросмотр очереди',
+  c2p:'Показывает, какие запросы встанут за оператором и насколько глубокой станет очередь на том трафике, который у вас есть.',
+  c3h:'Откат, который существует',
+  c3p:'К каждой сгенерированной миграции идёт down-скрипт, и проверка не пройдёт, пока он не был выполнен хотя бы раз.',
+  c4h:'Окно, а не ночь',
+  c4p:'Читает четыре недели трафика и отмечает часы, в которые исключительная блокировка стоит меньше всего запросов в очереди. Обычно это не три часа ночи.',
+  s2:'Журнал изменений',
+  g1:'Планы для MySQL 8, включая распознавание online DDL',
+  g2:'Глубина очереди считается по часам, а не по суткам',
+  g3:'Снимок можно закрепить, чтобы две миграции прогонялись на одной копии',
+  g4:'CLI больше не печатает план, который не смог проверить. Раньше он его угадывал.',
+  ft0:'Сделано вчетвером — каждый из нас однажды держал таблицу дольше, чем собирался.',
+  fh1:'Продукт', fl1:'Планы', fl2:'Предпросмотр блокировок', fl3:'Снимки',
+  fh2:'Документация', fl4:'Справочник CLI', fl5:'Заметки по Postgres', fl6:'Заметки по MySQL',
+  fh3:'Связь', fl7:'Статус сервисов',
+  r1:'Зачем Latch', r2:'Изменения', r3:'Справочник', r4:'Статус', r5:'Вакансии'
+};
+var EN = {};
+document.querySelectorAll('[data-i18n]').forEach(function (el) { EN[el.dataset.i18n] = el.innerHTML; });
+
+function setLang(l) {
+  var dict = l === 'ru' ? RU : EN;
+  document.querySelectorAll('[data-i18n]').forEach(function (el) {
+    var v = dict[el.dataset.i18n];
+    if (v !== undefined) el.innerHTML = v;
+  });
+  document.documentElement.lang = l;
+  document.documentElement.dataset.lang = l;
+  document.querySelectorAll('.switch button').forEach(function (b) {
+    b.setAttribute('aria-pressed', b.dataset.set === l ? 'true' : 'false');
+  });
+}
+document.querySelectorAll('.switch button').forEach(function (b) {
+  b.addEventListener('click', function () { setLang(b.dataset.set); });
+});
+</script>
+</body>
+</html>

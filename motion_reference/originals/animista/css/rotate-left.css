@@ -1,0 +1,3 @@
+/* Original keyframes: Animista, Ana Travas. https://animista.net/play/basic/rotate/rotate-left */
+.rotate-left{animation:rotate-left 0.5s cubic-bezier(.455,.03,.515,.955) 0s 1 normal both;}
+@keyframes rotate-left{0%{-webkit-transform:rotate(0);transform:rotate(0);-webkit-transform-origin:left;transform-origin:left}to{-webkit-transform:rotate(360deg);transform:rotate(360deg);-webkit-transform-origin:left;transform-origin:left}}

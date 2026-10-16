@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Juno Vaara — design engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+/* ── Дизайн-система Maciej Zadykowicz (styles.refero.design/style/f1b76a42) ──
+   страница держится на 1% цветности: хроматика живёт только в хиро-мурале и статус-пилюле
+   ровно один вес — 400, иерархия строится размером, а не жирностью · трекинг -.014em на всём
+   плоско: ни одной box-shadow, glow или blur — «высота» передаётся цветом #25262d → #383a42 → #384270
+   радиусы только 16 (карточки) / 24 (кнопки) / 64 (пилюли), острых углов нет */
+:root{
+  --bone:#f2f2f3; --slate:#25262d; --graphite:#383a42; --fog:#858893; --ash:#54565f;
+  --charcoal:#0c0c0c; --indigo:#384270; --line:#2e2f37;
+  --sans:'Inter','Replica-Regular',system-ui,-apple-system,sans-serif;
+  --mono:'JetBrains Mono','Replica-Mono',ui-monospace,monospace;
+  --r-card:16px; --r-btn:24px; --r-pill:64px; --page:1200px; --gap:64px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{background:var(--slate);color:var(--bone);font:400 16px/1.2 var(--sans);letter-spacing:-.014em;
+     -webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+::selection{background:var(--indigo)}
+:focus-visible{outline:1px solid var(--bone);outline-offset:3px;border-radius:var(--r-card)}
+.wrap{max-width:var(--page);margin:0 auto;padding:0 24px}
+.fog{color:var(--fog)}
+.mono{font-family:var(--mono)}
+.rule{height:1px;background:var(--line);margin:var(--gap) 0}
+
+/* ── навигация: без бара, только текст ── */
+.top{display:flex;gap:24px;align-items:baseline;padding:24px 0;flex-wrap:wrap}
+.top .nm{font-size:16px}
+.top .role{color:var(--fog);font-size:14px;margin-right:auto}
+.top a{font-size:14px;color:var(--fog)}
+.top a:hover{color:var(--bone)}
+.lng{background:none;border:1px solid var(--line);border-radius:var(--r-pill);color:var(--fog);
+     font:400 14px var(--sans);letter-spacing:-.014em;padding:6px 14px;cursor:pointer}
+.lng:hover{border-color:var(--fog)}
+:root[data-lang="en"] .lng [data-l="en"],:root[data-lang="ru"] .lng [data-l="ru"]{color:var(--bone)}
+
+/* ── хиро-мурал: единственное цветное место на странице ── */
+.mural{position:relative;border-radius:var(--r-card);overflow:hidden;background:#1e1f25;padding:64px 24px;margin-top:12px}
+.mural svg.shapes{position:absolute;inset:0;width:100%;height:100%}
+.mural h1{position:relative;z-index:2;font-size:clamp(48px,10vw,120px);line-height:1;letter-spacing:-.014em;max-width:12ch}
+.mural .sig{position:relative;z-index:2;margin-top:24px;font-family:var(--mono);font-size:14px;color:var(--fog)}
+
+/* ── био и действия ── */
+.bio{background:var(--graphite);border-radius:var(--r-card);padding:24px;margin-top:24px;max-width:78ch}
+.bio .hi{color:var(--fog);font-size:14px;margin-bottom:12px}
+.bio p{font-size:20px;line-height:1.2}
+.bio p + p{margin-top:12px}
+.actions{display:flex;gap:12px;align-items:center;margin-top:24px;flex-wrap:wrap}
+.status{display:inline-flex;align-items:center;gap:8px;background:var(--indigo);border-radius:var(--r-pill);
+        padding:8px 16px;font-size:14px}
+.status i{width:8px;height:8px;border-radius:50%;background:#7fe0a8}
+.cta{background:var(--graphite);border-radius:var(--r-btn);padding:12px 24px;font-size:14px;
+     border:0;color:var(--bone);font-family:var(--sans);letter-spacing:-.014em;cursor:pointer}
+.cta:hover{background:#4a4c55}
+
+/* ── проекты ── */
+h2.sec{font-size:36px;line-height:1.2;margin-bottom:24px}
+.proj{background:var(--graphite);border-radius:var(--r-card);padding:24px;margin-bottom:12px;
+      display:grid;grid-template-columns:110px minmax(0,1fr) minmax(0,320px);gap:24px;align-items:start}
+.proj .yr{font-family:var(--mono);font-size:14px;color:var(--fog);padding-top:6px}
+.proj h3{font-size:36px;line-height:1.2;margin-bottom:12px}
+.proj p{font-size:20px;line-height:1.2;color:var(--fog)}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.tag{border:1px solid var(--fog);border-radius:var(--r-pill);padding:2px 12px;font-family:var(--mono);
+     font-size:14px;color:var(--fog)}
+.tag::before{content:"○ ";font-size:10px}
+.shot{background:#1e1f25;border-radius:var(--r-card);overflow:hidden;aspect-ratio:16/10;display:grid;place-items:center}
+.shot svg{width:100%;height:100%}
+
+/* ── навыки / признание ── */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.panel{background:var(--graphite);border-radius:var(--r-card);padding:24px}
+.panel h4{font-size:24px;margin-bottom:12px}
+.list{display:flex;flex-direction:column;gap:12px}
+.li{display:flex;justify-content:space-between;gap:12px;font-size:16px;color:var(--fog);
+    border-bottom:1px solid var(--line);padding-bottom:12px}
+.li:last-child{border-bottom:0;padding-bottom:0}
+.li b{font-weight:400;color:var(--bone)}
+.li .m{font-family:var(--mono);font-size:14px;white-space:nowrap}
+
+/* ── о себе ── */
+.about{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,420px);gap:24px;align-items:start}
+.about .txt p{font-size:20px;line-height:1.2;color:var(--fog);max-width:56ch}
+.about .txt p + p{margin-top:12px}
+.about .txt b{color:var(--bone);font-weight:400}
+.card-note{background:var(--graphite);border-radius:var(--r-card);padding:24px}
+.card-note .k{color:var(--fog);font-size:14px}
+.card-note .v{font-size:20px;margin:6px 0 16px}
+.card-note .v:last-child{margin-bottom:0}
+
+/* ── футер ── */
+footer{padding:var(--gap) 0 40px}
+.fbar{display:flex;gap:24px;align-items:baseline;flex-wrap:wrap;font-size:14px;color:var(--fog)}
+.fbar .nm{color:var(--bone);font-size:16px;margin-right:auto}
+.fbar a:hover{color:var(--bone)}
+
+@media (max-width:900px){
+  .proj{grid-template-columns:1fr;gap:16px}
+  .proj .yr{padding-top:0}
+  .two,.about{grid-template-columns:1fr}
+  .mural{padding:40px 20px}
+  .proj h3{font-size:28px}
+}
+</style>
+</head>
+<body id="top">
+<div class="wrap">
+
+  <div class="top">
+    <span class="nm">Juno Vaara</span>
+    <span class="role" data-i18n="top.role">Design engineer</span>
+    <a href="mailto:hei@junovaara.example">hei@junovaara.example</a>
+    <a href="#">github/junovaara</a>
+    <button class="lng" id="lng" aria-label="RU / EN"><span data-l="ru">RU</span> / <span data-l="en">EN</span></button>
+  </div>
+
+  <!-- хиро-мурал -->
+  <div class="mural">
+    <svg class="shapes" viewBox="0 0 1200 420" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <path d="M940 40c70 0 120 60 120 130s-60 120-130 120-110-70-100-140 40-110 110-110z" fill="#d94f3d" opacity=".9"/>
+      <circle cx="1075" cy="300" r="72" fill="#f0c24b"/>
+      <path d="M810 250c60-20 120 10 130 70s-40 100-100 100-110-40-110-90 20-60 80-80z" fill="#3f6fd8" opacity=".85"/>
+      <path d="M20 300c0-60 40-90 90-90s80 40 80 90-30 100-90 100-80-40-80-100z" fill="#e07ab0" opacity=".7"/>
+      <path d="M470 330h150v70H470z" fill="#4fa87a" opacity=".6"/>
+      <path d="M690 60c40-30 100-10 110 40s-30 90-80 90-70-40-70-70 10-45 40-60z" fill="#f0c24b" opacity=".55"/>
+    </svg>
+    <h1 data-i18n="mural.h1">I build the part between the mockup and production.</h1>
+    <div class="sig" data-i18n="mural.sig">Helsinki · available for two projects in 2026</div>
+  </div>
+
+  <div class="bio">
+    <div class="hi">☻ <span data-i18n="bio.hi">Hello</span></div>
+    <p data-i18n="bio.p1">I'm Juno, a design engineer. I take an interface from a rough idea to something that ships — design system, components, motion, the accessibility work nobody puts in the case study.</p>
+    <p data-i18n="bio.p2">Most of my work is with small product teams where the gap between Figma and the repo is the actual problem.</p>
+  </div>
+
+  <div class="actions">
+    <span class="status"><i></i><span data-i18n="status">Open for work — Q4 2026</span></span>
+    <a class="cta" href="mailto:hei@junovaara.example" data-i18n="cta.mail">Send a brief</a>
+    <a class="cta" href="#work" data-i18n="cta.work">See selected work</a>
+  </div>
+
+  <div class="rule"></div>
+
+  <!-- проекты -->
+  <div id="work">
+    <h2 class="sec" data-i18n="work.h2">Selected projects</h2>
+
+    <div class="proj">
+      <div class="yr">2025—2026</div>
+      <div>
+        <h3>Kaiku</h3>
+        <p data-i18n="pr1.p">Design system and component library for a Nordic banking app. I led the token architecture, wrote the React primitives, and cut the design-to-merge time from nine days to two.</p>
+        <div class="tags"><span class="tag" data-i18n="t.ds">Design system</span><span class="tag">React</span><span class="tag" data-i18n="t.tok">Tokens</span></div>
+      </div>
+      <div class="shot">
+        <svg viewBox="0 0 320 200"><rect width="320" height="200" fill="#1a1b21"/>
+          <rect x="16" y="16" width="86" height="168" rx="8" fill="#2b2d35"/>
+          <rect x="26" y="30" width="60" height="7" rx="3.5" fill="#4a4c55"/>
+          <rect x="26" y="48" width="44" height="7" rx="3.5" fill="#3c3e47"/>
+          <rect x="26" y="64" width="52" height="7" rx="3.5" fill="#3c3e47"/>
+          <rect x="114" y="16" width="190" height="76" rx="8" fill="#2b2d35"/>
+          <rect x="126" y="30" width="80" height="10" rx="5" fill="#f2f2f3" opacity=".8"/>
+          <rect x="126" y="50" width="150" height="6" rx="3" fill="#54565f"/>
+          <rect x="126" y="64" width="120" height="6" rx="3" fill="#54565f"/>
+          <rect x="114" y="104" width="90" height="80" rx="8" fill="#384270"/>
+          <rect x="214" y="104" width="90" height="80" rx="8" fill="#2b2d35"/>
+          <circle cx="259" cy="144" r="18" fill="none" stroke="#4a4c55" stroke-width="6"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="proj">
+      <div class="yr">2024</div>
+      <div>
+        <h3>Tessellate</h3>
+        <p data-i18n="pr2.p">A canvas editor for a mapping startup. Rebuilt the rendering layer so 40 000 nodes stay at 60 fps, then designed the interactions on top of what the engine could actually do.</p>
+        <div class="tags"><span class="tag">Canvas</span><span class="tag" data-i18n="t.perf">Performance</span><span class="tag">TypeScript</span></div>
+      </div>
+      <div class="shot">
+        <svg viewBox="0 0 320 200"><rect width="320" height="200" fill="#1a1b21"/>
+          <g stroke="#33353d" stroke-width="1">
+            <path d="M0 40h320M0 80h320M0 120h320M0 160h320M40 0v200M80 0v200M120 0v200M160 0v200M200 0v200M240 0v200M280 0v200"/>
+          </g>
+          <path d="M40 160L100 92l52 34 60-72 68 46" fill="none" stroke="#d94f3d" stroke-width="2"/>
+          <circle cx="100" cy="92" r="5" fill="#f0c24b"/><circle cx="152" cy="126" r="5" fill="#f0c24b"/>
+          <circle cx="212" cy="54" r="5" fill="#f0c24b"/>
+          <rect x="20" y="16" width="72" height="24" rx="8" fill="#2b2d35"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="proj">
+      <div class="yr">2022—2024</div>
+      <div>
+        <h3>Verso</h3>
+        <p data-i18n="pr3.p">First design hire at a documentation platform. Built the editor, the theming layer and the docs about the docs. Left behind a system three other people could extend without asking me.</p>
+        <div class="tags"><span class="tag" data-i18n="t.editor">Editor</span><span class="tag" data-i18n="t.a11y">Accessibility</span><span class="tag" data-i18n="t.lead">Team lead</span></div>
+      </div>
+      <div class="shot">
+        <svg viewBox="0 0 320 200"><rect width="320" height="200" fill="#1a1b21"/>
+          <rect x="16" y="16" width="288" height="28" rx="8" fill="#2b2d35"/>
+          <circle cx="32" cy="30" r="4" fill="#54565f"/><circle cx="46" cy="30" r="4" fill="#54565f"/>
+          <rect x="16" y="56" width="130" height="128" rx="8" fill="#2b2d35"/>
+          <rect x="28" y="70" width="90" height="6" rx="3" fill="#4a4c55"/>
+          <rect x="28" y="86" width="70" height="6" rx="3" fill="#3c3e47"/>
+          <rect x="28" y="102" width="100" height="6" rx="3" fill="#3c3e47"/>
+          <rect x="28" y="118" width="60" height="6" rx="3" fill="#3c3e47"/>
+          <rect x="158" y="56" width="146" height="128" rx="8" fill="#22232a"/>
+          <rect x="170" y="72" width="122" height="10" rx="5" fill="#f2f2f3" opacity=".75"/>
+          <rect x="170" y="94" width="100" height="6" rx="3" fill="#54565f"/>
+          <rect x="170" y="108" width="112" height="6" rx="3" fill="#54565f"/>
+          <rect x="170" y="132" width="64" height="20" rx="10" fill="#384270"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="proj">
+      <div class="yr">2020—2022</div>
+      <div>
+        <h3>Ohra</h3>
+        <p data-i18n="pr4.p">Rebuilt a twelve-year-old grocery ordering flow used by 400 shops. Three rounds of shop-floor testing, one checkout, 22% fewer abandoned orders.</p>
+        <div class="tags"><span class="tag" data-i18n="t.ux">Product design</span><span class="tag" data-i18n="t.res">Research</span><span class="tag" data-i18n="t.legacy">Legacy rescue</span></div>
+      </div>
+      <div class="shot">
+        <svg viewBox="0 0 320 200"><rect width="320" height="200" fill="#1a1b21"/>
+          <rect x="94" y="14" width="132" height="172" rx="16" fill="#2b2d35"/>
+          <rect x="106" y="30" width="108" height="60" rx="8" fill="#22232a"/>
+          <rect x="116" y="44" width="60" height="8" rx="4" fill="#4a4c55"/>
+          <rect x="116" y="60" width="44" height="8" rx="4" fill="#3c3e47"/>
+          <rect x="106" y="100" width="52" height="34" rx="8" fill="#4fa87a" opacity=".55"/>
+          <rect x="162" y="100" width="52" height="34" rx="8" fill="#22232a"/>
+          <rect x="106" y="144" width="108" height="28" rx="14" fill="#384270"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <div class="rule"></div>
+
+  <!-- навыки и признание -->
+  <div class="two">
+    <div class="panel">
+      <h4 data-i18n="sk.h">What I actually do</h4>
+      <div class="list">
+        <div class="li"><b data-i18n="sk.1">Design systems and tokens</b><span class="m">01</span></div>
+        <div class="li"><b data-i18n="sk.2">Front-end: React, TypeScript, CSS</b><span class="m">02</span></div>
+        <div class="li"><b data-i18n="sk.3">Interaction and motion</b><span class="m">03</span></div>
+        <div class="li"><b data-i18n="sk.4">Accessibility audits (WCAG 2.2 AA)</b><span class="m">04</span></div>
+        <div class="li"><b data-i18n="sk.5">Prototypes that use the real API</b><span class="m">05</span></div>
+      </div>
+    </div>
+    <div class="panel">
+      <h4 data-i18n="rc.h">Recognition</h4>
+      <div class="list">
+        <div class="li"><b data-i18n="rc.1">Awwwards — Site of the Day</b><span class="m">2025</span></div>
+        <div class="li"><b data-i18n="rc.2">Fast Company Innovation by Design, finalist</b><span class="m">2024</span></div>
+        <div class="li"><b data-i18n="rc.3">Talk: “Tokens are a contract”, Helsinki Design Week</b><span class="m">2024</span></div>
+        <div class="li"><b data-i18n="rc.4">Nordic Design Award, shortlist</b><span class="m">2022</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rule"></div>
+
+  <!-- о себе -->
+  <div class="about">
+    <div class="txt">
+      <h2 class="sec">Juno <span class="fog" data-i18n="ab.pron">pronounced ‘yoo-no’</span></h2>
+      <p data-i18n="ab.p1">I started as a front-end developer, spent four years pretending I wasn't a designer, and eventually admitted the two jobs were the same job.</p>
+      <p data-i18n="ab.p2">I work best <b>embedded in one team</b> for a few months rather than reviewing decks from the outside. Most engagements start with a week of reading the codebase and talking to whoever answers support tickets.</p>
+      <p data-i18n="ab.p3">Outside work: long-distance skating, a stubborn 35 mm camera, and a slowly growing collection of Finnish enamel signage.</p>
+    </div>
+    <div class="card-note">
+      <div class="k" data-i18n="ab.k1">Based in</div><div class="v">Helsinki, UTC+2</div>
+      <div class="k" data-i18n="ab.k2">Working with</div><div class="v" data-i18n="ab.v2">Product teams of 4–30 people</div>
+      <div class="k" data-i18n="ab.k3">Typical engagement</div><div class="v" data-i18n="ab.v3">6–14 weeks, embedded</div>
+      <div class="k" data-i18n="ab.k4">Languages</div><div class="v">Suomi · English · Русский</div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap fbar">
+    <span class="nm">Juno Vaara</span>
+    <span>©2026</span>
+    <a href="mailto:hei@junovaara.example">hei@junovaara.example</a>
+    <a href="#">github/junovaara</a>
+    <a href="#top" data-i18n="foot.top">Back to top</a>
+  </div>
+</footer>
+
+<script>
+const I18N = {
+  "top.role":{en:"Design engineer",ru:"Дизайн-инженер"},
+  "mural.h1":{en:"I build the part between the mockup and production.",ru:"Я делаю то, что лежит между макетом и продакшеном."},
+  "mural.sig":{en:"Helsinki · available for two projects in 2026",ru:"Хельсинки · беру два проекта в 2026 году"},
+  "bio.hi":{en:"Hello",ru:"Привет"},
+  "bio.p1":{en:"I'm Juno, a design engineer. I take an interface from a rough idea to something that ships — design system, components, motion, the accessibility work nobody puts in the case study.",ru:"Я Juno, дизайн-инженер. Довожу интерфейс от сырой идеи до того, что реально выкатывается: дизайн-система, компоненты, анимация и та работа по доступности, которую не показывают в кейсах."},
+  "bio.p2":{en:"Most of my work is with small product teams where the gap between Figma and the repo is the actual problem.",ru:"Чаще всего работаю с небольшими продуктовыми командами, где настоящая проблема — разрыв между Figma и репозиторием."},
+  "status":{en:"Open for work — Q4 2026",ru:"Свободен — 4-й квартал 2026"},
+  "cta.mail":{en:"Send a brief",ru:"Прислать бриф"},
+  "cta.work":{en:"See selected work",ru:"Смотреть работы"},
+  "work.h2":{en:"Selected projects",ru:"Избранные проекты"},
+  "pr1.p":{en:"Design system and component library for a Nordic banking app. I led the token architecture, wrote the React primitives, and cut the design-to-merge time from nine days to two.",ru:"Дизайн-система и библиотека компонентов для скандинавского банковского приложения. Вёл архитектуру токенов, написал React-примитивы и сократил путь от макета до мерджа с девяти дней до двух."},
+  "pr2.p":{en:"A canvas editor for a mapping startup. Rebuilt the rendering layer so 40 000 nodes stay at 60 fps, then designed the interactions on top of what the engine could actually do.",ru:"Канвас-редактор для картографического стартапа. Переписал слой отрисовки так, чтобы 40 000 узлов держали 60 кадров, и уже поверх реальных возможностей движка спроектировал взаимодействие."},
+  "pr3.p":{en:"First design hire at a documentation platform. Built the editor, the theming layer and the docs about the docs. Left behind a system three other people could extend without asking me.",ru:"Первый дизайнер в платформе документации. Сделал редактор, слой тем и документацию про документацию. Оставил систему, которую трое других расширяют, не спрашивая меня."},
+  "pr4.p":{en:"Rebuilt a twelve-year-old grocery ordering flow used by 400 shops. Three rounds of shop-floor testing, one checkout, 22% fewer abandoned orders.",ru:"Переделал двенадцатилетний сценарий заказа продуктов, которым пользуются 400 магазинов. Три круга тестов прямо в торговом зале, один оформленный заказ и на 22% меньше брошенных корзин."},
+  "t.ds":{en:"Design system",ru:"Дизайн-система"},
+  "t.tok":{en:"Tokens",ru:"Токены"},
+  "t.perf":{en:"Performance",ru:"Производительность"},
+  "t.editor":{en:"Editor",ru:"Редактор"},
+  "t.a11y":{en:"Accessibility",ru:"Доступность"},
+  "t.lead":{en:"Team lead",ru:"Лид команды"},
+  "t.ux":{en:"Product design",ru:"Продуктовый дизайн"},
+  "t.res":{en:"Research",ru:"Исследования"},
+  "t.legacy":{en:"Legacy rescue",ru:"Спасение легаси"},
+  "sk.h":{en:"What I actually do",ru:"Что я на самом деле делаю"},
+  "sk.1":{en:"Design systems and tokens",ru:"Дизайн-системы и токены"},
+  "sk.2":{en:"Front-end: React, TypeScript, CSS",ru:"Фронтенд: React, TypeScript, CSS"},
+  "sk.3":{en:"Interaction and motion",ru:"Взаимодействие и анимация"},
+  "sk.4":{en:"Accessibility audits (WCAG 2.2 AA)",ru:"Аудит доступности (WCAG 2.2 AA)"},
+  "sk.5":{en:"Prototypes that use the real API",ru:"Прототипы на настоящем API"},
+  "rc.h":{en:"Recognition",ru:"Признание"},
+  "rc.1":{en:"Awwwards — Site of the Day",ru:"Awwwards — сайт дня"},
+  "rc.2":{en:"Fast Company Innovation by Design, finalist",ru:"Fast Company Innovation by Design, финалист"},
+  "rc.3":{en:"Talk: “Tokens are a contract”, Helsinki Design Week",ru:"Доклад «Токены — это контракт», Helsinki Design Week"},
+  "rc.4":{en:"Nordic Design Award, shortlist",ru:"Nordic Design Award, шорт-лист"},
+  "ab.pron":{en:"pronounced ‘yoo-no’",ru:"произносится «ю-но»"},
+  "ab.p1":{en:"I started as a front-end developer, spent four years pretending I wasn't a designer, and eventually admitted the two jobs were the same job.",ru:"Начинал фронтенд-разработчиком, четыре года делал вид, что я не дизайнер, и в итоге признал: это одна и та же работа."},
+  "ab.p2":{en:"I work best <b>embedded in one team</b> for a few months rather than reviewing decks from the outside. Most engagements start with a week of reading the codebase and talking to whoever answers support tickets.",ru:"Лучше всего работаю, <b>встроившись в одну команду</b> на несколько месяцев, а не рецензируя презентации со стороны. Обычно всё начинается с недели чтения кода и разговоров с тем, кто отвечает на тикеты поддержки."},
+  "ab.p3":{en:"Outside work: long-distance skating, a stubborn 35 mm camera, and a slowly growing collection of Finnish enamel signage.",ru:"Вне работы: коньки на длинные дистанции, упрямая 35-мм камера и медленно растущая коллекция финских эмалированных вывесок."},
+  "ab.k1":{en:"Based in",ru:"База"},
+  "ab.k2":{en:"Working with",ru:"Работаю с"},
+  "ab.v2":{en:"Product teams of 4–30 people",ru:"Продуктовыми командами 4–30 человек"},
+  "ab.k3":{en:"Typical engagement",ru:"Типичный формат"},
+  "ab.v3":{en:"6–14 weeks, embedded",ru:"6–14 недель внутри команды"},
+  "ab.k4":{en:"Languages",ru:"Языки"},
+  "foot.top":{en:"Back to top",ru:"Наверх"}
+};
+function apply(l){
+  const r=document.documentElement;
+  r.lang=l; r.setAttribute('data-lang',l);
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const e=I18N[el.getAttribute('data-i18n')];
+    if(e && e[l]!=null) el.innerHTML=e[l];
+  });
+  try{localStorage.setItem('juno_lang',l);}catch(e){}
+}
+(function(){
+  let l; try{l=localStorage.getItem('juno_lang');}catch(e){}
+  if(!l) l=(navigator.language||'en').toLowerCase().startsWith('ru')?'ru':'en';
+  apply(l);
+  document.getElementById('lng').addEventListener('click',()=>{
+    apply(document.documentElement.getAttribute('data-lang')==='ru'?'en':'ru');
+  });
+})();
+</script>
+</body>
+</html>

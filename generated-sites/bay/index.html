@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>BAY — workshop floors at the Kruse furniture works</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Commissioner:wght@400&display=swap" rel="stylesheet">
+<style>
+/* ─────────────────────────────────────────────────────────────
+   Дизайн-система: The1 (refero 04d2e256) — tokens.css дословно
+   ───────────────────────────────────────────────────────────── */
+:root {
+  /* Colors */
+  --color-the-green: #027b49;
+  --color-the-pink: #f19ec8;
+  --color-the-red: #fa4d43;
+  --color-the-yellow: #fbb833;
+  --color-concrete: #d9d9d9;
+  --color-iron: #1f1f1f;
+  --color-carbon: #000000;
+
+  /* Typography — Font Families */
+  --font-kh-teka: 'KH Teka', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-system-sans-serif: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* Typography — Scale */
+  --text-caption: 12px;      --leading-caption: 1.2;
+  --text-body: 15px;         --leading-body: 1.2;
+  --text-body-sm: 18px;      --leading-body-sm: 1.1;   --tracking-body-sm: -0.03em;
+  --text-subheading: 26px;   --leading-subheading: 1;  --tracking-subheading: -0.03em;
+  --text-heading: 60px;      --leading-heading: 0.8;   --tracking-heading: -0.03em;
+  --text-display: 215px;     --leading-display: 0.7;   --tracking-display: -0.06em;
+
+  /* Typography — Weights */
+  --font-weight-regular: 400;
+
+  /* Spacing */
+  --spacing-5: 5px; --spacing-6: 6px; --spacing-8: 8px; --spacing-10: 10px; --spacing-11: 11px;
+  --spacing-14: 14px; --spacing-15: 15px; --spacing-19: 19px; --spacing-20: 20px; --spacing-24: 24px;
+  --spacing-30: 30px; --spacing-40: 40px; --spacing-50: 50px; --spacing-100: 100px;
+  --spacing-130: 130px; --spacing-170: 170px;
+
+  /* Layout */
+  --page-max-width: 1440px;
+  --section-gap: 40px;
+  --card-padding: 0px;
+  --element-gap: 10px;
+
+  /* Border Radius */
+  --radius-3xl: 30px; --radius-full: 100px;
+  --radius-tags: 100px; --radius-cards: 0px; --radius-buttons: 100px;
+
+  /* Surfaces */
+  --surface-concrete-canvas: #d9d9d9;
+  --surface-iron-surface: #1f1f1f;
+}
+
+/* Подстановка шрифта: KH Teka недоступен; из названных замен кириллицу держит
+   только Roboto Condensed, но на скриншоте гарнитура НЕ узкая — взят гротеск
+   нормальной ширины с кириллицей. Вес 400 и отрицательный трекинг сохранены. */
+:root { --font-kh-teka: 'Commissioner', 'KH Teka', sans-serif; }
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--surface-concrete-canvas);
+  color: var(--color-iron);
+  font-family: var(--font-kh-teka);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  letter-spacing: var(--tracking-body-sm);
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, p { margin: 0; font-weight: var(--font-weight-regular); }
+a { color: inherit; text-decoration: none; }
+.wrap { max-width: var(--page-max-width); margin: 0 auto; padding-left: var(--spacing-20); padding-right: var(--spacing-20); }
+.util { font-family: var(--font-system-sans-serif); font-size: var(--text-caption); line-height: var(--leading-caption); letter-spacing: 0; }
+
+.pill {
+  display: inline-block; background: var(--color-iron); color: var(--color-concrete);
+  border-radius: var(--radius-buttons); border: 0;
+  padding: var(--spacing-8) var(--spacing-19);
+  font-family: inherit; font-size: var(--text-body); letter-spacing: 0; cursor: pointer;
+}
+.pill.ghost { background: none; color: var(--color-iron); border: 1px solid var(--color-carbon); }
+
+/* ── Шапка ────────────────────────────────────────────────────────── */
+.nav { display: flex; align-items: center; gap: var(--spacing-24); padding: var(--spacing-20) var(--spacing-20) var(--spacing-10); }
+.mark { font-size: var(--text-body-sm); letter-spacing: .06em; }
+.nav .sp { flex: 1; }
+.nav a.l { font-size: var(--text-body); letter-spacing: 0; }
+.lang { display: flex; gap: var(--spacing-6); }
+.lang button { background: none; border: 0; padding: 0; cursor: pointer; font-family: inherit; font-size: var(--text-body); color: #8a8a8a; }
+.lang button[aria-pressed="true"] { color: var(--color-iron); }
+
+/* ── Герой ────────────────────────────────────────────────────────── */
+.hero { padding: var(--spacing-30) var(--spacing-20) var(--spacing-40); }
+.display {
+  font-size: var(--text-display); line-height: var(--leading-display); letter-spacing: var(--tracking-display);
+}
+.display .r { text-align: right; }
+.hero-foot { display: flex; align-items: flex-end; gap: var(--spacing-40); margin-top: var(--spacing-40); }
+.hero-foot .sp { flex: 1; }
+.hero-note { width: 380px; }
+.hero-note b { font-weight: var(--font-weight-regular); font-size: var(--text-body); display: block; }
+.hero-note p { font-size: var(--text-body); letter-spacing: 0; margin-top: var(--spacing-8); }
+.hero-note .ask { display: flex; align-items: center; gap: var(--spacing-10); margin-top: var(--spacing-15); font-size: var(--text-body); letter-spacing: 0; }
+
+/* ── Четыре краски ────────────────────────────────────────────────── */
+.paints { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--spacing-10); padding: 0 var(--spacing-20); max-width: var(--page-max-width); margin: 0 auto; }
+.paint { position: relative; }
+.paint svg { display: block; width: 100%; height: auto; }
+.paint .cap { display: flex; justify-content: space-between; padding-top: var(--spacing-8); font-size: var(--text-body); letter-spacing: 0; }
+.paint .cap span:last-child { color: #6a6a6a; }
+
+/* ── Секции ───────────────────────────────────────────────────────── */
+section { padding: var(--spacing-100) 0 0; }
+h2 { font-size: var(--text-heading); line-height: var(--leading-heading); letter-spacing: var(--tracking-heading); }
+.sub { font-size: var(--text-subheading); line-height: var(--leading-subheading); letter-spacing: var(--tracking-subheading); }
+.intro { max-width: 620px; margin-top: var(--spacing-20); font-size: var(--text-body-sm); }
+
+/* Этажи — волосяные линии вместо карточек */
+.floors { margin-top: var(--spacing-40); border-top: 1px solid var(--color-carbon); }
+.floor {
+  display: grid; grid-template-columns: 14px 84px 1fr 150px 180px 120px; gap: var(--spacing-20); align-items: baseline;
+  padding: var(--spacing-19) 0; border-bottom: 1px solid var(--color-carbon);
+}
+.swatch { width: 14px; height: 14px; }
+.floor .n { font-size: var(--text-subheading); line-height: var(--leading-subheading); letter-spacing: var(--tracking-subheading); }
+.floor .t { font-size: var(--text-body-sm); }
+.floor .m { font-size: var(--text-body); letter-spacing: 0; color: #5f5f5f; }
+.floor .st { font-size: var(--text-body); letter-spacing: 0; text-align: right; }
+
+/* Машинный зал */
+.machines { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-40) var(--spacing-30); margin-top: var(--spacing-40); }
+.machine { border-top: 1px solid var(--color-carbon); padding-top: var(--spacing-10); }
+.machine .h { font-size: var(--text-subheading); line-height: var(--leading-subheading); letter-spacing: var(--tracking-subheading); }
+.machine .d { font-size: var(--text-body); letter-spacing: 0; margin-top: var(--spacing-8); color: #4a4a4a; }
+
+/* Полноширинный красный блок */
+.band { background: var(--color-the-red); color: var(--color-iron); margin-top: var(--spacing-100); padding: var(--spacing-100) 0; }
+.band .rules { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--spacing-30) var(--spacing-50); margin-top: var(--spacing-40); }
+.band .rule { border-top: 1px solid var(--color-carbon); padding-top: var(--spacing-10); font-size: var(--text-body-sm); }
+.band .rule b { display: block; font-weight: var(--font-weight-regular); font-size: var(--text-subheading); letter-spacing: var(--tracking-subheading); line-height: var(--leading-subheading); margin-bottom: var(--spacing-8); }
+
+/* Заявка */
+.apply { display: flex; gap: var(--spacing-10); margin-top: var(--spacing-30); max-width: 560px; }
+.apply input {
+  flex: 1; background: none; border: 1px solid var(--color-carbon); border-radius: var(--radius-buttons);
+  padding: var(--spacing-8) var(--spacing-19); font-family: inherit; font-size: var(--text-body); color: var(--color-iron);
+}
+.apply input::placeholder { color: #6a6a6a; }
+
+footer { margin-top: var(--spacing-100); padding: var(--spacing-40) 0 var(--spacing-50); border-top: 1px solid var(--color-carbon); }
+.foot { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: var(--spacing-30); }
+.foot .h { font-size: var(--text-body); letter-spacing: 0; color: #5f5f5f; }
+.foot a, .foot span.i { display: block; font-size: var(--text-body-sm); margin-top: var(--spacing-8); }
+.bigmark { font-size: var(--text-heading); line-height: var(--leading-heading); letter-spacing: var(--tracking-heading); }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <span class="mark">BAY</span>
+  <a class="l" href="#floors" data-i18n="n1">Floors</a>
+  <a class="l" href="#hall" data-i18n="n2">Machine hall</a>
+  <a class="l" href="#rules" data-i18n="n3">House rules</a>
+  <span class="sp"></span>
+  <div class="lang">
+    <button data-set="en" aria-pressed="true">En</button>
+    <button data-set="ru" aria-pressed="false">Ru</button>
+  </div>
+  <a class="pill" href="#apply" data-i18n="n4">Take a floor</a>
+</nav>
+
+<header class="hero">
+  <div class="display">
+    <div data-i18n="h1">A floor for the one who</div>
+    <div class="r" id="verb">saws</div>
+  </div>
+  <div class="hero-foot">
+    <div class="sp"></div>
+    <div class="hero-note">
+      <b data-i18n="hn1">Workshop floors at the Kruse furniture works</b>
+      <p data-i18n="hn2">Five floors of a 1911 cabinet factory on the north bank, let by the floor to people who make things with machines that make noise.</p>
+      <div class="ask"><span data-i18n="hn3">Are you the one?</span><a class="pill" href="#floors" data-i18n="hn4">Learn more</a></div>
+    </div>
+  </div>
+</header>
+
+<div class="paints">
+  <div class="paint">
+    <svg viewBox="0 0 340 300" aria-hidden="true">
+      <rect width="340" height="300" fill="#027b49"/>
+      <g stroke="#d9d9d9" stroke-width="3" fill="none">
+        <path d="M40 250h260M40 250V96l120-46 140 54v146"/>
+        <path d="M40 190h260M40 140h120M160 50v200M300 190h-140"/>
+        <path d="M70 250v-40h40v40M130 250v-40h40v40M210 250v-40h40v40"/>
+      </g>
+    </svg>
+    <div class="cap"><span data-i18n="p1">Floor 1 · joinery</span><span>620 m²</span></div>
+  </div>
+  <div class="paint">
+    <svg viewBox="0 0 340 300" aria-hidden="true">
+      <rect width="340" height="300" fill="#f19ec8"/>
+      <g stroke="#1f1f1f" stroke-width="3" fill="none">
+        <path d="M50 250h240V110H50z"/>
+        <path d="M50 110l120-60 120 60"/>
+        <path d="M90 250v-70h60v70M190 250v-70h60v70"/>
+        <circle cx="170" cy="150" r="26"/><path d="M170 124v52M144 150h52"/>
+      </g>
+    </svg>
+    <div class="cap"><span data-i18n="p2">Floor 2 · ceramics</span><span>540 m²</span></div>
+  </div>
+  <div class="paint">
+    <svg viewBox="0 0 340 300" aria-hidden="true">
+      <rect width="340" height="300" fill="#fbb833"/>
+      <g stroke="#1f1f1f" stroke-width="3" fill="none">
+        <path d="M40 250h260V80H40z"/>
+        <path d="M40 140h260M40 200h260M110 80v170M180 80v170M250 80v170"/>
+        <path d="M40 80l40-40h220l-40 40"/>
+      </g>
+    </svg>
+    <div class="cap"><span data-i18n="p3">Floor 3 · print &amp; bindery</span><span>540 m²</span></div>
+  </div>
+  <div class="paint">
+    <svg viewBox="0 0 340 300" aria-hidden="true">
+      <rect width="340" height="300" fill="#fa4d43"/>
+      <g stroke="#1f1f1f" stroke-width="3" fill="none">
+        <path d="M40 250h260V120H40z"/>
+        <path d="M40 120l60-70h140l60 70"/>
+        <path d="M100 50v200M240 50v200"/>
+        <path d="M70 250v-60h60v60M210 250v-60h60v60"/>
+        <path d="M170 120v130"/>
+      </g>
+    </svg>
+    <div class="cap"><span data-i18n="p4">Floor 4—5 · metal</span><span>1 180 m²</span></div>
+  </div>
+</div>
+
+<section class="wrap" id="floors">
+  <h2 data-i18n="f_h">Five floors, one staircase</h2>
+  <p class="intro" data-i18n="f_i">Each floor is let whole or in halves, on a three-year lease, to one trade at a time. We do not mix a spray booth with a bindery — the paint knows where it goes and so does the dust.</p>
+  <div class="floors">
+    <div class="floor"><span class="swatch" style="background:#027b49"></span><span class="n">01</span><span class="t" data-i18n="fl1">Joinery · benches, saws, drying racks</span><span class="m">620 m² · 4.8 m</span><span class="m" data-i18n="fl1m">let to Hartmann &amp; Söhne</span><span class="st" data-i18n="fl1s">taken</span></div>
+    <div class="floor"><span class="swatch" style="background:#f19ec8"></span><span class="n">02</span><span class="t" data-i18n="fl2">Ceramics · two kilns, wet room, glaze store</span><span class="m">540 m² · 4.2 m</span><span class="m" data-i18n="fl2m">half free from October</span><span class="st" data-i18n="fl2s">270 m² free</span></div>
+    <div class="floor"><span class="swatch" style="background:#fbb833"></span><span class="n">03</span><span class="t" data-i18n="fl3">Print and bindery · presses, guillotine, press hall</span><span class="m">540 m² · 4.2 m</span><span class="m" data-i18n="fl3m">let to Vandermeer Press</span><span class="st" data-i18n="fl3s">taken</span></div>
+    <div class="floor"><span class="swatch" style="background:#fa4d43"></span><span class="n">04</span><span class="t" data-i18n="fl4">Metal · welding bays, extraction, crane rail</span><span class="m">620 m² · 5.6 m</span><span class="m" data-i18n="fl4m">free now</span><span class="st" data-i18n="fl4s">620 m² free</span></div>
+    <div class="floor"><span class="swatch" style="background:#fa4d43"></span><span class="n">05</span><span class="t" data-i18n="fl5">Metal, upper · finishing, store, offices</span><span class="m">560 m² · 3.9 m</span><span class="m" data-i18n="fl5m">goes with floor 04</span><span class="st" data-i18n="fl5s">on request</span></div>
+  </div>
+</section>
+
+<section class="wrap" id="hall">
+  <h2 data-i18n="m_h">The machine hall belongs to everyone</h2>
+  <p class="intro" data-i18n="m_i">The ground floor holds the machines nobody can justify alone. Booked by the hour on the board by the door, paid for in the yearly service charge, maintained by the person whose name is on the machine.</p>
+  <div class="machines">
+    <div class="machine"><div class="h" data-i18n="mc1">Panel saw, 3.2 m</div><div class="d" data-i18n="mc1d">Sliding table, scoring blade. Booked in half hours, longest queue on Mondays.</div></div>
+    <div class="machine"><div class="h" data-i18n="mc2">Thicknesser and planer</div><div class="d" data-i18n="mc2d">630 mm, with extraction. Blades changed every 90 hours, log on the wall.</div></div>
+    <div class="machine"><div class="h" data-i18n="mc3">Kiln, 240 litres</div><div class="d" data-i18n="mc3d">Fires to 1 280 °C. Shared firings posted on the board; you pay by the shelf.</div></div>
+    <div class="machine"><div class="h" data-i18n="mc4">Guillotine, 92 cm</div><div class="d" data-i18n="mc4d">Hand-wheel, no power. The oldest machine in the building and the least broken.</div></div>
+    <div class="machine"><div class="h" data-i18n="mc5">Welding bay, 3 posts</div><div class="d" data-i18n="mc5d">MIG, TIG, stick. Curtains, extraction, and a fire watch rota you are on.</div></div>
+    <div class="machine"><div class="h" data-i18n="mc6">Goods lift, 2 tonnes</div><div class="d" data-i18n="mc6d">Original 1911 cage, new motor. Two people minimum, no exceptions.</div></div>
+  </div>
+</section>
+
+<div class="band" id="rules">
+  <div class="wrap">
+    <h2 data-i18n="r_h">House rules, all of them</h2>
+    <div class="rules">
+      <div class="rule"><b data-i18n="r1">Noise until eight</b><span data-i18n="r1d">Machines run 07:00 to 20:00 on weekdays, 10:00 to 18:00 on Saturdays, never on Sundays. The neighbours were here first.</span></div>
+      <div class="rule"><b data-i18n="r2">Sweep your own floor</b><span data-i18n="r2d">There is no cleaner for the workshops, only for the stairs and the yard. Dust that leaves your floor is your dust in someone else's glaze.</span></div>
+      <div class="rule"><b data-i18n="r3">One trade per floor</b><span data-i18n="r3d">Subletting to a different trade needs everybody's yes, because the extraction, the insurance and the smell are shared.</span></div>
+      <div class="rule"><b data-i18n="r4">Show what you make</b><span data-i18n="r4d">Two open days a year, the first Saturday in May and the first in November. Doors open, machines on, everyone in the building takes part.</span></div>
+    </div>
+  </div>
+</div>
+
+<section class="wrap" id="apply">
+  <h2 data-i18n="a_h">620 m² free on the fourth</h2>
+  <p class="intro" data-i18n="a_i">Write with what you make, what it weighs and how loud it is. We answer every letter within a week, and we will tell you honestly if the floor is wrong for the work — the metal floor has a crane rail and no daylight from the north.</p>
+  <form class="apply" onsubmit="return false">
+    <input type="email" placeholder="you@example.com" aria-label="email">
+    <button class="pill" data-i18n="a_b">Ask about a floor</button>
+  </form>
+  <p class="util" style="margin-top:15px" data-i18n="a_u">Viewings on Thursdays, 15:00 and 17:00 · Kruse works, north bank, gate 2</p>
+</section>
+
+<footer class="wrap">
+  <div class="foot">
+    <div>
+      <div class="bigmark">BAY</div>
+      <span class="i" data-i18n="fa">Kruse furniture works, 1911</span>
+      <span class="i" data-i18n="fb">North bank, gate 2</span>
+    </div>
+    <div>
+      <div class="h" data-i18n="fh1">Building</div>
+      <a href="#floors" data-i18n="fl_1">Floors</a>
+      <a href="#hall" data-i18n="fl_2">Machine hall</a>
+      <a href="#rules" data-i18n="fl_3">House rules</a>
+    </div>
+    <div>
+      <div class="h" data-i18n="fh2">Letting</div>
+      <a href="#apply" data-i18n="fl_4">What is free</a>
+      <a href="#apply" data-i18n="fl_5">Viewings</a>
+      <a href="#apply" data-i18n="fl_6">Service charge</a>
+    </div>
+    <div>
+      <div class="h" data-i18n="fh3">Contact</div>
+      <a href="#apply" data-i18n="fl_7">gate2@bay.works</a>
+      <span class="i util" data-i18n="fl_8">Open days: 3 May, 1 November</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ── Дисплейный глагол меняется мгновенно, без анимаций и градиентов ── */
+(function () {
+  var el = document.getElementById('verb');
+  var EN = ['saws', 'glazes', 'binds', 'welds'], RU = ['пилит', 'обжигает', 'сшивает', 'варит'];
+  var i = 0;
+  window.__verbs = function () { return document.documentElement.dataset.lang === 'ru' ? RU : EN; };
+  setInterval(function () { i = (i + 1) % 4; el.textContent = window.__verbs()[i]; }, 1600);
+})();
+
+/* ── RU/EN. Английский — исходный, русский — перевод под него ── */
+var RU = {
+  n1:'Этажи', n2:'Машинный зал', n3:'Правила', n4:'Взять этаж',
+  h1:'Этаж для того, кто',
+  hn1:'Мастерские на этажах мебельной фабрики Крузе',
+  hn2:'Пять этажей столярной фабрики 1911 года на северном берегу, сдаются поэтажно тем, кто работает машинами, от которых шумно.',
+  hn3:'Это про вас?', hn4:'Подробнее',
+  p1:'Этаж 1 · столярка', p2:'Этаж 2 · керамика', p3:'Этаж 3 · печать и переплёт', p4:'Этажи 4—5 · металл',
+  f_h:'Пять этажей, одна лестница',
+  f_i:'Каждый этаж сдаётся целиком или половиной, на три года и под одно ремесло за раз. Мы не ставим покрасочную рядом с переплётной: краска знает, куда ей идти, и пыль тоже.',
+  fl1:'Столярка · верстаки, пилы, сушильные стеллажи', fl1m:'сдан «Хартманн и сыновья»', fl1s:'занято',
+  fl2:'Керамика · две печи, мокрая комната, склад глазурей', fl2m:'половина свободна с октября', fl2s:'свободно 270 м²',
+  fl3:'Печать и переплёт · станки, резак, печатный зал', fl3m:'сдан Vandermeer Press', fl3s:'занято',
+  fl4:'Металл · сварочные посты, вытяжка, кран-балка', fl4m:'свободен сейчас', fl4s:'свободно 620 м²',
+  fl5:'Металл, верх · доводка, склад, конторы', fl5m:'идёт вместе с 4-м', fl5s:'по запросу',
+  m_h:'Машинный зал общий',
+  m_i:'На первом этаже стоят машины, которые в одиночку не окупает никто. Бронь по часам на доске у двери, оплата — в годовом сервисном сборе, обслуживание — на том, чьё имя написано на машине.',
+  mc1:'Форматный станок, 3,2 м', mc1d:'Подвижный стол, подрезной. Бронь по полчаса, самая длинная очередь по понедельникам.',
+  mc2:'Рейсмус и фуганок', mc2d:'630 мм, с вытяжкой. Ножи меняются каждые 90 часов, журнал на стене.',
+  mc3:'Печь, 240 литров', mc3d:'До 1 280 °C. Совместные обжиги вывешиваются на доске, платите за полку.',
+  mc4:'Резак, 92 см', mc4d:'Маховик, без электричества. Самая старая машина в доме и самая исправная.',
+  mc5:'Сварочный пост ×3', mc5d:'MIG, TIG, электрод. Шторы, вытяжка и график пожарной вахты, в котором вы тоже есть.',
+  mc6:'Грузовой лифт, 2 тонны', mc6d:'Оригинальная кабина 1911 года, новый мотор. Минимум вдвоём, без исключений.',
+  r_h:'Правила дома, все',
+  r1:'Шум до восьми', r1d:'Машины работают с 07:00 до 20:00 по будням, с 10:00 до 18:00 по субботам и никогда по воскресеньям. Соседи здесь были раньше нас.',
+  r2:'Пол за собой', r2d:'Уборщика для мастерских нет — только для лестницы и двора. Пыль, ушедшая с вашего этажа, — это ваша пыль в чужой глазури.',
+  r3:'Одно ремесло на этаж', r3d:'Пересдача под другое ремесло — только с общего согласия: вытяжка, страховка и запах общие.',
+  r4:'Показывайте, что делаете', r4d:'Два дня открытых дверей в год: первая суббота мая и первая суббота ноября. Двери открыты, машины включены, участвуют все.',
+  a_h:'620 м² свободно на четвёртом',
+  a_i:'Напишите, что вы делаете, сколько это весит и насколько это громко. Отвечаем на каждое письмо в течение недели и честно скажем, если этаж не подходит: на металлическом есть кран-балка и нет северного света.',
+  a_b:'Спросить про этаж',
+  a_u:'Просмотры по четвергам, 15:00 и 17:00 · фабрика Крузе, северный берег, ворота 2',
+  fa:'Мебельная фабрика Крузе, 1911', fb:'Северный берег, ворота 2',
+  fh1:'Дом', fl_1:'Этажи', fl_2:'Машинный зал', fl_3:'Правила',
+  fh2:'Аренда', fl_4:'Что свободно', fl_5:'Просмотры', fl_6:'Сервисный сбор',
+  fh3:'Связь', fl_7:'gate2@bay.works', fl_8:'Дни открытых дверей: 3 мая, 1 ноября'
+};
+var EN = {};
+document.querySelectorAll('[data-i18n]').forEach(function (el) { EN[el.dataset.i18n] = el.innerHTML; });
+
+function setLang(l) {
+  var dict = l === 'ru' ? RU : EN;
+  document.querySelectorAll('[data-i18n]').forEach(function (el) {
+    var v = dict[el.dataset.i18n];
+    if (v !== undefined) el.innerHTML = v;
+  });
+  document.documentElement.lang = l;
+  document.documentElement.dataset.lang = l;
+  document.querySelectorAll('.lang button').forEach(function (b) {
+    b.setAttribute('aria-pressed', b.dataset.set === l ? 'true' : 'false');
+  });
+  document.getElementById('verb').textContent = window.__verbs()[0];
+}
+document.querySelectorAll('.lang button').forEach(function (b) {
+  b.addEventListener('click', function () { setLang(b.dataset.set); });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,3 @@
+/* Original keyframes: Animista, Ana Travas. https://animista.net/play/basic/flip-2/flip-2-hor-bottom-fwd */
+.flip-2-hor-bottom-fwd{animation:flip-2-hor-bottom-fwd 0.5s cubic-bezier(.455,.03,.515,.955) 0s 1 normal both;}
+@keyframes flip-2-hor-bottom-fwd{0%{-webkit-transform:translateY(0) translateZ(0) rotateX(0);transform:translateY(0) translateZ(0) rotateX(0);-webkit-transform-origin:50% 100%;transform-origin:50% 100%}to{-webkit-transform:translateY(100%) translateZ(160px) rotateX(180deg);transform:translateY(100%) translateZ(160px) rotateX(180deg);-webkit-transform-origin:50% 0%;transform-origin:50% 0%}}

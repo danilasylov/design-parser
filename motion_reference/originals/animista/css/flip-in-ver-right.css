@@ -1,0 +1,3 @@
+/* Original keyframes: Animista, Ana Travas. https://animista.net/play/entrances/flip-in/flip-in-ver-right */
+.flip-in-ver-right{animation:flip-in-ver-right 0.5s cubic-bezier(.25,.46,.45,.94) 0s 1 normal both;}
+@keyframes flip-in-ver-right{0%{-webkit-transform:rotateY(-80deg);transform:rotateY(-80deg);opacity:0}to{-webkit-transform:rotateY(0);transform:rotateY(0);opacity:1}}

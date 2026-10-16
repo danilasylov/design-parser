@@ -1,0 +1,391 @@
+{
+  "aliquot": {
+    "note": "",
+    "posted": false,
+    "rating": "green",
+    "ts": "2026-08-21T10:55:20"
+  },
+  "almanac": {
+    "note": "",
+    "posted": true,
+    "rating": "green",
+    "ts": "2026-08-19T13:23:37"
+  },
+  "assay": {
+    "note": "",
+    "posted": false,
+    "rating": "red",
+    "ts": "2026-08-21T11:00:21"
+  },
+  "augur": {
+    "note": "",
+    "posted": false,
+    "rating": "yellow",
+    "ts": "2026-08-21T10:59:20"
+  },
+  "bay": {
+    "note": "",
+    "posted": false,
+    "rating": "star",
+    "ts": "2026-08-21T11:03:31"
+  },
+  "berth": {
+    "note": "",
+    "rating": "green",
+    "ts": "2026-08-11T00:31:55"
+  },
+  "bivak": {
+    "note": "",
+    "rating": "green",
+    "ts": "2026-08-10T22:28:55"
+  },
+  "bobbin": {
+    "note": "",
+    "rating": "green",
+    "ts": "2026-08-12T21:32:41"
+  },
+  "bridge": {
+    "note": "Без живых фотографий сайты витрины плохо выглядят",
+    "rating": "red",
+    "ts": "2026-08-13T17:50:06"
+  },
+  "brine": {
+    "note": "Сплошной фон для всей страницы выглядит хорошо",
+    "posted": false,
+    "rating": "green",
+    "ts": "2026-08-17T01:35:33"
+  },
+  "buckle": {
+    "note": "Сайт витрина без фото это плохо",
+    "posted": false,
+    "rating": "red",
+    "ts": "2026-08-16T02:24:33"
+  },
+  "buoy": {
+    "note": "",
+    "posted": false,
+    "rating": "yellow",
+    "ts": "2026-08-21T10:59:05"
+  },
+  "burr": {
+    "note": "",
+    "rating": "green",
+    "ts": "2026-08-12T21:33:10"
+  },
+  "cadence": {
+    "note": "",
+    "rating": "green",
+    "ts": "2026-08-10T22:28:44"
+  },
+  "counter": {
+    "note": "",
+    "posted": false,
+    "rating": "red",
+    "ts": "2026-08-21T11:00:53"
+  },
+  "crossbar": {
+    "note": "",
+    "rating": "green",
+    "ts": "2026-08-10T22:28:38"
+  },
+  "dispatch": {
+    "note": "",
+    "rating": "green",
+    "ts": "2026-08-11T00:31:58"
+  },
+  "drum": {
+    "note": "",
+    "posted": false,
+    "rating": "green",
+    "ts": "2026-08-21T11:00:43"
+  },
+  "dub": {
+    "note": "",
+    "posted": false,
+    "rating": "yellow",
+    "ts": "2026-08-21T10:53:42"
+  },
+  "encore": {
+    "note": "",
+    "rating": "green",
+    "ts": "2026-08-10T22:28:12"
+  },
+  "endow": {
+    "note": "",
+    "posted": false,
+    "rating": "yellow",
+    "ts": "2026-08-21T10:54:14"
+  },
+  "etude": {
+    "note": "",
+    "posted": true,
+    "rating": "green",
+    "ts": "2026-08-19T13:21:51"
+  },
+  "fathom": {
+    "note": "",
+    "rating": "green",
+    "ts": "2026-08-12T19:39:36"
+  },
+  "ferry": {
+    "note": "",
+    "rating": "green",
+    "ts": "2026-08-10T22:28:14"
+  },
+  "folio": {
+    "note": "",
+    "rating": "red",
+    "ts": "2026-08-12T21:32:08"
+  },
+  "foreword": {
+    "note": "",
+    "rating": "green",
+    "ts": "2026-08-10T22:28:33"
+  },
+  "foundry": {
+    "note": "",
+    "posted": false,
+    "rating": "yellow",
+    "ts": "2026-08-21T10:55:04"
+  },
+  "fresnel": {
+    "note": "",
+    "rating": "red",
+    "ts": "2026-08-12T21:32:57"
+  },
+  "gel": {
+    "note": "",
+    "posted": false,
+    "rating": "green",
+    "ts": "2026-08-21T11:01:30"
+  },
+  "grain": {
+    "note": "",
+    "posted": false,
+    "rating": "star",
+    "ts": "2026-08-21T11:03:11"
+  },
+  "hold": {
+    "note": "",
+    "posted": false,
+    "rating": "red",
+    "ts": "2026-08-19T13:23:49"
+  },
+  "ingot": {
+    "note": "",
+    "rating": "yellow",
+    "ts": "2026-08-10T22:28:30"
+  },
+  "juno": {
+    "note": "",
+    "rating": "green",
+    "ts": "2026-08-10T22:29:00"
+  },
+  "keel": {
+    "note": "",
+    "posted": true,
+    "rating": "green",
+    "ts": "2026-08-19T13:21:38"
+  },
+  "kerf": {
+    "note": "",
+    "rating": "green",
+    "ts": "2026-08-12T21:32:21"
+  },
+  "kernel-cup": {
+    "note": "",
+    "rating": "green",
+    "ts": "2026-08-10T22:30:45"
+  },
+  "kiln": {
+    "note": "",
+    "posted": false,
+    "rating": "green",
+    "ts": "2026-08-21T11:02:09"
+  },
+  "latch": {
+    "note": "",
+    "posted": false,
+    "rating": "star",
+    "ts": "2026-08-17T01:33:10"
+  },
+  "lineage": {
+    "note": "",
+    "posted": false,
+    "rating": "green",
+    "ts": "2026-08-21T11:07:24"
+  },
+  "lull": {
+    "note": "",
+    "rating": "green",
+    "ts": "2026-08-10T22:28:36"
+  },
+  "menders": {
+    "note": "",
+    "posted": false,
+    "rating": "green",
+    "ts": "2026-08-21T11:03:52"
+  },
+  "mutual": {
+    "note": "",
+    "rating": "green",
+    "ts": "2026-08-10T22:28:48"
+  },
+  "nocturne": {
+    "note": "",
+    "posted": false,
+    "rating": "yellow",
+    "ts": "2026-08-21T11:15:30"
+  },
+  "noor": {
+    "note": "",
+    "rating": "green",
+    "ts": "2026-08-10T22:29:09"
+  },
+  "offset": {
+    "note": "",
+    "posted": true,
+    "rating": "green",
+    "ts": "2026-08-17T01:26:12"
+  },
+  "overshoot": {
+    "note": "",
+    "rating": "green",
+    "ts": "2026-08-10T22:28:43"
+  },
+  "panel": {
+    "note": "",
+    "posted": false,
+    "rating": "green",
+    "ts": "2026-08-21T11:15:53"
+  },
+  "parcel": {
+    "note": "",
+    "rating": "green",
+    "ts": "2026-08-12T21:32:49"
+  },
+  "plinth": {
+    "note": "",
+    "rating": "red",
+    "ts": "2026-08-12T18:42:07"
+  },
+  "plot": {
+    "note": "",
+    "posted": false,
+    "rating": "green",
+    "ts": "2026-08-21T11:00:36"
+  },
+  "primer": {
+    "note": "",
+    "posted": false,
+    "rating": "star",
+    "ts": "2026-08-17T01:31:15"
+  },
+  "queue": {
+    "note": "",
+    "posted": true,
+    "rating": "green",
+    "ts": "2026-08-19T13:21:43"
+  },
+  "ream": {
+    "note": "",
+    "posted": false,
+    "rating": "green",
+    "ts": "2026-08-21T11:01:46"
+  },
+  "reel": {
+    "note": "",
+    "posted": false,
+    "rating": "green",
+    "ts": "2026-08-21T10:54:46"
+  },
+  "relay": {
+    "note": "",
+    "posted": true,
+    "rating": "green",
+    "ts": "2026-08-17T01:26:21"
+  },
+  "rondo": {
+    "note": "",
+    "rating": "green",
+    "ts": "2026-08-10T22:28:52"
+  },
+  "scree": {
+    "note": "",
+    "posted": false,
+    "rating": "green",
+    "ts": "2026-08-21T10:54:31"
+  },
+  "seam": {
+    "note": "",
+    "rating": "red",
+    "ts": "2026-08-12T21:33:33"
+  },
+  "semaphore": {
+    "note": "",
+    "rating": "green",
+    "ts": "2026-08-10T22:28:47"
+  },
+  "sleeve": {
+    "note": "",
+    "posted": false,
+    "rating": "red",
+    "ts": "2026-08-21T11:02:55"
+  },
+  "snapshot": {
+    "note": "",
+    "posted": false,
+    "rating": "green",
+    "ts": "2026-08-21T11:00:09"
+  },
+  "solder": {
+    "note": "",
+    "posted": false,
+    "rating": "green",
+    "ts": "2026-08-21T11:02:46"
+  },
+  "sonde": {
+    "note": "",
+    "posted": false,
+    "rating": "green",
+    "ts": "2026-08-21T11:15:42"
+  },
+  "stanza": {
+    "note": "",
+    "rating": "green",
+    "ts": "2026-08-10T22:28:54"
+  },
+  "tandem": {
+    "note": "",
+    "rating": "green",
+    "ts": "2026-08-11T00:31:52"
+  },
+  "threshold": {
+    "note": "",
+    "posted": false,
+    "rating": "red",
+    "ts": "2026-08-21T11:01:03"
+  },
+  "timbre": {
+    "note": "",
+    "posted": false,
+    "rating": "green",
+    "ts": "2026-08-21T13:45:33"
+  },
+  "unclaimed": {
+    "note": "",
+    "posted": false,
+    "rating": "green",
+    "ts": "2026-08-21T10:53:45"
+  },
+  "verbatim": {
+    "note": "",
+    "rating": "green",
+    "ts": "2026-08-12T21:33:46"
+  },
+  "windfall": {
+    "note": "",
+    "rating": "red",
+    "ts": "2026-08-10T22:28:06"
+  }
+}

@@ -1,0 +1,3 @@
+/* Original keyframes: Animista, Ana Travas. https://animista.net/play/basic/scale-up/scale-up-right */
+.scale-up-right{animation:scale-up-right 0.4s cubic-bezier(.39,.575,.565,1) 0s 1 normal both;}
+@keyframes scale-up-right{0%{-webkit-transform:scale(.5);transform:scale(.5);-webkit-transform-origin:100% 50%;transform-origin:100% 50%}to{-webkit-transform:scale(1);transform:scale(1);-webkit-transform-origin:100% 50%;transform-origin:100% 50%}}

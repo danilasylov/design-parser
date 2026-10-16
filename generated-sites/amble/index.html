@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Amble — The walk built for real recovery</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  /* Colors */
+  --color-pulse-violet: #4a53ff;
+  --color-obsidian: #000000;
+  --color-carbon: #191919;
+  --color-paper-white: #ffffff;
+  --color-lab-mist: #f3f5f9;
+  --color-hairline: #e5e7eb;
+  --color-fog-gray: #808080;
+  --color-ash: #999999;
+
+  --font-proxima-nova: 'Inter Tight', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  --text-caption: 14px;
+  --leading-caption: 1.59;
+  --text-body-sm: 16px;
+  --leading-body-sm: 1.33;
+  --tracking-body-sm: -0.48px;
+  --text-body-lg: 20px;
+  --leading-body-lg: 1.29;
+  --tracking-body-lg: -0.6px;
+  --text-subheading: 24px;
+  --leading-subheading: 1.13;
+  --tracking-subheading: -0.72px;
+  --text-heading-sm: 32px;
+  --leading-heading-sm: 1.09;
+  --tracking-heading-sm: -0.96px;
+  --text-heading: 35px;
+  --leading-heading: 1;
+  --tracking-heading: -1.05px;
+  --text-heading-lg: 50px;
+  --leading-heading-lg: 0.8;
+  --tracking-heading-lg: -2px;
+  --text-display: 120px;
+  --leading-display: 0.71;
+  --tracking-display: -4.8px;
+
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  --spacing-5: 5px;   --spacing-8: 8px;   --spacing-10: 10px; --spacing-12: 12px;
+  --spacing-15: 15px; --spacing-16: 16px; --spacing-20: 20px; --spacing-24: 24px;
+  --spacing-25: 25px; --spacing-30: 30px; --spacing-33: 33px; --spacing-36: 36px;
+  --spacing-38: 38px; --spacing-40: 40px; --spacing-50: 50px; --spacing-92: 92px;
+
+  --page-max-width: 1200px;
+  --section-gap: 100px;
+  --card-padding: 28px;
+  --element-gap: 20px;
+
+  --radius-sm: 2px; --radius-lg: 8px; --radius-2xl: 16px; --radius-2xl-2: 20px;
+  --radius-3xl: 24px; --radius-3xl-2: 30px; --radius-full: 60px; --radius-full-2: 300px;
+
+  --radius-cards: 24px; --radius-pills: 300px; --radius-images: 24px;
+  --radius-buttons: 300px; --radius-mediumrounded: 30px; --radius-smallelements: 8px;
+
+  --shadow-md: rgba(199, 199, 199, 0.25) 0px 4px 15px 0px;
+
+  --surface-page-canvas: #ffffff;
+  --surface-lab-mist-card: #f3f5f9;
+  --surface-dark-section: #000000;
+  --surface-carbon-band: #191919;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-proxima-nova);
+  background: var(--surface-page-canvas);
+  color: var(--color-obsidian);
+  -webkit-font-smoothing: antialiased;
+}
+img, svg { display: block; max-width: 100%; }
+a { text-decoration: none; color: inherit; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+.wrap { max-width: var(--page-max-width); margin: 0 auto; padding: 0 5%; }
+
+/* ---------- Announcement bar ---------- */
+.announce {
+  background: var(--color-pulse-violet);
+  color: #fff;
+  text-align: center;
+  font-size: var(--text-caption);
+  padding: 12px 20px;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+.announce a { text-decoration: underline; font-weight: var(--font-weight-medium); }
+
+/* ---------- Nav ---------- */
+nav {
+  background: var(--color-obsidian);
+  height: 84px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 5%;
+}
+.logo { color: #fff; font-size: 22px; font-weight: var(--font-weight-bold); letter-spacing: -0.5px; }
+.navlinks { display: flex; gap: 32px; }
+.navlinks a {
+  color: #fff;
+  font-size: 15px;
+  font-weight: var(--font-weight-medium);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.92;
+}
+.navlinks a:hover { opacity: 1; }
+.pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-pills);
+  font-weight: var(--font-weight-semibold);
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  white-space: nowrap;
+}
+.pill-violet { background: var(--color-pulse-violet); color: #fff; padding: 12px 24px; }
+.pill-white { background: #fff; color: #000; padding: 16px 32px; }
+.pill-outline { background: transparent; border: 1.5px solid var(--color-hairline); color: #000; padding: 12px 28px; font-size: 14px; text-transform: none; letter-spacing: 0; font-weight: var(--font-weight-medium); }
+
+/* ---------- Hero ---------- */
+.hero {
+  position: relative;
+  background: #000;
+  min-height: 92vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+.hero-scene {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 900px 600px at 78% 35%, rgba(74,83,255,0.35), transparent 60%),
+    radial-gradient(ellipse 700px 500px at 90% 80%, rgba(74,83,255,0.18), transparent 65%),
+    linear-gradient(180deg, #050505 0%, #000 100%);
+}
+.hero-path {
+  position: absolute; inset: 0; opacity: 0.55;
+}
+.hero-content { position: relative; z-index: 2; padding: 0 8%; max-width: 800px; }
+.hero h1 {
+  font-size: var(--text-display);
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-display);
+  color: #fff;
+  font-weight: var(--font-weight-regular);
+  margin-bottom: 28px;
+}
+.hero p {
+  font-size: 19px;
+  line-height: 1.5;
+  color: var(--color-fog-gray);
+  max-width: 520px;
+  margin-bottom: 36px;
+}
+.hero-cta { display: flex; }
+
+/* ---------- Lab mist feature card ---------- */
+.section { padding: var(--section-gap) 0; }
+.feature-card {
+  background: var(--surface-lab-mist-card);
+  border-radius: var(--radius-cards);
+  padding: var(--card-padding);
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+.feature-thumb {
+  width: 220px; height: 150px; border-radius: var(--radius-images); flex-shrink: 0;
+  background: linear-gradient(135deg, #4a53ff 0%, #191919 100%);
+  position: relative; overflow: hidden;
+}
+.feature-thumb svg { position: absolute; inset: 0; }
+.feature-mid { flex: 1; }
+.feature-mid h3 { font-size: var(--text-subheading); font-weight: var(--font-weight-bold); margin-bottom: 8px; letter-spacing: var(--tracking-subheading); }
+.feature-mid p { color: var(--color-fog-gray); font-size: var(--text-body-sm); max-width: 460px; }
+.eyebrow {
+  font-size: 14px; font-weight: var(--font-weight-semibold); text-transform: uppercase;
+  letter-spacing: 0.1em; color: var(--color-pulse-violet); margin-bottom: 16px; display: block;
+}
+h2.section-title {
+  font-size: var(--text-heading-lg); line-height: var(--leading-heading-lg);
+  letter-spacing: var(--tracking-heading-lg); font-weight: var(--font-weight-regular);
+  margin-bottom: 48px; max-width: 640px;
+}
+
+/* ---------- Carousel story cards ---------- */
+.carousel-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.story-card {
+  position: relative;
+  aspect-ratio: 3/4;
+  border-radius: var(--radius-cards);
+  overflow: hidden;
+  padding: 24px;
+  display: flex; flex-direction: column; justify-content: space-between;
+  color: #fff;
+}
+.story-card .card-heading { font-size: 24px; font-weight: var(--font-weight-semibold); }
+.story-card .metric { }
+.story-card .metric .num { font-size: 32px; font-weight: var(--font-weight-regular); }
+.story-card .metric .lbl { font-size: 12px; font-weight: var(--font-weight-medium); letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.85; }
+.story-1 { background: radial-gradient(circle at 30% 20%, #2a3a2f, #0b0f0c 70%); }
+.story-2 { background: radial-gradient(circle at 70% 30%, #22264a, #0a0b12 70%); }
+.story-3 { background: radial-gradient(circle at 50% 80%, #3a1f4a, #0d0910 70%); }
+
+/* ---------- Dark carbon band with pricing ---------- */
+.dark-band { background: var(--color-carbon); color: #fff; }
+.dark-band h2.section-title { color: #fff; }
+.dark-band .eyebrow { color: var(--color-pulse-violet); }
+.pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.price-card {
+  background: #fff; color: #000;
+  border-radius: var(--radius-cards);
+  border: 1px solid var(--color-hairline);
+  padding: 32px;
+  display: flex; flex-direction: column;
+}
+.price-card.featured { background: var(--color-obsidian); color: #fff; border-color: #000; }
+.price-tier { font-size: 24px; font-weight: var(--font-weight-bold); margin-bottom: 12px; }
+.price-num { font-size: 50px; font-weight: var(--font-weight-regular); letter-spacing: -2px; margin-bottom: 20px; }
+.price-num span { font-size: 16px; font-weight: var(--font-weight-medium); opacity: 0.6; }
+.price-features { list-style: none; margin-bottom: 28px; flex: 1; }
+.price-features li { font-size: 16px; padding: 8px 0; border-top: 1px solid rgba(0,0,0,0.08); }
+.price-card.featured .price-features li { border-top-color: rgba(255,255,255,0.12); }
+.price-features li:first-child { border-top: none; }
+.price-card .pill { width: 100%; }
+
+/* ---------- Closing CTA ---------- */
+.cta-band {
+  background: #000; color: #fff; text-align: center;
+  padding: 120px 5%;
+}
+.cta-band h2 {
+  font-size: var(--text-heading-lg); line-height: var(--leading-heading-lg);
+  letter-spacing: var(--tracking-heading-lg); font-weight: var(--font-weight-regular);
+  margin-bottom: 36px; max-width: 700px; margin-left: auto; margin-right: auto;
+}
+.cta-band .hero-cta { justify-content: center; }
+
+/* ---------- Footer ---------- */
+footer { background: #000; color: var(--color-ash); padding: 48px 5% 32px; font-size: 14px; }
+footer .wrap { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+.lang-toggle {
+  display: inline-flex; border: 1px solid var(--color-hairline); border-radius: var(--radius-pills);
+  overflow: hidden; margin-left: 24px;
+}
+.lang-toggle button { padding: 6px 14px; font-size: 13px; font-weight: var(--font-weight-semibold); color: #fff; }
+.lang-toggle button.active { background: var(--color-pulse-violet); }
+nav .right { display: flex; align-items: center; }
+
+[data-i18n] { }
+html[data-lang="en"] [lang-el="ru"] { display: none; }
+html[data-lang="ru"] [lang-el="en"] { display: none; }
+</style>
+</head>
+<body>
+
+<div class="announce">
+  <span lang-el="en">Try Amble free for 14 days</span>
+  <span lang-el="ru">Первые 14 дней Amble — бесплатно</span>
+  <a href="#plans"><span lang-el="en">Join now</span><span lang-el="ru">Присоединиться</span></a>
+</div>
+
+<nav>
+  <div class="logo">AMBLE</div>
+  <div class="navlinks">
+    <a href="#plans" lang-el="en">Memberships</a><a href="#plans" lang-el="ru">Тарифы</a>
+    <a href="#how" lang-el="en">How it works</a><a href="#how" lang-el="ru">Как это работает</a>
+    <a href="#walkers" lang-el="en">Walkers</a><a href="#walkers" lang-el="ru">Выгульщики</a>
+    <a href="#why" lang-el="en">Why Amble</a><a href="#why" lang-el="ru">Почему Amble</a>
+  </div>
+  <div class="right">
+    <a href="#plans" class="pill pill-violet"><span lang-el="en">Join now</span><span lang-el="ru">Начать</span></a>
+    <div class="lang-toggle">
+      <button data-set-lang="en" class="active">EN</button>
+      <button data-set-lang="ru">RU</button>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-scene"></div>
+  <svg class="hero-path" viewBox="0 0 1200 800" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M900,120 C1050,220 1020,340 900,420 C760,510 780,620 940,700" stroke="#4a53ff" stroke-width="2" fill="none" opacity="0.5"/>
+    <circle cx="900" cy="120" r="4" fill="#4a53ff"/>
+    <circle cx="940" cy="700" r="4" fill="#4a53ff"/>
+  </svg>
+  <div class="hero-content">
+    <h1><span lang-el="en">The walk built for real recovery</span><span lang-el="ru">Прогулка, спроектированная для настоящего восстановления</span></h1>
+    <p><span lang-el="en">Amble pairs a GPS + heart-rate collar with vetted walkers who follow your dog's exertion in real time — so every walk earns the rest that follows it.</span>
+       <span lang-el="ru">Amble сочетает ошейник с GPS и датчиком пульса и проверенных выгульщиков, которые следят за нагрузкой вашей собаки в реальном времени — чтобы каждая прогулка честно заслуживала отдых после неё.</span></p>
+    <div class="hero-cta">
+      <a href="#plans" class="pill pill-white"><span lang-el="en">Join now</span><span lang-el="ru">Присоединиться</span></a>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="feature-card">
+      <div class="feature-thumb">
+        <svg viewBox="0 0 220 150" xmlns="http://www.w3.org/2000/svg">
+          <polyline points="0,110 30,90 55,100 80,60 110,75 140,40 170,55 200,30 220,45" fill="none" stroke="#fff" stroke-width="2.5" opacity="0.85"/>
+        </svg>
+      </div>
+      <div class="feature-mid">
+        <h3><span lang-el="en">Every walk becomes data</span><span lang-el="ru">Каждая прогулка становится данными</span></h3>
+        <p><span lang-el="en">Distance, pace, elevation, and heart-rate zones sync to your app the moment the walker clips the leash back on.</span>
+           <span lang-el="ru">Дистанция, темп, набор высоты и пульсовые зоны попадают в приложение сразу, как только выгульщик пристёгивает поводок обратно.</span></p>
+      </div>
+      <a href="#how" class="pill pill-outline"><span lang-el="en">See how it works</span><span lang-el="ru">Как это устроено</span></a>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="how">
+  <div class="wrap">
+    <span class="eyebrow"><span lang-el="en">Recovery Metrics</span><span lang-el="ru">Метрики восстановления</span></span>
+    <h2 class="section-title"><span lang-el="en">Built on the same three signals that shape ours</span><span lang-el="ru">Построено на тех же трёх сигналах, что формируют наше собственное восстановление</span></h2>
+    <div class="carousel-grid">
+      <div class="story-card story-1">
+        <div class="card-heading"><span lang-el="en">Exertion</span><span lang-el="ru">Нагрузка</span></div>
+        <div class="metric"><div class="num">6.4</div><div class="lbl"><span lang-el="en">strain score</span><span lang-el="ru">балл нагрузки</span></div></div>
+      </div>
+      <div class="story-card story-2">
+        <div class="card-heading"><span lang-el="en">Calm</span><span lang-el="ru">Спокойствие</span></div>
+        <div class="metric"><div class="num">82%</div><div class="lbl"><span lang-el="en">heart-rate recovery</span><span lang-el="ru">восстановление пульса</span></div></div>
+      </div>
+      <div class="story-card story-3">
+        <div class="card-heading"><span lang-el="en">Rest</span><span lang-el="ru">Отдых</span></div>
+        <div class="metric"><div class="num">98%</div><div class="lbl"><span lang-el="en">sleep quality</span><span lang-el="ru">качество сна</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="walkers">
+  <div class="wrap">
+    <div class="feature-card">
+      <div class="feature-thumb" style="background:linear-gradient(135deg,#191919,#4a53ff);">
+        <svg viewBox="0 0 220 150" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="60" cy="75" r="26" fill="none" stroke="#fff" stroke-width="2" opacity="0.7"/>
+          <circle cx="150" cy="75" r="40" fill="none" stroke="#fff" stroke-width="2" opacity="0.35"/>
+        </svg>
+      </div>
+      <div class="feature-mid">
+        <h3><span lang-el="en">Vetted walkers, background-checked twice</span><span lang-el="ru">Проверенные выгульщики — дважды прошедшие отбор</span></h3>
+        <p><span lang-el="en">Every Amble walker passes a K9-handling assessment and a criminal background check before they touch a leash.</span>
+           <span lang-el="ru">Каждый выгульщик Amble проходит проверку навыков обращения с собаками и проверку биографии, прежде чем взять поводок.</span></p>
+      </div>
+      <a href="#why" class="pill pill-outline"><span lang-el="en">Meet the standard</span><span lang-el="ru">Наши стандарты</span></a>
+    </div>
+  </div>
+</section>
+
+<section class="dark-band section" id="plans">
+  <div class="wrap">
+    <span class="eyebrow"><span lang-el="en">Memberships</span><span lang-el="ru">Тарифы</span></span>
+    <h2 class="section-title"><span lang-el="en">Pick the cadence your dog's body needs</span><span lang-el="ru">Выберите ритм, который нужен телу вашей собаки</span></h2>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <div class="price-tier"><span lang-el="en">Base</span><span lang-el="ru">База</span></div>
+        <div class="price-num">$89<span>/<span lang-el="en">mo</span><span lang-el="ru">мес</span></span></div>
+        <ul class="price-features">
+          <li><span lang-el="en">3 tracked walks / week</span><span lang-el="ru">3 прогулки в неделю с трекингом</span></li>
+          <li><span lang-el="en">GPS + route history</span><span lang-el="ru">GPS и история маршрутов</span></li>
+          <li><span lang-el="en">Weekly recovery summary</span><span lang-el="ru">Еженедельная сводка восстановления</span></li>
+        </ul>
+        <a href="#" class="pill pill-outline"><span lang-el="en">Join now</span><span lang-el="ru">Выбрать</span></a>
+      </div>
+      <div class="price-card featured">
+        <div class="price-tier"><span lang-el="en">Pro</span><span lang-el="ru">Про</span></div>
+        <div class="price-num">$149<span>/<span lang-el="en">mo</span><span lang-el="ru">мес</span></span></div>
+        <ul class="price-features">
+          <li><span lang-el="en">Daily tracked walks</span><span lang-el="ru">Ежедневные прогулки с трекингом</span></li>
+          <li><span lang-el="en">Heart-rate collar included</span><span lang-el="ru">Ошейник с пульсометром в комплекте</span></li>
+          <li><span lang-el="en">Same walker every day</span><span lang-el="ru">Один и тот же выгульщик каждый день</span></li>
+        </ul>
+        <a href="#" class="pill pill-violet"><span lang-el="en">Join now</span><span lang-el="ru">Выбрать</span></a>
+      </div>
+      <div class="price-card">
+        <div class="price-tier"><span lang-el="en">Elite</span><span lang-el="ru">Элит</span></div>
+        <div class="price-num">$229<span>/<span lang-el="en">mo</span><span lang-el="ru">мес</span></span></div>
+        <ul class="price-features">
+          <li><span lang-el="en">2x daily walks</span><span lang-el="ru">2 прогулки в день</span></li>
+          <li><span lang-el="en">Certified K9 physio consult</span><span lang-el="ru">Консультация сертифицированного кинезиолога</span></li>
+          <li><span lang-el="en">Priority walker matching</span><span lang-el="ru">Приоритетный подбор выгульщика</span></li>
+        </ul>
+        <a href="#" class="pill pill-outline" style="border-color:rgba(255,255,255,0.3);color:#fff;"><span lang-el="en">Join now</span><span lang-el="ru">Выбрать</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-band">
+  <span class="eyebrow" style="color:#4a53ff;"><span lang-el="en">Start today</span><span lang-el="ru">Начните сегодня</span></span>
+  <h2><span lang-el="en">Start your dog's recovery journey</span><span lang-el="ru">Начните путь восстановления вашей собаки</span></h2>
+  <div class="hero-cta">
+    <a href="#plans" class="pill pill-white"><span lang-el="en">Join now</span><span lang-el="ru">Присоединиться</span></a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div>© 2026 Amble. <span lang-el="en">All rights reserved.</span><span lang-el="ru">Все права защищены.</span></div>
+    <div><span lang-el="en">Made for dogs who work hard and rest harder.</span><span lang-el="ru">Для собак, которые усердно работают — и ещё усерднее отдыхают.</span></div>
+  </div>
+</footer>
+
+<script>
+document.querySelectorAll('[data-set-lang]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const lang = btn.getAttribute('data-set-lang');
+    document.documentElement.setAttribute('lang', lang);
+    document.documentElement.setAttribute('data-lang', lang);
+    document.querySelectorAll('[data-set-lang]').forEach(b => b.classList.toggle('active', b === btn));
+  });
+});
+</script>
+</body>
+</html>

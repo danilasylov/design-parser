@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>Aliquot — the sample log for a small laboratory</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ─────────────────────────────────────────────────────────────
+   Дизайн-система: Programa (refero 41af8353) — tokens.css дословно
+   ───────────────────────────────────────────────────────────── */
+:root {
+  /* Colors */
+  --color-ink-black: #1a1a1a;
+  --color-paper-white: #ffffff;
+  --color-fog-gray: #f4f4f4;
+  --color-ash-gray: #a3a3a3;
+  --color-highlighter-yellow: #fbff2b;
+
+  /* Typography — Font Families */
+  /* Neue Haas Grotesk Text → Golos Text: неогротеск с кириллицей, ровно два веса */
+  --font-neue-haas-grotesk-text: 'Golos Text', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* Typography — Scale */
+  --text-caption: 14px;
+  --leading-caption: 1.4;
+  --tracking-caption: -0.42px;
+  --text-body-sm: 16px;
+  --leading-body-sm: 1.4;
+  --tracking-body-sm: -0.48px;
+  --text-subheading: 20px;
+  --leading-subheading: 1.4;
+  --tracking-subheading: -0.6px;
+  --text-heading-sm: 24px;
+  --leading-heading-sm: 1.2;
+  --tracking-heading-sm: -0.72px;
+  --text-heading: 42px;
+  --leading-heading: 1.1;
+  --tracking-heading: -1.26px;
+
+  /* Typography — Weights */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+
+  /* Spacing */
+  --spacing-unit: 6px;
+  --spacing-6: 6px;
+  --spacing-12: 12px;
+  --spacing-24: 24px;
+  --spacing-36: 36px;
+  --spacing-48: 48px;
+  --spacing-96: 96px;
+
+  /* Layout */
+  --page-max-width: 1200px;
+  --section-gap: 96px;
+  --card-padding: 16px;
+  --element-gap: 12px;
+
+  /* Border Radius */
+  --radius-lg: 10px;
+  --radius-2xl: 16px;
+  --radius-nav: 10px;
+  --radius-cards: 16px;
+  --radius-inputs: 10px;
+  --radius-buttons: 10px;
+
+  /* Surfaces */
+  --surface-canvas: #ffffff;
+  --surface-fog-card: #f4f4f4;
+  --surface-accent-fill: #fbff2b;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--surface-canvas);
+  color: var(--color-ink-black);
+  font-family: var(--font-neue-haas-grotesk-text);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  letter-spacing: -0.03em;
+  font-weight: var(--font-weight-regular);
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; text-decoration: none; }
+h1, h2, h3, h4, p, ul, ol { margin: 0; }
+ul { list-style: none; padding: 0; }
+
+.wrap { max-width: var(--page-max-width); margin: 0 auto; padding: 0 var(--spacing-24); }
+section { padding: var(--spacing-96) 0; }
+.mid { max-width: 780px; margin: 0 auto; }
+
+/* ── Навигация ── */
+.nav { position: sticky; top: 0; z-index: 30; background: var(--surface-canvas); }
+.nav .wrap { height: 64px; display: flex; align-items: center; }
+.logo { display: flex; align-items: center; gap: 8px; font-size: var(--text-subheading); letter-spacing: var(--tracking-subheading); }
+.nav-links { margin: 0 auto; display: flex; gap: var(--spacing-24); }
+.nav-links a { font-size: var(--text-body-sm); }
+.nav-right { display: flex; align-items: center; gap: var(--spacing-12); }
+.btn { display: inline-flex; align-items: center; gap: 8px; font-family: inherit; font-size: var(--text-body-sm); letter-spacing: inherit; border-radius: var(--radius-buttons); padding: 8px 12px; cursor: pointer; }
+.btn-yellow { background: var(--surface-accent-fill); border: 1px solid var(--color-ink-black); color: var(--color-ink-black); }
+.btn-dark { background: var(--color-ink-black); border: 1px solid var(--color-ink-black); color: var(--color-paper-white); padding: 10px 18px; }
+.btn-outline { background: var(--surface-canvas); border: 1px solid var(--color-ink-black); color: var(--color-ink-black); padding: 10px 18px; }
+.btn-ghost { background: none; border: 0; padding: 10px 6px; }
+.switch { display: inline-flex; border: 1px solid var(--color-ink-black); border-radius: var(--radius-nav); overflow: hidden; }
+.switch button { background: transparent; border: 0; font-family: inherit; font-size: var(--text-caption); letter-spacing: inherit; padding: 6px 9px; cursor: pointer; color: var(--color-ink-black); }
+.switch button[aria-pressed="true"] { background: var(--color-ink-black); color: var(--color-paper-white); }
+
+/* ── Хиро ── */
+.hero { padding: var(--spacing-48) 0 var(--spacing-96); text-align: center; }
+.pill {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--surface-fog-card); border-radius: var(--radius-nav);
+  padding: 6px 12px; font-size: var(--text-caption); margin-bottom: var(--spacing-36);
+}
+.pill i { display: inline-block; width: 8px; height: 8px; background: var(--color-ink-black); border-radius: 2px; }
+h1 { font-size: var(--text-heading); line-height: var(--leading-heading); letter-spacing: var(--tracking-heading); font-weight: var(--font-weight-medium); max-width: 860px; margin: 0 auto; }
+.hero p.sub { margin: var(--spacing-24) auto 0; max-width: 620px; font-size: 17px; }
+.hero .actions { margin-top: var(--spacing-36); display: flex; gap: var(--spacing-12); justify-content: center; }
+
+/* ── Макет приложения ── */
+.app { margin-top: var(--spacing-48); border: 1px solid var(--color-ink-black); border-radius: var(--radius-cards); overflow: hidden; text-align: left; background: var(--surface-canvas); }
+.app-bar { display: flex; align-items: center; gap: var(--spacing-12); padding: var(--spacing-12) var(--spacing-24); border-bottom: 1px solid var(--color-ink-black); font-size: var(--text-caption); }
+.app-bar .crumbs { color: var(--color-ash-gray); }
+.app-bar .right { margin-left: auto; display: flex; gap: var(--spacing-12); align-items: center; }
+.chip { border: 1px solid var(--color-ink-black); border-radius: var(--radius-nav); padding: 3px 9px; font-size: var(--text-caption); }
+.chip.on { background: var(--surface-accent-fill); }
+.app-body { display: grid; grid-template-columns: 208px 1fr; min-height: 420px; }
+.app-side { border-right: 1px solid var(--color-ink-black); padding: var(--spacing-24) 0; }
+.app-side .grp { font-size: var(--text-caption); color: var(--color-ash-gray); padding: 0 var(--spacing-24) var(--spacing-6); }
+.app-side a { display: flex; align-items: center; gap: 8px; padding: 7px var(--spacing-24); font-size: var(--text-caption); }
+.app-side a.sel { background: var(--surface-fog-card); font-weight: var(--font-weight-medium); }
+.app-main { padding: var(--spacing-24); }
+.app-main .toolbar { display: flex; align-items: center; gap: var(--spacing-12); margin-bottom: var(--spacing-24); }
+.app-main .toolbar .search { flex: 1; border: 1px solid var(--color-ink-black); border-radius: var(--radius-inputs); padding: 6px 12px; font-size: var(--text-caption); color: var(--color-ash-gray); }
+table { width: 100%; border-collapse: collapse; font-size: var(--text-caption); }
+thead th { text-align: left; font-weight: var(--font-weight-medium); padding-bottom: var(--spacing-12); border-bottom: 1px solid var(--color-ink-black); }
+tbody td { padding: var(--spacing-12) var(--spacing-12) var(--spacing-12) 0; border-bottom: 1px solid var(--color-fog-gray); }
+tbody tr:last-child td { border-bottom: 0; }
+td.id { font-variant-numeric: tabular-nums; font-weight: var(--font-weight-medium); }
+td.dim { color: var(--color-ash-gray); }
+.st { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--color-ink-black); border-radius: var(--radius-nav); padding: 2px 8px; font-size: var(--text-caption); }
+.st.hot { background: var(--surface-accent-fill); }
+.st.done { border-color: var(--color-ash-gray); color: var(--color-ash-gray); }
+
+/* ── Информационная плашка ── */
+.banner { background: var(--surface-fog-card); border-radius: var(--radius-cards); padding: var(--spacing-12) var(--spacing-24); font-size: var(--text-body-sm); display: flex; gap: var(--spacing-24); flex-wrap: wrap; }
+.banner b { font-weight: var(--font-weight-medium); }
+
+/* ── Нумерованные блоки ── */
+h2 { font-size: var(--text-heading-sm); line-height: var(--leading-heading-sm); letter-spacing: var(--tracking-heading-sm); font-weight: var(--font-weight-medium); }
+.numbered { margin-top: var(--spacing-36); }
+.numbered .n { display: grid; grid-template-columns: 36px 220px 1fr; gap: var(--spacing-24); padding: var(--spacing-24) 0; border-top: 1px solid var(--color-fog-gray); }
+.numbered .n:first-child { border-top: 0; }
+.numbered .lbl { font-weight: var(--font-weight-medium); }
+.numbered p { font-size: 17px; }
+.numbered .meta { margin-top: var(--spacing-6); font-size: var(--text-caption); color: var(--color-ash-gray); }
+
+/* ── Карточки ── */
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-24); }
+.card { border: 1px solid var(--color-ink-black); border-radius: var(--radius-cards); padding: var(--spacing-24); }
+.card.fog { background: var(--surface-fog-card); border-color: var(--surface-fog-card); }
+.card h3 { font-size: var(--text-subheading); letter-spacing: var(--tracking-subheading); font-weight: var(--font-weight-medium); margin-bottom: var(--spacing-12); }
+.card p { font-size: var(--text-caption); }
+
+/* ── Цепочка хранения ── */
+.chain { border: 1px solid var(--color-ink-black); border-radius: var(--radius-cards); overflow: hidden; }
+.chain .row { display: grid; grid-template-columns: 132px 150px 1fr 200px; gap: var(--spacing-24); padding: var(--spacing-12) var(--spacing-24); border-bottom: 1px solid var(--color-fog-gray); font-size: var(--text-caption); align-items: center; }
+.chain .row:last-child { border-bottom: 0; }
+.chain .row.head { background: var(--surface-fog-card); font-weight: var(--font-weight-medium); }
+.chain .t { font-variant-numeric: tabular-nums; }
+.chain .who { font-weight: var(--font-weight-medium); }
+.chain .hash { color: var(--color-ash-gray); font-variant-numeric: tabular-nums; }
+
+/* ── Тарифы ── */
+.plan { border: 1px solid var(--color-ink-black); border-radius: var(--radius-cards); padding: var(--spacing-24); display: flex; flex-direction: column; }
+.plan h3 { font-size: var(--text-subheading); letter-spacing: var(--tracking-subheading); font-weight: var(--font-weight-medium); }
+.plan .price { font-size: var(--text-heading-sm); letter-spacing: var(--tracking-heading-sm); margin: var(--spacing-12) 0 var(--spacing-24); }
+.plan ul { flex: 1; }
+.plan li { font-size: var(--text-caption); padding: var(--spacing-6) 0; border-top: 1px solid var(--color-fog-gray); }
+.plan .btn { margin-top: var(--spacing-24); justify-content: center; }
+
+/* ── Подвал ── */
+footer { padding: var(--spacing-48) 0; border-top: 1px solid var(--color-fog-gray); }
+.foot { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: var(--spacing-36); }
+footer h4 { font-size: var(--text-caption); font-weight: var(--font-weight-medium); margin-bottom: var(--spacing-12); }
+footer li { padding: 4px 0; font-size: var(--text-caption); }
+footer li a { color: var(--color-ink-black); }
+.foot-note { margin-top: var(--spacing-12); font-size: var(--text-caption); color: var(--color-ash-gray); max-width: 300px; }
+.foot-bottom { margin-top: var(--spacing-36); display: flex; font-size: var(--text-caption); color: var(--color-ash-gray); }
+.foot-bottom .right { margin-left: auto; display: flex; gap: var(--spacing-24); }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap">
+    <a class="logo" href="#">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="#1a1a1a" aria-hidden="true">
+        <rect x="1" y="4" width="9" height="9" transform="rotate(-12 5.5 8.5)"/>
+        <circle cx="15" cy="14" r="5"/>
+      </svg>
+      Aliquot
+    </a>
+    <div class="nav-links">
+      <a href="#flow" data-i18n="n1">Product</a>
+      <a href="#custody" data-i18n="n2">Chain of custody</a>
+      <a href="#price" data-i18n="n3">Pricing</a>
+      <a href="#" data-i18n="n4">Learn</a>
+    </div>
+    <div class="nav-right">
+      <a href="#" data-i18n="n5">Log in</a>
+      <a class="btn btn-yellow" href="#" data-i18n="n6">Start free</a>
+      <span class="switch">
+        <button type="button" data-set="en" aria-pressed="true">EN</button>
+        <button type="button" data-set="ru" aria-pressed="false">RU</button>
+      </span>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="pill"><i></i><span data-i18n="a1">Barcode printing on Zebra ZD421 shipped this week</span></span>
+    <h1 data-i18n="h1">One row per sample, from the door to the signed result</h1>
+    <p class="sub" data-i18n="h2">Aliquot is a sample log for laboratories with four to forty people: intake, splitting, analysis, verification, report. Every tube keeps its own history, and nobody has to remember which freezer it went into.</p>
+    <div class="actions">
+      <a class="btn btn-dark" href="#" data-i18n="h3">Start free</a>
+      <a class="btn btn-outline" href="#flow" data-i18n="h4">See a sample's life</a>
+    </div>
+
+    <div class="app">
+      <div class="app-bar">
+        <span>Aliquot</span>
+        <span class="crumbs">/ <span data-i18n="ab1">Samples</span> / <span data-i18n="ab2">In work</span></span>
+        <span class="right">
+          <span class="chip" data-i18n="ab3">Batch 2026-247</span>
+          <span class="chip" data-i18n="ab4">Print labels</span>
+          <span class="chip" data-i18n="ab5">Export</span>
+        </span>
+      </div>
+      <div class="app-body">
+        <div class="app-side">
+          <div class="grp" data-i18n="s0">Work</div>
+          <a class="sel" href="#">■ <span data-i18n="s1">Samples</span></a>
+          <a href="#">□ <span data-i18n="s2">Batches</span></a>
+          <a href="#">□ <span data-i18n="s3">Instruments</span></a>
+          <a href="#">□ <span data-i18n="s4">Reagents</span></a>
+          <div class="grp" style="margin-top:var(--spacing-24)" data-i18n="s5">Quality</div>
+          <a href="#">□ <span data-i18n="s6">Controls</span></a>
+          <a href="#">□ <span data-i18n="s7">Deviations</span></a>
+          <a href="#">□ <span data-i18n="s8">Audit trail</span></a>
+          <div class="grp" style="margin-top:var(--spacing-24)" data-i18n="s9">Out</div>
+          <a href="#">□ <span data-i18n="s10">Reports</span></a>
+          <a href="#">□ <span data-i18n="s11">Clients</span></a>
+        </div>
+        <div class="app-main">
+          <div class="toolbar">
+            <span class="search" data-i18n="tb0">Search by barcode, client, or matrix…</span>
+            <span class="chip" data-i18n="tb1">Matrix: water</span>
+            <span class="chip" data-i18n="tb2">Due today</span>
+          </div>
+          <table>
+            <thead>
+              <tr><th data-i18n="th1">Barcode</th><th data-i18n="th2">Matrix</th><th data-i18n="th3">Received</th><th data-i18n="th4">Method</th><th data-i18n="th5">Holding time</th><th data-i18n="th6">State</th></tr>
+            </thead>
+            <tbody>
+              <tr><td class="id">W-26-04187</td><td data-i18n="m1">Surface water</td><td class="dim">18.08 09:14</td><td>ГОСТ 31861</td><td data-i18n="ht1">14 h left</td><td><span class="st" data-i18n="stt1">Analysis</span></td></tr>
+              <tr><td class="id">W-26-04188</td><td data-i18n="m1b">Surface water</td><td class="dim">18.08 09:14</td><td>ГОСТ 31861</td><td data-i18n="ht2">14 h left</td><td><span class="st" data-i18n="stt2">Aliquoted</span></td></tr>
+              <tr><td class="id">S-26-00912</td><td data-i18n="m2">Soil, 0–20 cm</td><td class="dim">18.08 11:02</td><td>ПНД Ф 16.1.8</td><td data-i18n="ht3">6 d left</td><td><span class="st" data-i18n="stt3">Drying</span></td></tr>
+              <tr><td class="id">W-26-04190</td><td data-i18n="m3">Waste water</td><td class="dim">17.08 16:40</td><td>ПНД Ф 14.1:2.1</td><td data-i18n="ht4">expired 2 h</td><td><span class="st hot" data-i18n="stt4">Deviation</span></td></tr>
+              <tr><td class="id">A-26-00341</td><td data-i18n="m4">Air, sorbent tube</td><td class="dim">17.08 08:20</td><td>МУК 4.1.1045</td><td>—</td><td><span class="st" data-i18n="stt5">Verification</span></td></tr>
+              <tr><td class="id">W-26-04165</td><td data-i18n="m5">Drinking water</td><td class="dim">15.08 10:05</td><td>ГОСТ 31861</td><td>—</td><td><span class="st done" data-i18n="stt6">Reported</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="banner">
+      <span><b data-i18n="bn1">Last validated:</b> 12.08.2026</span>
+      <span><b data-i18n="bn2">Mapped to:</b> ISO/IEC 17025 §7.4, §7.5, §7.8</span>
+      <span><b data-i18n="bn3">Audit trail:</b> <span data-i18n="bn3v">append-only, exportable, never editable in place</span></span>
+    </div>
+  </div>
+</section>
+
+<section id="flow" style="padding-top:0">
+  <div class="wrap">
+    <h2 data-i18n="f0">The life of one tube</h2>
+    <div class="numbered">
+      <div class="n">
+        <span>1.</span><span class="lbl" data-i18n="f1l">Intake</span>
+        <div>
+          <p data-i18n="f1p">The courier's bag is opened in front of the screen. Client, matrix, sampling time, temperature on arrival, who handed it over. A barcode is printed and stuck on before the tube leaves the counter — that is the only moment the sample exists without a label, and it lasts about nine seconds.</p>
+          <div class="meta" data-i18n="f1m">Holding time starts from the sampling time, not from the moment you typed it in.</div>
+        </div>
+      </div>
+      <div class="n">
+        <span>2.</span><span class="lbl" data-i18n="f2l">Aliquoting</span>
+        <div>
+          <p data-i18n="f2p">One tube becomes four: metals, anions, organics, retain. Each child keeps a pointer to its parent, so a doubtful result three weeks later can be traced back to the same bottle, the same courier, the same afternoon.</p>
+          <div class="meta" data-i18n="f2m">The retain aliquot is created automatically and cannot be discarded before the report is signed.</div>
+        </div>
+      </div>
+      <div class="n">
+        <span>3.</span><span class="lbl" data-i18n="f3l">Analysis</span>
+        <div>
+          <p data-i18n="f3p">The instrument writes its own file; Aliquot reads it and attaches the raw data to the aliquot, not to a folder on somebody's desktop. Calibration, blank, control sample and their acceptance limits are stored with the run, so a batch that failed its control cannot quietly produce results.</p>
+          <div class="meta" data-i18n="f3m">Supported out of the box: Agilent, Shimadzu, Thermo, Khromos, and any instrument that can write CSV to a folder.</div>
+        </div>
+      </div>
+      <div class="n">
+        <span>4.</span><span class="lbl" data-i18n="f4l">Verification</span>
+        <div>
+          <p data-i18n="f4p">A second person sees the number, the control, and the deviation log side by side, and either signs or sends it back with a reason. Sending back is one click and is recorded — a lab where nothing is ever returned is a lab where nobody checks.</p>
+          <div class="meta" data-i18n="f4m">Two signatures are required by default; the second cannot be the person who ran the analysis.</div>
+        </div>
+      </div>
+      <div class="n">
+        <span>5.</span><span class="lbl" data-i18n="f5l">Report</span>
+        <div>
+          <p data-i18n="f5p">The protocol is built from the same records, with method, uncertainty, and limits printed next to every figure. A client who asks what the number means gets the answer on the same page instead of a phone call.</p>
+          <div class="meta" data-i18n="f5m">PDF and a signed XML, plus a link that expires in ninety days.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="custody" style="padding-top:0">
+  <div class="wrap">
+    <h2 data-i18n="c0">Chain of custody, as it is actually kept</h2>
+    <p style="margin:var(--spacing-12) 0 var(--spacing-36);max-width:680px;font-size:17px" data-i18n="c0p">Every touch is a line: who, when, what changed, and the hash of the record before it. Nothing is edited in place — a correction is a new line with the reason typed by a human.</p>
+    <div class="chain">
+      <div class="row head"><span data-i18n="ch1">Time</span><span data-i18n="ch2">Person</span><span data-i18n="ch3">Event</span><span data-i18n="ch4">Record hash</span></div>
+      <div class="row"><span class="t">18.08 09:14</span><span class="who">Р. Гумерова</span><span data-i18n="cr1">Received from courier, 6.4 °C, seal intact</span><span class="hash">a41f… 0c72</span></div>
+      <div class="row"><span class="t">18.08 09:16</span><span class="who">Р. Гумерова</span><span data-i18n="cr2">Barcode W-26-04187 printed and attached</span><span class="hash">7b90… 118e</span></div>
+      <div class="row"><span class="t">18.08 10:02</span><span class="who">И. Пастухов</span><span data-i18n="cr3">Split into four aliquots, retain to freezer B-3</span><span class="hash">e3c1… 44a0</span></div>
+      <div class="row"><span class="t">18.08 13:41</span><span class="who">И. Пастухов</span><span data-i18n="cr4">Run 2026-247 on ICP-MS, control 98.4 % recovery</span><span class="hash">55da… 9f31</span></div>
+      <div class="row"><span class="t">18.08 15:07</span><span class="who">А. Верещагин</span><span data-i18n="cr5">Returned: blank above limit, repeat requested</span><span class="hash">0912… 6cb4</span></div>
+      <div class="row"><span class="t">19.08 08:55</span><span class="who">И. Пастухов</span><span data-i18n="cr6">Repeat run 2026-251, blank clean</span><span class="hash">bd47… 2e50</span></div>
+      <div class="row"><span class="t">19.08 09:30</span><span class="who">А. Верещагин</span><span data-i18n="cr7">Verified and signed, protocol 04187/26 issued</span><span class="hash">cc10… 7a19</span></div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="grid-3">
+      <div class="card fog">
+        <h3 data-i18n="k1h">Holding time that argues back</h3>
+        <p data-i18n="k1p">Counted from the sampling moment and shown in hours left, not in a colour. When it runs out, the sample cannot be moved into analysis without a written deviation.</p>
+      </div>
+      <div class="card fog">
+        <h3 data-i18n="k2h">Reagents with a shelf life</h3>
+        <p data-i18n="k2p">Lot, opened date, expiry, and which runs used it. When a standard turns out to be bad, you get the list of affected results in one query instead of a week of paper.</p>
+      </div>
+      <div class="card fog">
+        <h3 data-i18n="k3h">Works when the network does not</h3>
+        <p data-i18n="k3p">The intake screen and the label printer keep working offline and reconcile afterwards. Laboratories are full of basements, and a courier will not wait for your Wi-Fi.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="price" style="padding-top:0">
+  <div class="wrap">
+    <h2 data-i18n="p0">Priced per person, because that is what a small lab counts</h2>
+    <div class="grid-3" style="margin-top:var(--spacing-36)">
+      <div class="plan">
+        <h3 data-i18n="pl1h">Bench</h3>
+        <div class="price" data-i18n="pl1p">Free, up to 3 people</div>
+        <ul>
+          <li data-i18n="pl1a">Samples, aliquots, barcodes</li>
+          <li data-i18n="pl1b">One instrument connector</li>
+          <li data-i18n="pl1c">Audit trail, exportable</li>
+        </ul>
+        <a class="btn btn-outline" href="#" data-i18n="pl1c2">Start free</a>
+      </div>
+      <div class="plan">
+        <h3 data-i18n="pl2h">Laboratory</h3>
+        <div class="price">2 400 ₽ <span style="font-size:var(--text-caption);letter-spacing:var(--tracking-caption)" data-i18n="pl2p">/ person / month</span></div>
+        <ul>
+          <li data-i18n="pl2a">Everything in Bench</li>
+          <li data-i18n="pl2b">Unlimited instrument connectors</li>
+          <li data-i18n="pl2c">Two-signature verification</li>
+          <li data-i18n="pl2d">Protocols with uncertainty and limits</li>
+          <li data-i18n="pl2e">Reagent lots and controls</li>
+        </ul>
+        <a class="btn btn-yellow" href="#" style="justify-content:center" data-i18n="pl2c2">Start free trial</a>
+      </div>
+      <div class="plan">
+        <h3 data-i18n="pl3h">On your server</h3>
+        <div class="price" data-i18n="pl3p">From 240 000 ₽ / year</div>
+        <ul>
+          <li data-i18n="pl3a">Runs inside the laboratory network</li>
+          <li data-i18n="pl3b">Accreditation-ready record export</li>
+          <li data-i18n="pl3c">Method library migrated by us</li>
+          <li data-i18n="pl3d">Two days of on-site setup</li>
+        </ul>
+        <a class="btn btn-outline" href="#" data-i18n="pl3c2">Talk to us</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <a class="logo" href="#" style="font-size:var(--text-body-sm)">
+          <svg width="18" height="18" viewBox="0 0 22 22" fill="#1a1a1a" aria-hidden="true"><rect x="1" y="4" width="9" height="9" transform="rotate(-12 5.5 8.5)"/><circle cx="15" cy="14" r="5"/></svg>
+          Aliquot
+        </a>
+        <p class="foot-note" data-i18n="ft1">Written with a water laboratory in Kazan that kept its sample log in a paper journal and one very brave spreadsheet.</p>
+      </div>
+      <div>
+        <h4 data-i18n="fh1">Product</h4>
+        <ul><li><a href="#flow" data-i18n="fl1">Samples</a></li><li><a href="#custody" data-i18n="fl2">Chain of custody</a></li><li><a href="#" data-i18n="fl3">Instruments</a></li><li><a href="#" data-i18n="fl4">Protocols</a></li></ul>
+      </div>
+      <div>
+        <h4 data-i18n="fh2">Documents</h4>
+        <ul><li><a href="#" data-i18n="fl5">17025 mapping</a></li><li><a href="#" data-i18n="fl6">Validation package</a></li><li><a href="#" data-i18n="fl7">Data export format</a></li><li><a href="#" data-i18n="fl8">Changelog</a></li></ul>
+      </div>
+      <div>
+        <h4 data-i18n="fh3">Company</h4>
+        <ul><li><a href="#" data-i18n="fl9">About</a></li><li><a href="#" data-i18n="fl10">Support</a></li><li><a href="#" data-i18n="fl11">Status</a></li><li><a href="#" data-i18n="fl12">Contact</a></li></ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Aliquot</span>
+      <span class="right"><a href="#" data-i18n="fb1">Terms</a><a href="#" data-i18n="fb2">Privacy</a></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ── RU/EN. Английский — исходный, русский — перевод под него ── */
+var RU = {
+  n1:'Продукт', n2:'Цепочка хранения', n3:'Цены', n4:'Материалы', n5:'Войти', n6:'Начать бесплатно',
+  a1:'На этой неделе выпустили печать этикеток на Zebra ZD421',
+  h1:'Одна строка на пробу — от двери до подписанного протокола',
+  h2:'Aliquot — журнал проб для лабораторий на четыре–сорок человек: приём, деление, анализ, проверка, отчёт. У каждой пробирки своя история, и никому не приходится вспоминать, в какой морозильник она уехала.',
+  h3:'Начать бесплатно', h4:'Посмотреть жизнь пробы',
+  ab1:'Пробы', ab2:'В работе', ab3:'Партия 2026-247', ab4:'Печать этикеток', ab5:'Выгрузка',
+  s0:'Работа', s1:'Пробы', s2:'Партии', s3:'Приборы', s4:'Реактивы',
+  s5:'Качество', s6:'Контроли', s7:'Отклонения', s8:'Журнал действий',
+  s9:'Наружу', s10:'Протоколы', s11:'Заказчики',
+  tb0:'Поиск по штрихкоду, заказчику или матрице…', tb1:'Матрица: вода', tb2:'Срок сегодня',
+  th1:'Штрихкод', th2:'Матрица', th3:'Принято', th4:'Методика', th5:'Срок хранения', th6:'Состояние',
+  m1:'Поверхностная вода', m1b:'Поверхностная вода', m2:'Почва, 0–20 см', m3:'Сточная вода', m4:'Воздух, сорбционная трубка', m5:'Питьевая вода',
+  ht1:'осталось 14 ч', ht2:'осталось 14 ч', ht3:'осталось 6 сут', ht4:'просрочен 2 ч',
+  stt1:'Анализ', stt2:'Разделена', stt3:'Сушка', stt4:'Отклонение', stt5:'Проверка', stt6:'Выдан',
+  bn1:'Последняя валидация:', bn2:'Соответствие:', bn3:'Журнал действий:',
+  bn3v:'только дописывается, выгружается, никогда не правится на месте',
+  f0:'Жизнь одной пробирки',
+  f1l:'Приём',
+  f1p:'Сумку курьера вскрывают перед экраном. Заказчик, матрица, время отбора, температура при получении, кто передал. Штрихкод печатают и клеят до того, как пробирка уйдёт со стойки, — это единственный момент, когда проба существует без метки, и длится он около девяти секунд.',
+  f1m:'Срок хранения считается от времени отбора, а не от момента, когда вы его набрали.',
+  f2l:'Деление',
+  f2p:'Одна пробирка становится четырьмя: металлы, анионы, органика, архив. Каждая дочерняя хранит ссылку на родителя, поэтому сомнительный результат через три недели прослеживается до той же бутылки, того же курьера и того же дня.',
+  f2m:'Архивный аликвот создаётся сам и не может быть утилизирован до подписания протокола.',
+  f3l:'Анализ',
+  f3p:'Прибор пишет свой файл, Aliquot его читает и прикрепляет сырые данные к аликвоте, а не к папке на чьём-то рабочем столе. Калибровка, холостая проба, контрольный образец и их границы приёмки хранятся вместе с прогоном — партия, завалившая контроль, не сможет тихо выдать результаты.',
+  f3m:'Из коробки: Agilent, Shimadzu, Thermo, «Хромос» и любой прибор, умеющий класть CSV в папку.',
+  f4l:'Проверка',
+  f4p:'Второй человек видит рядом число, контроль и журнал отклонений и либо подписывает, либо возвращает с причиной. Возврат делается одним нажатием и записывается: лаборатория, где никогда ничего не возвращают, — это лаборатория, где никто не проверяет.',
+  f4m:'По умолчанию нужны две подписи, и вторая не может принадлежать тому, кто выполнял анализ.',
+  f5l:'Протокол',
+  f5p:'Протокол собирается из тех же записей: методика, неопределённость и нормативы напечатаны рядом с каждой цифрой. Заказчик, который спрашивает, что означает число, получает ответ на той же странице, а не по телефону.',
+  f5m:'PDF и подписанный XML, плюс ссылка, которая живёт девяносто дней.',
+  c0:'Цепочка хранения — так, как её действительно ведут',
+  c0p:'Каждое касание — строка: кто, когда, что изменилось и хеш предыдущей записи. Ничего не правится на месте: исправление — это новая строка с причиной, набранной человеком.',
+  ch1:'Время', ch2:'Кто', ch3:'Событие', ch4:'Хеш записи',
+  cr1:'Принято от курьера, 6,4 °C, пломба цела',
+  cr2:'Штрихкод W-26-04187 напечатан и наклеен',
+  cr3:'Разделена на четыре аликвоты, архив в морозильник B-3',
+  cr4:'Прогон 2026-247 на ИСП-МС, контроль 98,4 % извлечения',
+  cr5:'Возврат: холостая выше предела, запрошен повтор',
+  cr6:'Повторный прогон 2026-251, холостая чистая',
+  cr7:'Проверено и подписано, выдан протокол 04187/26',
+  k1h:'Срок хранения, который спорит',
+  k1p:'Считается от момента отбора и показан в оставшихся часах, а не цветом. Когда он выходит, пробу нельзя перевести в анализ без письменного отклонения.',
+  k2h:'Реактивы со сроком годности',
+  k2p:'Партия, дата вскрытия, срок и список прогонов, где её использовали. Когда стандарт оказывается негодным, список задетых результатов приходит одним запросом, а не неделей бумаги.',
+  k3h:'Работает, когда сеть не работает',
+  k3p:'Экран приёма и принтер этикеток продолжают работать офлайн и сходятся потом. Лаборатории состоят из подвалов, а курьер не станет ждать ваш вайфай.',
+  p0:'Цена за человека — потому что маленькая лаборатория считает именно людей',
+  pl1h:'Стол', pl1p:'Бесплатно, до 3 человек',
+  pl1a:'Пробы, аликвоты, штрихкоды', pl1b:'Один коннектор к прибору', pl1c:'Журнал действий с выгрузкой', pl1c2:'Начать бесплатно',
+  pl2h:'Лаборатория', pl2p:'/ человек / месяц',
+  pl2a:'Всё из «Стола»', pl2b:'Сколько угодно коннекторов', pl2c:'Проверка в две подписи',
+  pl2d:'Протоколы с неопределённостью и нормативами', pl2e:'Партии реактивов и контроли', pl2c2:'Пробный период',
+  pl3h:'На вашем сервере', pl3p:'От 240 000 ₽ в год',
+  pl3a:'Работает внутри сети лаборатории', pl3b:'Выгрузка записей под аккредитацию',
+  pl3c:'Библиотеку методик переносим мы', pl3d:'Два дня настройки на месте', pl3c2:'Написать нам',
+  ft1:'Написано вместе с водной лабораторией в Казани, которая вела журнал проб в бумажной тетради и одной очень храброй таблице.',
+  fh1:'Продукт', fl1:'Пробы', fl2:'Цепочка хранения', fl3:'Приборы', fl4:'Протоколы',
+  fh2:'Документы', fl5:'Соответствие 17025', fl6:'Пакет валидации', fl7:'Формат выгрузки', fl8:'Изменения',
+  fh3:'Компания', fl9:'О нас', fl10:'Поддержка', fl11:'Статус', fl12:'Контакты',
+  fb1:'Условия', fb2:'Приватность'
+};
+var EN = {};
+document.querySelectorAll('[data-i18n]').forEach(function (el) { EN[el.dataset.i18n] = el.innerHTML; });
+
+function setLang(l) {
+  var dict = l === 'ru' ? RU : EN;
+  document.querySelectorAll('[data-i18n]').forEach(function (el) {
+    var v = dict[el.dataset.i18n];
+    if (v !== undefined) el.innerHTML = v;
+  });
+  document.documentElement.lang = l;
+  document.documentElement.dataset.lang = l;
+  document.querySelectorAll('.switch button').forEach(function (b) {
+    b.setAttribute('aria-pressed', b.dataset.set === l ? 'true' : 'false');
+  });
+}
+document.querySelectorAll('.switch button').forEach(function (b) {
+  b.addEventListener('click', function () { setLang(b.dataset.set); });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,1 @@
+import{j as e}from"./index-WM7-nNXq.js";import{I as r}from"./iphone-B-xwwkwq.js";function t(){return e.jsx("div",{className:"w-[434px]",children:e.jsx(r,{videoSrc:"./external/4d10ff8d1b2da5722b.mp4"})})}export{t as default};

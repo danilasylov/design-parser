@@ -1,0 +1,1 @@
+import{j as e}from"./index-WM7-nNXq.js";import{T as t}from"./typing-animation-DeQgNHt8.js";import"./use-in-view-CknktuZ9.js";function n(){return e.jsx(t,{words:["Fast typing","Slow delete"],typeSpeed:50,deleteSpeed:150,pauseDelay:2e3,loop:!0})}export{n as default};

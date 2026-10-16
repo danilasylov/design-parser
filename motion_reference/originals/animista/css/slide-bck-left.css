@@ -1,0 +1,3 @@
+/* Original keyframes: Animista, Ana Travas. https://animista.net/play/basic/slide-bck/slide-bck-left */
+.slide-bck-left{animation:slide-bck-left 0.45s cubic-bezier(.47,0,.745,.715) 0s 1 normal both;}
+@keyframes slide-bck-left{0%{-webkit-transform:translateZ(0) translateX(0);transform:translateZ(0) translateX(0)}to{-webkit-transform:translateZ(-400px) translateX(-200px);transform:translateZ(-400px) translateX(-200px)}}

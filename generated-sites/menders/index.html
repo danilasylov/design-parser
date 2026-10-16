@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>MENDERS — visible mending, Tuesday nights</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@600;900&display=swap" rel="stylesheet">
+<style>
+/* ─────────────────────────────────────────────────────────────
+   Дизайн-система: INFRINGE (refero 36e7c3f9) — tokens.css дословно
+   ───────────────────────────────────────────────────────────── */
+:root {
+  /* Colors */
+  --color-photocopy-black: #000000;
+  --color-newsprint-white: #ffffff;
+  --color-muted-ash: #666666;
+  --color-highlighter-yellow: #ffff01;
+  --color-link-cobalt: #2b4dff;
+
+  /* Typography — Font Families */
+  --font-archivo-black: 'Archivo Black', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* Typography — Scale */
+  --text-caption: 12px;      --leading-caption: 1.2;      --tracking-caption: 0.28px;
+  --text-body-sm: 16px;      --leading-body-sm: 1.2;      --tracking-body-sm: 0.37px;
+  --text-heading-sm: 32px;   --leading-heading-sm: 1;     --tracking-heading-sm: -0.99px;
+  --text-heading: 48px;      --leading-heading: 1;        --tracking-heading: -1.49px;
+  --text-heading-lg: 108px;  --leading-heading-lg: 0.8;   --tracking-heading-lg: -4.32px;
+  --text-display: 252px;     --leading-display: 0.8;      --tracking-display: -23.4px;
+
+  /* Typography — Weights */
+  --font-weight-thin: 100; --font-weight-regular: 400; --font-weight-bold: 700;
+
+  /* Spacing */
+  --spacing-unit: 4px;
+  --spacing-4: 4px; --spacing-8: 8px; --spacing-16: 16px; --spacing-20: 20px;
+  --spacing-24: 24px; --spacing-32: 32px; --spacing-80: 80px; --spacing-120: 120px;
+
+  /* Layout */
+  --section-gap: 64px; --card-padding: 16px; --element-gap: 16px;
+
+  /* Named Radii */
+  --radius-all: 0px; --radius-tags: 0px; --radius-cards: 0px;
+  --radius-images: 0px; --radius-inputs: 0px; --radius-buttons: 0px;
+
+  /* Surfaces */
+  --surface-page-canvas: #ffffff;
+  --surface-highlighter-band: #ffff01;
+  --surface-ink-header: #000000;
+}
+
+/* Подстановка шрифта: у Archivo Black и названной замены Anton нет кириллицы.
+   Взят Golos Text — гротеск того же класса; 900 держит роль «единственного
+   чёрного голоса», 600 оставлен только для длинных абзацев ради читаемости. */
+:root { --font-archivo-black: 'Golos Text', 'Archivo Black', sans-serif; }
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--surface-page-canvas);
+  color: var(--color-photocopy-black);
+  font-family: var(--font-archivo-black);
+  font-weight: 900;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  letter-spacing: var(--tracking-body-sm);
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, p { margin: 0; font-weight: 900; }
+a { color: inherit; }
+
+/* ── Боковая вертикальная навигация ─────────────────────────────────── */
+.side {
+  position: fixed; left: var(--spacing-8); top: 0; z-index: 50;
+  width: 16px; height: 100vh; overflow: hidden;
+}
+.side .t {
+  position: absolute; top: 0; left: 16px;
+  transform: rotate(90deg); transform-origin: 0 0;
+  white-space: nowrap;
+  font-size: var(--text-body-sm); line-height: 16px; letter-spacing: var(--tracking-body-sm);
+  color: var(--color-photocopy-black);
+}
+.page { margin-left: 32px; }
+
+/* ── Полосы ─────────────────────────────────────────────────────────── */
+.masthead {
+  background: var(--surface-ink-header); color: var(--color-newsprint-white);
+  padding: 50px var(--spacing-16);
+}
+.masthead .d {
+  display: inline-block;
+  font-size: var(--text-display); line-height: var(--leading-display);
+  letter-spacing: var(--tracking-display);
+  white-space: nowrap;
+}
+.strip { height: 16px; background: var(--surface-highlighter-band); }
+.split { display: grid; grid-template-columns: 1fr 1fr; }
+.plate { display: block; width: 100%; height: 100%; }
+.seam { position: relative; }
+.seam .lbl {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%) rotate(90deg);
+  color: var(--color-link-cobalt);
+  font-size: var(--text-heading-sm); line-height: var(--leading-heading-sm); letter-spacing: var(--tracking-heading-sm);
+  white-space: nowrap; z-index: 5;
+}
+
+.yellow { background: var(--surface-highlighter-band); }
+.yellow .grid { display: grid; grid-template-columns: 1fr 1fr; align-items: stretch; }
+.yellow .txt { padding: var(--spacing-24); display: flex; flex-direction: column; justify-content: center; gap: var(--spacing-16); }
+.yellow h2 { font-size: var(--text-heading); line-height: var(--leading-heading); letter-spacing: var(--tracking-heading); }
+.yellow .sm { font-size: var(--text-body-sm); line-height: var(--leading-body-sm); letter-spacing: var(--tracking-body-sm); font-weight: 600; max-width: 520px; }
+.yellow .imgwrap { border: 1px solid var(--color-photocopy-black); }
+
+.sec { padding: var(--section-gap) var(--spacing-16); }
+.sec h2 { font-size: var(--text-heading); line-height: var(--leading-heading); letter-spacing: var(--tracking-heading); }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-32); margin-top: var(--spacing-32); }
+.two p { font-weight: 600; font-size: var(--text-body-sm); line-height: var(--leading-body-sm); letter-spacing: var(--tracking-body-sm); }
+.two p + p { margin-top: var(--spacing-16); }
+
+/* Прейскурант — хардлайны, без карточек */
+.list { margin-top: var(--spacing-32); border-top: 1px solid var(--color-photocopy-black); }
+.list .r {
+  display: grid; grid-template-columns: 1fr 200px 132px; gap: var(--spacing-16); align-items: baseline;
+  padding: var(--spacing-16) 0; border-bottom: 1px solid var(--color-photocopy-black);
+}
+.list .n { font-size: var(--text-heading-sm); line-height: var(--leading-heading-sm); letter-spacing: var(--tracking-heading-sm); }
+.list .m { font-size: var(--text-caption); line-height: var(--leading-caption); letter-spacing: var(--tracking-caption); color: var(--color-muted-ash); font-weight: 600; }
+.list .p { font-size: var(--text-heading-sm); line-height: var(--leading-heading-sm); letter-spacing: var(--tracking-heading-sm); text-align: right; }
+
+.black { background: var(--surface-ink-header); color: var(--color-newsprint-white); padding: var(--spacing-80) var(--spacing-16); }
+.black h2 { font-size: var(--text-heading-lg); line-height: var(--leading-heading-lg); letter-spacing: var(--tracking-heading-lg); }
+.black .sm { font-weight: 600; font-size: var(--text-body-sm); letter-spacing: var(--tracking-body-sm); margin-top: var(--spacing-24); max-width: 640px; }
+
+/* Подписка */
+.form { display: flex; gap: var(--spacing-8); margin-top: var(--spacing-24); max-width: 560px; }
+.form input {
+  flex: 1; border: 1px solid var(--color-muted-ash); border-radius: var(--radius-inputs);
+  background: var(--color-newsprint-white); color: var(--color-photocopy-black);
+  font-family: inherit; font-weight: 900; font-size: var(--text-body-sm); letter-spacing: var(--tracking-body-sm);
+  padding: 6px 14px;
+}
+.form input::placeholder { color: var(--color-muted-ash); }
+.form input:focus { outline: 2px solid var(--color-photocopy-black); border-color: transparent; }
+.form button {
+  border: 1px solid var(--color-photocopy-black); border-radius: var(--radius-buttons);
+  background: var(--color-newsprint-white); color: var(--color-photocopy-black);
+  font-family: inherit; font-weight: 900; font-size: var(--text-body-sm); letter-spacing: var(--tracking-body-sm);
+  padding: 6px 14px; cursor: pointer;
+}
+.form button:hover { background: var(--color-photocopy-black); color: var(--color-newsprint-white); }
+
+.lnk { text-decoration: underline; margin: var(--spacing-8) 0; display: inline-block; }
+.lnk:hover { color: var(--color-link-cobalt); }
+
+/* Переключатель языка — голый текст, как все ссылки системы */
+.lang { display: flex; gap: var(--spacing-8); align-items: baseline; }
+.lang button {
+  background: none; border: 0; padding: 0; cursor: pointer;
+  font-family: inherit; font-weight: 900; font-size: var(--text-body-sm); letter-spacing: var(--tracking-body-sm);
+  color: var(--color-muted-ash); text-transform: uppercase;
+}
+.lang button[aria-pressed="true"] { color: var(--color-photocopy-black); text-decoration: underline; }
+
+.topbar { display: flex; align-items: baseline; gap: var(--spacing-24); padding: var(--spacing-16); }
+.topbar .sp { flex: 1; }
+
+/* Нижняя полоса — только тип */
+.footstrip { overflow: hidden; padding: var(--spacing-32) 0 var(--spacing-16); }
+.footstrip .r {
+  font-size: var(--text-heading-lg); line-height: var(--leading-heading-lg); letter-spacing: var(--tracking-heading-lg);
+  white-space: nowrap;
+}
+.footmeta { display: flex; gap: var(--spacing-32); padding: 0 var(--spacing-16) var(--spacing-80); font-weight: 600; font-size: var(--text-caption); letter-spacing: var(--tracking-caption); color: var(--color-muted-ash); }
+</style>
+</head>
+<body>
+
+<div class="side" aria-hidden="true"><div class="t" id="sidetext">MENU MENDERS · MENU MENDERS · MENU MENDERS · MENU MENDERS · MENU MENDERS · MENU MENDERS ·</div></div>
+
+<div class="page">
+
+  <div class="topbar">
+    <a class="lnk" href="#work" data-i18n="t1">What we mend</a>
+    <a class="lnk" href="#nights" data-i18n="t2">Tuesday nights</a>
+    <a class="lnk" href="#prices" data-i18n="t3">Prices</a>
+    <a class="lnk" href="#drop" data-i18n="t4">Drop-off</a>
+    <span class="sp"></span>
+    <div class="lang">
+      <button data-set="en" aria-pressed="true">En</button>
+      <button data-set="ru" aria-pressed="false">Ru</button>
+    </div>
+  </div>
+
+  <div class="masthead"><div class="d" id="mast">MENDERS</div></div>
+
+  <div class="split seam">
+    <svg class="plate" viewBox="0 0 700 560" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <rect width="700" height="560" fill="#ffffff"/>
+      <!-- дыра и штопальная решётка: основа, потом уток -->
+      <g stroke="#000" stroke-width="3" fill="none">
+        <path d="M150 120h400v320H150z"/>
+      </g>
+      <path d="M300 220c40-30 90-20 110 20c18 36-6 80-52 86c-52 6-98-30-92-64c4-24 20-32 34-42z" fill="#000"/>
+      <g stroke="#000" stroke-width="4">
+        <path d="M270 190v210M300 186v218M330 184v222M360 184v222M390 186v218M420 190v210"/>
+      </g>
+      <g stroke="#ffff01" stroke-width="7">
+        <path d="M256 230h180M256 258h180M256 286h180M256 314h180M256 342h180"/>
+      </g>
+      <g stroke="#000" stroke-width="3" fill="none">
+        <path d="M150 470c60-24 120-24 180 0s120 24 180 0"/>
+      </g>
+      <text x="150" y="510" font-family="'Golos Text',sans-serif" font-weight="900" font-size="12" letter-spacing="0.28" fill="#000">FIG. 1 — WARP FIRST, WEFT AFTER, NO KNOT</text>
+    </svg>
+
+    <svg class="plate" viewBox="0 0 700 560" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <rect width="700" height="560" fill="#000000"/>
+      <!-- сашико: бегущий стежок по сетке -->
+      <g stroke="#ffff01" stroke-width="6" stroke-linecap="square">
+        <path d="M80 120h40M160 120h40M240 120h40M320 120h40M400 120h40M480 120h40M560 120h40"/>
+        <path d="M100 180h40M180 180h40M260 180h40M340 180h40M420 180h40M500 180h40M580 180h40"/>
+        <path d="M80 240h40M160 240h40M240 240h40M320 240h40M400 240h40M480 240h40M560 240h40"/>
+        <path d="M100 300h40M180 300h40M260 300h40M340 300h40M420 300h40M500 300h40M580 300h40"/>
+        <path d="M80 360h40M160 360h40M240 360h40M320 360h40M400 360h40M480 360h40M560 360h40"/>
+      </g>
+      <g stroke="#ffffff" stroke-width="6" stroke-linecap="square">
+        <path d="M120 90v40M120 210v40M120 330v40"/>
+        <path d="M280 150v40M280 270v40M280 390v40"/>
+        <path d="M440 90v40M440 210v40M440 330v40"/>
+      </g>
+      <rect x="80" y="430" width="540" height="3" fill="#ffffff"/>
+      <text x="80" y="470" font-family="'Golos Text',sans-serif" font-weight="900" font-size="12" letter-spacing="0.28" fill="#ffffff">FIG. 2 — SASHIKO, 4 MM, ONE THREAD, SIX ROWS</text>
+    </svg>
+    <div class="lbl" data-i18n="seam1">Visible mending</div>
+  </div>
+
+  <div class="strip"></div>
+
+  <div class="yellow">
+    <div class="grid">
+      <div class="txt">
+        <h2 data-i18n="y_h">Tuesday, 19:00, six chairs</h2>
+        <p class="sm" data-i18n="y_p">Bring the thing and the hole. Needles, thread, mushrooms and one person who has done this ten thousand times are already here. Two hours, no course, no certificate, no photographs of your hands for anybody's feed.</p>
+        <a class="lnk" href="#nights" data-i18n="y_l">Take a chair →</a>
+      </div>
+      <div class="imgwrap">
+        <svg class="plate" viewBox="0 0 700 460" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <rect width="700" height="460" fill="#ffff01"/>
+          <!-- носок на грибке -->
+          <path d="M250 60h120v150c0 40 40 60 70 90c34 34 22 90-30 100c-60 12-140-4-160-50c-14-32 0-60 0-98z" fill="#ffffff" stroke="#000" stroke-width="4"/>
+          <ellipse cx="300" cy="330" rx="70" ry="52" fill="#000"/>
+          <g stroke="#ffff01" stroke-width="6">
+            <path d="M240 306h120M240 330h120M240 354h120"/>
+          </g>
+          <g stroke="#000" stroke-width="4">
+            <path d="M262 288v88M286 282v98M310 282v98M334 288v88"/>
+          </g>
+          <path d="M430 250c60 20 90 60 90 100" stroke="#000" stroke-width="4" fill="none"/>
+          <circle cx="524" cy="352" r="10" fill="#000"/>
+          <text x="60" y="420" font-family="'Golos Text',sans-serif" font-weight="900" font-size="12" letter-spacing="0.28" fill="#000">FIG. 3 — THE MUSHROOM DOES HALF THE WORK</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <section class="sec" id="work">
+    <h2 data-i18n="w_h">We do not make it look new</h2>
+    <div class="two">
+      <div>
+        <p data-i18n="w_p1">A repair that hides is a repair that fails twice: once when the thread gives, and once when you find out the garment was never worth keeping. We work the other way. The darn sits on top in a colour you chose, the patch is square and the stitches are 4 mm apart because that is the distance at which a hand-made row reads as a decision.</p>
+        <p data-i18n="w_p2">Everything comes back with a card: what was done, what thread, how long it should hold, and what to bring it back for. Nine hundred and forty garments since we opened the room, and four returned for the same hole.</p>
+      </div>
+      <div>
+        <p data-i18n="w_p3">We take knitwear, denim, workwear, coats, canvas bags, one tent and, twice, a flag. We do not take shoes, leather or anything that has been in a fire — there are two people down the street who do those properly and we will give you the address.</p>
+        <p data-i18n="w_p4">Wool is charged by the hole, denim by the area, everything else by the half hour. If the repair costs more than the garment is worth we will say so before we start, and then usually do it anyway if you still want it.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="split seam">
+    <svg class="plate" viewBox="0 0 700 520" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <rect width="700" height="520" fill="#ffffff"/>
+      <!-- заплата с крестовым швом -->
+      <rect x="120" y="90" width="460" height="340" fill="none" stroke="#000" stroke-width="4"/>
+      <rect x="230" y="170" width="240" height="180" fill="#2b4dff"/>
+      <g stroke="#000" stroke-width="5">
+        <path d="M230 170l40 30M270 170l-40 30M310 170l40 30M350 170l-40 30M390 170l40 30M430 170l-40 30"/>
+        <path d="M230 320l40 30M270 320l-40 30M310 320l40 30M350 320l-40 30M390 320l40 30M430 320l-40 30"/>
+      </g>
+      <g stroke="#000" stroke-width="5">
+        <path d="M230 200l30 40M230 240l30 40M230 280l30 40M470 200l-30 40M470 240l-30 40M470 280l-30 40"/>
+      </g>
+      <text x="120" y="470" font-family="'Golos Text',sans-serif" font-weight="900" font-size="12" letter-spacing="0.28" fill="#000">FIG. 4 — PATCH SITS ON TOP, NEVER UNDERNEATH</text>
+    </svg>
+
+    <svg class="plate" viewBox="0 0 700 520" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <rect width="700" height="520" fill="#000000"/>
+      <!-- катушка и нить -->
+      <rect x="250" y="80" width="120" height="260" fill="#ffffff"/>
+      <rect x="230" y="80" width="160" height="26" fill="#ffffff"/>
+      <rect x="230" y="314" width="160" height="26" fill="#ffffff"/>
+      <g stroke="#ffff01" stroke-width="8">
+        <path d="M250 130h120M250 160h120M250 190h120M250 220h120M250 250h120M250 280h120"/>
+      </g>
+      <path d="M390 340c80 20 140 0 180 60c40 60-40 100-120 80" stroke="#ffff01" stroke-width="6" fill="none"/>
+      <circle cx="450" cy="480" r="9" fill="#ffff01"/>
+      <text x="60" y="440" font-family="'Golos Text',sans-serif" font-weight="900" font-size="12" letter-spacing="0.28" fill="#ffffff">FIG. 5 — ONE COLOUR PER GARMENT, CHOSEN BY YOU</text>
+    </svg>
+    <div class="lbl" data-i18n="seam2">Thread study</div>
+  </div>
+
+  <section class="sec" id="prices">
+    <h2 data-i18n="p_h">What it costs</h2>
+    <div class="list">
+      <div class="r"><span class="n" data-i18n="p1n">Moth hole, knitwear</span><span class="m" data-i18n="p1m">up to 20 mm · same week</span><span class="p">€12</span></div>
+      <div class="r"><span class="n" data-i18n="p2n">Elbow, whole panel</span><span class="m" data-i18n="p2m">darned grid · 10 days</span><span class="p">€38</span></div>
+      <div class="r"><span class="n" data-i18n="p3n">Denim knee, sashiko</span><span class="m" data-i18n="p3m">patch behind, stitched on top · 10 days</span><span class="p">€34</span></div>
+      <div class="r"><span class="n" data-i18n="p4n">Pocket bag, replaced</span><span class="m" data-i18n="p4m">cotton drill · same week</span><span class="p">€18</span></div>
+      <div class="r"><span class="n" data-i18n="p5n">Seat of trousers</span><span class="m" data-i18n="p5m">by the half hour · 14 days</span><span class="p">€26</span></div>
+      <div class="r"><span class="n" data-i18n="p6n">Tuesday chair</span><span class="m" data-i18n="p6m">two hours, thread included, you do the work</span><span class="p">€8</span></div>
+    </div>
+  </section>
+
+  <div class="black" id="drop">
+    <h2 data-i18n="b_h">Bring the hole</h2>
+    <p class="sm" data-i18n="b_p">Drop-off is Wednesday to Saturday, 11:00 to 18:00, at the green door on Hamburger Straße 41. Leave the garment, take a numbered tag, get a message when it is done. Post works too — put the tag number on the outside and we will send it back the way it came.</p>
+    <div class="form">
+      <input type="email" placeholder="you@example.com" aria-label="email">
+      <button data-i18n="b_btn">Get the mending letter</button>
+    </div>
+  </div>
+
+  <section class="sec" id="nights">
+    <h2 data-i18n="n_h">Six chairs, every Tuesday</h2>
+    <div class="two">
+      <div>
+        <p data-i18n="n_p1">The chairs go up on the first of the month and are gone by the third. If you have never held a needle, take the chair marked first time — someone sits with you for the whole two hours and you leave with one finished hole.</p>
+        <p data-i18n="n_p2">Bring your own garment. We supply wool, cotton, needles, mushrooms, scissors and tea. Nobody photographs anybody. Nothing is posted anywhere.</p>
+      </div>
+      <div>
+        <p data-i18n="n_p3">Since 2021: three hundred and forty evenings, two thousand one hundred chairs, one hundred and eleven people who now mend at home and never come back, which is the point.</p>
+        <a class="lnk" href="#drop" data-i18n="n_l">Write for a chair →</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="strip"></div>
+
+  <div class="footstrip"><div class="r" id="footrun">MENDERS · MENDERS · MENDERS · MENDERS ·</div></div>
+  <div class="footmeta">
+    <span data-i18n="f1">Hamburger Straße 41</span>
+    <span data-i18n="f2">Wed—Sat 11:00—18:00</span>
+    <span data-i18n="f3">room@menders.works</span>
+    <span data-i18n="f4">Since 2021 · 940 garments</span>
+  </div>
+
+</div>
+
+<script>
+/* ── Мачта: DESIGN.md требует, чтобы дисплейная строка заполняла ширину полосы
+      («should visually fill or overflow the viewport width»). Базовый кегль шкалы —
+      252px; здесь он подгоняется под ширину, трекинг −0.093em сохраняется. ── */
+(function () {
+  var el = document.getElementById('mast');
+  if (!el) return;
+  function fit() {
+    el.style.fontSize = '252px';
+    el.style.letterSpacing = '-23.4px';
+    var avail = el.parentNode.clientWidth - 32;
+    var w = el.getBoundingClientRect().width;
+    if (!w) return;
+    /* последняя литера теряет отрицательный трекинг — компенсируем */
+    var k = (avail + 23.4) / (w + 23.4);
+    el.style.fontSize = (252 * k) + 'px';
+    el.style.letterSpacing = (-23.4 * k) + 'px';
+  }
+  fit();
+  window.addEventListener('resize', fit);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+})();
+
+/* ── RU/EN. Английский — исходный, русский — перевод под него ── */
+var RU = {
+  t1:'Что чиним', t2:'Вторники', t3:'Цены', t4:'Приём',
+  seam1:'Видимая штопка', seam2:'Этюд с нитью',
+  y_h:'Вторник, 19:00, шесть стульев',
+  y_p:'Приносите вещь и дырку. Иглы, нитки, грибки и человек, который делал это десять тысяч раз, уже здесь. Два часа, без курса, без сертификата и без фотографий ваших рук для чьей-нибудь ленты.',
+  y_l:'Занять стул →',
+  w_h:'Мы не делаем вид, что вещь новая',
+  w_p1:'Починка, которая прячется, проваливается дважды: первый раз — когда нитка сдаёт, второй — когда выясняется, что вещь и не стоило хранить. Мы работаем наоборот. Штопка ложится сверху в цвете, который выбрали вы, заплата квадратная, а стежки идут через 4 мм — на этом расстоянии ручной ряд читается как решение.',
+  w_p2:'Всё возвращается с карточкой: что сделано, какой нитью, сколько должно держать и с чем приходить снова. Девятьсот сорок вещей с тех пор, как открыли комнату, и четыре вернулись с той же дыркой.',
+  w_p3:'Берём трикотаж, деним, рабочую одежду, пальто, холщовые сумки, один раз палатку и дважды флаг. Не берём обувь, кожу и всё, что побывало в огне: в двух шагах есть двое, кто делает это как надо, и мы дадим адрес.',
+  w_p4:'Шерсть считаем по дыркам, деним по площади, остальное по получасам. Если починка выйдет дороже вещи, скажем до начала — и обычно всё равно сделаем, если вы всё ещё хотите.',
+  p_h:'Сколько стоит',
+  p1n:'Дырка от моли, трикотаж', p1m:'до 20 мм · на этой неделе',
+  p2n:'Локоть целиком', p2m:'штопальная решётка · 10 дней',
+  p3n:'Колено на дениме, сашико', p3m:'заплата снизу, строчка сверху · 10 дней',
+  p4n:'Карманный мешок, замена', p4m:'хлопковая диагональ · на этой неделе',
+  p5n:'Сиденье брюк', p5m:'по получасам · 14 дней',
+  p6n:'Стул во вторник', p6m:'два часа, нитки наши, работа ваша',
+  b_h:'Приносите дырку',
+  b_p:'Приём со среды по субботу, с 11:00 до 18:00, зелёная дверь на Гамбургер-штрассе, 41. Оставляете вещь, забираете номерок, получаете сообщение, когда готово. Почтой тоже можно: напишите номер снаружи, и мы отправим обратно тем же способом.',
+  b_btn:'Письмо о починках',
+  n_h:'Шесть стульев, каждый вторник',
+  n_p1:'Стулья выкладываются первого числа и заканчиваются к третьему. Если вы никогда не держали иглу, берите стул с пометкой «в первый раз»: рядом все два часа сидит человек, и вы уходите с одной законченной дыркой.',
+  n_p2:'Вещь своя. Шерсть, хлопок, иглы, грибки, ножницы и чай — наши. Никто никого не фотографирует. Никуда ничего не выкладывается.',
+  n_p3:'С 2021 года: триста сорок вечеров, две тысячи сто стульев, сто одиннадцать человек, которые теперь штопают дома и больше не приходят, — ради этого всё и затевалось.',
+  n_l:'Написать про стул →',
+  f1:'Гамбургер-штрассе, 41', f2:'Ср—Сб 11:00—18:00', f3:'room@menders.works', f4:'С 2021 года · 940 вещей'
+};
+var EN = {};
+document.querySelectorAll('[data-i18n]').forEach(function (el) { EN[el.dataset.i18n] = el.innerHTML; });
+
+function setLang(l) {
+  var dict = l === 'ru' ? RU : EN;
+  document.querySelectorAll('[data-i18n]').forEach(function (el) {
+    var v = dict[el.dataset.i18n];
+    if (v !== undefined) el.innerHTML = v;
+  });
+  document.documentElement.lang = l;
+  document.documentElement.dataset.lang = l;
+  document.querySelectorAll('.lang button').forEach(function (b) {
+    b.setAttribute('aria-pressed', b.dataset.set === l ? 'true' : 'false');
+  });
+  document.getElementById('sidetext').textContent =
+    (l === 'ru' ? 'МЕНЮ MENDERS · ' : 'MENU MENDERS · ').repeat(6);
+}
+document.querySelectorAll('.lang button').forEach(function (b) {
+  b.addEventListener('click', function () { setLang(b.dataset.set); });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,1 @@
+import{z as r,j as e}from"./index-WM7-nNXq.js";import{A as o}from"./animated-theme-toggler-DelQQJfd.js";import"./createLucideIcon-BmO5EyrG.js";function n(){const{resolvedTheme:t,setTheme:m}=r();return e.jsx("div",{className:"flex justify-center p-6",children:e.jsx(o,{theme:t==="dark"?"dark":"light",onThemeChange:m})})}export{n as default};

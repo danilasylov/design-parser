@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>asyl-book — Каталог (V–A–C)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400&display=swap" rel="stylesheet">
+<style>
+/* ==== Дизайн-система V–A–C — токены со страницы стиля, дословно ==== */
+:root {
+  /* Colors */
+  --color-ink: #000000;
+  --color-paper: #ffffff;
+  --color-graphite: #999999;
+
+  /* Typography — Font Families (подстановка с кириллицей: Diagramatika → Onest, только вес 400) */
+  --font-diagramatika-text: 'Onest', ui-sans-serif, system-ui, sans-serif;
+  --font-diagramatika-display: 'Onest', ui-sans-serif, system-ui, sans-serif;
+
+  /* Typography — Scale */
+  --text-caption: 16px;
+  --leading-caption: 1.15;
+  --text-subheading: 20px;
+  --leading-subheading: 1.1;
+  --text-heading-sm: 24px;
+  --leading-heading-sm: 0.9;
+  --text-heading-lg: 35px;
+  --leading-heading-lg: 0.88;
+  /* расширение системы: один размер выше 35px для заявления на первом экране,
+     та же плотность leading 0.88 и тот же вес 400 */
+  --text-statement: 52px;
+
+  /* Typography — Weights */
+  --font-weight-regular: 400;
+
+  /* Spacing */
+  --spacing-unit: 6px;
+  --spacing-5: 5px;
+  --spacing-10: 10px;
+  --spacing-11: 11px;
+  --spacing-20: 20px;
+  --spacing-35: 35px;
+  --spacing-40: 40px;
+  --spacing-150: 150px;
+
+  /* Layout */
+  --page-max-width: 1440px;
+  --section-gap: 150px;
+  --card-padding: 0px;
+  --element-gap: 5px;
+
+  /* Named Radii */
+  --radius-tags: 0px;
+  --radius-cards: 0px;
+  --radius-images: 0px;
+  --radius-buttons: 0px;
+
+  /* Surfaces */
+  --surface-paper: #ffffff;
+  --surface-image-field: #f5f5f5;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--surface-paper);
+  color: var(--color-ink);
+  font-family: var(--font-diagramatika-text);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; text-decoration: none; }
+a:hover { text-decoration: underline; }
+p { margin: 0; }
+h1, h2, h3 { font-weight: var(--font-weight-regular); margin: 0; }
+
+/* ---- Регистрационная планка A — S — B ---- */
+.reg { position: relative; border-bottom: 1px solid var(--color-ink); height: 34px; }
+.reg span { position: absolute; top: 6px; font-size: var(--text-subheading); line-height: 1; background: var(--surface-paper); padding: 0 var(--spacing-10); }
+.reg .l { left: var(--spacing-20); }
+.reg .c { left: 50%; transform: translateX(-50%); }
+.reg .r { right: var(--spacing-20); }
+.reg .arrow { position: absolute; top: 36px; left: 50%; transform: translateX(-50%); font-size: var(--text-caption); line-height: 1; }
+.regfoot { padding: var(--spacing-20) var(--spacing-20) 0; display: flex; justify-content: space-between; }
+
+/* ---- Поля страницы: закреплённая по краям навигация не должна наезжать на текст ---- */
+.page { max-width: var(--page-max-width); margin: 0 auto; padding: 0 160px; }
+
+.edge-nav {
+  position: fixed; right: 18px; top: 38%; z-index: 5;
+  writing-mode: vertical-rl; transform: rotate(180deg);
+  font-size: var(--text-caption); line-height: 1; letter-spacing: 0.01em;
+}
+.edge-nav a:hover { text-decoration: underline; }
+.edge-tabs { position: fixed; left: 18px; bottom: 20px; z-index: 5; font-size: var(--text-caption); }
+
+/* ---- Метка со стрелкой: обязательный префикс ↗ ---- */
+.arrowlink { font-size: var(--text-caption); line-height: var(--leading-caption); display: block; margin-bottom: var(--spacing-10); }
+
+.section { padding-top: var(--spacing-150); }
+.section > .head { margin-bottom: var(--spacing-40); }
+.h-lg { font-size: var(--text-heading-lg); line-height: var(--leading-heading-lg); }
+.h-sm { font-size: var(--text-heading-sm); line-height: var(--leading-heading-sm); }
+.sub { font-size: var(--text-subheading); line-height: var(--leading-subheading); }
+
+/* ---- Первый экран: заявление, а не крик ---- */
+.hero { padding-top: var(--spacing-150); }
+.hero .statement { font-size: var(--text-statement); line-height: 0.88; max-width: 20ch; margin-bottom: var(--spacing-40); }
+.hero .deck { font-size: var(--text-subheading); line-height: 1.3; max-width: 46ch; margin-bottom: var(--spacing-35); }
+.hero .acts { display: flex; gap: var(--spacing-35); }
+
+/* ---- Сетка в три колонки, огромный межрядный интервал ---- */
+.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); column-gap: var(--spacing-20); row-gap: var(--spacing-150); }
+.grid4 { display: grid; grid-template-columns: repeat(4, 1fr); column-gap: var(--spacing-20); row-gap: var(--spacing-40); }
+.cell { position: relative; }
+.cell .field { background: var(--surface-image-field); border-radius: var(--radius-images); aspect-ratio: 16 / 10; margin-bottom: var(--spacing-10); display: flex; align-items: flex-end; padding: var(--spacing-10); }
+.cell .field.vert { aspect-ratio: 9 / 16; }
+.cell .field .mark { color: var(--color-graphite); font-size: var(--text-caption); line-height: 1; }
+.cell .body { font-size: var(--text-caption); line-height: 1.35; margin-top: var(--spacing-10); max-width: 34ch; }
+.cap a { text-decoration: underline; }
+.cell .cap { color: var(--color-graphite); font-size: var(--text-caption); line-height: 1.3; margin-top: var(--spacing-10); max-width: 34ch; }
+.watermark {
+  position: absolute; right: -6px; top: 34%; color: var(--color-graphite);
+  font-size: var(--text-caption); line-height: 1; transform: rotate(30deg); transform-origin: right center;
+  pointer-events: none;
+}
+
+/* ---- Списки на волосяных линиях ---- */
+.facts { list-style: none; margin: 0; padding: 0; }
+.facts li { border-top: 1px solid var(--color-ink); padding: var(--spacing-20) 0; display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-20); }
+.facts li:last-child { border-bottom: 1px solid var(--color-ink); }
+.facts .t { font-size: var(--text-heading-sm); line-height: var(--leading-heading-sm); }
+.facts p { line-height: 1.35; }
+
+.split { display: grid; grid-template-columns: 1fr 2fr; gap: var(--spacing-40); }
+.wide-claim { font-size: var(--text-heading-lg); line-height: var(--leading-heading-lg); max-width: 30ch; }
+
+.colophon { margin-top: var(--spacing-150); border-top: 1px solid var(--color-ink); padding: var(--spacing-20) 0 var(--spacing-40); display: flex; justify-content: space-between; }
+.pb { padding-bottom: var(--spacing-150); }
+</style>
+</head>
+<body>
+
+<div class="reg">
+  <span class="l">A</span>
+  <span class="c">S</span>
+  <span class="r">B</span>
+  <span class="arrow">↑</span>
+</div>
+
+<nav class="edge-nav">
+  <a href="#why">Зачем это</a> · <a href="#inside">Что внутри</a> · <a href="#privacy">Где книги</a> · <a href="#access">Доступ</a>
+</nav>
+<div class="edge-tabs"><a href="#">Обзор</a> / <a href="#">Продукт</a></div>
+
+<div class="page">
+
+  <div class="regfoot">
+    <span>asyl-book</span>
+    <span>Читалка на английском</span>
+  </div>
+
+  <section class="hero">
+    <a class="arrowlink" href="#">↗ Читалка, словарь и повторение, 2026</a>
+    <h1 class="statement">Английская книга, в которой словарь уже внутри</h1>
+    <p class="deck">Клик по незнакомому слову — перевод прямо в тексте, не выходя из книги. Слово попадает в ваш список и само возвращается на повторение, когда вы начинаете его забывать. Трудное предложение разбирается по кнопке.</p>
+    <div class="acts">
+      <a href="#">↗ Открыть продукт</a>
+      <a href="https://t.me/dasylov" target="_blank" rel="noopener noreferrer">↗ Написать за доступом</a>
+    </div>
+    <div class="cell" style="margin-top:var(--spacing-40)">
+      <div class="field" style="aspect-ratio:21/9"><span class="mark">Слот под обзорный ролик, 60–90 с</span></div>
+      <p class="cap">Библиотека → книга → чтение с переводом → сохранённое слово → повторение. Монтаж из коротких сцен.</p>
+    </div>
+  </section>
+
+  <section class="section" id="why">
+    <div class="head">
+      <a class="arrowlink" href="#why">↗ Задача</a>
+      <h2 class="h-lg">Зачем это</h2>
+    </div>
+    <div class="split" style="margin-bottom:var(--spacing-40)">
+      <div></div>
+      <p class="sub">Чтение на английском ломается всегда в одном месте — на незнакомом слове. Полезть в словарь значит выйти из книги, и через десяток слов книга закрывается. Перевести страницу целиком значит перестать читать по-английски. Учить готовую колоду слов значит учить чужой список без книги, ради которой всё затевалось.</p>
+    </div>
+    <div class="grid3" style="row-gap:var(--spacing-40)">
+      <div class="cell">
+        <span class="arrowlink">↗ Вариант 01</span>
+        <h3 class="h-sm">Словарь в соседней вкладке</h3>
+        <p class="body">Перевод есть, но чтение рвётся на каждом слове — и ни одно из них не остаётся в голове.</p>
+      </div>
+      <div class="cell">
+        <span class="arrowlink">↗ Вариант 02</span>
+        <h3 class="h-sm">Перевод всей страницы</h3>
+        <p class="body">Понятно сразу и всё — только английского в таком чтении уже нет.</p>
+      </div>
+      <div class="cell">
+        <span class="arrowlink">↗ Вариант 03</span>
+        <h3 class="h-sm">Готовая колода слов</h3>
+        <p class="body">Чужие слова без контекста: половина не встретится вам ещё год.</p>
+      </div>
+    </div>
+    <p class="wide-claim" style="margin-top:var(--spacing-150)">Слово встретилось в книге → перевод пришёл туда же → слово легло в ваш список → вернулось на повторение вовремя.</p>
+  </section>
+
+  <section class="section">
+    <div class="head">
+      <a class="arrowlink" href="#">↗ Цикл</a>
+      <h2 class="h-lg">Как это работает</h2>
+    </div>
+    <div class="grid3" style="row-gap:var(--spacing-40)">
+      <div class="cell">
+        <span class="arrowlink">↗ Шаг 01</span>
+        <h3 class="h-sm">Берёте книгу</h3>
+        <p class="body">Загружаете свой .epub или открываете одну из тех, что уже лежат в библиотеке.</p>
+      </div>
+      <div class="cell">
+        <span class="arrowlink">↗ Шаг 02</span>
+        <h3 class="h-sm">Читаете и кликаете</h3>
+        <p class="body">Перевод, часть речи, озвучка — на месте. Фразовый глагол переводится целиком, трудное предложение разбирается по кнопке.</p>
+      </div>
+      <div class="cell">
+        <span class="arrowlink">↗ Шаг 03</span>
+        <h3 class="h-sm">Слова возвращаются сами</h3>
+        <p class="body">Сохранённое встаёт в очередь повторения по FSRS и приходит в тот день, когда начинает забываться.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="inside">
+    <div class="head">
+      <a class="arrowlink" href="#inside">↗ Возможности, 9 позиций</a>
+      <h2 class="h-lg">Что внутри</h2>
+    </div>
+    <div class="grid3">
+
+      <div class="cell">
+        <div class="field"><span class="mark">Слот под ролик</span></div>
+        <a class="arrowlink" href="#">↗ Словарь, 01</a>
+        <h3 class="h-sm">Перевод по клику, не выходя из книги</h3>
+        <p class="body">Клик по слову — часть речи и несколько значений, тут же кнопка озвучки. Перевод появляется в шапке: страница не дёргается, место в абзаце не теряется. Словарь ищет и по исходной форме — walked найдётся через walk.</p>
+        <p class="cap">Клик по незнакомому слову: в шапке появляется часть речи и переводы, текст не сдвигается.</p>
+        <span class="watermark">Чтение</span>
+      </div>
+
+      <div class="cell">
+        <div class="field"><span class="mark">Слот под ролик</span></div>
+        <a class="arrowlink" href="#">↗ Сочетания, 02</a>
+        <h3 class="h-sm">Фразовые глаголы — целиком, а не по кускам</h3>
+        <p class="body">give up, look after, put up with — по отдельности эти слова врут: «дать» и «вверх» не складываются в «сдаться». Читалка узнаёт сочетание прямо в предложении.</p>
+        <p class="cap">Клик по give в «give up»: подсвечиваются оба слова, перевод приходит на сочетание целиком.</p>
+      </div>
+
+      <div class="cell">
+        <div class="field"><span class="mark">Слот под ролик</span></div>
+        <a class="arrowlink" href="#">↗ Синтаксис, 03</a>
+        <h3 class="h-sm">Разбор трудного предложения</h3>
+        <p class="body">Кнопка разбора даёт точный перевод и одну-три коротких заметки: инверсия, сослагательное наклонение, идиома, устаревшая форма. Если предложение простое, так и будет сказано.</p>
+        <p class="cap">Кнопка разбора на длинном предложении: перевод и две-три заметки о том, что в нём необычного.</p>
+      </div>
+
+      <div class="cell">
+        <div class="field"><span class="mark">Слот под ролик</span></div>
+        <a class="arrowlink" href="#">↗ Список, 04</a>
+        <h3 class="h-sm">Свой список слов — из книги, которую вы читаете</h3>
+        <p class="body">Слово сохраняется в один клик и остаётся в той форме, в какой стояло в тексте: London не превращается в london. Список — отдельная страница.</p>
+        <p class="cap">Страница «Мои слова»: список сохранённого, озвучка, удаление лишнего.</p>
+        <span class="watermark">Словарь</span>
+      </div>
+
+      <div class="cell">
+        <div class="field"><span class="mark">Слот под ролик</span></div>
+        <a class="arrowlink" href="#">↗ Память, 05</a>
+        <h3 class="h-sm">Повторение, которое само знает, когда вернуться</h3>
+        <p class="body">Слова выстраиваются в очередь по FSRS. Алгоритм смотрит, как вы отвечали именно на это слово, и показывает его в тот день, когда оно начинает забываться: не раньше и не позже.</p>
+        <p class="cap">Повторение: карточка, ответ, оценка — и следующий показ назначается автоматически.</p>
+      </div>
+
+      <div class="cell">
+        <div class="field"><span class="mark">Слот под ролик</span></div>
+        <a class="arrowlink" href="#">↗ Грамматика, 06</a>
+        <h3 class="h-sm">Справочник грамматики под рукой</h3>
+        <p class="body">61 правило в 12 темах — времена, артикли, модальные, условные, пассив, косвенная речь — написанных для читателя книг, а не для экзамена.</p>
+        <p class="cap">Справочник: прокрутка по урокам, оглавление справа следит за местом, отметка «изучено».</p>
+      </div>
+
+      <div class="cell">
+        <div class="field"><span class="mark">Слот под ролик</span></div>
+        <a class="arrowlink" href="#">↗ Статистика, 07</a>
+        <h3 class="h-sm">Видно, что происходит</h3>
+        <p class="body">Сколько читали по дням, скорость в словах в минуту, ближайшие повторения, календарь за год. И главная цифра: сколько осталось до конца книги при вашей собственной скорости.</p>
+        <p class="cap">Дашборд: графики по дням, скорость чтения, сколько осталось до конца книги, календарь.</p>
+        <span class="watermark">Наблюдение</span>
+      </div>
+
+      <div class="cell">
+        <div class="field"><span class="mark">Слот под ролик</span></div>
+        <a class="arrowlink" href="#">↗ Библиотека, 08</a>
+        <h3 class="h-sm">Своя книга — за секунду</h3>
+        <p class="body">.epub до 30 МБ разбирается на главы с обложкой примерно за секунду. Начать можно и без своей книги: «Алиса», Шерлок Холмс и «Вокруг света за 80 дней» уже лежат в каждом аккаунте.</p>
+        <p class="cap">Загрузка своего .epub: выбор файла — и через секунду книга уже в библиотеке с обложкой.</p>
+      </div>
+
+      <div class="cell">
+        <div class="field vert"><span class="mark">9:16</span></div>
+        <a class="arrowlink" href="#">↗ Телефон, 09</a>
+        <h3 class="h-sm">Телефон — полноценное место для чтения</h3>
+        <p class="body">Перевод показывается полосой снизу, под большой палец, а не всплывашкой, которая закрывает то, что вы читаете. Тёмная тема и размер шрифта — в два касания.</p>
+        <p class="cap">То же на телефоне: перевод выезжает полосой снизу, читать и листать можно одной рукой.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="head">
+      <a class="arrowlink" href="#">↗ Мелочи</a>
+      <h2 class="h-lg">И ещё четыре вещи</h2>
+    </div>
+    <div class="grid4">
+      <div class="cell">
+        <h3 class="h-sm">Время считается честно</h3>
+        <p class="body">Счётчик идёт, только пока вкладка перед вами и вы правда листаете. Забытая на ночь вкладка не дорисует три часа чтения.</p>
+      </div>
+      <div class="cell">
+        <h3 class="h-sm">Продолжает с того места</h3>
+        <p class="body">Закрыли на середине главы — вернётесь ровно туда же, а не к её началу. Отдельно ничего сохранять не нужно.</p>
+      </div>
+      <div class="cell">
+        <h3 class="h-sm">Работает в метро</h3>
+        <p class="body">Без сети слова сохраняются как обычно и уходят на сервер, когда связь вернётся. Ничего не задваивается.</p>
+      </div>
+      <div class="cell">
+        <h3 class="h-sm">Тёмная тема и кегль</h3>
+        <p class="body">Светлая, тёмная или как в системе; размер текста — под ваши глаза и экран. Настройки живут в браузере.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="privacy">
+    <div class="split">
+      <div>
+        <a class="arrowlink" href="#privacy">↗ Приватность</a>
+        <h2 class="h-lg">Где лежат ваши книги</h2>
+      </div>
+      <div>
+        <ul class="facts">
+          <li><span class="t">Загруженная книга видна только вам</span><p>Общей библиотеки из чужих загрузок здесь нет и не будет — кроме нескольких классиков в общественном достоянии, которые лежат у всех сразу.</p></li>
+          <li><span class="t">Сервер в Москве</span><p>Ни книги, ни списки слов, ни статистика не уезжают за границу.</p></li>
+          <li><span class="t">Пароль не хранится в открытом виде</span><p>Утечка базы сама по себе не даёт войти в аккаунт.</p></li>
+          <li><span class="t">Счётчик посещений не пишет ни адрес, ни браузер</span><p>Только сам факт захода.</p></li>
+          <li><span class="t">Удаление аккаунта стирает и файлы книг</span><p>А не только строчки в базе.</p></li>
+        </ul>
+        <p class="cap" style="margin-top:var(--spacing-20);max-width:none">Словарь — <a href="https://www.wikdict.com/" target="_blank" rel="noopener noreferrer">WikDict</a>, переводы из английского Викисловаря, лицензия CC&nbsp;BY-SA.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section pb" id="access">
+    <div class="split">
+      <div>
+        <a class="arrowlink" href="#access">↗ Вход</a>
+        <h2 class="h-lg">Как получить доступ</h2>
+      </div>
+      <div>
+        <p class="sub" style="margin-bottom:var(--spacing-35)">Кнопки «зарегистрироваться» здесь нет намеренно: аккаунт открывает владелец сервиса вручную. Напишите — и придёт ссылка, по которой вы зададите себе пароль. Первые 14&nbsp;дней — пробный доступ со всеми возможностями.</p>
+        <div class="acts" style="display:flex;gap:var(--spacing-35)">
+          <a href="https://t.me/dasylov" target="_blank" rel="noopener noreferrer">↗ Telegram, @dasylov</a>
+          <a href="https://www.instagram.com/danil.asylovich" target="_blank" rel="noopener noreferrer">↗ Instagram, @danil.asylovich</a>
+          <a href="#">↗ У меня уже есть аккаунт</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="colophon">
+    <span>asyl-book</span>
+    <span>Читалка на английском</span>
+    <span>2026</span>
+  </div>
+
+</div>
+
+</body>
+</html>

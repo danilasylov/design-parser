@@ -1,0 +1,3 @@
+/* Original keyframes: Animista, Ana Travas. https://animista.net/play/basic/slide-rotate/slide-rotate-ver-l-bck */
+.slide-rotate-ver-l-bck{animation:slide-rotate-ver-l-bck 0.5s cubic-bezier(.455,.03,.515,.955) 0s 1 normal both;}
+@keyframes slide-rotate-ver-l-bck{0%{-webkit-transform:translateX(0) translateZ(0) rotateY(0);transform:translateX(0) translateZ(0) rotateY(0);-webkit-transform-origin:center left;transform-origin:center left}to{-webkit-transform:translateX(-150px) translateZ(-230px) rotateY(90deg);transform:translateX(-150px) translateZ(-230px) rotateY(90deg);-webkit-transform-origin:center left;transform-origin:center left}}

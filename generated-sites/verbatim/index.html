@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>Verbatim — a model that reads archival handwriting</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════════════════════════════
+   Дизайн-система Wispr Flow — styles.refero.design/style/ac53825c-1e06-4ae0-8489-cace5c5e0339
+   :root ниже вставлен ДОСЛОВНО со вкладки CSS Variables.
+   ══════════════════════════════════════════════════════════════════ */
+:root {
+  /* Colors */
+  --color-lavender-whisper: #f0d7ff;
+  --color-forest-ink: #034f46;
+  --color-ember-glow: #ffa946;
+  --color-vast-ink: #1a1a1a;
+  --color-lumen-cream: #ffffeb;
+  --color-lumen-stone: #e4e4d0;
+  --color-fog: #8a8a80;
+  --color-charcoal: #222222;
+  --color-pure-white: #ffffff;
+
+  /* Typography — Font Families */
+  --font-eb-garamond: 'Eb Garamond', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-figtree: 'Figtree', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* Typography — Scale */
+  --text-caption: 14px;
+  --leading-caption: 1.3;
+  --text-body-sm: 16px;
+  --leading-body-sm: 1.3;
+  --text-body: 20px;
+  --leading-body: 1.3;
+  --text-subheading: 24px;
+  --leading-subheading: 1.3;
+  --text-heading-sm: 32px;
+  --leading-heading-sm: 1.3;
+  --tracking-heading-sm: -0.96px;
+  --text-heading: 48px;
+  --leading-heading: 0.95;
+  --text-heading-lg: 64px;
+  --leading-heading-lg: 0.95;
+  --tracking-heading-lg: -1.92px;
+  --text-display: 120px;
+  --leading-display: 0.85;
+  --tracking-display: -3.6px;
+
+  /* Typography — Weights */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Spacing */
+  --spacing-unit: 8px;
+  --spacing-8: 8px;
+  --spacing-16: 16px;
+  --spacing-24: 24px;
+  --spacing-32: 32px;
+  --spacing-40: 40px;
+  --spacing-48: 48px;
+  --spacing-56: 56px;
+  --spacing-64: 64px;
+  --spacing-80: 80px;
+  --spacing-96: 96px;
+  --spacing-104: 104px;
+  --spacing-128: 128px;
+  --spacing-168: 168px;
+
+  /* Layout */
+  --page-max-width: 1200px;
+  --section-gap: 64-96px;
+  --card-padding: 32px;
+  --element-gap: 8-16px;
+
+  /* Border Radius */
+  --radius-lg: 8px;
+  --radius-xl: 14px;
+  --radius-3xl: 32px;
+  --radius-3xl-2: 40px;
+  --radius-full: 64px;
+  --radius-full-2: 80px;
+  --radius-full-3: 992px;
+  --radius-full-4: 1000px;
+  --radius-full-5: 1600px;
+  --radius-full-6: 9999px;
+
+  /* Named Radii */
+  --radius-cards: 32px;
+  --radius-badges: 9999px;
+  --radius-inputs: 12px;
+  --radius-buttons: 12px;
+  --radius-sections: 40-80px;
+
+  /* Surfaces */
+  --surface-cream-canvas: #ffffeb;
+  --surface-dark-chamber: #1a1a1a;
+  --surface-lavender-accent: #f0d7ff;
+  --surface-forest-panel: #034f46;
+}
+
+/* Подстановки шрифтов. EB Garamond назван в системе прямо и имеет кириллицу.
+   Figtree кириллицы не имеет — из списка замен DESIGN.md её имеет Manrope
+   (у Plus Jakarta Sans только cyrillic-ext). --section-gap и --element-gap
+   в токенах нечисловые («64-96px»), поэтому ритм задан --spacing-96/-16. */
+:root {
+  --font-display: 'EB Garamond', var(--font-eb-garamond);
+  --font-ui: 'Manrope', var(--font-figtree);
+}
+
+* { box-sizing: border-box; }
+html { -webkit-font-smoothing: antialiased; }
+body {
+  margin: 0;
+  background: var(--surface-cream-canvas);
+  color: var(--color-vast-ink);
+  font-family: var(--font-ui);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  font-weight: var(--font-weight-regular);
+}
+svg { display: block; }
+a { color: inherit; text-decoration: none; }
+h1, h2, h3, h4, p, ul { margin: 0; padding: 0; }
+ul { list-style: none; }
+
+.wrap { max-width: var(--page-max-width); margin: 0 auto; padding: 0 var(--spacing-24); }
+.sec { padding: var(--spacing-96) 0; }
+
+/* дисплей — только вес 400, командует масштабом */
+.disp {
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--text-display);
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-display);
+}
+.h-lg {
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--text-heading-lg);
+  line-height: var(--leading-heading-lg);
+  letter-spacing: var(--tracking-heading-lg);
+}
+.h {
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--text-heading);
+  line-height: var(--leading-heading);
+}
+.h-sm {
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--text-heading-sm);
+  line-height: var(--leading-heading-sm);
+  letter-spacing: var(--tracking-heading-sm);
+}
+.fog { color: var(--color-fog); }
+.body { font-size: var(--text-body); line-height: var(--leading-body); }
+.cap { font-size: var(--text-caption); line-height: var(--leading-caption); }
+
+/* кнопки: рамка 2px — подпись системы, радиус 12px */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-8);
+  font-family: var(--font-ui);
+  font-size: var(--text-body-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: 1;
+  padding: var(--spacing-16) var(--spacing-24);
+  border: 2px solid var(--color-vast-ink);
+  border-radius: var(--radius-buttons);
+  background: var(--surface-lavender-accent);
+  color: var(--color-vast-ink);
+  cursor: pointer;
+}
+.btn-2 { background: var(--color-lumen-cream); }
+.btn-on-dark { background: var(--color-lumen-cream); border-color: var(--color-lumen-cream); }
+.btn:hover { background: var(--color-vast-ink); color: var(--color-lumen-cream); }
+.btn-on-dark:hover { background: var(--surface-lavender-accent); border-color: var(--surface-lavender-accent); color: var(--color-vast-ink); }
+
+/* навигация — плавающая кремовая пилюля */
+.navwrap { padding: var(--spacing-24) var(--spacing-24) 0; }
+nav {
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+  background: var(--color-lumen-cream);
+  border: 2px solid var(--color-vast-ink);
+  border-radius: var(--radius-full-6);
+  padding: var(--spacing-8) var(--spacing-8) var(--spacing-8) var(--spacing-32);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-32);
+}
+nav .logo { font-family: var(--font-display); font-size: var(--text-subheading); display: flex; align-items: center; gap: var(--spacing-8); }
+nav .links { display: flex; gap: var(--spacing-32); margin-left: auto; }
+nav .links a { font-weight: var(--font-weight-semibold); }
+nav .links a:hover { text-decoration: underline; text-underline-offset: 4px; }
+nav .btn { padding: var(--spacing-16) var(--spacing-24); }
+.lang { display: flex; align-items: center; gap: 6px; font-weight: var(--font-weight-semibold); }
+.lang button { font: inherit; border: none; background: none; padding: 0; cursor: pointer; color: var(--color-fog); }
+.lang button[aria-pressed="true"] { color: var(--color-vast-ink); }
+.lang span { color: var(--color-fog); }
+
+/* герой */
+.hero { padding: var(--spacing-104) 0 var(--spacing-96); text-align: center; }
+.hero .disp { max-width: 15ch; margin: 0 auto; }
+.hero .sub { max-width: 46ch; margin: var(--spacing-32) auto 0; text-align: left; }
+.hero .acts { display: flex; gap: var(--spacing-16); justify-content: center; margin-top: var(--spacing-40); }
+.hero .note { margin-top: var(--spacing-16); color: var(--color-fog); }
+.squiggle { display: block; margin: var(--spacing-8) auto 0; }
+
+/* строка-«перо»: кремовая пилюля с рукописным штрихом внутри */
+.stroke-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-8);
+  background: var(--color-lumen-cream);
+  border: 2px solid var(--color-vast-ink);
+  border-radius: var(--radius-full-6);
+  padding: var(--spacing-8) var(--spacing-16);
+  vertical-align: middle;
+}
+
+/* тёмная комната */
+.chamber {
+  background: var(--surface-dark-chamber);
+  color: var(--color-lumen-cream);
+  border-radius: var(--radius-full-2);
+  padding: var(--spacing-80);
+  margin: 0 auto;
+  max-width: var(--page-max-width);
+}
+.chamber.tight { padding: var(--spacing-64); }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-64); align-items: center; }
+
+/* карточки */
+.card {
+  background: var(--color-lumen-cream);
+  border: 2px solid var(--color-vast-ink);
+  border-radius: var(--radius-cards);
+  padding: var(--card-padding);
+}
+.card.dark { background: var(--surface-dark-chamber); color: var(--color-lumen-cream); border-color: var(--color-vast-ink); }
+.card.lav { background: var(--surface-lavender-accent); }
+.three { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-24); }
+.card .h-sm { margin: var(--spacing-16) 0 var(--spacing-8); }
+
+/* бейджи */
+.badge {
+  display: inline-flex; align-items: center; gap: var(--spacing-8);
+  background: var(--surface-forest-panel); color: var(--color-lumen-cream);
+  border-radius: var(--radius-full-4); padding: var(--spacing-8) var(--spacing-16);
+  font-size: var(--text-caption); font-weight: var(--font-weight-medium);
+}
+.badge-sq { border-radius: var(--radius-lg); background: var(--color-vast-ink); }
+.pill-out {
+  display: inline-flex; align-items: center; gap: var(--spacing-8);
+  border: 1px solid var(--color-pure-white); color: var(--color-lumen-cream);
+  border-radius: var(--radius-full-4); padding: var(--spacing-8) var(--spacing-16);
+  font-size: var(--text-caption); font-weight: var(--font-weight-medium);
+}
+.pills { display: flex; flex-wrap: wrap; gap: var(--spacing-16); }
+
+/* плоский макет страницы расшифровки */
+.mock { background: var(--color-vast-ink); border: 2px solid var(--color-lumen-stone); border-radius: var(--radius-3xl-2); padding: var(--spacing-32); }
+.mock .line { height: 10px; background: var(--color-lumen-cream); border-radius: var(--radius-full-6); margin-bottom: var(--spacing-16); opacity: .9; }
+.mock .bubble { background: var(--color-lumen-cream); color: var(--color-vast-ink); border-radius: 20px; padding: var(--spacing-16); margin-bottom: var(--spacing-16); }
+.mock .bubble.teal { background: var(--surface-forest-panel); color: var(--color-lumen-cream); }
+
+.stat { font-family: var(--font-display); font-size: var(--text-heading); line-height: var(--leading-heading); }
+.sechead { max-width: 22ch; margin-bottom: var(--spacing-48); }
+
+footer { background: var(--surface-dark-chamber); color: var(--color-lumen-cream); padding: var(--spacing-80) 0 var(--spacing-40); margin-top: var(--spacing-96); }
+.fcols { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: var(--spacing-40); }
+.fcols h4 { font-weight: var(--font-weight-semibold); margin-bottom: var(--spacing-16); }
+.fcols li { margin-bottom: var(--spacing-8); color: var(--color-lumen-stone); }
+.flegal { display: flex; justify-content: space-between; margin-top: var(--spacing-64); padding-top: var(--spacing-24); border-top: 1px solid var(--color-fog); color: var(--color-fog); }
+</style>
+</head>
+<body>
+
+<div class="navwrap">
+  <nav>
+    <div class="logo">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="#1a1a1a" stroke-width="2"><path d="M2 17c4 0 3-12 8-12s5 12 10 12"/></svg>
+      Verbatim
+    </div>
+    <div class="links">
+      <a href="#how" data-i18n="nav1">How it reads</a>
+      <a href="#proof" data-i18n="nav2">Accuracy</a>
+      <a href="#export" data-i18n="nav3">Export</a>
+      <div class="lang"><button data-set="en" aria-pressed="true">EN</button><span>/</span><button data-set="ru" aria-pressed="false">RU</button></div>
+    </div>
+    <a class="btn" href="#try" data-i18n="navcta">Send one page</a>
+  </nav>
+</div>
+
+<section class="hero">
+  <div class="wrap">
+    <h1 class="disp"><span class="fog" data-i18n="h1a">Verbatim reads</span> <span data-i18n="h1b">the unreadable.</span></h1>
+    <svg class="squiggle" width="360" height="16" viewBox="0 0 360 16" fill="none">
+      <path d="M4 11c30-8 56 6 86-1s52-9 82-2 54 9 84 2 60-8 60-8" stroke="#f0d7ff" stroke-width="4" stroke-linecap="round"/>
+    </svg>
+    <p class="body sub" data-i18n="hsub">A handwriting model trained on two centuries of archival hands — parish registers, field diaries, ship logs, the letters nobody has opened since 1911. Send a scan, get a transcript you can search, correct line by line, and export as TEI.</p>
+    <div class="acts">
+      <a class="btn" href="#try" data-i18n="hb1">Send one page</a>
+      <a class="btn btn-2" href="#proof" data-i18n="hb2">See a sample transcript</a>
+    </div>
+    <p class="cap note" data-i18n="hnote">First fifty pages free. No account until you like what comes back.</p>
+  </div>
+</section>
+
+<!-- тёмная комната: как читает -->
+<section id="how" style="padding: 0 var(--spacing-24);">
+  <div class="chamber">
+    <div class="two">
+      <div>
+        <span class="badge" data-i18n="ch-b">Line by line</span>
+        <h2 class="h-lg" style="margin:var(--spacing-24) 0" data-i18n="ch-h">It never guesses in silence.</h2>
+        <p class="body" data-i18n="ch-p">Every line comes back with the image strip it was read from and a confidence figure. Anything under the threshold you set is held back for a human — usually the one word that matters, not the whole page.</p>
+        <a class="btn btn-on-dark" href="#proof" style="margin-top:var(--spacing-32)" data-i18n="ch-b2">Watch it read a page</a>
+      </div>
+      <div class="mock">
+        <div class="line" style="width:88%"></div>
+        <div class="line" style="width:64%"></div>
+        <div class="bubble">
+          <div class="cap fog" data-i18n="mk1">Line 14 · confidence 0.98</div>
+          <div style="margin-top:6px" data-i18n="mk2">“…and the river stood open until the feast of St Nicholas…”</div>
+        </div>
+        <div class="bubble teal">
+          <div class="cap" data-i18n="mk3">Line 15 · confidence 0.41 · held for review</div>
+          <div style="margin-top:6px" data-i18n="mk4">“…the miller ⟨?⟩ was paid in rye…”</div>
+        </div>
+        <div class="line" style="width:76%"></div>
+        <div class="line" style="width:40%; margin-bottom:0"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- сравнение -->
+<section class="sec" id="proof">
+  <div class="wrap">
+    <h2 class="h sechead" data-i18n="cmp-h">What a week of an archivist's time looks like.</h2>
+    <div class="two">
+      <div class="card">
+        <span class="badge-sq badge" data-i18n="cmp1b">By hand</span>
+        <div class="stat" style="margin:var(--spacing-24) 0 var(--spacing-8)">4</div>
+        <p class="body" data-i18n="cmp1">Pages an experienced palaeographer transcribes in a working day, at the pace the hand allows.</p>
+      </div>
+      <div class="card dark">
+        <span class="badge" data-i18n="cmp2b">With Verbatim</span>
+        <div class="stat" style="margin:var(--spacing-24) 0 var(--spacing-8)">180</div>
+        <p class="body" data-i18n="cmp2">Pages read in the same day, of which about eleven come back flagged and get the palaeographer's actual attention.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- три карточки -->
+<section class="sec" style="padding-top:0">
+  <div class="wrap">
+    <div class="three">
+      <div class="card">
+        <span class="badge" data-i18n="f1b">Trained per hand</span>
+        <h3 class="h-sm" data-i18n="f1t">Your fonds, your model</h3>
+        <p data-i18n="f1d">Forty corrected pages are enough to fine-tune on a single scribe. The clerk who wrote badly for thirty years becomes the easiest part of the collection.</p>
+      </div>
+      <div class="card lav">
+        <span class="badge" data-i18n="f2b">Alignment</span>
+        <h3 class="h-sm" data-i18n="f2t">The image never leaves the line</h3>
+        <p data-i18n="f2d">Transcript and scan stay bound at line level, so a reader can always drop back to the ink and check you.</p>
+      </div>
+      <div class="card">
+        <span class="badge" data-i18n="f3b">Uncertainty</span>
+        <h3 class="h-sm" data-i18n="f3t">Doubt is written down</h3>
+        <p data-i18n="f3d">Unreadable words are marked as unreadable, not invented. A gap is a finding; a plausible fabrication is a fault.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- тёмная комната: экспорт -->
+<section id="export" style="padding: 0 var(--spacing-24);">
+  <div class="chamber tight">
+    <h2 class="h" data-i18n="ex-h">It leaves in a format your catalogue already speaks.</h2>
+    <p class="body" style="margin:var(--spacing-24) 0 var(--spacing-40); max-width:60ch" data-i18n="ex-p">Nothing is locked in. Every transcript exports with its line coordinates, its confidence figures and its correction history attached.</p>
+    <div class="pills">
+      <span class="pill-out">TEI-XML</span>
+      <span class="pill-out">ALTO</span>
+      <span class="pill-out">PAGE-XML</span>
+      <span class="pill-out">CSV</span>
+      <span class="pill-out" data-i18n="ex5">Plain text</span>
+      <span class="pill-out" data-i18n="ex6">Searchable PDF</span>
+    </div>
+  </div>
+</section>
+
+<!-- финальный призыв -->
+<section class="sec" id="try">
+  <div class="wrap" style="text-align:center">
+    <h2 class="h-lg" style="max-width:20ch;margin:0 auto" data-i18n="cta-h">Send the worst page you have.</h2>
+    <p class="body" style="max-width:48ch;margin:var(--spacing-24) auto 0" data-i18n="cta-p">If we can read it, you will have the transcript back the same afternoon. If we cannot, we will tell you which hand defeated us and why.</p>
+    <div class="acts" style="justify-content:center">
+      <a class="btn" href="#try" data-i18n="cta-b1">Send one page</a>
+      <a class="btn btn-2" href="#try" data-i18n="cta-b2">Talk to an archivist</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="fcols">
+      <div>
+        <div class="h-sm" style="margin-bottom:var(--spacing-16)">Verbatim</div>
+        <p style="max-width:30ch;color:var(--color-lumen-stone)" data-i18n="fa">Handwritten text recognition for archives, libraries and the people who read what nobody else can.</p>
+      </div>
+      <div>
+        <h4 data-i18n="fh1">Product</h4>
+        <ul>
+          <li data-i18n="fl1">How it reads</li>
+          <li data-i18n="fl2">Fine-tuning</li>
+          <li data-i18n="fl3">Export formats</li>
+        </ul>
+      </div>
+      <div>
+        <h4 data-i18n="fh2">Collections</h4>
+        <ul>
+          <li data-i18n="fl4">Parish registers</li>
+          <li data-i18n="fl5">Field diaries</li>
+          <li data-i18n="fl6">Ship logs</li>
+        </ul>
+      </div>
+      <div>
+        <h4 data-i18n="fh3">Contact</h4>
+        <ul>
+          <li data-i18n="fl7">Send a page</li>
+          <li data-i18n="fl8">For institutions</li>
+          <li data-i18n="fl9">Write to us</li>
+        </ul>
+      </div>
+    </div>
+    <div class="flegal cap">
+      <span>© 2026 Verbatim</span>
+      <span data-i18n="fn">Scans stay yours · nothing is used for training without a signature</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ── RU/EN. Английский — исходный, русский — перевод под него ── */
+var RU = {
+  nav1:'Как читает', nav2:'Точность', nav3:'Экспорт', navcta:'Прислать страницу',
+  h1a:'Verbatim читает', h1b:'нечитаемое.',
+  hsub:'Модель почерка, обученная на двух столетиях архивных рук — метрические книги, полевые дневники, судовые журналы, письма, которых никто не открывал с 1911 года. Пришлите скан и получите расшифровку, по которой можно искать, править её построчно и выгрузить в TEI.',
+  hb1:'Прислать страницу', hb2:'Посмотреть пример расшифровки',
+  hnote:'Первые пятьдесят страниц бесплатно. Аккаунт — только когда вам понравится результат.',
+  'ch-b':'Построчно', 'ch-h':'Она никогда не догадывается молча.',
+  'ch-p':'Каждая строка возвращается вместе с полоской изображения, с которой она прочитана, и числом уверенности. Всё, что ниже выставленного вами порога, откладывается человеку — обычно это одно важное слово, а не вся страница.',
+  'ch-b2':'Посмотреть, как читается страница',
+  mk1:'Строка 14 · уверенность 0,98', mk2:'«…и река стояла открытой до Николина дня…»',
+  mk3:'Строка 15 · уверенность 0,41 · отложено на проверку', mk4:'«…мельнику ⟨?⟩ плачено рожью…»',
+  'cmp-h':'Как выглядит неделя архивиста.',
+  cmp1b:'Руками', cmp1:'Столько страниц опытный палеограф расшифровывает за рабочий день — в том темпе, который позволяет почерк.',
+  cmp2b:'С Verbatim', cmp2:'Столько страниц прочитано за тот же день, из них около одиннадцати возвращаются помеченными и получают настоящее внимание палеографа.',
+  f1b:'Обучение под руку', f1t:'Ваш фонд — ваша модель',
+  f1d:'Сорока выправленных страниц хватает, чтобы дообучиться на одном писце. Канцелярист, тридцать лет писавший плохо, становится самой лёгкой частью коллекции.',
+  f2b:'Привязка', f2t:'Изображение не отрывается от строки',
+  f2d:'Расшифровка и скан связаны на уровне строки, поэтому читатель всегда может вернуться к чернилам и вас проверить.',
+  f3b:'Неуверенность', f3t:'Сомнение записывается',
+  f3d:'Нечитаемые слова помечаются нечитаемыми, а не выдумываются. Пропуск — это результат; правдоподобная выдумка — это брак.',
+  'ex-h':'Выгрузка идёт в формате, на котором ваш каталог уже говорит.',
+  'ex-p':'Ничего не запирается внутри. Каждая расшифровка выгружается вместе с координатами строк, числами уверенности и историей правок.',
+  ex5:'Простой текст', ex6:'PDF с текстовым слоем',
+  'cta-h':'Пришлите самую скверную страницу, что у вас есть.',
+  'cta-p':'Если мы её прочтём, расшифровка вернётся в тот же день. Если нет — скажем, какая рука нас победила и почему.',
+  'cta-b1':'Прислать страницу', 'cta-b2':'Поговорить с архивистом',
+  fa:'Распознавание рукописного текста для архивов, библиотек и тех, кто читает то, что не может прочесть никто другой.',
+  fh1:'Продукт', fl1:'Как читает', fl2:'Дообучение', fl3:'Форматы выгрузки',
+  fh2:'Коллекции', fl4:'Метрические книги', fl5:'Полевые дневники', fl6:'Судовые журналы',
+  fh3:'Связь', fl7:'Прислать страницу', fl8:'Для учреждений', fl9:'Написать нам',
+  fn:'Сканы остаются вашими · ничего не уходит в обучение без подписи'
+};
+var EN = {};
+document.querySelectorAll('[data-i18n]').forEach(function (el) { EN[el.dataset.i18n] = el.innerHTML; });
+function setLang(l) {
+  var dict = l === 'ru' ? RU : EN;
+  document.querySelectorAll('[data-i18n]').forEach(function (el) {
+    var v = dict[el.dataset.i18n];
+    if (v !== undefined) el.innerHTML = v;
+  });
+  document.documentElement.lang = l;
+  document.documentElement.dataset.lang = l;
+  document.querySelectorAll('.lang button').forEach(function (b) {
+    b.setAttribute('aria-pressed', b.dataset.set === l ? 'true' : 'false');
+  });
+}
+document.querySelectorAll('.lang button').forEach(function (b) {
+  b.addEventListener('click', function () { setLang(b.dataset.set); });
+});
+</script>
+</body>
+</html>

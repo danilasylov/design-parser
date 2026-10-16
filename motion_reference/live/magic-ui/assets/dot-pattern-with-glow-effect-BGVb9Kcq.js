@@ -1,0 +1,1 @@
+import{j as e,c as t}from"./index-WM7-nNXq.js";import{D as r}from"./dot-pattern-p9drL6Cs.js";function s(){return e.jsx("div",{className:"relative flex h-[500px] w-full flex-col items-center justify-center overflow-hidden",children:e.jsx(r,{glow:!0,className:t("[mask-image:radial-gradient(300px_circle_at_center,white,transparent)]")})})}export{s as default};

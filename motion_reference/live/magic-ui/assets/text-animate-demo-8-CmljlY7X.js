@@ -1,0 +1,1 @@
+import{j as r}from"./index-WM7-nNXq.js";import{T as t}from"./text-animate-F4tCGw4G.js";function n(){return r.jsx(t,{animation:"blurInUp",by:"character",duration:5,children:"Blur in by character"})}export{n as default};

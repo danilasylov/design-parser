@@ -1,0 +1,3 @@
+/* Original keyframes: Animista, Ana Travas. https://animista.net/play/exits/slide-out-elliptic/slide-out-elliptic-right-bck */
+.slide-out-elliptic-right-bck{animation:slide-out-elliptic-right-bck 0.7s ease-in 0s 1 normal both;}
+@keyframes slide-out-elliptic-right-bck{0%{-webkit-transform:translateX(0) rotateY(0) scale(1);transform:translateX(0) rotateY(0) scale(1);-webkit-transform-origin:-1800px 50%;transform-origin:-1800px 50%;opacity:1}to{-webkit-transform:translateX(1000px) rotateY(-30deg) scale(0);transform:translateX(1000px) rotateY(-30deg) scale(0);-webkit-transform-origin:-100% 50%;transform-origin:-100% 50%;opacity:1}}

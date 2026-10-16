@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QUEUE — every drop, and what happened to it after</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rubik+Mono+One&family=PT+Serif:wght@400;700&family=Pixelify+Sans:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ───────── ДИЗАЙН-СИСТЕМА OFF WHITE — tokens.css ДОСЛОВНО ───────── */
+:root {
+  /* Colors */
+  --color-voltage-green: #00fb34;
+  --color-alarm-red: #ff0000;
+  --color-caution-yellow: #fff500;
+  --color-absolute-black: #000000;
+  --color-pure-white: #ffffff;
+  --color-ashen-gray: #aba4a4;
+
+  /* Typography — Font Families */
+  /* Offwhite → Rubik Mono One (блочная геометрия, кириллица), Times → PT Serif,
+     Arial-утилита → Pixelify Sans (пиксельное настроение на малых кеглях — из DESIGN.md) */
+  --font-offwhite: 'Rubik Mono One', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-times: 'PT Serif', Times, "Times New Roman", serif;
+  --font-arial: 'Pixelify Sans', ui-monospace, Menlo, monospace;
+
+  /* Typography — Scale */
+  --text-caption: 11px;
+  --leading-caption: 1.2;
+  --text-body: 16px;
+  --leading-body: 1.2;
+  --text-subheading: 18px;
+  --leading-subheading: 1.3;
+  --text-body-lg: 20px;
+  --leading-body-lg: 1.31;
+  --text-heading-sm: 36px;
+  --leading-heading-sm: 1.25;
+  --text-heading-lg: 48px;
+  --leading-heading-lg: 1.15;
+  --text-display: 72px;
+  --leading-display: 1.1;
+  --text-display-lg: 96px;
+  --leading-display-lg: 1;
+  --text-hero: 180px;
+  --leading-hero: 1;
+  --text-monumental: 500px;
+  --leading-monumental: 1;
+
+  /* Typography — Weights */
+  --font-weight-regular: 400;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Spacing */
+  --spacing-unit: 6px;
+  --spacing-40: 40px;
+  --spacing-60: 60px;
+  --spacing-90: 90px;
+  --spacing-120: 120px;
+
+  /* Layout */
+  --card-padding: 40px;
+  --element-gap: 40px;
+
+  /* Border Radius */
+  --radius-3xl: 30px;
+
+  /* Named Radii */
+  --radius-links: 30px;
+  --radius-images: 0px;
+  --radius-buttons: 30px;
+  --radius-surfaces: 0px;
+  --radius-display-type: 0px;
+
+  /* Surfaces */
+  --surface-midnight-canvas: #000000;
+  --surface-inverse-panel: #ffffff;
+  --surface-alert-frame: #ff0000;
+  --surface-neon-type-field: #00fb34;
+  --surface-caution-highlight: #fff500;
+}
+
+/* ───────── База ───────── */
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--surface-midnight-canvas);color:var(--color-pure-white);
+  font-family:var(--font-times);font-size:var(--text-body);line-height:var(--leading-body);
+  -webkit-font-smoothing:antialiased;
+}
+a{color:inherit;text-decoration:none}
+h1,h2,h3,p,ul{margin:0}
+ul{list-style:none;padding:0}
+
+/* Дисплейная гарнитура — архитектура страницы, углы всегда прямые */
+.disp{font-family:var(--font-offwhite);border-radius:var(--radius-display-type);text-transform:uppercase}
+/* Пиксельная микро-бирка */
+.px{font-family:var(--font-arial);font-size:var(--text-caption);line-height:var(--leading-caption);text-transform:uppercase;letter-spacing:.06em}
+
+/* Горизонтально плотно и без контейнера — канва не сжата max-width (см. Layout) */
+.pad{padding-left:var(--spacing-40);padding-right:var(--spacing-40)}
+
+/* ───────── Шапка ───────── */
+header{
+  position:sticky;top:0;z-index:50;background:var(--color-absolute-black);
+  border-bottom:1px solid var(--color-alarm-red);
+}
+.nav{display:flex;align-items:center;gap:var(--spacing-40);height:56px}
+.nav .brand{font-family:var(--font-offwhite);font-size:var(--text-subheading);color:var(--color-voltage-green)}
+.nav .links{display:flex;gap:24px;margin-left:auto}
+.nav .links a{color:var(--color-pure-white);padding:4px 0;border-bottom:1px solid transparent}
+.nav .links a:hover{border-bottom-color:var(--color-caution-yellow)}
+.lang{display:flex;gap:2px;border:1px solid var(--color-ashen-gray);border-radius:var(--radius-links);padding:2px}
+.lang button{
+  font-family:var(--font-arial);font-size:var(--text-caption);text-transform:uppercase;letter-spacing:.06em;
+  background:transparent;border:0;color:var(--color-ashen-gray);padding:5px 10px;border-radius:var(--radius-links);cursor:pointer;
+}
+.lang button[aria-pressed="true"]{background:var(--color-voltage-green);color:var(--color-absolute-black)}
+.btn{
+  display:inline-block;font-family:var(--font-offwhite);font-size:var(--text-caption);letter-spacing:.04em;
+  text-transform:uppercase;padding:11px 22px;border-radius:var(--radius-buttons);border:0;cursor:pointer;
+}
+.btn-green{background:var(--color-voltage-green);color:var(--color-absolute-black)}
+.btn-out{background:transparent;color:var(--color-pure-white);border:1px solid var(--color-pure-white)}
+
+/* ───────── Герой: монументальные буквы + разбросанные плитки ───────── */
+.hero{position:relative;height:780px;overflow:hidden;border-bottom:1px solid var(--color-alarm-red)}
+.monument{
+  position:absolute;top:96px;left:var(--spacing-40);
+  font-family:var(--font-offwhite);font-size:var(--text-hero);line-height:var(--leading-hero);
+  color:var(--surface-neon-type-field);letter-spacing:-.02em;user-select:none;
+}
+.monument .row2{display:block;margin-top:-18px}
+/* Аннотация чёрным по зелёному полю — приём референса: мелкий текст лежит НА букве */
+.annot{
+  position:absolute;background:var(--surface-neon-type-field);color:var(--color-absolute-black);
+  font-family:var(--font-times);font-size:var(--text-body);line-height:var(--leading-body);padding:6px 14px;
+}
+/* Аннотации и плитки живут в свободном поле СПРАВА от монумента и под ним:
+   в референсе фото ложатся в негативное пространство между буквами, а не закрывают их */
+.a1{top:500px;left:var(--spacing-40);width:390px}
+.a2{top:246px;left:860px;width:340px}
+.a3{top:606px;left:88px}
+
+/* Плитки дропов вместо портретов референса: та же коллажная россыпь с наездом на буквы */
+.tile{position:absolute;background:var(--color-absolute-black);border:1px solid var(--color-pure-white);padding:12px 14px;width:200px}
+.tile.red{border-color:var(--color-alarm-red)}
+.tile.yellow{border-color:var(--color-caution-yellow)}
+.tile b{display:block;font-family:var(--font-offwhite);font-size:var(--text-body);letter-spacing:-.01em;margin-bottom:8px}
+.tile span{display:block;color:var(--color-ashen-gray);font-size:var(--text-caption);font-family:var(--font-arial);text-transform:uppercase;letter-spacing:.06em}
+/* Ступенчатый разброс, а не сетка: плитки садятся по разным высотам,
+   ATELIER RIGA заходит в промежуток справа от «2026», не задевая штрихи букв */
+.t1{top:96px;left:848px}
+.t2{top:146px;left:1136px;width:250px}
+.t3{top:566px;left:1150px;width:236px}
+.t4{top:392px;left:652px}
+.t5{top:372px;left:1116px;width:250px}
+.t6{top:486px;left:866px}
+
+.hero-cta{position:absolute;bottom:60px;left:var(--spacing-40);display:flex;gap:14px;align-items:center}
+
+/* ───────── Секции ───────── */
+section{padding:var(--spacing-90) 0}
+.sec-h{display:flex;align-items:flex-end;gap:24px;margin-bottom:var(--spacing-60);flex-wrap:wrap}
+.sec-h h2{font-family:var(--font-offwhite);font-size:var(--text-display);line-height:var(--leading-display);text-transform:uppercase}
+.sec-h .note{max-width:420px;color:var(--color-ashen-gray);margin-left:auto}
+
+/* Таблица недели: красная рамка — самый частый приём системы (44 границы против 12 заливок) */
+.week{border:1px solid var(--color-alarm-red)}
+.wk-head,.wk-row{display:grid;grid-template-columns:118px 1fr 130px 150px 132px;gap:16px;padding:16px 20px;align-items:center}
+.wk-head{border-bottom:1px solid var(--color-alarm-red);color:var(--color-ashen-gray)}
+.wk-row{border-top:1px solid var(--color-alarm-red)}
+.wk-row:first-of-type{border-top:0}
+.wk-row .brand{font-family:var(--font-offwhite);font-size:var(--text-body-lg);text-transform:uppercase;letter-spacing:-.01em}
+.wk-row .obj{color:var(--color-ashen-gray)}
+.tag{font-style:normal;display:inline-block;font-family:var(--font-arial);font-size:var(--text-caption);text-transform:uppercase;letter-spacing:.06em;padding:5px 10px;border-radius:var(--radius-links)}
+.tag.open{background:var(--color-voltage-green);color:var(--color-absolute-black)}
+.tag.soon{border:1px solid var(--color-caution-yellow);color:var(--color-caution-yellow)}
+.tag.gone{border:1px solid var(--color-alarm-red);color:var(--color-alarm-red)}
+
+/* Цифры «после дропа» */
+.after{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--color-ashen-gray);border:1px solid var(--color-ashen-gray)}
+.after div{background:var(--color-absolute-black);padding:var(--card-padding) 28px}
+.after b{display:block;font-family:var(--font-offwhite);font-size:var(--text-heading-sm);line-height:var(--leading-heading-sm);color:var(--color-caution-yellow)}
+.after span{display:block;margin-top:14px;color:var(--color-ashen-gray);font-size:var(--text-body)}
+
+/* Манифест: белая инверсная панель — вторая поверхность системы */
+.manifesto{background:var(--surface-inverse-panel);color:var(--color-absolute-black);padding:var(--spacing-90) 0}
+.manifesto .in{display:grid;grid-template-columns:1fr 1fr;gap:var(--element-gap);align-items:start}
+.manifesto h2{font-family:var(--font-offwhite);font-size:var(--text-heading-lg);line-height:var(--leading-heading-lg);text-transform:uppercase}
+.manifesto p{font-size:var(--text-body-lg);line-height:var(--leading-body-lg);margin-bottom:18px}
+.manifesto .mark{background:var(--surface-neon-type-field);padding:0 4px}
+
+/* Как это работает */
+.how{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--element-gap)}
+.how article{border:1px solid var(--color-pure-white);padding:var(--card-padding)}
+.how .n{font-family:var(--font-offwhite);font-size:var(--text-heading-sm);color:var(--color-voltage-green);margin-bottom:20px;display:block}
+.how h3{font-family:var(--font-offwhite);font-size:var(--text-subheading);text-transform:uppercase;margin-bottom:12px}
+.how p{color:var(--color-ashen-gray);line-height:1.35}
+
+/* Подписка */
+.sub-band{border-top:1px solid var(--color-alarm-red);border-bottom:1px solid var(--color-alarm-red);padding:var(--spacing-60) 0}
+.sub-in{display:flex;align-items:center;gap:24px;flex-wrap:wrap}
+.sub-in h2{font-family:var(--font-offwhite);font-size:var(--text-heading-sm);line-height:var(--leading-heading-sm);text-transform:uppercase;max-width:620px}
+.form{display:flex;gap:10px;margin-left:auto}
+.form input{
+  background:transparent;border:1px solid var(--color-ashen-gray);border-radius:var(--radius-surfaces);
+  color:var(--color-pure-white);font-family:var(--font-times);font-size:var(--text-body);padding:12px 16px;width:280px;outline:none;
+}
+.form input:focus{border-color:var(--color-caution-yellow)}
+
+/* Подвал */
+footer{padding:var(--spacing-60) 0 var(--spacing-40)}
+.foot{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:var(--element-gap)}
+.foot .big{font-family:var(--font-offwhite);font-size:var(--text-heading-sm);color:var(--color-voltage-green);text-transform:uppercase}
+.foot h4{font-family:var(--font-arial);font-size:var(--text-caption);text-transform:uppercase;letter-spacing:.06em;color:var(--color-ashen-gray);margin:0 0 14px;font-weight:400}
+.foot li{margin-bottom:9px}
+.foot li a:hover{color:var(--color-voltage-green)}
+.foot-legal{display:flex;justify-content:space-between;margin-top:var(--spacing-60);padding-top:20px;border-top:1px solid var(--color-ashen-gray);color:var(--color-ashen-gray)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav pad">
+    <a class="brand" href="#top">QUEUE</a>
+    <div class="links">
+      <a href="#week" data-i18n="nav1">This week</a>
+      <a href="#after" data-i18n="nav2">After the drop</a>
+      <a href="#how" data-i18n="nav3">Method</a>
+      <a href="#manifesto" data-i18n="nav4">Position</a>
+    </div>
+    <div class="lang">
+      <button data-set="en" aria-pressed="true">EN</button>
+      <button data-set="ru" aria-pressed="false">RU</button>
+    </div>
+    <a class="btn btn-green" href="#subscribe" data-i18n="cta0">Get the alert</a>
+  </div>
+</header>
+
+<main id="top">
+
+  <section class="hero">
+    <div class="monument">QUEUE<span class="row2">2026</span></div>
+
+    <div class="annot a1 disp-none" data-i18n="an1">Nine drops this week. Two of them will be gone before you finish reading this line.</div>
+    <div class="annot a2" data-i18n="an2">We publish the queue times, the piece counts, and what the same object cost eleven days later.</div>
+    <div class="annot a3" data-i18n="an3">The gray area between hype and stock.</div>
+
+    <div class="tile t1"><b>NORTHBOUND</b><span data-i18n="tl1">Thu 14:00 CET · 240 pieces</span></div>
+    <div class="tile t2 red"><b>PALAIS 9</b><span data-i18n="tl2">Sold out in 41 seconds</span></div>
+    <div class="tile t3 yellow"><b>KOSTER</b><span data-i18n="tl3">Queue opens in 3 days</span></div>
+    <div class="tile t4"><b>ATELIER RIGA</b><span data-i18n="tl4">Fri 09:00 · 60 pieces</span></div>
+    <div class="tile t5 red"><b>SECOND SUN</b><span data-i18n="tl5">Resale spread +310%</span></div>
+    <div class="tile t6"><b>HALT</b><span data-i18n="tl6">Restock, no announcement</span></div>
+
+    <div class="hero-cta">
+      <a class="btn btn-green" href="#week" data-i18n="cta1">See this week</a>
+      <a class="btn btn-out" href="#manifesto" data-i18n="cta2">Why we publish it</a>
+    </div>
+  </section>
+
+  <section id="week" class="pad">
+    <div class="sec-h">
+      <h2 data-i18n="s1h">This week</h2>
+      <p class="note" data-i18n="s1n">Nine drops, three cities, one honest column: how many pieces actually exist.</p>
+    </div>
+    <div class="week">
+      <div class="wk-head px">
+        <span data-i18n="th1">Date</span><span data-i18n="th2">Label</span><span data-i18n="th3">Pieces</span><span data-i18n="th4">Queue opens</span><span data-i18n="th5">State</span>
+      </div>
+      <div class="wk-row">
+        <span class="px">10 · 03</span>
+        <span class="brand">NORTHBOUND</span>
+        <span class="obj">240</span>
+        <span class="obj">14:00 CET</span>
+        <span><i class="tag open" data-i18n="st1">Open</i></span>
+      </div>
+      <div class="wk-row">
+        <span class="px">10 · 03</span>
+        <span class="brand">HALT</span>
+        <span class="obj" data-i18n="unk">unstated</span>
+        <span class="obj" data-i18n="nores">no announcement</span>
+        <span><i class="tag soon" data-i18n="st2">Soon</i></span>
+      </div>
+      <div class="wk-row">
+        <span class="px">11 · 03</span>
+        <span class="brand">PALAIS 9</span>
+        <span class="obj">120</span>
+        <span class="obj">18:00 CET</span>
+        <span><i class="tag gone" data-i18n="st3">Gone</i></span>
+      </div>
+      <div class="wk-row">
+        <span class="px">12 · 03</span>
+        <span class="brand">KOSTER</span>
+        <span class="obj">85</span>
+        <span class="obj">11:00 EET</span>
+        <span><i class="tag soon" data-i18n="st2b">Soon</i></span>
+      </div>
+      <div class="wk-row">
+        <span class="px">13 · 03</span>
+        <span class="brand">ATELIER RIGA</span>
+        <span class="obj">60</span>
+        <span class="obj">09:00 EET</span>
+        <span><i class="tag soon" data-i18n="st2c">Soon</i></span>
+      </div>
+      <div class="wk-row">
+        <span class="px">14 · 03</span>
+        <span class="brand">SECOND SUN</span>
+        <span class="obj">400</span>
+        <span class="obj">20:00 CET</span>
+        <span><i class="tag open" data-i18n="st1b">Open</i></span>
+      </div>
+    </div>
+  </section>
+
+  <section id="after" class="pad">
+    <div class="sec-h">
+      <h2 data-i18n="s2h">After the drop</h2>
+      <p class="note" data-i18n="s2n">The part the announcement never carries. Median across 1,240 tracked drops since 2024.</p>
+    </div>
+    <div class="after">
+      <div><b>41 s</b><span data-i18n="af1">median sell-out for a drop under 150 pieces</span></div>
+      <div><b>+310%</b><span data-i18n="af2">median resale spread on day eleven</span></div>
+      <div><b>62%</b><span data-i18n="af3">of pieces never worn, listed within a month</span></div>
+      <div><b>1 in 9</b><span data-i18n="af4">restocks quietly, at the original price</span></div>
+    </div>
+  </section>
+
+  <section class="manifesto" id="manifesto">
+    <div class="in pad">
+      <h2 data-i18n="s3h">We are not a hype account</h2>
+      <div>
+        <p data-i18n="s3p1">A drop is an announcement with a countdown attached. Everything else — how many pieces exist, who got them, what they cost a week later — is left in the <span class="mark">gray area</span>, and the gray area is where the money is made.</p>
+        <p data-i18n="s3p2">QUEUE publishes the boring half. Piece counts when a label states them, and the word <b>unstated</b> when it does not. Queue times in your timezone. Resale spread eleven days on, whether that flatters the label or not.</p>
+        <p data-i18n="s3p3">We take no cut of any sale, run no affiliate links, and accept no paid placement in the week table. When a label refuses to state a number, that refusal is the entry.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="how" class="pad">
+    <div class="sec-h">
+      <h2 data-i18n="s4h">Method</h2>
+    </div>
+    <div class="how">
+      <article>
+        <span class="n">01</span>
+        <h3 data-i18n="h1t">We watch, not guess</h3>
+        <p data-i18n="h1d">Every entry starts from a label's own channel — the store page, the newsletter, the notice board. No leaks, no reposts, no screenshots of screenshots.</p>
+      </article>
+      <article>
+        <span class="n">02</span>
+        <h3 data-i18n="h2t">Counts or silence</h3>
+        <p data-i18n="h2d">If the piece count is published, it goes in the table. If it is not, the cell reads unstated, and that stays visible forever in the archive.</p>
+      </article>
+      <article>
+        <span class="n">03</span>
+        <h3 data-i18n="h3d">Eleven days later</h3>
+        <p data-i18n="h3t">Every drop gets revisited on day eleven, when the resale market has stopped being excited and started being a market.</p>
+      </article>
+    </div>
+  </section>
+
+  <div class="sub-band" id="subscribe">
+    <div class="sub-in pad">
+      <h2 data-i18n="s5h">One message, ninety minutes before the queue opens</h2>
+      <form class="form" onsubmit="return false">
+        <input type="email" placeholder="you@mail.com" aria-label="Email">
+        <button class="btn btn-green" type="submit" data-i18n="cta3">Subscribe</button>
+      </form>
+    </div>
+  </div>
+
+</main>
+
+<footer class="pad">
+  <div class="foot">
+    <div>
+      <div class="big">QUEUE</div>
+      <p style="margin-top:16px;color:var(--color-ashen-gray);max-width:320px" data-i18n="fabout">A drop calendar with the numbers attached. Independent, unfunded, and unavailable for placement.</p>
+    </div>
+    <div>
+      <h4 data-i18n="fh1">Calendar</h4>
+      <ul>
+        <li><a href="#week" data-i18n="fl1">This week</a></li>
+        <li><a href="#" data-i18n="fl2">Archive 2024–26</a></li>
+        <li><a href="#" data-i18n="fl3">Labels A–Z</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 data-i18n="fh2">Numbers</h4>
+      <ul>
+        <li><a href="#after" data-i18n="fl4">After the drop</a></li>
+        <li><a href="#" data-i18n="fl5">Resale index</a></li>
+        <li><a href="#" data-i18n="fl6">Method notes</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 data-i18n="fh3">Contact</h4>
+      <ul>
+        <li><a href="#" data-i18n="fl7">Submit a drop</a></li>
+        <li><a href="#" data-i18n="fl8">Corrections</a></li>
+        <li><a href="#" data-i18n="fl9">Press</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-legal px">
+    <span>© 2026 QUEUE</span>
+    <span data-i18n="fnote">Berlin · Riga · Milan</span>
+  </div>
+</footer>
+
+<script>
+/* ── RU/EN. Английский — исходный, русский — перевод под него ── */
+var RU = {
+  nav1:'Эта неделя', nav2:'После дропа', nav3:'Метод', nav4:'Позиция', cta0:'Получать сигнал',
+  an1:'Девять дропов на этой неделе. Два из них закончатся раньше, чем вы дочитаете эту строку.',
+  an2:'Мы публикуем время очереди, тираж и то, сколько та же вещь стоила через одиннадцать дней.',
+  an3:'Серая зона между хайпом и складом.',
+  tl1:'Чт 14:00 CET · 240 штук', tl2:'Разобрали за 41 секунду', tl3:'Очередь через 3 дня',
+  tl4:'Пт 09:00 · 60 штук', tl5:'Наценка перепродажи +310%', tl6:'Довоз без анонса',
+  cta1:'Смотреть неделю', cta2:'Зачем мы это публикуем',
+  s1h:'Эта неделя', s1n:'Девять дропов, три города и одна честная колонка: сколько вещей существует на самом деле.',
+  th1:'Дата', th2:'Марка', th3:'Тираж', th4:'Очередь', th5:'Статус',
+  st1:'Открыт', st1b:'Открыт', st2:'Скоро', st2b:'Скоро', st2c:'Скоро', st3:'Разобран',
+  unk:'не назван', nores:'без анонса',
+  s2h:'После дропа', s2n:'Та часть, которую анонс никогда не несёт. Медиана по 1240 отслеженным дропам с 2024 года.',
+  af1:'медианное время распродажи тиража меньше 150 штук',
+  af2:'медианная наценка перепродажи на одиннадцатый день',
+  af3:'вещей выставлено на перепродажу в первый месяц ненадёванными',
+  af4:'дроп из девяти тихо довозят по исходной цене',
+  s3h:'Мы не хайп-канал',
+  s3p1:'Дроп — это анонс с обратным отсчётом. Всё остальное — сколько вещей существует, кому они достались, сколько стоили через неделю — остаётся в <span class="mark">серой зоне</span>, а в серой зоне и делаются деньги.',
+  s3p2:'QUEUE публикует скучную половину. Тираж — когда марка его называет, и слово <b>не назван</b> — когда не называет. Время очереди в вашем часовом поясе. Наценку перепродажи на одиннадцатый день, красит она марку или нет.',
+  s3p3:'Мы не берём процент с продаж, не ставим партнёрских ссылок и не продаём места в недельной таблице. Если марка отказывается назвать цифру — этот отказ и есть запись.',
+  s4h:'Метод',
+  h1t:'Смотрим, а не гадаем', h1d:'Каждая запись начинается с собственного канала марки — страницы магазина, рассылки, доски объявлений. Никаких утечек, репостов и скриншотов со скриншотов.',
+  h2t:'Тираж или молчание', h2d:'Назван тираж — идёт в таблицу. Не назван — в ячейке стоит «не назван», и это остаётся в архиве навсегда.',
+  h3d:'Одиннадцать дней спустя', h3t:'К каждому дропу возвращаемся на одиннадцатый день, когда перепродажа перестала возбуждаться и начала быть рынком.',
+  s5h:'Одно сообщение за девяносто минут до открытия очереди', cta3:'Подписаться',
+  fabout:'Календарь дропов с приложенными цифрами. Независимый, без инвесторов и без мест под размещение.',
+  fh1:'Календарь', fl1:'Эта неделя', fl2:'Архив 2024–26', fl3:'Марки А–Я',
+  fh2:'Цифры', fl4:'После дропа', fl5:'Индекс перепродажи', fl6:'Заметки о методе',
+  fh3:'Связь', fl7:'Прислать дроп', fl8:'Исправления', fl9:'Пресса',
+  fnote:'Берлин · Рига · Милан'
+};
+var EN = {};
+document.querySelectorAll('[data-i18n]').forEach(function (el) { EN[el.dataset.i18n] = el.innerHTML; });
+
+function setLang(l) {
+  var dict = l === 'ru' ? RU : EN;
+  document.querySelectorAll('[data-i18n]').forEach(function (el) {
+    var v = dict[el.dataset.i18n];
+    if (v !== undefined) el.innerHTML = v;
+  });
+  document.documentElement.lang = l;
+  document.documentElement.dataset.lang = l;
+  document.querySelectorAll('.lang button').forEach(function (b) {
+    b.setAttribute('aria-pressed', b.dataset.set === l ? 'true' : 'false');
+  });
+}
+document.querySelectorAll('.lang button').forEach(function (b) {
+  b.addEventListener('click', function () { setLang(b.dataset.set); });
+});
+</script>
+</body>
+</html>

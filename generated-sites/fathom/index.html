@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>Fathom — an eight-week apnea protocol</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=IBM+Plex+Mono:wght@400&family=Pixelify+Sans:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════════════════════════════
+   Дизайн-система SwimClub — styles.refero.design/style/d7a73e16-4b3e-4b9d-aef2-2c31a9db7457
+   :root ниже вставлен ДОСЛОВНО со вкладки CSS Variables.
+   ══════════════════════════════════════════════════════════════════ */
+:root {
+  /* Colors */
+  --color-tabloid-orange: #ff9e00;
+  --color-deep-capsule-navy: #020507;
+  --gradient-deep-capsule-navy: linear-gradient(rgb(106, 144, 176), rgb(65, 115, 158) 30%, rgb(18, 58, 92) 97%, rgb(2, 5, 7) 139%);
+  --color-ink-black: #000000;
+  --color-paper-white: #ffffff;
+  --color-cool-gray: #d2dce1;
+  --color-iron-gray: #666666;
+  --color-ash: #b3b3b3;
+  --color-smoke: #cccccc;
+
+  /* Typography — Font Families */
+  --font-px-grotesk: 'Px Grotesk', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-apercu-mono-pro: 'Apercu Mono Pro', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-swimclub-custom-pixelbitmap-face: 'Swimclub (custom pixel/bitmap face)', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* Typography — Scale */
+  --text-caption: 12px;
+  --leading-caption: 1.3;
+  --text-body-sm: 15px;
+  --leading-body-sm: 1.7;
+  --text-subheading: 21px;
+  --leading-subheading: 1.3;
+  --text-heading-sm: 31px;
+  --leading-heading-sm: 1.1;
+  --text-heading: 37px;
+  --leading-heading: 1.1;
+  --text-heading-lg: 52px;
+  --leading-heading-lg: 1.05;
+  --text-display: 74px;
+  --leading-display: 1.05;
+  --text-stat-numeral: 105px;
+  --leading-stat-numeral: 1;
+
+  /* Typography — Weights */
+  --font-weight-regular: 400;
+  --font-weight-bold: 700;
+
+  /* Spacing */
+  --spacing-unit: 4px;
+  --spacing-4: 4px;
+  --spacing-8: 8px;
+  --spacing-12: 12px;
+  --spacing-16: 16px;
+  --spacing-24: 24px;
+  --spacing-32: 32px;
+  --spacing-40: 40px;
+  --spacing-64: 64px;
+  --spacing-120: 120px;
+  --spacing-140: 140px;
+
+  /* Layout */
+  --page-max-width: 1200px;
+  --section-gap: 120px;
+  --card-padding: 32px;
+  --element-gap: 4px;
+
+  /* Named Radii */
+  --radius-tags: 0px;
+  --radius-cards: 0px;
+  --radius-images: 0px;
+  --radius-buttons: 0px;
+
+  /* Surfaces */
+  --surface-canvas-gray: #d2dce1;
+  --surface-paper: #ffffff;
+  --surface-orange-panel: #ff9e00;
+  --surface-capsule-black: #020507;
+}
+
+/* Подстановки шрифтов. Px Grotesk / Apercu Mono / Swimclub — кастомные;
+   из списка замен DESIGN.md кириллица есть только у Inter (Space Grotesk и
+   DM Sans её не имеют), моно — IBM Plex Mono (первый в списке замен),
+   пиксельный — Pixelify Sans (у VT323 и Press Start 2P кириллицы нет). */
+:root {
+  --font-body: 'Inter', var(--font-px-grotesk);
+  --font-mono: 'IBM Plex Mono', var(--font-apercu-mono-pro);
+  --font-pixel: 'Pixelify Sans', var(--font-swimclub-custom-pixelbitmap-face);
+  /* Водяной столб героя: те же четыре стопа из --gradient-deep-capsule-navy,
+     но в порядке скриншота (тёмное сверху → бледное снизу), а не токена. */
+  --gradient-water: linear-gradient(180deg,
+      #020507 0%, #041019 16%, #123a5c 46%, #41739e 72%, #6a90b0 87%, #b7c6d0 100%);
+}
+
+* { box-sizing: border-box; }
+html { -webkit-font-smoothing: antialiased; }
+body {
+  margin: 0;
+  background: var(--surface-paper);
+  color: var(--color-ink-black);
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: var(--font-weight-regular);
+  line-height: var(--leading-body-sm);
+}
+img, svg { display: block; }
+a { color: inherit; text-decoration: none; }
+h1, h2, h3, h4, p, ul { margin: 0; padding: 0; }
+ul { list-style: none; }
+
+/* ── общие примитивы системы ───────────────────────────────────── */
+.wrap { max-width: var(--page-max-width); margin: 0 auto; padding: 0 var(--spacing-32); }
+
+.lbl {                                   /* моно-микрокопия: метки, навигация, подписи */
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  font-weight: var(--font-weight-regular);
+}
+.lbl-15 { font-size: var(--text-body-sm); line-height: 1.2; }
+
+.pixel {                                 /* Swimclub-подстановка: логотип и гигантские цифры */
+  font-family: var(--font-pixel);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--leading-stat-numeral);
+}
+
+.btn {                                   /* CTA только контурная, заливки нет, радиус 0 */
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: var(--text-body-sm);
+  line-height: 1.1;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  padding: var(--spacing-12) var(--spacing-24);
+  border: 1px solid var(--color-ink-black);
+  border-radius: var(--radius-buttons);
+  background: transparent;
+  color: var(--color-ink-black);
+  cursor: pointer;
+  transition: background .12s linear, color .12s linear;
+}
+.btn:hover { background: var(--color-ink-black); color: var(--color-paper-white); }
+.btn-on-dark { border-color: var(--color-paper-white); color: var(--color-paper-white); }
+.btn-on-dark:hover { background: var(--color-paper-white); color: var(--color-ink-black); }
+
+.sec { padding: var(--section-gap) 0; }
+
+h2.head {
+  font-size: var(--text-heading);
+  line-height: var(--leading-heading);
+  font-weight: var(--font-weight-bold);
+}
+h3.sub {
+  font-size: var(--text-subheading);
+  line-height: var(--leading-subheading);
+  font-weight: var(--font-weight-bold);
+}
+p.body { font-size: var(--text-body-sm); line-height: var(--leading-body-sm); }
+p.body-lg { font-size: 17px; line-height: 1.7; }
+.muted { color: var(--color-iron-gray); }
+
+/* ── объявление + навигация ────────────────────────────────────── */
+.ann {                                   /* единственная доза оранжевого сверху */
+  background: var(--surface-orange-panel);
+  color: var(--color-ink-black);
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+nav {
+  background: var(--surface-paper);
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding: var(--spacing-24) var(--spacing-32);
+}
+nav .zone { display: flex; align-items: center; gap: var(--spacing-32); }
+nav .zone.right { justify-content: flex-end; }
+nav a:hover { text-decoration: underline; text-underline-offset: 4px; }
+.mark { font-family: var(--font-pixel); font-weight: var(--font-weight-bold); font-size: 24px; letter-spacing: 0.04em; }
+.lang { display: flex; align-items: center; gap: var(--spacing-4); }
+.lang button {
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  color: var(--color-ash);
+}
+.lang button[aria-pressed="true"] { color: var(--color-ink-black); }
+.lang span { color: var(--color-ash); font-family: var(--font-mono); font-size: var(--text-caption); }
+
+/* ── герой ─────────────────────────────────────────────────────── */
+.hero {
+  background: var(--gradient-water);
+  color: var(--color-paper-white);
+  padding: var(--spacing-64) 0 0;
+}
+.hero-in {
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+  padding: 0 var(--spacing-32);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-40);
+  align-items: start;
+  min-height: 660px;
+}
+.hero h1 {
+  font-size: var(--text-display);
+  line-height: var(--leading-display);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: -0.01em;
+  margin-top: var(--spacing-40);
+}
+.hero p { max-width: 30em; margin-top: var(--spacing-24); }
+.hero .btn { margin-top: var(--spacing-32); }
+.hero .kicker { color: var(--color-cool-gray); }
+.gauge { width: 100%; max-width: 460px; margin: 0 auto; }
+.gauge .gm { font-family: var(--font-mono); letter-spacing: 0.02em; }
+.gauge-cap { text-align: center; margin-top: var(--spacing-16); color: var(--color-cool-gray); }
+
+/* ── полоса доверия ────────────────────────────────────────────── */
+.credbar { display: grid; grid-template-columns: repeat(4, 1fr); }
+.credbar > div { padding: var(--spacing-32); border-left: 1px solid var(--color-ink-black); }
+.credbar > div:first-child { border-left: none; padding-left: 0; }
+.credbar > div:last-child { padding-right: 0; }
+.credbar .ico { margin-bottom: var(--spacing-24); }
+.credbar .lbl { margin-bottom: var(--spacing-8); }
+
+/* ── полоса-заголовок по центру ────────────────────────────────── */
+.band-gray { background: var(--surface-canvas-gray); }
+.centered { text-align: center; max-width: 760px; margin: 0 auto; }
+.centered .lbl { margin-bottom: var(--spacing-24); }
+.centered p { margin-top: var(--spacing-24); }
+
+/* ── оранжевая панель статистики ───────────────────────────────── */
+.stats { background: var(--surface-orange-panel); display: grid; grid-template-columns: repeat(3, 1fr); }
+.stats > div { padding: var(--spacing-64) var(--spacing-40); border-left: 1px solid var(--color-paper-white); }
+.stats > div:first-child { border-left: none; }
+.stats .num { font-size: var(--text-stat-numeral); margin: var(--spacing-24) 0 var(--spacing-16); }
+.stats p { max-width: 22em; }
+
+/* ── карточки-пунктиры ─────────────────────────────────────────── */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--element-gap); }
+.card {
+  background: var(--surface-paper);
+  border: 1px dashed var(--color-smoke);
+  border-radius: var(--radius-cards);
+  padding: var(--card-padding);
+  display: grid;
+  grid-template-columns: 24px 1fr 16px;
+  gap: var(--spacing-24);
+  align-items: start;
+}
+.card .ttl { margin-bottom: var(--spacing-4); }
+.card .dash { width: 16px; height: 1px; background: var(--color-ink-black); margin-top: 14px; }
+.sechead { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: var(--spacing-40); }
+.sechead h2 { max-width: 14em; }
+
+/* ── чёрная полоса с профилем погружения ───────────────────────── */
+.band-black { background: var(--surface-capsule-black); color: var(--color-paper-white); }
+.profile { width: 100%; }
+.profile .pm { font-family: var(--font-mono); letter-spacing: 0.02em; fill: var(--color-cool-gray); }
+.band-black .row { display: flex; justify-content: space-between; margin-bottom: var(--spacing-40); }
+
+/* ── список тегов и таблица требований ─────────────────────────── */
+.tags { display: flex; flex-wrap: wrap; gap: var(--spacing-16) var(--spacing-24); margin-top: var(--spacing-16); }
+.tags span { font-family: var(--font-mono); font-size: var(--text-body-sm); letter-spacing: 0.02em; text-transform: uppercase; }
+.table { margin-top: var(--spacing-64); border-top: 1px solid var(--color-ink-black); }
+.table .r { display: grid; grid-template-columns: 260px 1fr; gap: var(--spacing-32); padding: var(--spacing-24) 0; border-bottom: 1px solid var(--color-smoke); }
+.table .r:last-child { border-bottom: 1px solid var(--color-ink-black); }
+
+/* ── финальный призыв и подвал ─────────────────────────────────── */
+.close { text-align: center; }
+.close .lbl { margin-bottom: var(--spacing-24); }
+.close h2 { font-size: var(--text-heading-lg); line-height: var(--leading-heading-lg); font-weight: var(--font-weight-bold); }
+.close .btn { margin-top: var(--spacing-32); }
+.close .note { margin-top: var(--spacing-24); }
+footer { background: var(--surface-canvas-gray); padding: var(--spacing-64) 0 var(--spacing-32); }
+.fcols { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: var(--spacing-40); }
+.fcols h4 { margin-bottom: var(--spacing-16); }
+.fcols li { margin-bottom: var(--spacing-8); }
+.fcols li a { font-size: var(--text-body-sm); }
+.fcols li a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.fmark { font-family: var(--font-pixel); font-weight: var(--font-weight-bold); font-size: 24px; letter-spacing: 0.04em; margin-bottom: var(--spacing-16); }
+.flegal { display: flex; justify-content: space-between; margin-top: var(--spacing-64); padding-top: var(--spacing-24); border-top: 1px solid var(--color-ink-black); }
+</style>
+</head>
+<body>
+
+<div class="ann lbl"><span data-i18n="ann">Spring line opens 4 May · Kaş, Turkey · 12 places, 9 taken</span></div>
+
+<nav>
+  <div class="zone lbl">
+    <a href="#protocol" data-i18n="nav1">Protocol</a>
+    <a href="#method" data-i18n="nav2">Method</a>
+    <a href="#safety" data-i18n="nav3">Safety</a>
+  </div>
+  <div class="mark">FATHOM</div>
+  <div class="zone right lbl">
+    <a href="#apply" data-i18n="nav4">Logbook</a>
+    <div class="lang">
+      <button data-set="en" aria-pressed="true">EN</button><span>/</span><button data-set="ru" aria-pressed="false">RU</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ── герой: водяной столб, изолированный «продукт» справа ─────── -->
+<section class="hero">
+  <div class="hero-in">
+    <div>
+      <div class="lbl kicker" data-i18n="hk">Eight weeks · four supervised sessions</div>
+      <h1 data-i18n="h1">Depth is trained at the surface.</h1>
+      <p class="body-lg" data-i18n="hp">Fathom is an apnea protocol, not a course. Dry tables at home, a filmed breathe-up, and four sessions on the line — with a diving physician reading the same six numbers before every descent.</p>
+      <a class="btn btn-on-dark" href="#protocol" data-i18n="hb">Read the protocol</a>
+    </div>
+    <div>
+      <svg class="gauge" viewBox="0 0 420 470" role="img" aria-label="Depth gauge reading 38.4 metres">
+        <circle cx="210" cy="210" r="196" fill="none" stroke="#ffffff" stroke-width="1" opacity=".35"/>
+        <circle cx="210" cy="210" r="186" fill="none" stroke="#ffffff" stroke-width="1.6"/>
+        <circle cx="210" cy="210" r="120" fill="none" stroke="#ffffff" stroke-width="1" opacity=".3"/>
+<line x1="64.5" y1="294.0" x2="81.8" y2="284.0" stroke="#fff" stroke-width="1.6" opacity="1"/>
+<line x1="56.5" y1="278.3" x2="62.9" y2="275.5" stroke="#fff" stroke-width="1" opacity=".45"/>
+<line x1="50.2" y1="261.9" x2="56.9" y2="259.8" stroke="#fff" stroke-width="1" opacity=".45"/>
+<line x1="45.7" y1="244.9" x2="52.5" y2="243.5" stroke="#fff" stroke-width="1" opacity=".45"/>
+<line x1="42.9" y1="227.6" x2="49.9" y2="226.8" stroke="#fff" stroke-width="1" opacity=".45"/>
+<line x1="42.0" y1="210.0" x2="55.0" y2="210.0" stroke="#fff" stroke-width="1" opacity=".75"/>
+<line x1="42.9" y1="192.4" x2="49.9" y2="193.2" stroke="#fff" stroke-width="1" opacity=".45"/>
+<line x1="45.7" y1="175.1" x2="52.5" y2="176.5" stroke="#fff" stroke-width="1" opacity=".45"/>
+<line x1="50.2" y1="158.1" x2="56.9" y2="160.2" stroke="#fff" stroke-width="1" opacity=".45"/>
+<line x1="56.5" y1="141.7" x2="62.9" y2="144.5" stroke="#fff" stroke-width="1" opacity=".45"/>
+<line x1="64.5" y1="126.0" x2="81.8" y2="136.0" stroke="#fff" stroke-width="1.6" opacity="1"/>
+<line x1="74.1" y1="111.3" x2="79.7" y2="115.4" stroke="#fff" stroke-width="1" opacity=".45"/>
+<line x1="85.2" y1="97.6" x2="90.4" y2="102.3" stroke="#fff" stroke-width="1" opacity=".45"/>
+<line x1="97.6" y1="85.2" x2="102.3" y2="90.4" stroke="#fff" stroke-width="1" opacity=".45"/>
+<line x1="111.3" y1="74.1" x2="115.4" y2="79.7" stroke="#fff" stroke-width="1" opacity=".45"/>
+<line x1="126.0" y1="64.5" x2="132.5" y2="75.8" stroke="#fff" stroke-width="1" opacity=".75"/>
+<line x1="141.7" y1="56.5" x2="144.5" y2="62.9" stroke="#fff" stroke-width="1" opacity=".45"/>
+<line x1="158.1" y1="50.2" x2="160.2" y2="56.9" stroke="#fff" stroke-width="1" opacity=".45"/>
+<line x1="175.1" y1="45.7" x2="176.5" y2="52.5" stroke="#fff" stroke-width="1" opacity=".45"/>
+<line x1="192.4" y1="42.9" x2="193.2" y2="49.9" stroke="#fff" stroke-width="1" opacity=".45"/>
+<line x1="210.0" y1="42.0" x2="210.0" y2="62.0" stroke="#fff" stroke-width="1.6" opacity="1"/>
+<line x1="227.6" y1="42.9" x2="226.8" y2="49.9" stroke="#fff" stroke-width="1" opacity=".45"/>
+<line x1="244.9" y1="45.7" x2="243.5" y2="52.5" stroke="#fff" stroke-width="1" opacity=".45"/>
+<line x1="261.9" y1="50.2" x2="259.8" y2="56.9" stroke="#fff" stroke-width="1" opacity=".45"/>
+<line x1="278.3" y1="56.5" x2="275.5" y2="62.9" stroke="#fff" stroke-width="1" opacity=".45"/>
+<line x1="294.0" y1="64.5" x2="287.5" y2="75.8" stroke="#fff" stroke-width="1" opacity=".75"/>
+<line x1="308.7" y1="74.1" x2="304.6" y2="79.7" stroke="#fff" stroke-width="1" opacity=".45"/>
+<line x1="322.4" y1="85.2" x2="317.7" y2="90.4" stroke="#fff" stroke-width="1" opacity=".45"/>
+<line x1="334.8" y1="97.6" x2="329.6" y2="102.3" stroke="#fff" stroke-width="1" opacity=".45"/>
+<line x1="345.9" y1="111.3" x2="340.3" y2="115.4" stroke="#fff" stroke-width="1" opacity=".45"/>
+<line x1="355.5" y1="126.0" x2="338.2" y2="136.0" stroke="#fff" stroke-width="1.6" opacity="1"/>
+<line x1="363.5" y1="141.7" x2="357.1" y2="144.5" stroke="#fff" stroke-width="1" opacity=".45"/>
+<line x1="369.8" y1="158.1" x2="363.1" y2="160.2" stroke="#fff" stroke-width="1" opacity=".45"/>
+<line x1="374.3" y1="175.1" x2="367.5" y2="176.5" stroke="#fff" stroke-width="1" opacity=".45"/>
+<line x1="377.1" y1="192.4" x2="370.1" y2="193.2" stroke="#fff" stroke-width="1" opacity=".45"/>
+<line x1="378.0" y1="210.0" x2="365.0" y2="210.0" stroke="#fff" stroke-width="1" opacity=".75"/>
+<line x1="377.1" y1="227.6" x2="370.1" y2="226.8" stroke="#fff" stroke-width="1" opacity=".45"/>
+<line x1="374.3" y1="244.9" x2="367.5" y2="243.5" stroke="#fff" stroke-width="1" opacity=".45"/>
+<line x1="369.8" y1="261.9" x2="363.1" y2="259.8" stroke="#fff" stroke-width="1" opacity=".45"/>
+<line x1="363.5" y1="278.3" x2="357.1" y2="275.5" stroke="#fff" stroke-width="1" opacity=".45"/>
+<line x1="355.5" y1="294.0" x2="338.2" y2="284.0" stroke="#fff" stroke-width="1.6" opacity="1"/>
+<line x1="345.9" y1="308.7" x2="340.3" y2="304.6" stroke="#fff" stroke-width="1" opacity=".45"/>
+<line x1="334.8" y1="322.4" x2="329.6" y2="317.7" stroke="#fff" stroke-width="1" opacity=".45"/>
+<line x1="322.4" y1="334.8" x2="317.7" y2="329.6" stroke="#fff" stroke-width="1" opacity=".45"/>
+<line x1="308.7" y1="345.9" x2="304.6" y2="340.3" stroke="#fff" stroke-width="1" opacity=".45"/>
+<line x1="294.0" y1="355.5" x2="287.5" y2="344.2" stroke="#fff" stroke-width="1" opacity=".75"/>
+<line x1="278.3" y1="363.5" x2="275.5" y2="357.1" stroke="#fff" stroke-width="1" opacity=".45"/>
+<line x1="261.9" y1="369.8" x2="259.8" y2="363.1" stroke="#fff" stroke-width="1" opacity=".45"/>
+<line x1="244.9" y1="374.3" x2="243.5" y2="367.5" stroke="#fff" stroke-width="1" opacity=".45"/>
+<line x1="227.6" y1="377.1" x2="226.8" y2="370.1" stroke="#fff" stroke-width="1" opacity=".45"/>
+<line x1="210.0" y1="378.0" x2="210.0" y2="358.0" stroke="#fff" stroke-width="1.6" opacity="1"/>
+<text x="97.4" y="279.0" fill="#fff" font-size="13" text-anchor="middle" class="gm">0</text>
+<text x="97.4" y="149.0" fill="#fff" font-size="13" text-anchor="middle" class="gm">10</text>
+<text x="210.0" y="84.0" fill="#fff" font-size="13" text-anchor="middle" class="gm">20</text>
+<text x="322.6" y="149.0" fill="#fff" font-size="13" text-anchor="middle" class="gm">30</text>
+<text x="322.6" y="279.0" fill="#fff" font-size="13" text-anchor="middle" class="gm">40</text>
+<text x="210.0" y="344.0" fill="#fff" font-size="13" text-anchor="middle" class="gm">50</text>
+<line x1="324.7" y1="297.1" x2="351.8" y2="317.6" stroke="#d2dce1" stroke-width="1.6" stroke-dasharray="3 3"/>
+<line x1="185.6" y1="200.9" x2="339.3" y2="258.1" stroke="#fff" stroke-width="2.4"/>
+        <circle cx="210" cy="210" r="7" fill="#ffffff"/>
+        <!-- окно LCD -->
+        <rect x="140" y="238" width="140" height="52" fill="#d2dce1"/>
+        <text x="153" y="277" fill="#020507" font-size="34" class="gm">38.4</text>
+        <text x="253" y="277" fill="#020507" font-size="16" class="gm">M</text>
+        <text x="140" y="316" fill="#ffffff" font-size="12" class="gm" opacity=".7">MAX 41.2</text>
+        <text x="280" y="316" fill="#ffffff" font-size="12" class="gm" opacity=".7" text-anchor="end">02:24</text>
+        <!-- крепление -->
+        <line x1="210" y1="14" x2="210" y2="24" stroke="#ffffff" stroke-width="1.6"/>
+        <rect x="186" y="404" width="48" height="14" fill="none" stroke="#ffffff" stroke-width="1.6"/>
+      </svg>
+      <div class="lbl gauge-cap" data-i18n="gc">Line 03 · constant weight · session 14 of 16</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── полоса доверия ───────────────────────────────────────────── -->
+<section class="sec" style="padding:var(--spacing-64) 0;">
+  <div class="wrap">
+    <div class="credbar">
+      <div>
+        <svg class="ico" width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="#000" stroke-width="1.2">
+          <circle cx="9" cy="9" r="4"/><circle cx="19" cy="19" r="4"/><line x1="12" y1="12" x2="16" y2="16"/>
+        </svg>
+        <div class="lbl" data-i18n="c1l">One to one</div>
+        <p class="body" data-i18n="c1">A safety diver meets every descent at ten metres. No exceptions, no solo lines.</p>
+      </div>
+      <div>
+        <svg class="ico" width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="#000" stroke-width="1.2">
+          <rect x="4" y="4" width="20" height="20"/><line x1="14" y1="9" x2="14" y2="19"/><line x1="9" y1="14" x2="19" y2="14"/>
+        </svg>
+        <div class="lbl" data-i18n="c2l">Read by a physician</div>
+        <p class="body" data-i18n="c2">Dr. Ilse Marchand signs off every intake and every file at week eight.</p>
+      </div>
+      <div>
+        <svg class="ico" width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="#000" stroke-width="1.2">
+          <line x1="5" y1="21" x2="23" y2="21"/><line x1="8" y1="21" x2="8" y2="13"/><line x1="14" y1="21" x2="14" y2="8"/><line x1="20" y1="21" x2="20" y2="16"/>
+        </svg>
+        <div class="lbl" data-i18n="c3l">341 descents logged</div>
+        <p class="body" data-i18n="c3">Every dive of the 2025 season written down, timed and countersigned.</p>
+      </div>
+      <div>
+        <svg class="ico" width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="#000" stroke-width="1.2">
+          <polygon points="14,4 22,14 14,24 6,14"/><line x1="6" y1="14" x2="22" y2="14"/>
+        </svg>
+        <div class="lbl" data-i18n="c4l">Pool, then sea</div>
+        <p class="body" data-i18n="c4">Six weeks in a 25-metre pool near you, two weekends on the line in Kaş.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── полоса-заголовок ─────────────────────────────────────────── -->
+<section class="sec band-gray" id="method">
+  <div class="wrap centered">
+    <div class="lbl" data-i18n="m0">The method</div>
+    <h2 class="head" data-i18n="m1">Apnea is a measurement problem.</h2>
+    <p class="body-lg" data-i18n="m2">Most divers stall because they train sensation instead of data — a good day feels like progress and a bad one like failure. We record the same six numbers every session and let the curve decide when you are allowed to go deeper.</p>
+  </div>
+</section>
+
+<!-- ── оранжевая панель статистики ──────────────────────────────── -->
+<section class="stats">
+  <div>
+    <div class="lbl" data-i18n="s1l">Dry static at intake</div>
+    <div class="pixel num">2:40</div>
+    <p class="body" data-i18n="s1">Median hold of the divers who arrive with one course behind them.</p>
+  </div>
+  <div>
+    <div class="lbl" data-i18n="s2l">Dry static at week eight</div>
+    <div class="pixel num">5:10</div>
+    <p class="body" data-i18n="s2">Median of the last three cohorts, measured dry, on the same protocol.</p>
+  </div>
+  <div>
+    <div class="lbl" data-i18n="s3l">Depth on the closing line</div>
+    <div class="pixel num">38</div>
+    <p class="body" data-i18n="s3">Median personal best in metres, constant weight, on the final session.</p>
+  </div>
+</section>
+
+<!-- ── восемь недель: карточки-пунктиры ─────────────────────────── -->
+<section class="sec" id="protocol">
+  <div class="wrap">
+    <div class="sechead">
+      <h2 class="head" data-i18n="p0">Eight weeks, written down in advance.</h2>
+      <div class="lbl muted" data-i18n="p00">Protocol 04 · revision March 2026</div>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1.2"><rect x="3" y="4" width="18" height="16"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="9" y1="10" x2="9" y2="20"/><line x1="15" y1="10" x2="15" y2="20"/></svg>
+        <div>
+          <h3 class="sub ttl" data-i18n="w1t">Week 01–02 · Dry tables</h3>
+          <p class="body muted" data-i18n="w1d">CO₂ and O₂ tables at home, twice a day, eleven minutes. Nothing in the water yet.</p>
+        </div>
+        <div class="dash"></div>
+      </div>
+      <div class="card">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1.2"><circle cx="12" cy="12" r="9"/><path d="M3 13c3 0 3-3 6-3s3 3 6 3 3-3 6-3"/></svg>
+        <div>
+          <h3 class="sub ttl" data-i18n="w2t">Week 03 · Ventilation audit</h3>
+          <p class="body muted" data-i18n="w2d">We film your breathe-up and cut it down to four minutes. Most people lose a minute of anxiety here.</p>
+        </div>
+        <div class="dash"></div>
+      </div>
+      <div class="card">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1.2"><path d="M12 4v7"/><path d="M12 11c0 5-3 6-5 6s-2-2-2-5"/><path d="M12 11c0 5 3 6 5 6s2-2 2-5"/></svg>
+        <div>
+          <h3 class="sub ttl" data-i18n="w3t">Week 04 · Flexibility</h3>
+          <p class="body muted" data-i18n="w3d">Rib-cage and diaphragm work, never past the range the physician marked at intake.</p>
+        </div>
+        <div class="dash"></div>
+      </div>
+      <div class="card">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1.2"><path d="M4 12h6"/><path d="M14 12h6"/><circle cx="12" cy="12" r="2"/><path d="M12 4v4"/><path d="M12 16v4"/></svg>
+        <div>
+          <h3 class="sub ttl" data-i18n="w4t">Week 05 · Equalisation</h3>
+          <p class="body muted" data-i18n="w4d">Mouthfill on dry land until it is boring, then the same drill at five metres, head down.</p>
+        </div>
+        <div class="dash"></div>
+      </div>
+      <div class="card">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1.2"><line x1="12" y1="3" x2="12" y2="21"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="14" x2="16" y2="14"/><line x1="8" y1="20" x2="16" y2="20"/></svg>
+        <div>
+          <h3 class="sub ttl" data-i18n="w5t">Week 06–07 · The line</h3>
+          <p class="body muted" data-i18n="w5d">Two supervised weekends. Free immersion first, constant weight after, lanyard on both.</p>
+        </div>
+        <div class="dash"></div>
+      </div>
+      <div class="card">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1.2"><rect x="4" y="3" width="16" height="18"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="13" y2="16"/></svg>
+        <div>
+          <h3 class="sub ttl" data-i18n="w6t">Week 08 · Assessment</h3>
+          <p class="body muted" data-i18n="w6d">One measured descent, one static, and a written file you keep — your numbers, not ours.</p>
+        </div>
+        <div class="dash"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── чёрная полоса: профиль погружения ────────────────────────── -->
+<section class="sec band-black">
+  <div class="wrap">
+    <div class="row lbl">
+      <span data-i18n="dp1">Descent profile · session 14</span>
+      <span data-i18n="dp2">Constant weight · 38.4 m · 02:24</span>
+    </div>
+    <svg class="profile" viewBox="0 0 1136 380" role="img" aria-label="Depth against time for a 38.4 metre descent">
+      <line x1="70" y1="30" x2="70" y2="330" stroke="#666666" stroke-width="1"/>
+      <line x1="70" y1="30" x2="1110" y2="30" stroke="#666666" stroke-width="1"/>
+      <line x1="70" y1="105" x2="1110" y2="105" stroke="#666666" stroke-width="1" stroke-dasharray="2 6"/>
+      <line x1="70" y1="180" x2="1110" y2="180" stroke="#666666" stroke-width="1" stroke-dasharray="2 6"/>
+      <line x1="70" y1="255" x2="1110" y2="255" stroke="#666666" stroke-width="1" stroke-dasharray="2 6"/>
+      <line x1="70" y1="330" x2="1110" y2="330" stroke="#666666" stroke-width="1"/>
+      <text x="56" y="35" class="pm" font-size="12" text-anchor="end">0</text>
+      <text x="56" y="110" class="pm" font-size="12" text-anchor="end">10</text>
+      <text x="56" y="185" class="pm" font-size="12" text-anchor="end">20</text>
+      <text x="56" y="260" class="pm" font-size="12" text-anchor="end">30</text>
+      <text x="56" y="335" class="pm" font-size="12" text-anchor="end">40</text>
+      <text x="70" y="366" class="pm" font-size="12">00:00</text>
+      <text x="380" y="366" class="pm" font-size="12" text-anchor="middle">00:40</text>
+      <text x="590" y="366" class="pm" font-size="12" text-anchor="middle">01:12</text>
+      <text x="880" y="366" class="pm" font-size="12" text-anchor="middle">01:55</text>
+      <text x="1110" y="366" class="pm" font-size="12" text-anchor="end">02:24</text>
+      <path d="M70 30 L120 34 L260 150 L430 268 L560 314 L590 318 L620 314 L760 262 L930 140 L1070 36 L1110 30"
+            fill="none" stroke="#ffffff" stroke-width="2"/>
+      <line x1="590" y1="30" x2="590" y2="318" stroke="#ffffff" stroke-width="1" stroke-dasharray="3 4" opacity=".5"/>
+      <circle cx="590" cy="318" r="4" fill="#ffffff"/>
+      <text x="606" y="310" class="pm" fill="#ffffff" font-size="13">TURN 38.4 M</text>
+      <circle cx="380" cy="228" r="3.5" fill="none" stroke="#ffffff" stroke-width="1.5"/>
+      <text x="392" y="222" class="pm" font-size="12">FREEFALL FROM 22 M</text>
+      <circle cx="880" cy="176" r="3.5" fill="none" stroke="#ffffff" stroke-width="1.5"/>
+      <text x="892" y="162" class="pm" font-size="12">SAFETY DIVER MEETS AT 20 M</text>
+    </svg>
+  </div>
+</section>
+
+<!-- ── набор тренировки + требования ────────────────────────────── -->
+<section class="sec" id="safety">
+  <div class="wrap">
+    <div class="lbl" data-i18n="t0">Trained with</div>
+    <div class="tags">
+      <span>CO₂ tables</span><span>O₂ tables</span><span data-i18n="tg3">Dry static</span><span>FRC dives</span>
+      <span>Mouthfill</span><span data-i18n="tg6">Reverse packing</span><span data-i18n="tg7">Rescue drill</span><span data-i18n="tg8">Surface protocol</span>
+    </div>
+    <div class="table">
+      <div class="r">
+        <div class="lbl" data-i18n="r1l">Required</div>
+        <p class="body" data-i18n="r1">A medical certificate less than six months old, one previous freediving course of any level, and a two-minute dry static you can repeat on demand.</p>
+      </div>
+      <div class="r">
+        <div class="lbl" data-i18n="r2l">Not required</div>
+        <p class="body" data-i18n="r2">A personal best, a monofin, a competition card, or the ability to hold your breath longer than the person next to you.</p>
+      </div>
+      <div class="r">
+        <div class="lbl" data-i18n="r3l">Grounds to stop</div>
+        <p class="body" data-i18n="r3">Any squeeze, any blackout, any equalisation failure at depth, or a resting heart rate the physician does not like. The line stops for all four, and the week is repeated.</p>
+      </div>
+      <div class="r">
+        <div class="lbl" data-i18n="r4l">What you leave with</div>
+        <p class="body" data-i18n="r4">A file: intake measurements, eight weeks of tables, four session sheets, the final descent profile, and a written plan for the season after.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── финальный призыв ─────────────────────────────────────────── -->
+<section class="sec band-gray" id="apply">
+  <div class="wrap close">
+    <div class="lbl" data-i18n="f0">Next line</div>
+    <h2 data-i18n="f1">4 May, Kaş. Twelve places, nine taken.</h2>
+    <a class="btn" href="#apply" data-i18n="f2">Request the intake file</a>
+    <p class="body muted note" data-i18n="f3">Applications close 14 March. The physician's review takes about a week and is part of the price.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="fcols">
+      <div>
+        <div class="fmark">FATHOM</div>
+        <p class="body muted" style="max-width:26em" data-i18n="fa">A small apnea programme run out of a 25-metre pool and two weekends of open water a year. Founded 2021.</p>
+      </div>
+      <div>
+        <h4 class="lbl" data-i18n="fh1">Programme</h4>
+        <ul>
+          <li><a href="#protocol" data-i18n="fl1">The eight weeks</a></li>
+          <li><a href="#method" data-i18n="fl2">Method</a></li>
+          <li><a href="#safety" data-i18n="fl3">Requirements</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="lbl" data-i18n="fh2">Safety</h4>
+        <ul>
+          <li><a href="#safety" data-i18n="fl4">Medical review</a></li>
+          <li><a href="#safety" data-i18n="fl5">On the line</a></li>
+          <li><a href="#safety" data-i18n="fl6">Incident log</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="lbl" data-i18n="fh3">Contact</h4>
+        <ul>
+          <li><a href="#apply" data-i18n="fl7">Apply</a></li>
+          <li><a href="#" data-i18n="fl8">Write to us</a></li>
+          <li><a href="#" data-i18n="fl9">Where we dive</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="flegal lbl">
+      <span>© 2026 Fathom</span>
+      <span data-i18n="fn">Kaş · Antalya · never dive alone</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ── RU/EN. Английский — исходный, русский — перевод под него ── */
+var RU = {
+  ann:'Весенняя линия открывается 4 мая · Каш, Турция · 12 мест, 9 занято',
+  nav1:'Протокол', nav2:'Метод', nav3:'Безопасность', nav4:'Журнал',
+  hk:'Восемь недель · четыре сессии под наблюдением',
+  h1:'Глубину тренируют на поверхности.',
+  hp:'Fathom — это протокол апноэ, а не курс. Сухие таблицы дома, снятая на видео продышка и четыре сессии на тросе — с врачом-физиологом, который читает одни и те же шесть чисел перед каждым погружением.',
+  hb:'Читать протокол',
+  gc:'Трос 03 · постоянный вес · сессия 14 из 16',
+  c1l:'Один на одного', c1:'Страхующий встречает каждое всплытие на десяти метрах. Без исключений и без одиночных тросов.',
+  c2l:'Читает врач', c2:'Ильзе Маршан подписывает каждый вход в программу и каждое дело на восьмой неделе.',
+  c3l:'341 погружение в журнале', c3:'Каждое погружение сезона 2025 записано, засечено по времени и подписано двумя людьми.',
+  c4l:'Сначала бассейн', c4:'Шесть недель в 25-метровом бассейне рядом с вами, два уик-энда на тросе в Каше.',
+  m0:'Метод',
+  m1:'Апноэ — это задача на измерение.',
+  m2:'Большинство ныряльщиков встаёт на месте, потому что тренирует ощущение вместо данных: хороший день кажется прогрессом, плохой — провалом. Мы записываем одни и те же шесть чисел каждую сессию и позволяем кривой решать, когда вам можно глубже.',
+  s1l:'Сухая задержка на входе', s1:'Медиана у тех, кто приходит с одним пройденным курсом за плечами.',
+  s2l:'Сухая задержка на восьмой неделе', s2:'Медиана трёх последних наборов, замер сухой, по тому же протоколу.',
+  s3l:'Глубина на закрывающем тросе', s3:'Медианный личный рекорд в метрах, постоянный вес, на финальной сессии.',
+  p0:'Восемь недель, расписанных заранее.', p00:'Протокол 04 · редакция от марта 2026',
+  w1t:'Недели 01–02 · Сухие таблицы', w1d:'Таблицы на CO₂ и O₂ дома, дважды в день, одиннадцать минут. В воду пока не заходим.',
+  w2t:'Неделя 03 · Разбор продышки', w2d:'Снимаем вашу продышку на видео и режем её до четырёх минут. Обычно здесь теряется минута тревоги.',
+  w3t:'Неделя 04 · Растяжка', w3d:'Работа с грудной клеткой и диафрагмой, никогда за пределами амплитуды, отмеченной врачом на входе.',
+  w4t:'Неделя 05 · Продувка', w4d:'Mouthfill на суше до полной скуки, потом то же упражнение на пяти метрах, головой вниз.',
+  w5t:'Недели 06–07 · Трос', w5d:'Два уик-энда под наблюдением. Сначала free immersion, потом постоянный вес, ланьярд на обоих.',
+  w6t:'Неделя 08 · Аттестация', w6d:'Одно замеренное погружение, одна задержка и письменное дело, которое остаётся у вас: ваши числа, а не наши.',
+  dp1:'Профиль погружения · сессия 14', dp2:'Постоянный вес · 38,4 м · 02:24',
+  t0:'Тренируется через',
+  tg3:'Сухая задержка', tg6:'Обратная упаковка', tg7:'Спасательная отработка', tg8:'Протокол всплытия',
+  r1l:'Обязательно', r1:'Медицинская справка не старше шести месяцев, один любой пройденный курс фридайвинга и двухминутная сухая задержка, которую вы можете повторить по требованию.',
+  r2l:'Не обязательно', r2:'Личный рекорд, моноласта, спортивная карточка или умение задержать дыхание дольше, чем сосед по бортику.',
+  r3l:'Основания остановиться', r3:'Любой сквиз, любая потеря сознания, любой отказ продувки на глубине или пульс покоя, который не нравится врачу. Трос останавливается по всем четырём, неделя повторяется.',
+  r4l:'С чем вы уходите', r4:'Дело: замеры на входе, восемь недель таблиц, четыре протокола сессий, финальный профиль погружения и письменный план на сезон после.',
+  f0:'Ближайшая линия', f1:'4 мая, Каш. Двенадцать мест, девять заняты.',
+  f2:'Запросить дело для входа', f3:'Заявки закрываются 14 марта. Разбор врача занимает около недели и входит в стоимость.',
+  fa:'Небольшая программа по апноэ, которая живёт в 25-метровом бассейне и двух уик-эндах открытой воды в год. Основана в 2021-м.',
+  fh1:'Программа', fl1:'Восемь недель', fl2:'Метод', fl3:'Требования',
+  fh2:'Безопасность', fl4:'Разбор врача', fl5:'На тросе', fl6:'Журнал происшествий',
+  fh3:'Связь', fl7:'Подать заявку', fl8:'Написать нам', fl9:'Где мы ныряем',
+  fn:'Каш · Анталья · никогда не ныряй один'
+};
+var EN = {};
+document.querySelectorAll('[data-i18n]').forEach(function (el) { EN[el.dataset.i18n] = el.innerHTML; });
+
+function setLang(l) {
+  var dict = l === 'ru' ? RU : EN;
+  document.querySelectorAll('[data-i18n]').forEach(function (el) {
+    var v = dict[el.dataset.i18n];
+    if (v !== undefined) el.innerHTML = v;
+  });
+  document.documentElement.lang = l;
+  document.documentElement.dataset.lang = l;
+  document.querySelectorAll('.lang button').forEach(function (b) {
+    b.setAttribute('aria-pressed', b.dataset.set === l ? 'true' : 'false');
+  });
+}
+document.querySelectorAll('.lang button').forEach(function (b) {
+  b.addEventListener('click', function () { setLang(b.dataset.set); });
+});
+</script>
+</body>
+</html>

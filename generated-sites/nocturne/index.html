@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>NOCTURNE — one menu, one sitting</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ─────────────────────────────────────────────────────────────
+   Дизайн-система: Limón (refero f1b6a7d6) — tokens.css дословно
+   ───────────────────────────────────────────────────────────── */
+:root {
+  /* Colors */
+  --color-black-olive: #1d0b0d;
+  --color-forest-ink: #103b15;
+  --color-lemon-zest: #f7ea48;
+  --color-warm-cream: #fcf9f0;
+  --color-sage-mist: #dbe2dc;
+  --color-pure-white: #ffffff;
+
+  /* Typography — Font Families */
+  --font-venuscom: 'VenusCom', 'DM Sans', 'Outfit', 'Plus Jakarta Sans', sans-serif;
+
+  /* Typography — Scale */
+  --text-caption: 14px;      --leading-caption: 1.45;    --tracking-caption: 0.84px;
+  --text-body-sm: 16px;      --leading-body-sm: 1.37;    --tracking-body-sm: 0.64px;
+  --text-body-lg: 20px;      --leading-body-lg: 1.25;    --tracking-body-lg: 0.4px;
+  --text-subheading: 26px;   --leading-subheading: 1.2;  --tracking-subheading: 0.52px;
+  --text-heading-sm: 30px;   --leading-heading-sm: 1.15; --tracking-heading-sm: 0.9px;
+  --text-heading: 36px;      --leading-heading: 1.15;    --tracking-heading: 1.08px;
+  --text-heading-lg: 46px;   --leading-heading-lg: 1.1;  --tracking-heading-lg: 1.84px;
+  --text-display: 68px;      --leading-display: 1.01;    --tracking-display: 4.08px;
+  --text-display-xl: 75px;   --leading-display-xl: 1;    --tracking-display-xl: 4.5px;
+
+  /* Typography — Weights */
+  --fw-light: 300; --fw-regular: 400; --fw-medium: 500; --fw-semibold: 600; --fw-bold: 700;
+
+  /* Spacing */
+  --spacing-4: 4px; --spacing-8: 8px; --spacing-12: 12px;
+  --spacing-16: 16px; --spacing-20: 20px; --spacing-120: 120px;
+
+  /* Layout */
+  --page-max-width: 1200px;
+  --section-gap: 60px;
+  --card-padding: 30px;
+  --element-gap: 15-20px;
+
+  /* Border Radius */
+  --radius-cards: 0px;
+  --radius-badges: 1px;
+  --radius-inputs: 1px;
+  --radius-buttons: 1px;
+  --radius-circular: 40px;
+
+  /* Surfaces */
+  --surface-black-olive: #1d0b0d;
+  --surface-warm-cream: #fcf9f0;
+  --surface-forest-ink: #103b15;
+  --surface-lemon-zest: #f7ea48;
+}
+
+/* Подстановка шрифта: VenusCom недоступен, у названных в DESIGN.md замен
+   (DM Sans / Outfit / Plus Jakarta Sans) нет кириллицы — взят Onest того же
+   геометрико-гуманистического класса, широкий трекинг держит так же. */
+:root { --font-venuscom: 'Onest', 'DM Sans', 'Outfit', sans-serif; }
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--color-black-olive);
+  color: var(--color-warm-cream);
+  font-family: var(--font-venuscom);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  letter-spacing: var(--tracking-body-sm);
+  font-weight: var(--fw-regular);
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, p, figure { margin: 0; }
+a { color: inherit; text-decoration: none; }
+.wrap { max-width: var(--page-max-width); margin: 0 auto; padding: 0 var(--spacing-20); }
+
+/* ── Шапка: кремовая, как на самом сайте (скриншот главнее прозы) ──────── */
+.nav {
+  background: var(--color-warm-cream);
+  color: var(--color-black-olive);
+  padding: var(--spacing-16) var(--spacing-20);
+  position: sticky; top: 0; z-index: 30;
+}
+.nav-in {
+  max-width: var(--page-max-width); margin: 0 auto;
+  display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: var(--spacing-20);
+}
+.nav-links { display: flex; gap: var(--spacing-20); align-items: center; }
+.nav-links a {
+  font-size: var(--text-body-sm); letter-spacing: .04em; text-transform: uppercase;
+  font-weight: var(--fw-regular);
+}
+.nav-links a.here { border: 1px solid var(--color-black-olive); border-radius: var(--radius-badges); padding: 2px 6px; }
+.wordmark {
+  font-size: var(--text-heading-lg); line-height: var(--leading-heading-lg);
+  letter-spacing: var(--tracking-heading-lg);
+  font-weight: var(--fw-medium); color: var(--color-forest-ink); white-space: nowrap;
+}
+.nav-right { display: flex; gap: var(--spacing-16); align-items: center; justify-content: flex-end; }
+.lang { display: flex; gap: var(--spacing-8); font-size: var(--text-caption); letter-spacing: .06em; }
+.lang button {
+  background: none; border: 0; padding: 0; cursor: pointer; font: inherit; letter-spacing: inherit;
+  color: rgba(29,11,13,.45); text-transform: uppercase;
+}
+.lang button[aria-pressed="true"] { color: var(--color-black-olive); }
+.btn {
+  display: inline-block; background: var(--color-lemon-zest); color: var(--color-black-olive);
+  padding: var(--spacing-12) var(--spacing-16); border-radius: var(--radius-buttons); border: 0;
+  font-family: inherit; font-size: var(--text-body-sm); font-weight: var(--fw-semibold);
+  letter-spacing: .04em; text-transform: uppercase; cursor: pointer;
+}
+
+/* ── Герой ────────────────────────────────────────────────────────────── */
+.hero { position: relative; background: var(--color-black-olive); overflow: hidden; }
+.hero-scene { display: block; width: 100%; height: 620px; }
+.hero-copy {
+  position: absolute; left: 50%; transform: translateX(-50%); bottom: 72px;
+  width: 100%; max-width: var(--page-max-width); padding: 0 var(--spacing-20);
+}
+.display {
+  color: var(--color-lemon-zest);
+  font-size: var(--text-display-xl); line-height: var(--leading-display-xl);
+  letter-spacing: var(--tracking-display-xl); font-weight: var(--fw-regular);
+  text-transform: uppercase;
+}
+.hero-sub {
+  margin-top: var(--spacing-20); max-width: 520px;
+  color: var(--color-warm-cream);
+  font-size: var(--text-body-lg); line-height: var(--leading-body-lg); letter-spacing: var(--tracking-body-lg);
+}
+.hero-cta { margin-top: var(--spacing-20); }
+
+/* ── Секции ───────────────────────────────────────────────────────────── */
+.sec { padding: var(--section-gap) 0; }
+.sec.cream { background: var(--color-warm-cream); color: var(--color-forest-ink); }
+.sec.olive { background: var(--color-black-olive); color: var(--color-warm-cream); }
+.eyebrow {
+  font-size: var(--text-caption); line-height: var(--leading-caption); letter-spacing: .18em;
+  text-transform: uppercase; font-weight: var(--fw-medium); opacity: .7;
+}
+h2 {
+  font-size: var(--text-heading); line-height: var(--leading-heading); letter-spacing: var(--tracking-heading);
+  font-weight: var(--fw-medium); text-transform: uppercase; margin-top: var(--spacing-16);
+}
+.sec.cream h2 { color: var(--color-forest-ink); }
+.lead {
+  margin-top: var(--spacing-20); max-width: 640px;
+  font-size: 19px; line-height: 1.3; letter-spacing: .57px;
+}
+
+/* Карточки блюд — «фотография» нарисована, рамок и теней нет */
+.dishes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px 30px; margin-top: 40px; }
+.dish svg { display: block; width: 100%; height: auto; }
+.dish h3 {
+  margin-top: var(--card-padding);
+  font-size: var(--text-body-lg); line-height: var(--leading-body-lg); letter-spacing: var(--tracking-body-lg);
+  font-weight: var(--fw-medium);
+  min-height: 50px; /* две строки заголовка — чтобы описания карточек стояли по одной линии */
+}
+.dish p { margin-top: var(--spacing-12); font-size: 19px; line-height: 1.3; letter-spacing: .57px; }
+.ghost {
+  display: inline-flex; align-items: center; gap: var(--spacing-4);
+  margin-top: var(--spacing-16);
+  font-size: var(--text-body-sm); font-weight: var(--fw-medium);
+  letter-spacing: .04em; text-transform: uppercase; cursor: pointer;
+}
+.ghost:hover { text-decoration: underline; }
+.ghost .arw { font-size: var(--text-caption); }
+
+/* Неделя — список с волосяными разделителями */
+.week { margin-top: 40px; border-top: 1px solid rgba(219,226,220,.25); }
+.week .row {
+  display: grid; grid-template-columns: 132px 1fr 148px; gap: var(--spacing-20); align-items: baseline;
+  padding: var(--spacing-20) 0; border-bottom: 1px solid rgba(219,226,220,.25);
+}
+.week .d { font-size: var(--text-body-sm); letter-spacing: .12em; text-transform: uppercase; opacity: .65; }
+.week .t { font-size: var(--text-subheading); line-height: var(--leading-subheading); letter-spacing: var(--tracking-subheading); }
+.week .s { font-size: var(--text-caption); letter-spacing: .12em; text-transform: uppercase; text-align: right; opacity: .65; }
+.week .row.full .s { color: var(--color-lemon-zest); opacity: 1; }
+
+/* Баннер с крупной «фотографией» справа */
+.banner { display: grid; grid-template-columns: 1fr 55%; gap: 40px; align-items: center; }
+.banner svg { display: block; width: 100%; height: auto; }
+
+/* Зал / факты */
+.facts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; margin-top: 40px; }
+.fact .v { font-size: var(--text-heading-sm); line-height: var(--leading-heading-sm); letter-spacing: var(--tracking-heading-sm); }
+.fact .l { margin-top: var(--spacing-8); font-size: var(--text-caption); line-height: var(--leading-caption); letter-spacing: .12em; text-transform: uppercase; opacity: .65; }
+
+/* FAQ */
+.faq { margin-top: 40px; border-top: 1px solid rgba(16,59,21,.25); }
+.faq .q { padding: var(--spacing-20) 0; border-bottom: 1px solid rgba(16,59,21,.25); display: grid; grid-template-columns: 320px 1fr; gap: 30px; }
+.faq .q b { font-weight: var(--fw-medium); font-size: var(--text-body-lg); letter-spacing: var(--tracking-body-lg); }
+.faq .q span { font-size: 19px; line-height: 1.3; letter-spacing: .57px; }
+
+/* Бронь */
+.book { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: end; margin-top: 40px; }
+.book .price { font-size: var(--text-display); line-height: var(--leading-display); letter-spacing: var(--tracking-display); color: var(--color-lemon-zest); }
+.book .note { margin-top: var(--spacing-16); font-size: 19px; line-height: 1.3; letter-spacing: .57px; max-width: 480px; }
+.field { display: flex; gap: var(--spacing-8); margin-top: var(--spacing-20); }
+.field input {
+  flex: 1; background: transparent; border: 1px solid rgba(219,226,220,.4); border-radius: var(--radius-inputs);
+  padding: var(--spacing-12) var(--spacing-16); color: var(--color-warm-cream);
+  font-family: inherit; font-size: var(--text-body-sm); letter-spacing: var(--tracking-body-sm);
+}
+.field input::placeholder { color: rgba(252,249,240,.5); }
+
+footer { background: var(--color-black-olive); color: var(--color-warm-cream); padding: var(--section-gap) 0 40px; border-top: 1px solid rgba(219,226,220,.25); }
+.foot { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 30px; }
+.foot .h { font-size: var(--text-caption); letter-spacing: .18em; text-transform: uppercase; opacity: .65; }
+.foot .col a, .foot .col span { display: block; margin-top: var(--spacing-12); font-size: var(--text-body-sm); letter-spacing: var(--tracking-body-sm); }
+.foot .big { font-size: var(--text-heading-sm); letter-spacing: var(--tracking-heading-sm); text-transform: uppercase; }
+
+.totop {
+  position: fixed; right: 24px; bottom: 24px; width: 40px; height: 40px;
+  border-radius: var(--radius-circular); background: var(--color-forest-ink);
+  color: var(--color-warm-cream); border: 0; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; font-size: var(--text-body-sm);
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-in">
+    <div class="nav-links">
+      <a href="#tonight" class="here" data-i18n="n1">Tonight</a>
+      <a href="#week" data-i18n="n2">The week</a>
+      <a href="#room" data-i18n="n3">The room</a>
+      <a href="#faq" data-i18n="n4">FAQ</a>
+    </div>
+    <div class="wordmark">NOCTURNE</div>
+    <div class="nav-right">
+      <div class="lang">
+        <button data-set="en" aria-pressed="true">En</button>
+        <button data-set="ru" aria-pressed="false">Ru</button>
+      </div>
+      <a class="btn" href="#book" data-i18n="n5">Book</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <!-- «Фотографии» нет: стол сверху нарисован в палитре системы -->
+  <svg class="hero-scene" viewBox="0 0 1440 620" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <rect width="1440" height="620" fill="#1d0b0d"/>
+    <ellipse cx="720" cy="300" rx="760" ry="330" fill="#16321a"/>
+    <ellipse cx="720" cy="270" rx="560" ry="230" fill="#103b15"/>
+    <!-- посуда собрана в правой части: слева внизу остаётся чистое поле под текст -->
+    <g>
+      <circle cx="420" cy="128" r="72" fill="#fcf9f0"/><circle cx="420" cy="128" r="55" fill="#f6f1e2"/>
+      <path d="M388 136c14-26 50-26 64 0z" fill="#103b15"/>
+      <rect x="400" y="110" width="40" height="6" rx="1" fill="#dbe2dc"/>
+      <circle cx="420" cy="100" r="6" fill="#f7ea48"/>
+    </g>
+    <g>
+      <circle cx="880" cy="176" r="116" fill="#fcf9f0"/><circle cx="880" cy="176" r="92" fill="#f6f1e2"/>
+      <g fill="#103b15">
+        <rect x="818" y="168" width="124" height="7" rx="1"/>
+        <rect x="828" y="186" width="104" height="7" rx="1"/>
+        <rect x="838" y="150" width="84" height="7" rx="1"/>
+      </g>
+      <circle cx="880" cy="130" r="9" fill="#f7ea48"/>
+    </g>
+    <g>
+      <circle cx="1200" cy="120" r="84" fill="#fcf9f0"/><circle cx="1200" cy="120" r="65" fill="#f6f1e2"/>
+      <path d="M1165 120a35 35 0 0 1 70 0a35 35 0 0 1-70 0" fill="#dbe2dc"/>
+      <circle cx="1188" cy="112" r="11" fill="#103b15"/><circle cx="1214" cy="128" r="8" fill="#103b15"/>
+    </g>
+    <g>
+      <circle cx="1010" cy="452" r="100" fill="#fcf9f0"/><circle cx="1010" cy="452" r="78" fill="#f6f1e2"/>
+      <path d="M1010 392a60 60 0 0 1 0 120z" fill="#dbe2dc"/>
+      <circle cx="986" cy="446" r="14" fill="#103b15"/><circle cx="1022" cy="470" r="9" fill="#103b15"/>
+    </g>
+    <g>
+      <circle cx="1310" cy="356" r="86" fill="#fcf9f0"/><circle cx="1310" cy="356" r="66" fill="#f6f1e2"/>
+      <path d="M1276 356h68M1284 336h52M1284 376h52" stroke="#103b15" stroke-width="7" stroke-linecap="round"/>
+    </g>
+    <!-- бокал и приборы -->
+    <g fill="none" stroke="#dbe2dc" stroke-width="4">
+      <path d="M782 392c0 26 18 40 34 40s34-14 34-40z"/><path d="M816 432v46M796 478h40"/>
+    </g>
+    <g fill="#dbe2dc">
+      <rect x="1394" y="404" width="6" height="96" rx="1"/><rect x="1390" y="404" width="14" height="26" rx="1"/>
+      <rect x="1420" y="404" width="6" height="96" rx="1"/><rect x="1414" y="404" width="18" height="34" rx="9"/>
+    </g>
+    <!-- свеча -->
+    <g><rect x="638" y="126" width="26" height="72" fill="#fcf9f0"/><ellipse cx="651" cy="126" rx="13" ry="5" fill="#dbe2dc"/>
+       <path d="M651 94c10 10 10 22 0 28c-10-6-10-18 0-28z" fill="#f7ea48"/></g>
+  </svg>
+
+  <div class="hero-copy">
+    <h1 class="display"><span data-i18n="h1a">One menu</span><br><span data-i18n="h1b">One sitting</span></h1>
+    <p class="hero-sub" data-i18n="hsub">Twenty seats under one lamp on Rua da Boavista. Doors at 19:45, first plate at 20:00, Wednesday to Sunday.</p>
+    <div class="hero-cta"><a class="btn" href="#book" data-i18n="hcta">Book a seat</a></div>
+  </div>
+</header>
+
+<section class="sec cream" id="tonight">
+  <div class="wrap">
+    <div class="eyebrow" data-i18n="e1">Wednesday 13 August</div>
+    <h2 data-i18n="h_tonight">Tonight, three of five</h2>
+    <p class="lead" data-i18n="l_tonight">The menu is written at the market at seven in the morning and printed at four in the afternoon. You will not be asked to choose anything except how much bread.</p>
+
+    <div class="dishes">
+      <figure class="dish">
+        <svg viewBox="0 0 400 320" aria-hidden="true">
+          <rect width="400" height="320" fill="#e8e3d2"/>
+          <circle cx="200" cy="160" r="126" fill="#fcf9f0"/><circle cx="200" cy="160" r="100" fill="#f2ecdb"/>
+          <g fill="#103b15"><rect x="132" y="150" width="136" height="12" rx="2"/><rect x="146" y="128" width="108" height="12" rx="2"/><rect x="146" y="180" width="108" height="12" rx="2"/></g>
+          <circle cx="164" cy="160" r="11" fill="#dbe2dc"/><circle cx="236" cy="160" r="11" fill="#dbe2dc"/>
+          <circle cx="200" cy="118" r="8" fill="#f7ea48"/>
+        </svg>
+        <h3 data-i18n="d1t">Charred leek, hazelnut, aged goat</h3>
+        <p data-i18n="d1d">Leeks go into the embers whole and come out black; we take three layers off and keep what steamed inside.</p>
+        <span class="ghost" data-i18n="d1l">See the dish <span class="arw">→</span></span>
+      </figure>
+
+      <figure class="dish">
+        <svg viewBox="0 0 400 320" aria-hidden="true">
+          <rect width="400" height="320" fill="#e8e3d2"/>
+          <ellipse cx="200" cy="160" rx="140" ry="118" fill="#fcf9f0"/><ellipse cx="200" cy="160" rx="112" ry="92" fill="#f2ecdb"/>
+          <path d="M96 160c40-46 168-46 208 0c-40 46-168 46-208 0z" fill="#dbe2dc"/>
+          <path d="M304 160c14-18 30-26 30-26v52s-16-8-30-26z" fill="#dbe2dc"/>
+          <path d="M120 160h164" stroke="#103b15" stroke-width="6" stroke-linecap="round"/>
+          <circle cx="150" cy="146" r="7" fill="#103b15"/><circle cx="236" cy="176" r="7" fill="#103b15"/>
+          <circle cx="200" cy="120" r="9" fill="#f7ea48"/>
+        </svg>
+        <h3 data-i18n="d2t">Turbot on the bone, brown butter, capers</h3>
+        <p data-i18n="d2d">One fish for the room, carved at the pass. If it is not on the boat by five, this line says something else by four.</p>
+        <span class="ghost" data-i18n="d2l">See the dish <span class="arw">→</span></span>
+      </figure>
+
+      <figure class="dish">
+        <svg viewBox="0 0 400 320" aria-hidden="true">
+          <rect width="400" height="320" fill="#e8e3d2"/>
+          <circle cx="200" cy="160" r="122" fill="#fcf9f0"/><circle cx="200" cy="160" r="96" fill="#f2ecdb"/>
+          <circle cx="200" cy="160" r="62" fill="#dbe2dc"/>
+          <path d="M200 100c34 0 60 26 60 60s-26 60-60 60z" fill="#f7ea48"/>
+          <path d="M168 160c0-18 14-32 32-32" stroke="#103b15" stroke-width="6" fill="none" stroke-linecap="round"/>
+          <circle cx="200" cy="160" r="10" fill="#103b15"/>
+        </svg>
+        <h3 data-i18n="d3t">Quince, bay leaf, cold cream</h3>
+        <p data-i18n="d3d">Poached for four hours in the oven that is cooling down anyway. The bay comes from the tree behind the kitchen door.</p>
+        <span class="ghost" data-i18n="d3l">See the dish <span class="arw">→</span></span>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="sec olive" id="week">
+  <div class="wrap">
+    <div class="eyebrow" data-i18n="e2">This week</div>
+    <h2 data-i18n="h_week">Five nights, five menus</h2>
+    <div class="week">
+      <div class="row full"><span class="d" data-i18n="w1d">Wed 13</span><span class="t" data-i18n="w1t">Roots and ash</span><span class="s" data-i18n="w1s">Full</span></div>
+      <div class="row full"><span class="d" data-i18n="w2d">Thu 14</span><span class="t" data-i18n="w2t">Everything from the boat</span><span class="s" data-i18n="w2s">Full</span></div>
+      <div class="row"><span class="d" data-i18n="w3d">Fri 15</span><span class="t" data-i18n="w3t">The long braise</span><span class="s" data-i18n="w3s">4 seats</span></div>
+      <div class="row"><span class="d" data-i18n="w4d">Sat 16</span><span class="t" data-i18n="w4t">Fire only</span><span class="s" data-i18n="w4s">2 seats</span></div>
+      <div class="row"><span class="d" data-i18n="w5d">Sun 17</span><span class="t" data-i18n="w5t">Honest leftovers</span><span class="s" data-i18n="w5s">9 seats</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec cream" id="bread">
+  <div class="wrap banner">
+    <div>
+      <div class="eyebrow" data-i18n="e3">Not a side</div>
+      <h2 data-i18n="h_bread">The bread is not optional</h2>
+      <p class="lead" data-i18n="l_bread">It goes in at five, comes out at seven and is on the table before you have taken your coat off. The starter is eleven years old and travelled here in a jar in someone's hand luggage. There is butter, salted twice, and there is more bread.</p>
+      <span class="ghost" data-i18n="l_breadl">How we bake it <span class="arw">→</span></span>
+    </div>
+    <svg viewBox="0 0 640 460" aria-hidden="true">
+      <rect width="640" height="460" fill="#e8e3d2"/>
+      <ellipse cx="320" cy="240" rx="250" ry="180" fill="#fcf9f0"/>
+      <ellipse cx="320" cy="240" rx="196" ry="140" fill="#f2ecdb"/>
+      <path d="M150 250c0-72 76-124 170-124s170 52 170 124c0 46-76 74-170 74s-170-28-170-74z" fill="#dbe2dc"/>
+      <g stroke="#103b15" stroke-width="9" stroke-linecap="round" fill="none">
+        <path d="M214 210l60-40M270 236l60-40M326 262l60-40M382 288l60-40"/>
+      </g>
+      <circle cx="500" cy="132" r="26" fill="#f7ea48"/>
+      <rect x="120" y="352" width="400" height="10" rx="1" fill="#103b15"/>
+    </svg>
+  </div>
+</section>
+
+<section class="sec olive" id="room">
+  <div class="wrap">
+    <div class="eyebrow" data-i18n="e4">Rua da Boavista 112, Lisboa</div>
+    <h2 data-i18n="h_room">The room</h2>
+    <p class="lead" data-i18n="l_room">One long table, twenty chairs, one lamp low enough that you can see the plate and not much else. The kitchen is four metres from the last seat, so the loudest thing in the room is usually a pan.</p>
+    <div class="facts">
+      <div class="fact"><div class="v">20</div><div class="l" data-i18n="f1">seats, one sitting</div></div>
+      <div class="fact"><div class="v">20:00</div><div class="l" data-i18n="f2">every plate starts here</div></div>
+      <div class="fact"><div class="v">5</div><div class="l" data-i18n="f3">courses, no substitutions</div></div>
+      <div class="fact"><div class="v">€58</div><div class="l" data-i18n="f4">bread and service in</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec cream" id="faq">
+  <div class="wrap">
+    <div class="eyebrow" data-i18n="e5">Before you book</div>
+    <h2 data-i18n="h_faq">Questions we are asked at the door</h2>
+    <div class="faq">
+      <div class="q"><b data-i18n="q1">Can I see the menu first?</b><span data-i18n="a1">No. It is written the morning of the dinner and printed at four. Tell us what you cannot eat and we will cook around it.</span></div>
+      <div class="q"><b data-i18n="q2">What if I am late?</b><span data-i18n="a2">We hold your chair until 20:15 and then the first plate goes out without you. You will catch up by the third course.</span></div>
+      <div class="q"><b data-i18n="q3">Do you take large groups?</b><span data-i18n="a3">Up to six. Beyond that you are the whole room, which we also do — write to us and we will send the numbers.</span></div>
+      <div class="q"><b data-i18n="q4">Is there a wine list?</b><span data-i18n="a4">There are four bottles open at any moment and a person who will tell you honestly which one goes with the fish.</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec olive" id="book">
+  <div class="wrap">
+    <div class="eyebrow" data-i18n="e6">Seats open Monday, 09:00</div>
+    <h2 data-i18n="h_book">Book a seat</h2>
+    <div class="book">
+      <div>
+        <div class="price">€58</div>
+        <p class="note" data-i18n="l_book">Five courses, bread, service. Wine is separate and starts at €6 a glass. Cancel before noon on the day and we move you to another night; after that we keep the deposit, because the fish was bought for you.</p>
+      </div>
+      <div>
+        <p class="note" data-i18n="l_book2">Leave an address and we send one message a week: what is on the table, which nights are left. Nothing else, ever.</p>
+        <div class="field">
+          <input type="email" placeholder="you@example.com" aria-label="email">
+          <button class="btn" data-i18n="b_book">Take a seat</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot">
+    <div class="col">
+      <div class="big">NOCTURNE</div>
+      <span data-i18n="fa">Rua da Boavista 112, Lisboa</span>
+      <span data-i18n="fb">Wednesday to Sunday, one sitting at 20:00</span>
+    </div>
+    <div class="col">
+      <div class="h" data-i18n="fh1">The table</div>
+      <a href="#tonight" data-i18n="fl1">Tonight</a>
+      <a href="#week" data-i18n="fl2">The week</a>
+      <a href="#book" data-i18n="fl3">Booking</a>
+    </div>
+    <div class="col">
+      <div class="h" data-i18n="fh2">The kitchen</div>
+      <a href="#bread" data-i18n="fl4">The bread</a>
+      <a href="#room" data-i18n="fl5">The room</a>
+      <a href="#faq" data-i18n="fl6">FAQ</a>
+    </div>
+    <div class="col">
+      <div class="h" data-i18n="fh3">Reach us</div>
+      <a href="#book" data-i18n="fl7">table@nocturne.pt</a>
+      <span data-i18n="fl8">No telephone, on purpose</span>
+    </div>
+  </div>
+</footer>
+
+<button class="totop" aria-label="up" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+/* ── RU/EN. Английский — исходный, русский — перевод под него ── */
+var RU = {
+  n1:'Сегодня', n2:'Неделя', n3:'Зал', n4:'Вопросы', n5:'Бронь',
+  h1a:'Одно меню', h1b:'Одна посадка',
+  hsub:'Двадцать мест под одной лампой на Руа-да-Боавишта. Двери в 19:45, первая тарелка в 20:00, со среды по воскресенье.',
+  hcta:'Занять место',
+  e1:'Среда, 13 августа', h_tonight:'Сегодня — три из пяти',
+  l_tonight:'Меню пишется на рынке в семь утра и печатается в четыре пополудни. Выбирать вас попросят только одно: сколько хлеба.',
+  d1t:'Обугленный лук-порей, фундук, выдержанный козий',
+  d1d:'Порей уходит в угли целиком и выходит чёрным; мы снимаем три слоя и оставляем то, что пропарилось внутри.',
+  d1l:'Про блюдо <span class="arw">→</span>',
+  d2t:'Тюрбо на кости, бурое масло, каперсы',
+  d2d:'Одна рыба на весь зал, разбирается на пассе. Если её нет на лодке к пяти, к четырём здесь стоит другая строка.',
+  d2l:'Про блюдо <span class="arw">→</span>',
+  d3t:'Айва, лавровый лист, холодные сливки',
+  d3d:'Четыре часа в духовке, которая и так остывает. Лавр — с дерева за кухонной дверью.',
+  d3l:'Про блюдо <span class="arw">→</span>',
+  e2:'На этой неделе', h_week:'Пять вечеров, пять меню',
+  w1d:'Ср 13', w1t:'Корни и зола', w1s:'Занято',
+  w2d:'Чт 14', w2t:'Всё, что с лодки', w2s:'Занято',
+  w3d:'Пт 15', w3t:'Долгое томление', w3s:'4 места',
+  w4d:'Сб 16', w4t:'Только огонь', w4s:'2 места',
+  w5d:'Вс 17', w5t:'Честные остатки', w5s:'9 мест',
+  e3:'Не гарнир', h_bread:'Хлеб здесь не опция',
+  l_bread:'Уходит в печь в пять, выходит в семь и стоит на столе раньше, чем вы снимете пальто. Закваске одиннадцать лет, сюда она приехала в банке в ручной клади. Есть масло, солёное дважды, и есть ещё хлеб.',
+  l_breadl:'Как мы его печём <span class="arw">→</span>',
+  e4:'Руа-да-Боавишта 112, Лиссабон', h_room:'Зал',
+  l_room:'Один длинный стол, двадцать стульев, одна лампа — достаточно низкая, чтобы видеть тарелку и почти ничего больше. Кухня в четырёх метрах от крайнего места, так что самое громкое в зале обычно сковорода.',
+  f1:'мест, одна посадка', f2:'во столько выходит первая тарелка', f3:'подачи, замен нет', f4:'хлеб и обслуживание внутри',
+  e5:'Перед бронью', h_faq:'Вопросы, которые задают на пороге',
+  q1:'Можно сначала посмотреть меню?', a1:'Нет. Оно пишется утром того же дня и печатается в четыре. Скажите, чего вам нельзя, — приготовим вокруг этого.',
+  q2:'А если я опоздаю?', a2:'Стул держим до 20:15, дальше первая тарелка уходит без вас. К третьей подаче догоните.',
+  q3:'Берёте большие компании?', a3:'До шести человек. Больше — это уже весь зал, так тоже можно: напишите, пришлём цифры.',
+  q4:'Есть винная карта?', a4:'В любой момент открыты четыре бутылки и есть человек, который честно скажет, какая подходит к рыбе.',
+  e6:'Места открываются в понедельник, 09:00', h_book:'Занять место',
+  l_book:'Пять подач, хлеб, обслуживание. Вино отдельно, от €6 за бокал. Отмена до полудня в день ужина — переносим на другой вечер; позже удерживаем депозит, потому что рыба куплена на вас.',
+  l_book2:'Оставьте адрес — раз в неделю пишем одно письмо: что на столе и какие вечера остались. Больше ничего и никогда.',
+  b_book:'Забронировать',
+  fa:'Руа-да-Боавишта 112, Лиссабон', fb:'Со среды по воскресенье, одна посадка в 20:00',
+  fh1:'Стол', fl1:'Сегодня', fl2:'Неделя', fl3:'Бронь',
+  fh2:'Кухня', fl4:'Хлеб', fl5:'Зал', fl6:'Вопросы',
+  fh3:'Связь', fl7:'table@nocturne.pt', fl8:'Телефона нет — намеренно'
+};
+var EN = {};
+document.querySelectorAll('[data-i18n]').forEach(function (el) { EN[el.dataset.i18n] = el.innerHTML; });
+
+function setLang(l) {
+  var dict = l === 'ru' ? RU : EN;
+  document.querySelectorAll('[data-i18n]').forEach(function (el) {
+    var v = dict[el.dataset.i18n];
+    if (v !== undefined) el.innerHTML = v;
+  });
+  document.documentElement.lang = l;
+  document.documentElement.dataset.lang = l;
+  document.querySelectorAll('.lang button').forEach(function (b) {
+    b.setAttribute('aria-pressed', b.dataset.set === l ? 'true' : 'false');
+  });
+}
+document.querySelectorAll('.lang button').forEach(function (b) {
+  b.addEventListener('click', function () { setLang(b.dataset.set); });
+});
+</script>
+</body>
+</html>

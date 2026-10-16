@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>Drum — risograph print studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600&family=Inter:wght@400&display=swap" rel="stylesheet">
+<style>
+/* ─────────────────────────────────────────────────────────────
+   Дизайн-система: Superlocal (refero a865ac1d) — tokens.css дословно
+   ───────────────────────────────────────────────────────────── */
+:root {
+  /* Colors */
+  --color-electric-cobalt: #1673ff;
+  --color-coffee-bean: #3d2800;
+  --color-tangerine-burn: #ff7b02;
+  --color-eggshell-cream: #fbf5e7;
+  --color-ink-black: #000000;
+  --color-pale-ash: #c4c4c4;
+  --color-mocha: #604106;
+
+  /* Typography — Font Families */
+  --font-rst-reactor: 'RST Reactor', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-inter: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-system-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* Typography — Scale */
+  --text-micro: 10px;
+  --leading-micro: 1.2;
+  --tracking-micro: 0.5px;
+  --text-eyebrow: 12px;
+  --leading-eyebrow: 1.2;
+  --tracking-eyebrow: 0.264px;
+  --text-caption: 14px;
+  --leading-caption: 1.41;
+  --tracking-caption: -0.28px;
+  --text-body-sm: 16px;
+  --leading-body-sm: 1.6;
+  --tracking-body-sm: -0.32px;
+  --text-heading: 64px;
+  --leading-heading: 0.9;
+  --tracking-heading: -3.2px;
+  --text-display: 172px;
+  --leading-display: 1;
+  --tracking-display: -10.32px;
+
+  /* Typography — Weights */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+
+  /* Spacing */
+  --spacing-5: 5px;
+  --spacing-7: 7px;
+  --spacing-8: 8px;
+  --spacing-10: 10px;
+  --spacing-16: 16px;
+  --spacing-17: 17px;
+  --spacing-23: 23px;
+  --spacing-24: 24px;
+  --spacing-32: 32px;
+  --spacing-48: 48px;
+  --spacing-57: 57px;
+  --spacing-78: 78px;
+  --spacing-80: 80px;
+  --spacing-104: 104px;
+  --spacing-112: 112px;
+  --spacing-200: 200px;
+
+  /* Border Radius */
+  --radius-tags: 30px;
+  --radius-cards: 0px;
+  --radius-pills: 99px;
+  --radius-buttons: 50px;
+
+  /* Surfaces */
+  --surface-hero-cobalt: #1673ff;
+  --surface-eggshell-canvas: #fbf5e7;
+  --surface-ash-tint: #c4c4c4;
+  --surface-coffee-band: #3d2800;
+}
+
+/* Мои подстановки: RST Reactor закрыт, а обе замены из DESIGN.md — Space Grotesk и
+   Sora — не имеют кириллицы (проверено по subset'ам Google Fonts). Ближайший
+   геометрический гротеск с кириллицей — Manrope; он и держит весь трекинговый размах
+   системы, от -0.06em на 172px до +0.05em на 10px. Длинные абзацы — Inter, как в системе. */
+:root {
+  --font-rst-reactor: 'Manrope', ui-sans-serif, system-ui, sans-serif;
+  --text-body-17: 17px;      /* «body 14–17px» из системы */
+  --leading-body-17: 1.41;
+  --tracking-body-17: -0.68px;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--surface-eggshell-canvas);
+  color: var(--color-ink-black);
+  font-family: var(--font-rst-reactor);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--text-body-17); line-height: var(--leading-body-17); letter-spacing: var(--tracking-body-17);
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, p, ul, li { margin: 0; padding: 0; list-style: none; font-weight: var(--font-weight-regular); }
+a { color: inherit; text-decoration: none; }
+.eyebrow { font-size: var(--text-eyebrow); line-height: var(--leading-eyebrow); letter-spacing: var(--tracking-eyebrow); text-transform: uppercase; }
+.micro { font-size: var(--text-micro); line-height: var(--leading-micro); letter-spacing: var(--tracking-micro); text-transform: uppercase; }
+.cap { font-size: var(--text-caption); line-height: var(--leading-caption); letter-spacing: var(--tracking-caption); }
+.long { font-family: var(--font-inter); font-size: var(--text-body-sm); line-height: var(--leading-body-sm); letter-spacing: var(--tracking-body-sm); }
+.pad { padding: var(--spacing-78) var(--spacing-80); }
+.num { font-variant-numeric: tabular-nums; }
+
+/* ── Кобальтовая полоса героя — единственный насыщенный аккорд системы ── */
+.hero {
+  background: var(--surface-hero-cobalt); color: var(--color-eggshell-cream);
+  min-height: 900px; padding: var(--spacing-32); position: relative;
+  display: flex; flex-direction: column;
+}
+.hero .top { display: flex; align-items: flex-start; justify-content: space-between; }
+.wordmark { font-size: var(--text-heading); line-height: 1; letter-spacing: var(--tracking-heading); font-weight: var(--font-weight-medium); }
+.hero nav { display: flex; gap: var(--spacing-24); align-items: center; padding-top: var(--spacing-16); }
+.hero nav a, .hero nav button {
+  font-family: inherit; background: none; border: 0; color: var(--color-eggshell-cream); cursor: pointer;
+  font-size: var(--text-eyebrow); line-height: var(--leading-eyebrow); letter-spacing: var(--tracking-eyebrow); text-transform: uppercase; padding: 0;
+}
+.switch { display: flex; gap: var(--spacing-8); }
+.switch button { opacity: .55; }
+.switch button[aria-pressed="true"] { opacity: 1; }
+
+.bloom { flex: 1; display: grid; place-items: center; }
+.bloom svg { height: 620px; width: auto; display: block; }
+
+.hero .bottom { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--spacing-32); }
+.pill {
+  display: inline-flex; align-items: center; gap: var(--spacing-16);
+  background: var(--color-eggshell-cream); color: var(--color-coffee-bean);
+  border: 0; border-radius: var(--radius-pills); padding: var(--spacing-8) var(--spacing-16);
+  font-family: inherit; font-size: var(--text-eyebrow); letter-spacing: var(--tracking-eyebrow); text-transform: uppercase; cursor: pointer;
+}
+.pill .badge { width: 32px; height: 32px; border-radius: 50%; background: #fff; display: grid; place-items: center; }
+
+/* ── Кремовые секции ───────────────────────────────────────────────── */
+.cream { background: var(--surface-eggshell-canvas); }
+.display { font-size: var(--text-display); line-height: var(--leading-display); letter-spacing: var(--tracking-display); font-weight: var(--font-weight-medium); color: var(--color-coffee-bean); }
+.h64 { font-size: var(--text-heading); line-height: var(--leading-heading); letter-spacing: var(--tracking-heading); font-weight: var(--font-weight-medium); }
+.lead { max-width: 720px; margin-top: var(--spacing-32); }
+
+/* сетка барабанов — границы ячеек и есть линии сетки */
+.grid6 { display: grid; grid-template-columns: repeat(6, 1fr); margin-top: var(--spacing-48); }
+.cell { border: 1px solid var(--color-ink-black); margin: -0.5px; aspect-ratio: 1 / 0.66; display: grid; place-items: center; text-align: center; padding: var(--spacing-16); }
+.cell .n { font-size: var(--text-body-17); letter-spacing: var(--tracking-body-17); }
+.cell .c { margin-top: var(--spacing-5); color: var(--color-mocha); }
+
+/* ── Кофейная полоса: расписание печати ───────────────────────────── */
+.coffee { background: var(--surface-coffee-band); color: var(--color-eggshell-cream); }
+.rows { margin-top: var(--spacing-48); }
+.row { display: grid; grid-template-columns: 110px 1fr 260px; gap: var(--spacing-24); align-items: baseline; padding: var(--spacing-16) 0; border-top: 1px solid var(--color-mocha); }
+.row:last-child { border-bottom: 1px solid var(--color-mocha); }
+.row .t { font-size: var(--text-body-17); letter-spacing: var(--tracking-body-17); }
+.row .m { text-align: right; }
+
+/* ── Прайс ─────────────────────────────────────────────────────────── */
+.price { margin-top: var(--spacing-48); }
+.price .r { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: var(--spacing-24); padding: var(--spacing-16) 0; border-top: 1px solid var(--color-ink-black); align-items: baseline; }
+.price .r:last-child { border-bottom: 1px solid var(--color-ink-black); }
+.price .hd span { color: var(--color-mocha); }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-48); margin-top: var(--spacing-48); }
+.checks li { padding: var(--spacing-10) 0; border-bottom: 1px solid var(--color-pale-ash); }
+
+footer { background: var(--surface-eggshell-canvas); padding: var(--spacing-48) var(--spacing-80) var(--spacing-57); }
+footer .row2 { display: flex; justify-content: space-between; align-items: flex-end; }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="top">
+    <span class="wordmark">drum</span>
+    <nav>
+      <a href="#what" data-i18n="n1">Studio</a>
+      <a href="#inks" data-i18n="n2">Inks</a>
+      <a href="#press" data-i18n="n3">On the press</a>
+      <a href="#prices" data-i18n="n4">Prices</a>
+      <span class="switch"><button data-set="en" aria-pressed="true">EN</button><button data-set="ru" aria-pressed="false">RU</button></span>
+    </nav>
+  </div>
+
+  <div class="bloom">
+    <svg id="bloom" viewBox="-320 -320 640 780" role="img" aria-label="Rosette"></svg>
+  </div>
+
+  <div class="bottom">
+    <span class="eyebrow" data-i18n="h1">Risograph print studio<br>Tallinn, since 2014</span>
+    <button class="pill">
+      <span class="badge">
+        <svg width="20" height="20" viewBox="-10 -10 20 20" aria-hidden="true">
+          <circle r="3.2" fill="#fbf5e7" stroke="#3d2800" stroke-width="1"/>
+          <g stroke="#ff7b02" stroke-width="1.6">
+            <path d="M0-9V-5M0 9V5M-9 0H-5M9 0H5M-6.4-6.4l2.8 2.8M6.4 6.4l-2.8-2.8M-6.4 6.4l2.8-2.8M6.4-6.4l-2.8 2.8"/>
+          </g>
+        </svg>
+      </span>
+      <span data-i18n="h2">Order a print run</span>
+      <span>→</span>
+    </button>
+  </div>
+</header>
+
+<section class="cream pad" id="what">
+  <span class="eyebrow" style="color:var(--color-mocha)" data-i18n="s1e">What comes off the drum</span>
+  <h2 class="display" style="margin-top:var(--spacing-32)" data-i18n="s1d">Overprint.</h2>
+  <p class="lead long" data-i18n="s1p">A risograph lays down one ink per pass. Two passes make a third colour where the layers cross, and that overprint is the only honest reason to print this way instead of sending the file to a laser printer down the street. Everything else about the machine — the misregistration, the roller marks, the way a solid never comes out solid — is what the file has to be drawn around.</p>
+  <p class="lead long" style="margin-top:var(--spacing-24)" data-i18n="s1p2">We print posters, zines, election broadsheets, seed packets and one wedding invitation a year. Runs from 25 to 3 000 sheets. Below 25 it is cheaper for you to photocopy it, and we will say so.</p>
+</section>
+
+<section class="cream pad" style="padding-top:0" id="inks">
+  <span class="eyebrow" style="color:var(--color-mocha)" data-i18n="s2e">Twelve drums on the shelf</span>
+  <h2 class="h64" style="margin-top:var(--spacing-24);max-width:900px" data-i18n="s2h">This page is printed in three inks.<br>Your poster does not have to be.</h2>
+
+  <div class="grid6">
+    <div class="cell"><div><div class="n">Federal Blue</div><div class="c micro" data-i18n="d1">3005 · 2 DRUMS</div></div></div>
+    <div class="cell"><div><div class="n">Fluorescent Pink</div><div class="c micro" data-i18n="d2">1005 · 1 DRUM</div></div></div>
+    <div class="cell"><div><div class="n">Yellow</div><div class="c micro" data-i18n="d3">1002 · 2 DRUMS</div></div></div>
+    <div class="cell"><div><div class="n">Bright Red</div><div class="c micro" data-i18n="d4">1003 · 1 DRUM</div></div></div>
+    <div class="cell"><div><div class="n">Green</div><div class="c micro" data-i18n="d5">1004 · 1 DRUM</div></div></div>
+    <div class="cell"><div><div class="n">Black</div><div class="c micro" data-i18n="d6">1001 · 3 DRUMS</div></div></div>
+    <div class="cell"><div><div class="n">Orange</div><div class="c micro" data-i18n="d7">1007 · 1 DRUM</div></div></div>
+    <div class="cell"><div><div class="n">Teal</div><div class="c micro" data-i18n="d8">1023 · 1 DRUM</div></div></div>
+    <div class="cell"><div><div class="n">Burgundy</div><div class="c micro" data-i18n="d9">1046 · 1 DRUM</div></div></div>
+    <div class="cell"><div><div class="n">Metallic Gold</div><div class="c micro" data-i18n="d10">1049 · 1 DRUM</div></div></div>
+    <div class="cell"><div><div class="n">Medium Blue</div><div class="c micro" data-i18n="d11">1017 · 1 DRUM</div></div></div>
+    <div class="cell"><div><div class="n" data-i18n="ink12">Fed. Blue, retired</div><div class="c micro" data-i18n="ink12b">3005 · SPARE</div></div></div>
+  </div>
+</section>
+
+<section class="coffee pad" id="press">
+  <h2 class="h64" data-i18n="s3h">On the press<br>this month</h2>
+  <p class="cap" style="max-width:640px;margin-top:var(--spacing-48)" data-i18n="s3p">The studio runs one job at a time and the drum change takes twenty minutes, so the calendar is the honest answer to “when can you print it”. Open drum day is free and you can bring anything that fits on A3.</p>
+
+  <div class="rows">
+    <div class="row">
+      <span class="eyebrow">02.09</span>
+      <span class="t" data-i18n="r1">Kino Sõprus season posters, three inks</span>
+      <span class="m eyebrow" data-i18n="r1m">A2 · 400 SHEETS</span>
+    </div>
+    <div class="row">
+      <span class="eyebrow">05.09</span>
+      <span class="t" data-i18n="r2">Zine: the allotments of Kalamaja</span>
+      <span class="m eyebrow" data-i18n="r2m">A5 · 48 PP · 250 COPIES</span>
+    </div>
+    <div class="row">
+      <span class="eyebrow">09.09</span>
+      <span class="t" data-i18n="r3">Open drum day — bring your own file</span>
+      <span class="m eyebrow" data-i18n="r3m">FREE · 17:00—21:00</span>
+    </div>
+    <div class="row">
+      <span class="eyebrow">12.09</span>
+      <span class="t" data-i18n="r4">Riso for architects: plans in two inks</span>
+      <span class="m eyebrow" data-i18n="r4m">WORKSHOP · 12 SEATS · 40 €</span>
+    </div>
+    <div class="row">
+      <span class="eyebrow">19.09</span>
+      <span class="t" data-i18n="r5">City election broadsheet, black and red</span>
+      <span class="m eyebrow" data-i18n="r5m">B2 · 2 000 SHEETS</span>
+    </div>
+    <div class="row">
+      <span class="eyebrow">26.09</span>
+      <span class="t" data-i18n="r6">Drum change: pink out, metallic gold in</span>
+      <span class="m eyebrow" data-i18n="r6m">STUDIO CLOSED</span>
+    </div>
+  </div>
+</section>
+
+<section class="cream pad" id="prices">
+  <span class="eyebrow" style="color:var(--color-mocha)" data-i18n="s4e">What it costs</span>
+  <h2 class="h64" style="margin-top:var(--spacing-24)" data-i18n="s4h">Per sheet, per ink.</h2>
+
+  <div class="price">
+    <div class="r hd eyebrow"><span data-i18n="p0a">Format</span><span data-i18n="p0b">25—99</span><span data-i18n="p0c">100—499</span><span data-i18n="p0d">500+</span></div>
+    <div class="r"><span data-i18n="p1">A4, one ink, 120 g cartridge</span><span class="num">0.42 €</span><span class="num">0.24 €</span><span class="num">0.17 €</span></div>
+    <div class="r"><span data-i18n="p2">A3, one ink, 120 g cartridge</span><span class="num">0.68 €</span><span class="num">0.39 €</span><span class="num">0.28 €</span></div>
+    <div class="r"><span data-i18n="p3">A2, one ink, 160 g cartridge</span><span class="num">1.35 €</span><span class="num">0.82 €</span><span class="num">0.61 €</span></div>
+    <div class="r"><span data-i18n="p4">Every additional ink, per pass</span><span class="num">+60 %</span><span class="num">+45 %</span><span class="num">+38 %</span></div>
+    <div class="r"><span data-i18n="p5">Drum change inside one job</span><span class="num">12 €</span><span class="num">12 €</span><span class="num" data-i18n="p5c">free</span></div>
+  </div>
+
+  <div class="two">
+    <div>
+      <span class="eyebrow" style="color:var(--color-mocha)" data-i18n="s5e">What we need from you</span>
+      <ul class="checks" style="margin-top:var(--spacing-24)">
+        <li data-i18n="k1">One greyscale file per ink, named by ink</li>
+        <li data-i18n="k2">300 dpi, no rich blacks, no transparency left live</li>
+        <li data-i18n="k3">3 mm trim, and nothing critical inside 8 mm of the edge</li>
+        <li data-i18n="k4">Registration drift of about 1 mm designed into the overlaps</li>
+      </ul>
+    </div>
+    <div>
+      <span class="eyebrow" style="color:var(--color-mocha)" data-i18n="s6e">What you get back</span>
+      <ul class="checks" style="margin-top:var(--spacing-24)">
+        <li data-i18n="k5">A wet proof of every ink pair before the run</li>
+        <li data-i18n="k6">Two spare sheets per hundred, at no charge</li>
+        <li data-i18n="k7">The file back, flattened the way it actually printed</li>
+        <li data-i18n="k8">Roller marks. They are part of the price, not a defect</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="row2">
+    <div>
+      <span class="cap" style="color:var(--color-coffee-bean)">drm</span>
+      <p class="eyebrow" style="margin-top:var(--spacing-16);color:var(--color-mocha)" data-i18n="f1">Telliskivi 60a, Tallinn · Tue—Sat, 11:00—19:00</p>
+    </div>
+    <span class="eyebrow" style="color:var(--color-mocha)">print@drum.ee · +372 5 123 4567</span>
+  </div>
+</footer>
+
+<script>
+/* ── Розетка: шесть кремовых лепестков, оранжевый лучевой венец, тонкое
+      кофейное кольцо и кремовая сердцевина. Плоские формы, без градиентов. ── */
+(function () {
+  var svg = document.getElementById('bloom'), ns = 'http://www.w3.org/2000/svg', out = '';
+  function spikes(n, r0, r1, w, fill) {
+    var s = '';
+    for (var i = 0; i < n; i++) {
+      var a = (i / n) * Math.PI * 2, d = w * Math.PI / 180;
+      var x1 = Math.sin(a - d) * r0, y1 = -Math.cos(a - d) * r0;
+      var x2 = Math.sin(a) * r1,     y2 = -Math.cos(a) * r1;
+      var x3 = Math.sin(a + d) * r0, y3 = -Math.cos(a + d) * r0;
+      s += '<path d="M' + x1.toFixed(1) + ' ' + y1.toFixed(1) + 'L' + x2.toFixed(1) + ' ' + y2.toFixed(1) +
+           'L' + x3.toFixed(1) + ' ' + y3.toFixed(1) + 'Z" fill="' + fill + '"/>';
+    }
+    return s;
+  }
+  out += '<rect x="-9" y="150" width="18" height="300" fill="#fbf5e7"/>';
+  for (var p = 0; p < 6; p++) {
+    out += '<ellipse cx="0" cy="-156" rx="104" ry="118" transform="rotate(' + (p * 60) + ')" fill="#fbf5e7"/>';
+  }
+  out += spikes(46, 66, 182, 3.1, '#ff7b02');
+  out += spikes(72, 62, 104, 1.15, '#3d2800');
+  out += '<circle r="60" fill="#fbf5e7"/>';
+  svg.innerHTML = out;
+})();
+
+/* ── RU/EN. Английский — исходный, русский — перевод под него ── */
+var RU = {
+  n1:'Студия', n2:'Краски', n3:'На станке', n4:'Цены',
+  h1:'Мастерская рисографии<br>Таллин, с 2014 года',
+  h2:'Заказать тираж',
+  s1e:'Что сходит с барабана',
+  s1d:'Наложение.',
+  s1p:'Рисограф кладёт одну краску за проход. Два прохода дают третий цвет там, где слои пересекаются, и это наложение — единственная честная причина печатать так, а не отправить файл в лазерник за углом. Всё остальное в машине — уход приводки, следы валика, то, как плашка никогда не выходит плашкой, — это то, вокруг чего должен быть нарисован файл.',
+  s1p2:'Мы печатаем плакаты, зины, предвыборные листовки, пакетики для семян и одно свадебное приглашение в год. Тиражи от 25 до 3 000 листов. Ниже 25 вам дешевле сделать ксерокс, и мы так и скажем.',
+  s2e:'Двенадцать барабанов на полке',
+  s2h:'Эта страница напечатана в три краски.<br>Ваш плакат — не обязан.',
+  ink12:'Federal Blue, снят', ink12b:'3005 · ЗАПАС',
+  s3h:'На станке<br>в этом месяце',
+  s3p:'Студия ведёт одну работу за раз, а смена барабана занимает двадцать минут, поэтому календарь — честный ответ на вопрос «когда напечатаете». День открытого барабана бесплатный, принести можно что угодно, что влезает в A3.',
+  r1:'Плакаты сезона кинотеатра Sõprus, три краски',
+  r2:'Зин: садовые участки Каламая',
+  r3:'День открытого барабана — со своим файлом', r3m:'БЕСПЛАТНО · 17:00—21:00',
+  r4:'Рисография для архитекторов: планы в две краски', r4m:'ВОРКШОП · 12 МЕСТ · 40 €',
+  r5:'Городская предвыборная листовка, чёрная и красная',
+  r6:'Смена барабана: розовый снят, золото поставлено', r6m:'СТУДИЯ ЗАКРЫТА',
+  r1m:'A2 · 400 ЛИСТОВ', r2m:'A5 · 48 ПОЛОС · 250 ЭКЗ.', r5m:'B2 · 2 000 ЛИСТОВ',
+  d1:'3005 · 2 БАРАБАНА', d2:'1005 · 1 БАРАБАН', d3:'1002 · 2 БАРАБАНА', d4:'1003 · 1 БАРАБАН',
+  d5:'1004 · 1 БАРАБАН', d6:'1001 · 3 БАРАБАНА', d7:'1007 · 1 БАРАБАН', d8:'1023 · 1 БАРАБАН',
+  d9:'1046 · 1 БАРАБАН', d10:'1049 · 1 БАРАБАН', d11:'1017 · 1 БАРАБАН',
+  s4e:'Сколько это стоит', s4h:'За лист, за краску.',
+  p0a:'Формат', p0b:'25—99', p0c:'100—499', p0d:'500+',
+  p1:'A4, одна краска, офсет 120 г',
+  p2:'A3, одна краска, офсет 120 г',
+  p3:'A2, одна краска, офсет 160 г',
+  p4:'Каждая следующая краска, за проход',
+  p5:'Смена барабана внутри работы', p5c:'бесплатно',
+  s5e:'Что нужно от вас',
+  k1:'По одному файлу в градациях серого на краску, имя — по краске',
+  k2:'300 dpi, без составного чёрного, без живой прозрачности',
+  k3:'Вылеты 3 мм, ничего важного ближе 8 мм к краю',
+  k4:'Уход приводки около 1 мм заложен в перекрытия',
+  s6e:'Что вы получаете',
+  k5:'Мокрая проба каждой пары красок до тиража',
+  k6:'Два запасных листа на сотню, без доплаты',
+  k7:'Файл обратно, сведённый так, как он реально напечатался',
+  k8:'Следы валика. Они входят в цену, а не в брак',
+  f1:'Теллискиви, 60a, Таллин · Вт—Сб, 11:00—19:00'
+};
+var EN = {};
+document.querySelectorAll('[data-i18n]').forEach(function (el) { EN[el.dataset.i18n] = el.innerHTML; });
+
+function setLang(l) {
+  var dict = l === 'ru' ? RU : EN;
+  document.querySelectorAll('[data-i18n]').forEach(function (el) {
+    var v = dict[el.dataset.i18n];
+    if (v !== undefined) el.innerHTML = v;
+  });
+  document.documentElement.lang = l;
+  document.documentElement.dataset.lang = l;
+  document.querySelectorAll('.switch button').forEach(function (b) {
+    b.setAttribute('aria-pressed', b.dataset.set === l ? 'true' : 'false');
+  });
+}
+document.querySelectorAll('.switch button').forEach(function (b) {
+  b.addEventListener('click', function () { setLang(b.dataset.set); });
+});
+</script>
+</body>
+</html>

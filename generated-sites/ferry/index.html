@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ferry — one integration for every chain</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+/* ─── Токены дизайн-системы WalletConnect — вставлены дословно ────────── */
+:root {
+  /* Colors */
+  --color-electric-cobalt: #006cff;
+  --color-indigo-action: #4672ff;
+  --color-deep-indigo: #1b2045;
+  --color-sky-tint: #66a7ff;
+  --color-glacial-wash: #cce2ff;
+  --color-parchment: #f9f9f9;
+  --color-pure-white: #ffffff;
+  --color-mist: #e9e9e9;
+  --color-silver: #bbbbbb;
+  --color-pewter: #b3b3b3;
+  --color-fog: #9a9a9a;
+  --color-steel: #787878;
+  --color-slate: #6c6c6c;
+  --color-graphite: #4f4f4f;
+  --color-charcoal: #303030;
+  --color-obsidian: #202020;
+  --color-cobalt-radial: #099ff0;
+  --gradient-cobalt-radial: radial-gradient(78.13% 78.13% at 79.97% 80.72%, rgb(9, 159, 240) 0%, rgb(9, 121, 240) 100%);
+
+  /* Typography — Font Families */
+  --font-khteka: 'KHTeka', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-roboto: 'Roboto', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-khteka-mono: 'KHTeka Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Typography — Scale */
+  --text-caption: 12px;
+  --leading-caption: 1.43;
+  --text-subheading: 18px;
+  --leading-subheading: 1.4;
+  --text-heading-sm: 20px;
+  --leading-heading-sm: 1.33;
+  --text-heading: 24px;
+  --leading-heading: 1.2;
+  --text-heading-lg: 30px;
+  --leading-heading-lg: 1.11;
+  --text-display: 36px;
+  --leading-display: 1;
+
+  /* Typography — Weights */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+
+  /* Spacing */
+  --spacing-unit: 4px;
+  --spacing-4: 4px;
+  --spacing-8: 8px;
+  --spacing-12: 12px;
+  --spacing-16: 16px;
+  --spacing-24: 24px;
+  --spacing-32: 32px;
+  --spacing-40: 40px;
+  --spacing-48: 48px;
+  --spacing-64: 64px;
+  --spacing-72: 72px;
+
+  /* Layout */
+  --page-max-width: 1200px;
+  --section-gap: 64px;
+  --card-padding: 24px;
+  --element-gap: 8px;
+
+  /* Border Radius */
+  --radius-sm: 3px;
+  --radius-2xl: 16px;
+  --radius-3xl: 40px;
+
+  /* Named Radii */
+  --radius-nav: 16px;
+  --radius-tags: 3px;
+  --radius-cards: 40px;
+  --radius-images: 40px;
+  --radius-inputs: 16px;
+  --radius-buttons: 16px;
+  --radius-heropanels: 40px;
+
+  /* Shadows */
+  --shadow-sm: rgba(0, 0, 0, 0.3) 0px 0px 8px 0px;
+
+  /* Surfaces */
+  --surface-canvas: #f9f9f9;
+  --surface-card: #ffffff;
+  --surface-recessed: #e9e9e9;
+  --surface-brand-panel: #006cff;
+  --surface-dark-band: #202020;
+}
+
+/* Подстановки шрифтов: KHTeka и KHTeka Mono — кастомные. DESIGN.md предлагает
+   Inter или DM Sans (у DM Sans нет кириллицы) и JetBrains Mono / IBM Plex Mono
+   для моноширинного компаньона — оба с кириллицей. Roboto из токенов не
+   используется намеренно: система отводит его только под чужие оверлеи. */
+:root {
+  --font-ui: 'Inter', var(--font-khteka);
+  --font-mono: 'JetBrains Mono', var(--font-khteka-mono);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: var(--font-ui);
+  font-weight: var(--font-weight-regular);
+  font-size: 16px;
+  line-height: 1.6;
+  background: var(--surface-canvas);
+  /* Чистый чёрный запрещён — тёмный системы это тёплый навий */
+  color: var(--color-deep-indigo);
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap { max-width: var(--page-max-width); margin: 0 auto; padding: 0 var(--spacing-24); }
+section { padding: var(--spacing-64) 0; }
+
+/* ─── Типографика ─────────────────────────────────────────────────────── */
+.display { font-size: var(--text-display); line-height: var(--leading-display); font-weight: var(--font-weight-bold); }
+.h-lg { font-size: var(--text-heading-lg); line-height: var(--leading-heading-lg); font-weight: var(--font-weight-bold); }
+.h { font-size: var(--text-heading); line-height: var(--leading-heading); font-weight: var(--font-weight-bold); }
+.h-sm { font-size: var(--text-heading-sm); line-height: var(--leading-heading-sm); font-weight: var(--font-weight-medium); }
+.sub { font-size: var(--text-subheading); line-height: var(--leading-subheading); }
+.cap { font-size: var(--text-caption); line-height: var(--leading-caption); }
+.mono { font-family: var(--font-mono); }
+.muted { color: var(--color-slate); }
+
+/* ─── Кнопки: 16px, контент — 40px, между ними ничего ─────────────────── */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  font-family: var(--font-ui); font-size: 16px; font-weight: var(--font-weight-medium);
+  padding: 13px var(--spacing-24); border-radius: var(--radius-buttons);
+  border: 1px solid transparent; text-decoration: none; cursor: pointer;
+  transition: background-color .15s linear, color .15s linear, border-color .15s linear;
+}
+.btn--cobalt { background: var(--color-electric-cobalt); color: var(--color-pure-white); }
+.btn--cobalt:hover { background: var(--color-indigo-action); }
+.btn--outline { background: var(--color-pure-white); border-color: var(--color-mist); color: var(--color-deep-indigo); }
+.btn--outline:hover { border-color: var(--color-silver); }
+/* На кобальтовой панели белая кнопка — заливка, прозрачная — обводка */
+.btn--onblue { background: var(--color-pure-white); color: var(--color-electric-cobalt); }
+.btn--onblue:hover { background: var(--color-glacial-wash); }
+.btn--onblue-ghost { background: transparent; border-color: rgba(255,255,255,.55); color: var(--color-pure-white); }
+.btn--onblue-ghost:hover { border-color: var(--color-pure-white); }
+.btn--sm { padding: 9px var(--spacing-16); font-size: 14px; }
+
+.tag {
+  display: inline-block; border-radius: var(--radius-tags);
+  background: var(--color-glacial-wash); color: var(--color-deep-indigo);
+  padding: 3px var(--spacing-8); font-size: var(--text-caption); font-weight: var(--font-weight-medium);
+}
+
+/* ─── Навигация: элементы с радиусом 16 ───────────────────────────────── */
+.nav { padding: var(--spacing-16) 0; }
+.nav__inner {
+  max-width: var(--page-max-width); margin: 0 auto; padding: 0 var(--spacing-24);
+  display: flex; align-items: center; gap: var(--spacing-8);
+}
+.brand { display: inline-flex; align-items: center; gap: var(--spacing-8); text-decoration: none; color: var(--color-deep-indigo); margin-right: var(--spacing-24); }
+.brand svg { width: 26px; height: 26px; color: var(--color-electric-cobalt); }
+.brand span { font-size: 20px; font-weight: var(--font-weight-bold); }
+.nav__links { display: flex; gap: var(--spacing-4); list-style: none; }
+.nav__links a {
+  display: inline-block; padding: 9px var(--spacing-16); border-radius: var(--radius-nav);
+  color: var(--color-deep-indigo); text-decoration: none; font-size: 14px; font-weight: var(--font-weight-medium);
+  border: 1px solid transparent;
+}
+.nav__links a:hover { border-color: var(--color-mist); background: var(--color-pure-white); }
+.nav__right { margin-left: auto; display: flex; align-items: center; gap: var(--spacing-8); }
+.lang { display: inline-flex; border: 1px solid var(--color-mist); border-radius: var(--radius-nav); overflow: hidden; background: var(--color-pure-white); }
+.lang button {
+  font-family: var(--font-ui); font-size: var(--text-caption); font-weight: var(--font-weight-medium);
+  padding: 9px var(--spacing-12); border: none; background: transparent; color: var(--color-slate); cursor: pointer;
+}
+.lang button[aria-pressed="true"] { background: var(--color-deep-indigo); color: var(--color-pure-white); }
+
+/* ─── Герой: кобальтовая панель — крупная поверхность бренда ──────────── */
+.hero { padding-top: var(--spacing-16); }
+.hero__panel {
+  background: var(--surface-brand-panel);
+  border-radius: var(--radius-heropanels);
+  color: var(--color-pure-white);
+  padding: var(--spacing-72);
+  display: grid; grid-template-columns: 1.15fr .85fr; gap: var(--spacing-48); align-items: center;
+  overflow: hidden;
+}
+.hero__panel .display { max-width: 15ch; margin-bottom: var(--spacing-24); }
+.hero__panel p { color: rgba(255,255,255,.86); max-width: 46ch; }
+.hero__actions { display: flex; gap: var(--spacing-8); margin-top: var(--spacing-32); }
+/* Обелиски: скруглённые монолиты, радиальный кобальт разрешён только тут */
+.obelisks { display: flex; align-items: flex-end; justify-content: center; gap: var(--spacing-16); height: 280px; }
+.obelisks i {
+  display: block; width: 62px; border-radius: var(--radius-cards);
+  background: var(--gradient-cobalt-radial);
+  border: 1px solid rgba(255,255,255,.28);
+}
+.obelisks i:nth-child(1) { height: 150px; }
+.obelisks i:nth-child(2) { height: 240px; }
+.obelisks i:nth-child(3) { height: 190px; }
+.obelisks i:nth-child(4) { height: 110px; }
+
+/* ─── Полоса доверия ──────────────────────────────────────────────────── */
+.trust { display: flex; justify-content: space-between; align-items: center; padding: var(--spacing-40) 0; }
+.trust span { font-size: 18px; font-weight: var(--font-weight-bold); color: var(--color-pewter); }
+
+/* ─── Карточки: крупный радиус 40, рамка вместо тени ──────────────────── */
+.cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-24); }
+.card {
+  background: var(--surface-card); border: 1px solid var(--color-mist);
+  border-radius: var(--radius-cards); padding: var(--spacing-40);
+  display: flex; flex-direction: column; gap: var(--spacing-12);
+}
+.card svg { width: 26px; height: 26px; color: var(--color-deep-indigo); margin-bottom: var(--spacing-8); }
+.card p { font-size: 14px; line-height: 1.6; color: var(--color-slate); }
+
+/* ─── Панель кода ─────────────────────────────────────────────────────── */
+.split { display: grid; grid-template-columns: .9fr 1.1fr; gap: var(--spacing-48); align-items: center; }
+.code {
+  background: var(--surface-dark-band); border-radius: var(--radius-cards);
+  padding: var(--spacing-40); color: #d8d8d8;
+  font-family: var(--font-mono); font-size: 14px; line-height: 1.7;
+  overflow-x: auto;
+}
+.code .c { color: var(--color-fog); }
+.code .s { color: var(--color-sky-tint); }
+.code .k { color: var(--color-glacial-wash); }
+.chain-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #303030; }
+.chain-row:last-child { border-bottom: none; }
+.chain-row b { font-weight: var(--font-weight-regular); color: var(--color-pure-white); }
+.chain-row span { color: var(--color-fog); }
+
+/* ─── Тёмная полоса ───────────────────────────────────────────────────── */
+.band-dark { background: var(--surface-dark-band); color: var(--color-pure-white); border-radius: var(--radius-cards); padding: var(--spacing-64); }
+.band-dark .h-lg { max-width: 22ch; margin-bottom: var(--spacing-24); }
+.band-dark p { color: #b9b9b9; max-width: 56ch; }
+.figures { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--spacing-32); margin-top: var(--spacing-48); }
+.figure b { display: block; font-size: var(--text-display); line-height: var(--leading-display); font-weight: var(--font-weight-bold); }
+.figure span { display: block; font-size: 14px; color: #9a9a9a; margin-top: var(--spacing-8); }
+
+/* ─── Финал ───────────────────────────────────────────────────────────── */
+.final {
+  background: var(--surface-brand-panel); color: var(--color-pure-white);
+  border-radius: var(--radius-heropanels); padding: var(--spacing-72); text-align: center;
+}
+.final .h-lg { max-width: 24ch; margin: 0 auto var(--spacing-16); }
+.final p { color: rgba(255,255,255,.86); max-width: 52ch; margin: 0 auto; }
+.final__actions { display: flex; gap: var(--spacing-8); justify-content: center; margin-top: var(--spacing-32); }
+
+/* ─── Подвал ──────────────────────────────────────────────────────────── */
+.footer { border-top: 1px solid var(--color-mist); padding: var(--spacing-48) 0 var(--spacing-32); margin-top: var(--spacing-64); }
+.footer__grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: var(--spacing-40); }
+.footer__grid h4 { font-size: 14px; font-weight: var(--font-weight-bold); margin-bottom: var(--spacing-16); }
+.footer__grid ul { list-style: none; display: flex; flex-direction: column; gap: var(--spacing-8); }
+.footer__grid a { color: var(--color-slate); text-decoration: none; font-size: 14px; }
+.footer__grid a:hover { color: var(--color-deep-indigo); }
+.footer__note { font-size: 14px; color: var(--color-slate); margin-top: var(--spacing-12); max-width: 34ch; }
+.footer__bottom { margin-top: var(--spacing-48); padding-top: var(--spacing-24); border-top: 1px solid var(--color-mist); display: flex; justify-content: space-between; font-size: 14px; color: var(--color-slate); }
+</style>
+</head>
+<body>
+
+<!-- ─── Навигация ─────────────────────────────────────────────────────── -->
+<header class="nav">
+  <div class="nav__inner">
+    <a class="brand" href="#top">
+      <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+        <path d="M4 17c3.5-4 6.5-4 10 0s6.5 4 10 0"/><path d="M4 11c3.5-4 6.5-4 10 0s6.5 4 10 0"/>
+      </svg>
+      <span>Ferry</span>
+    </a>
+    <ul class="nav__links">
+      <li><a href="#how" data-i18n="nav.1">How it works</a></li>
+      <li><a href="#chains" data-i18n="nav.2">Chains</a></li>
+      <li><a href="#numbers" data-i18n="nav.3">Numbers</a></li>
+      <li><a href="#final" data-i18n="nav.4">Docs</a></li>
+    </ul>
+    <div class="nav__right">
+      <div class="lang">
+        <button type="button" data-set="en" aria-pressed="true">EN</button>
+        <button type="button" data-set="ru" aria-pressed="false">RU</button>
+      </div>
+      <a class="btn btn--outline btn--sm" href="#final" data-i18n="nav.login">Sign in</a>
+      <a class="btn btn--cobalt btn--sm" href="#final" data-i18n="nav.cta">Get keys</a>
+    </div>
+  </div>
+</header>
+
+<!-- ─── Герой ─────────────────────────────────────────────────────────── -->
+<div class="wrap hero" id="top">
+  <div class="hero__panel">
+    <div>
+      <h1 class="display" data-i18n="hero.title">One integration for every chain your users are already on</h1>
+      <p class="sub" data-i18n="hero.sub">Ferry moves assets between eleven networks behind a single endpoint. You quote, you sign, we route — and the user never learns the word “bridge”.</p>
+      <div class="hero__actions">
+        <a class="btn btn--onblue" href="#final" data-i18n="hero.cta1">Get API keys</a>
+        <a class="btn btn--onblue-ghost" href="#how" data-i18n="hero.cta2">Read the docs</a>
+      </div>
+    </div>
+    <div class="obelisks" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+  </div>
+</div>
+
+<!-- ─── Полоса доверия ────────────────────────────────────────────────── -->
+<div class="wrap">
+  <div class="trust">
+    <span>Basalt</span><span>Northwind</span><span>Kestrel</span>
+    <span>Halyard</span><span>Pont</span><span>Ferrous</span><span>Lumen</span>
+  </div>
+</div>
+
+<!-- ─── Как это работает ──────────────────────────────────────────────── -->
+<section id="how">
+  <div class="wrap">
+    <h2 class="h-lg" style="max-width:24ch;margin-bottom:var(--spacing-40)" data-i18n="how.title">Three calls, and the routing is somebody else's problem</h2>
+    <div class="cards">
+      <div class="card">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 8h16M4 16h16"/><circle cx="9" cy="8" r="2.2"/><circle cx="15" cy="16" r="2.2"/></svg>
+        <h3 class="h-sm" data-i18n="how.1t">Quote</h3>
+        <p data-i18n="how.1d">Ask for a route and get every option back with the real cost, the real time and the bridge that will actually carry it.</p>
+      </div>
+      <div class="card">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3v12M8 11l4 4 4-4"/><path d="M4 19h16"/></svg>
+        <h3 class="h-sm" data-i18n="how.2t">Sign</h3>
+        <p data-i18n="how.2d">One signature from the user's existing wallet. No new approvals, no intermediate token, no second confirmation halfway across.</p>
+      </div>
+      <div class="card">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5v5l3.5 2"/></svg>
+        <h3 class="h-sm" data-i18n="how.3t">Settle</h3>
+        <p data-i18n="how.3d">We watch both sides and refund automatically if a leg fails. Median settlement is under two minutes across the eleven.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Код и сети ────────────────────────────────────────────────────── -->
+<section id="chains">
+  <div class="wrap split">
+    <div>
+      <span class="tag" data-i18n="ch.tag">Eleven networks</span>
+      <h2 class="h-lg" style="margin:var(--spacing-16) 0 var(--spacing-16)" data-i18n="ch.title">The same call, whichever way the money goes</h2>
+      <p class="muted" data-i18n="ch.p">Chains are a parameter, not a rewrite. Adding a network on our side does not change a line on yours — the quote object keeps the shape it had on day one.</p>
+      <a class="btn btn--outline" style="margin-top:var(--spacing-24)" href="#final" data-i18n="ch.cta">See the full list</a>
+    </div>
+    <div class="code">
+<pre><span class="c">// quote a route, any direction</span>
+<span class="k">const</span> route = <span class="k">await</span> ferry.<span class="s">quote</span>({
+  from:   <span class="s">"base:usdc"</span>,
+  to:     <span class="s">"arbitrum:usdc"</span>,
+  amount: <span class="s">"2500.00"</span>,
+  payer:  <span class="s">"0x8f3a…c71d"</span>
+});</pre>
+      <div style="margin-top:var(--spacing-24)">
+        <div class="chain-row"><b>base → arbitrum</b><span>0.9s · $0.41</span></div>
+        <div class="chain-row"><b>base → optimism</b><span>1.2s · $0.38</span></div>
+        <div class="chain-row"><b>base → solana</b><span>4.6s · $0.72</span></div>
+        <div class="chain-row"><b>ethereum → base</b><span>18s · $2.10</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Тёмная полоса с цифрами ───────────────────────────────────────── -->
+<section id="numbers" style="padding-top:0">
+  <div class="wrap">
+    <div class="band-dark">
+      <h2 class="h-lg" data-i18n="num.title">What the last twelve months looked like</h2>
+      <p data-i18n="num.p">Published monthly, including the months we would rather not have published. Failed legs are counted as failures even when the refund landed.</p>
+      <div class="figures">
+        <div class="figure"><b>$4.1B</b><span data-i18n="num.1">routed across eleven networks</span></div>
+        <div class="figure"><b>11</b><span data-i18n="num.2">networks behind one endpoint</span></div>
+        <div class="figure"><b>1m 48s</b><span data-i18n="num.3">median settlement, end to end</span></div>
+        <div class="figure"><b>0.04%</b><span data-i18n="num.4">legs failed, all refunded</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Финал ─────────────────────────────────────────────────────────── -->
+<div class="wrap">
+  <div class="final" id="final">
+    <h2 class="h-lg" data-i18n="fin.title">Keys in about four minutes, no call with anybody</h2>
+    <p data-i18n="fin.p">Test keys are instant and unlimited on testnets. Production needs one form and usually clears the same day.</p>
+    <div class="final__actions">
+      <a class="btn btn--onblue" href="#final" data-i18n="fin.cta1">Get API keys</a>
+      <a class="btn btn--onblue-ghost" href="#how" data-i18n="fin.cta2">Talk to an engineer</a>
+    </div>
+  </div>
+</div>
+
+<!-- ─── Подвал ────────────────────────────────────────────────────────── -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__grid">
+      <div>
+        <a class="brand" href="#top">
+          <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+            <path d="M4 17c3.5-4 6.5-4 10 0s6.5 4 10 0"/><path d="M4 11c3.5-4 6.5-4 10 0s6.5 4 10 0"/>
+          </svg>
+          <span>Ferry</span>
+        </a>
+        <p class="footer__note" data-i18n="f.note">One integration for every chain your users are already on. Built in Tbilisi.</p>
+      </div>
+      <div>
+        <h4 data-i18n="f.c1">Product</h4>
+        <ul>
+          <li><a href="#how" data-i18n="f.c1.1">Quotes</a></li>
+          <li><a href="#chains" data-i18n="f.c1.2">Chains</a></li>
+          <li><a href="#numbers" data-i18n="f.c1.3">Settlement</a></li>
+          <li><a href="#final" data-i18n="f.c1.4">Pricing</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 data-i18n="f.c2">Developers</h4>
+        <ul>
+          <li><a href="#final" data-i18n="f.c2.1">Documentation</a></li>
+          <li><a href="#final" data-i18n="f.c2.2">SDK</a></li>
+          <li><a href="#final" data-i18n="f.c2.3">Status</a></li>
+          <li><a href="#final" data-i18n="f.c2.4">Changelog</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 data-i18n="f.c3">Company</h4>
+        <ul>
+          <li><a href="#top" data-i18n="f.c3.1">About</a></li>
+          <li><a href="#top" data-i18n="f.c3.2">Security</a></li>
+          <li><a href="#top" data-i18n="f.c3.3">Audits</a></li>
+          <li><a href="#top" data-i18n="f.c3.4">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span data-i18n="f.copy">© 2026 Ferry Labs</span>
+      <span data-i18n="f.legal">Terms · Privacy · Audits</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* Английский — исходный; русский — перевод. Дефолт EN, без автодетекта. */
+var I18N = {
+  ru: {
+    "nav.1": "Как это работает", "nav.2": "Сети", "nav.3": "Цифры", "nav.4": "Документация",
+    "nav.login": "Войти", "nav.cta": "Получить ключи",
+
+    "hero.title": "Одна интеграция на все сети, где ваши пользователи уже есть",
+    "hero.sub": "Ferry перекладывает активы между одиннадцатью сетями за одним эндпоинтом. Вы запрашиваете котировку и подписываете, маршрут выбираем мы — а пользователь так и не узнаёт слова «бридж».",
+    "hero.cta1": "Получить ключи",
+    "hero.cta2": "Открыть документацию",
+
+    "how.title": "Три вызова, а маршрутизация — уже не ваша забота",
+    "how.1t": "Котировка",
+    "how.1d": "Спрашиваете маршрут и получаете все варианты с настоящей ценой, настоящим временем и тем мостом, который его действительно повезёт.",
+    "how.2t": "Подпись",
+    "how.2d": "Одна подпись из уже имеющегося кошелька. Без новых апрувов, без промежуточного токена и без второго подтверждения на полпути.",
+    "how.3t": "Расчёт",
+    "how.3d": "Мы смотрим за обеими сторонами и автоматически возвращаем средства, если плечо не прошло. Медиана расчёта — меньше двух минут по всем одиннадцати.",
+
+    "ch.tag": "Одиннадцать сетей",
+    "ch.title": "Один и тот же вызов, куда бы ни шли деньги",
+    "ch.p": "Сеть — это параметр, а не переписывание. Когда мы добавляем сеть у себя, у вас не меняется ни строки: объект котировки сохраняет форму, которая была в первый день.",
+    "ch.cta": "Смотреть полный список",
+
+    "num.title": "Как выглядели последние двенадцать месяцев",
+    "num.p": "Публикуем ежемесячно, включая те месяцы, которые публиковать не хотелось. Несработавшие плечи считаются отказами, даже если возврат дошёл.",
+    "num.1": "проведено через одиннадцать сетей",
+    "num.2": "сетей за одним эндпоинтом",
+    "num.3": "медианный расчёт от края до края",
+    "num.4": "плеч не прошли, все возвращены",
+
+    "fin.title": "Ключи примерно за четыре минуты и без звонка с кем-либо",
+    "fin.p": "Тестовые ключи выдаются мгновенно и без лимитов в тестовых сетях. Для боевых нужна одна анкета, и обычно она проходит в тот же день.",
+    "fin.cta1": "Получить ключи",
+    "fin.cta2": "Поговорить с инженером",
+
+    "f.note": "Одна интеграция на все сети, где ваши пользователи уже есть. Сделано в Тбилиси.",
+    "f.c1": "Продукт",
+    "f.c1.1": "Котировки", "f.c1.2": "Сети", "f.c1.3": "Расчёты", "f.c1.4": "Тарифы",
+    "f.c2": "Разработчикам",
+    "f.c2.1": "Документация", "f.c2.2": "SDK", "f.c2.3": "Статус", "f.c2.4": "Changelog",
+    "f.c3": "Компания",
+    "f.c3.1": "О нас", "f.c3.2": "Безопасность", "f.c3.3": "Аудиты", "f.c3.4": "Контакты",
+    "f.copy": "© 2026 Ferry Labs",
+    "f.legal": "Условия · Приватность · Аудиты"
+  }
+};
+
+(function () {
+  var nodes = document.querySelectorAll('[data-i18n]');
+  var EN = {};
+  nodes.forEach(function (n) { EN[n.getAttribute('data-i18n')] = n.textContent; });
+
+  function apply(lang) {
+    nodes.forEach(function (n) {
+      var k = n.getAttribute('data-i18n');
+      var v = lang === 'ru' ? I18N.ru[k] : EN[k];
+      if (v) n.textContent = v;
+    });
+    document.documentElement.lang = lang;
+    document.documentElement.setAttribute('data-lang', lang);
+    document.querySelectorAll('.lang [data-set]').forEach(function (b) {
+      b.setAttribute('aria-pressed', String(b.getAttribute('data-set') === lang));
+    });
+  }
+  document.querySelectorAll('.lang [data-set]').forEach(function (b) {
+    b.addEventListener('click', function () { apply(b.getAttribute('data-set')); });
+  });
+})();
+</script>
+</body>
+</html>

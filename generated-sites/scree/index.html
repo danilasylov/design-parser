@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>Scree — sixteen weeks to a mountain marathon</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+/* ─────────────────────────────────────────────────────────────
+   Дизайн-система: Buddy (refero 1329b661) — tokens.css дословно
+   ───────────────────────────────────────────────────────────── */
+:root {
+  /* Colors */
+  --color-lime-spark: #bfff5a;
+  --color-cobalt-signal: #1a67fd;
+  --color-forest-depth: #0b3d28;
+  --color-paper-white: #fcfcfd;
+  --color-midnight-ink: #1d2130;
+  --color-carbon: #151720;
+  --color-obsidian: #0a0d16;
+  --color-mist-gray: #ebeef7;
+  --color-slate-edge: #d5d9e8;
+  --color-silver-wash: #d6d6d7;
+  --color-pewter: #6b6d72;
+  --color-graphite: #474950;
+  --color-cyan-beam: #46d8ff;
+  --color-mint-pulse: #19f79a;
+  --color-citron-wave: #e5ed38;
+  --color-orchid-glaze: #ff9dec;
+  --color-amber-glow: #ffc650;
+  --gradient-amber-glow: radial-gradient(100% 100% at 50% 0px, rgb(255, 216, 136) 0%, rgb(255, 198, 80) 100%);
+  --color-mint-tint: #d8fbed;
+
+  /* Typography — Font Families */
+  --font-ibm-plex-sans: 'IBM Plex Sans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-ibm-plex-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Typography — Scale */
+  --text-caption: 12px;
+  --leading-caption: 2;
+  --tracking-caption: 2px;
+  --text-subheading: 18px;
+  --leading-subheading: 1.45;
+  --text-heading-sm: 22px;
+  --leading-heading-sm: 1.43;
+  --tracking-heading-sm: -0.26px;
+  --text-heading: 48px;
+  --leading-heading: 1;
+  --tracking-heading: -1px;
+  --text-display: 80px;
+  --leading-display: 0.9;
+  --tracking-display: -3.6px;
+
+  /* Typography — Weights */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Spacing */
+  --spacing-8: 8px;
+  --spacing-16: 16px;
+  --spacing-24: 24px;
+  --spacing-32: 32px;
+  --spacing-40: 40px;
+  --spacing-48: 48px;
+  --spacing-72: 72px;
+  --spacing-96: 96px;
+  --spacing-120: 120px;
+
+  /* Layout */
+  --page-max-width: 1200px;
+  --section-gap: 80px;
+  --card-padding: 24px;
+  --element-gap: 16px;
+
+  /* Border Radius */
+  --radius-lg: 8px;
+  --radius-xl: 14px;
+  --radius-3xl: 24px;
+  --radius-cards: 24px;
+  --radius-pills: 9999px;
+  --radius-images: 8px;
+  --radius-buttons: 56px;
+  --radius-navlinks: 44px;
+  --radius-smallcards: 14px;
+
+  /* Shadows */
+  --shadow-subtle: rgba(29, 33, 48, 0.04) 0px 3px 3px -1px, rgba(29, 33, 48, 0.04) 0px 6px 6px -3px, rgba(29, 33, 48, 0.04) 0px 12px 12px -6px, rgba(29, 33, 48, 0.04) 0px 24px 24px -12px, rgba(29, 33, 48, 0.04) 0px 32px 32px -16px;
+  --shadow-subtle-3: rgba(255, 255, 255, 0.72) 0px 0px 0px 1px inset, rgb(213, 217, 232) 0px 0px 0px 1px, rgba(29, 33, 48, 0.03) 0px 1px 1px -1px, rgba(29, 33, 48, 0.05) 0px 3px 3px -2px, rgba(29, 33, 48, 0.03) 0px 5px 5px -3px, rgba(213, 217, 232, 0.22) 0px 5px 5px -2px;
+  --shadow-subtle-5: rgba(29, 33, 48, 0.08) 0px 0px 0px 1px, rgba(29, 33, 48, 0.04) 0px 1px 1px -1px, rgba(29, 33, 48, 0.04) 0px 2px 2px -1px, rgba(29, 33, 48, 0.04) 0px 3px 3px -1.5px, rgba(29, 33, 48, 0.04) 0px 5px 5px -2.5px, rgba(183, 255, 90, 0.08) 0px 10px 10px -5px, rgba(183, 255, 90, 0.08) 0px 24px 24px -8px;
+
+  /* Surfaces */
+  --surface-canvas: #fcfcfd;
+  --surface-card: #fcfcfd;
+  --surface-dark-section: #0a0d16;
+  --surface-amber-card: #ffd888;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--surface-canvas);
+  color: var(--color-carbon);
+  font-family: var(--font-ibm-plex-sans);
+  font-size: 17px;
+  line-height: 1.6;
+  font-weight: var(--font-weight-regular);
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; text-decoration: none; }
+h1, h2, h3, h4, p, ul, ol, figure { margin: 0; }
+ul { list-style: none; padding: 0; }
+
+/* Миллиметровка — фон холста (24px сетка, как в системе) */
+.grid-bg {
+  background-image:
+    linear-gradient(to right, rgba(29,33,48,0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(29,33,48,0.045) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.wrap { max-width: var(--page-max-width); margin: 0 auto; padding: 0 var(--spacing-24); }
+section { padding: var(--spacing-96) 0; }
+
+.eyebrow {
+  font-family: var(--font-ibm-plex-mono); font-size: var(--text-caption);
+  line-height: var(--leading-caption); letter-spacing: var(--tracking-caption);
+  text-transform: uppercase; color: var(--color-pewter); font-weight: var(--font-weight-medium);
+}
+h1 { font-size: var(--text-display); line-height: var(--leading-display); letter-spacing: var(--tracking-display); font-weight: var(--font-weight-bold); color: var(--color-obsidian); }
+h2 { font-size: var(--text-heading); line-height: var(--leading-heading); letter-spacing: var(--tracking-heading); font-weight: var(--font-weight-bold); color: var(--color-obsidian); }
+h3 { font-size: var(--text-heading-sm); line-height: var(--leading-heading-sm); letter-spacing: var(--tracking-heading-sm); font-weight: var(--font-weight-semibold); color: var(--color-midnight-ink); }
+p.lead { font-size: var(--text-subheading); line-height: var(--leading-subheading); color: var(--color-graphite); }
+
+/* Мазок-градиент под ключевыми словами */
+.stroke { position: relative; display: inline-block; }
+.stroke svg { position: absolute; left: -4px; right: -4px; bottom: -2px; width: calc(100% + 8px); height: 14px; }
+
+/* ── Навигация ── */
+.nav { position: sticky; top: 0; z-index: 40; background: rgba(252,252,253,0.9); backdrop-filter: blur(8px); border-bottom: 1px solid var(--color-mist-gray); }
+.nav .wrap { height: 68px; display: flex; align-items: center; gap: var(--spacing-24); }
+.logo { display: flex; align-items: center; gap: 10px; font-weight: var(--font-weight-bold); font-size: 19px; color: var(--color-midnight-ink); letter-spacing: -0.02em; }
+.nav-links { margin: 0 auto; display: flex; gap: var(--spacing-8); }
+.nav-links a { padding: 8px 16px; border-radius: var(--radius-navlinks); font-size: 15px; color: var(--color-midnight-ink); font-weight: var(--font-weight-medium); }
+.nav-links a:hover { background: var(--color-mist-gray); }
+.nav-right { display: flex; align-items: center; gap: var(--spacing-16); }
+.btn { display: inline-flex; align-items: center; gap: 8px; border-radius: var(--radius-buttons); padding: 12px 24px; font-family: inherit; font-size: 15px; font-weight: var(--font-weight-semibold); cursor: pointer; border: 0; }
+.btn-lime { background: var(--color-lime-spark); color: var(--color-forest-depth); box-shadow: var(--shadow-subtle-5); }
+.btn-ghost { background: transparent; color: var(--color-midnight-ink); box-shadow: rgb(213,217,232) 0 0 0 1px; }
+.btn-lg { padding: 16px 32px; font-size: 17px; }
+.switch { display: inline-flex; border-radius: var(--radius-pills); overflow: hidden; box-shadow: rgb(213,217,232) 0 0 0 1px; }
+.switch button { background: transparent; border: 0; font-family: inherit; font-size: 13px; font-weight: var(--font-weight-medium); padding: 7px 10px; cursor: pointer; color: var(--color-pewter); }
+.switch button[aria-pressed="true"] { background: var(--color-midnight-ink); color: var(--color-paper-white); }
+
+/* ── Хиро ── */
+.hero { padding: var(--spacing-96) 0 var(--spacing-72); text-align: center; }
+.hero h1 { max-width: 980px; margin: var(--spacing-24) auto 0; }
+.hero p.lead { max-width: 640px; margin: var(--spacing-32) auto 0; }
+.hero .actions { margin-top: var(--spacing-40); display: flex; gap: var(--spacing-16); justify-content: center; }
+
+/* ── Карточки ── */
+.card {
+  background: var(--surface-card); border-radius: var(--radius-cards);
+  box-shadow: var(--shadow-subtle-3), var(--shadow-subtle);
+  padding: var(--card-padding); position: relative; overflow: hidden;
+}
+.card .arc { position: absolute; top: 0; left: 0; right: 0; height: 40px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-24); }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-32); }
+.card h3 { margin: var(--spacing-24) 0 var(--spacing-8); }
+.card p { color: var(--color-graphite); font-size: 15px; }
+
+/* ── Профиль трассы ── */
+.profile { padding: var(--spacing-32); }
+.profile svg { display: block; width: 100%; height: auto; }
+.profile .legend { display: flex; gap: var(--spacing-32); margin-top: var(--spacing-16); }
+.profile .legend span { font-family: var(--font-ibm-plex-mono); font-size: var(--text-caption); letter-spacing: var(--tracking-caption); text-transform: uppercase; color: var(--color-pewter); }
+
+/* ── Полоса стартов ── */
+.races { text-align: center; padding: var(--spacing-48) 0; }
+.races ul { display: flex; justify-content: center; gap: var(--spacing-40); flex-wrap: wrap; margin-top: var(--spacing-16); }
+.races li { font-weight: var(--font-weight-semibold); color: var(--color-pewter); font-size: 16px; }
+
+/* ── Таблица недель ── */
+.weeks { width: 100%; border-collapse: collapse; font-size: 15px; }
+.weeks th { text-align: left; font-family: var(--font-ibm-plex-mono); font-size: var(--text-caption); letter-spacing: var(--tracking-caption); text-transform: uppercase; color: var(--color-pewter); font-weight: var(--font-weight-medium); padding: 0 var(--spacing-16) var(--spacing-16) 0; }
+.weeks td { padding: var(--spacing-16) var(--spacing-16) var(--spacing-16) 0; border-top: 1px solid var(--color-mist-gray); vertical-align: top; }
+.weeks td.w { font-weight: var(--font-weight-semibold); color: var(--color-midnight-ink); width: 76px; }
+.weeks td.num { font-variant-numeric: tabular-nums; width: 118px; white-space: nowrap; }
+.weeks td.key { color: var(--color-graphite); }
+.weeks tr.down td { background: var(--color-mist-gray); }
+.weeks tr.down .tag { background: var(--color-paper-white); }
+.tag { display: inline-block; border-radius: var(--radius-pills); padding: 2px 12px; font-size: 13px; font-weight: var(--font-weight-medium); background: var(--color-mist-gray); color: var(--color-midnight-ink); }
+.tag.lime { background: var(--color-lime-spark); color: var(--color-forest-depth); }
+
+/* ── Тёмная полоса ── */
+.dark { background: var(--surface-dark-section); color: var(--color-paper-white); padding: var(--spacing-96) 0; }
+.dark h2 { color: var(--color-paper-white); }
+.amber-card { background: var(--gradient-amber-glow); color: var(--color-obsidian); border-radius: var(--radius-cards); padding: var(--spacing-48); max-width: 780px; margin: var(--spacing-48) auto 0; }
+.amber-card blockquote { font-size: 24px; line-height: 1.35; letter-spacing: -0.3px; font-weight: var(--font-weight-medium); }
+.amber-card .who { margin-top: var(--spacing-24); font-size: 15px; font-weight: var(--font-weight-semibold); }
+.amber-card .who span { font-weight: var(--font-weight-regular); color: rgba(10,13,22,0.7); }
+.dark .figs { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--spacing-32); margin-top: var(--spacing-72); text-align: center; }
+.dark .figs .n { font-size: var(--text-heading); line-height: 1; letter-spacing: var(--tracking-heading); font-weight: var(--font-weight-bold); }
+.dark .figs p { color: var(--color-silver-wash); font-size: 15px; margin-top: var(--spacing-16); }
+
+/* ── Комплект ── */
+.kit li { display: grid; grid-template-columns: 220px 1fr; gap: var(--spacing-24); padding: var(--spacing-16) 0; border-top: 1px solid var(--color-mist-gray); font-size: 15px; }
+.kit li b { font-weight: var(--font-weight-semibold); color: var(--color-midnight-ink); }
+.kit li span { color: var(--color-graphite); }
+
+/* ── Цены ── */
+.plan { display: flex; flex-direction: column; }
+.plan .price { font-size: var(--text-heading); line-height: 1; letter-spacing: var(--tracking-heading); font-weight: var(--font-weight-bold); color: var(--color-obsidian); margin: var(--spacing-16) 0 var(--spacing-24); }
+.plan ul { flex: 1; }
+.plan li { font-size: 15px; color: var(--color-graphite); padding: 8px 0; border-top: 1px solid var(--color-mist-gray); }
+.plan .btn { margin-top: var(--spacing-24); justify-content: center; }
+
+/* ── Подвал ── */
+footer { padding: var(--spacing-72) 0 var(--spacing-48); border-top: 1px solid var(--color-mist-gray); }
+.foot { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: var(--spacing-40); }
+footer h4 { font-family: var(--font-ibm-plex-mono); font-size: var(--text-caption); letter-spacing: var(--tracking-caption); text-transform: uppercase; color: var(--color-pewter); font-weight: var(--font-weight-medium); margin-bottom: var(--spacing-16); }
+footer li { padding: 5px 0; font-size: 15px; }
+footer li a:hover { color: var(--color-cobalt-signal); }
+.foot-note { color: var(--color-pewter); font-size: 15px; max-width: 320px; margin-top: var(--spacing-16); }
+.foot-bottom { margin-top: var(--spacing-48); padding-top: var(--spacing-24); border-top: 1px solid var(--color-mist-gray); display: flex; font-size: 14px; color: var(--color-pewter); }
+.foot-bottom .right { margin-left: auto; display: flex; gap: var(--spacing-24); }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap">
+    <a class="logo" href="#">
+      <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true">
+        <rect width="26" height="26" rx="8" fill="#1d2130"/>
+        <path d="M6 18l5-8 3 4.5L16.5 11 21 18H6z" fill="#bfff5a"/>
+      </svg>
+      Scree
+    </a>
+    <div class="nav-links">
+      <a href="#plan" data-i18n="n1">The plan</a>
+      <a href="#profile" data-i18n="n2">The race</a>
+      <a href="#kit" data-i18n="n3">Kit</a>
+      <a href="#price" data-i18n="n4">Pricing</a>
+    </div>
+    <div class="nav-right">
+      <a href="#" style="font-size:15px;font-weight:500" data-i18n="n5">Sign in</a>
+      <a class="btn btn-lime" href="#price" data-i18n="n6">Start week 1</a>
+      <span class="switch">
+        <button type="button" data-set="en" aria-pressed="true">EN</button>
+        <button type="button" data-set="ru" aria-pressed="false">RU</button>
+      </span>
+    </div>
+  </div>
+</nav>
+
+<header class="hero grid-bg">
+  <div class="wrap">
+    <div class="eyebrow" data-i18n="e0">16-week build · mountain marathon · 42 km</div>
+    <h1>
+      <span data-i18n="h1a">Sixteen weeks to 42 km and</span>
+      <span class="stroke"><span data-i18n="h1b">2 600 m of climb</span>
+        <svg viewBox="0 0 300 14" preserveAspectRatio="none" aria-hidden="true">
+          <defs><linearGradient id="g1" x1="0" x2="1"><stop offset="0" stop-color="#46d8ff"/><stop offset="0.35" stop-color="#19f79a"/><stop offset="0.7" stop-color="#e5ed38"/><stop offset="1" stop-color="#ff9dec"/></linearGradient></defs>
+          <path d="M2 10 C60 3, 120 12, 180 6 S280 4, 298 8" stroke="url(#g1)" stroke-width="7" fill="none" stroke-linecap="round"/>
+        </svg>
+      </span>
+    </h1>
+    <p class="lead" data-i18n="h2">A training plan that counts metres of ascent the way other plans count kilometres — because the mountain does not care how fast you are on the flat. Written for a runner who can already do 25 km on a Sunday and has never descended for two hours straight.</p>
+    <div class="actions">
+      <a class="btn btn-lime btn-lg" href="#price" data-i18n="h3">Start week 1 on Monday</a>
+      <a class="btn btn-ghost btn-lg" href="#plan" data-i18n="h4">Read all sixteen weeks</a>
+    </div>
+
+    <div class="card profile" style="margin-top:var(--spacing-72);text-align:left" id="profile">
+      <div class="eyebrow" data-i18n="pr0">Race profile · Elbrus Trail 42K · 2 600 m D+</div>
+      <svg viewBox="0 0 1100 300" fill="none" font-family="'IBM Plex Mono', monospace" font-size="11" style="margin-top:16px">
+        <g stroke="#ebeef7" stroke-width="1">
+          <path d="M56 30H1080M56 90H1080M56 150H1080M56 210H1080M56 262H1080"/>
+        </g>
+        <g fill="#6b6d72">
+          <text x="4" y="34">2 900 m</text><text x="4" y="94">2 500</text><text x="4" y="154">2 100</text><text x="4" y="214">1 700</text><text x="4" y="266">1 300</text>
+        </g>
+        <path d="M56 262 L150 240 L230 186 L300 150 L360 98 L410 120 L470 60 L520 84 L590 150 L650 132 L700 74 L760 44 L820 96 L880 168 L940 210 L1000 196 L1080 250 L1080 262 Z" fill="#ebeef7"/>
+        <path d="M56 262 L150 240 L230 186 L300 150 L360 98 L410 120 L470 60 L520 84 L590 150 L650 132 L700 74 L760 44 L820 96 L880 168 L940 210 L1000 196 L1080 250" stroke="#1d2130" stroke-width="2"/>
+        <g stroke="#d5d9e8" stroke-dasharray="3 4"><path d="M300 30V262M590 30V262M880 30V262"/></g>
+        <g fill="#1d2130" font-weight="500">
+          <circle cx="300" cy="150" r="4"/><text x="286" y="286">CP1 · 11 km</text>
+          <circle cx="590" cy="150" r="4"/><text x="574" y="286">CP2 · 24 km</text>
+          <circle cx="880" cy="168" r="4"/><text x="864" y="286">CP3 · 34 km</text>
+        </g>
+        <circle cx="760" cy="44" r="5" fill="#bfff5a" stroke="#0b3d28" stroke-width="1.5"/>
+        <text x="716" y="32" fill="#0b3d28" font-weight="500">2 810 m — high point, km 30</text>
+      </svg>
+      <div class="legend">
+        <span data-i18n="lg1">Cut-off at CP2: 5 h 40</span>
+        <span data-i18n="lg2">Longest descent: 9 km, −1 100 m</span>
+        <span data-i18n="lg3">Above 2 500 m: 11 km</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="races">
+  <div class="wrap">
+    <div class="eyebrow" data-i18n="rc0">Written for these starts, adapted for any of them</div>
+    <ul>
+      <li>Elbrus Trail 42K</li><li>Adygea Skyrace</li><li>Baikal Vertical</li><li>Krasnaya Polyana 40</li><li>Ural Ultra 45</li>
+    </ul>
+  </div>
+</div>
+
+<section id="plan" style="padding-top:var(--spacing-48)">
+  <div class="wrap">
+    <div class="eyebrow" data-i18n="e1">The build</div>
+    <h2 style="max-width:760px;margin-top:var(--spacing-16)" data-i18n="s1">Four blocks. Every fourth week takes something away.</h2>
+    <p class="lead" style="max-width:720px;margin-top:var(--spacing-24)" data-i18n="s1p">Volume is written in hours and metres of ascent, not in kilometres — an hour of climbing on scree and an hour on a flat road are different jobs, and only one of them is what you signed up for.</p>
+
+    <table class="weeks" style="margin-top:var(--spacing-48)">
+      <thead>
+        <tr><th data-i18n="th1">Week</th><th data-i18n="th2">Block</th><th data-i18n="th3">Hours</th><th data-i18n="th4">Ascent</th><th data-i18n="th5">Key session of the week</th><th data-i18n="th6">Long day</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="w">01–03</td><td><span class="tag" data-i18n="bl1">Base</span></td><td class="num">6–7 h</td><td class="num">900 m</td><td class="key" data-i18n="k1">Hill strides on a 6 % road, 8 × 40 s, walk down</td><td data-i18n="l1">2 h easy, any terrain</td></tr>
+        <tr class="down"><td class="w">04</td><td><span class="tag" data-i18n="bl2">Down week</span></td><td class="num">4 h</td><td class="num">400 m</td><td class="key" data-i18n="k2">Nothing hard. One session of downhill technique on grass</td><td data-i18n="l2">1 h 15, flat</td></tr>
+        <tr><td class="w">05–07</td><td><span class="tag" data-i18n="bl3">Ascent</span></td><td class="num">7–9 h</td><td class="num">1 400–1 800 m</td><td class="key" data-i18n="k3">Vertical repeats: 4 × 250 m climb, hike the steep parts on purpose</td><td data-i18n="l3">3 h with 900 m, poles</td></tr>
+        <tr class="down"><td class="w">08</td><td><span class="tag" data-i18n="bl4">Down week</span></td><td class="num">5 h</td><td class="num">600 m</td><td class="key" data-i18n="k4">Test: 10 km at race effort on rolling ground, heart rate recorded</td><td data-i18n="l4">1 h 30</td></tr>
+        <tr><td class="w">09–11</td><td><span class="tag" data-i18n="bl5">Descent</span></td><td class="num">8–10 h</td><td class="num">1 800–2 200 m</td><td class="key" data-i18n="k5">Descending volume: 3 × 400 m down, quads sore on purpose, 48 h before the next one</td><td data-i18n="l5">4–5 h with 1 400 m</td></tr>
+        <tr class="down"><td class="w">12</td><td><span class="tag" data-i18n="bl6">Down week</span></td><td class="num">5 h</td><td class="num">700 m</td><td class="key" data-i18n="k6">Kit rehearsal: full pack, race food, the shoes you will actually wear</td><td data-i18n="l6">2 h, race pace on the descent</td></tr>
+        <tr><td class="w">13–14</td><td><span class="tag" data-i18n="bl7">Race specific</span></td><td class="num">9–11 h</td><td class="num">2 400 m</td><td class="key" data-i18n="k7">Back-to-back: 4 h Saturday, 3 h Sunday on tired legs, both above 1 800 m if you can</td><td data-i18n="l7">The biggest day of the plan</td></tr>
+        <tr><td class="w">15</td><td><span class="tag" data-i18n="bl8">Taper</span></td><td class="num">6 h</td><td class="num">1 000 m</td><td class="key" data-i18n="k8">Short and sharp. Nothing new, nothing long, sleep is the session</td><td data-i18n="l8">2 h</td></tr>
+        <tr><td class="w">16</td><td><span class="tag lime" data-i18n="bl9">Race week</span></td><td class="num">2–3 h</td><td class="num">300 m</td><td class="key" data-i18n="k9">Three easy runs, one with six minutes at race effort on Wednesday</td><td data-i18n="l9">Saturday, 42 km</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="grid-3">
+      <div class="card">
+        <svg class="arc" viewBox="0 0 400 40" preserveAspectRatio="none" aria-hidden="true">
+          <defs><linearGradient id="a1" x1="0" x2="1"><stop offset="0" stop-color="#46d8ff"/><stop offset="1" stop-color="#19f79a"/></linearGradient></defs>
+          <path d="M0 34 C120 4, 280 4, 400 34" stroke="url(#a1)" stroke-width="3" fill="none"/>
+        </svg>
+        <h3 data-i18n="c1h">Ascent is the unit</h3>
+        <p data-i18n="c1p">Each week has a metres-of-climb target and a permitted range. Hit it on any hill you can reach: a ski slope, a stairwell, the same 80-metre bank twenty times. The plan does not care which, only that the legs did the work.</p>
+      </div>
+      <div class="card">
+        <svg class="arc" viewBox="0 0 400 40" preserveAspectRatio="none" aria-hidden="true">
+          <defs><linearGradient id="a2" x1="0" x2="1"><stop offset="0" stop-color="#e5ed38"/><stop offset="1" stop-color="#ff9dec"/></linearGradient></defs>
+          <path d="M0 34 C120 4, 280 4, 400 34" stroke="url(#a2)" stroke-width="3" fill="none"/>
+        </svg>
+        <h3 data-i18n="c2h">Descending is what breaks people</h3>
+        <p data-i18n="c2p">Three weeks of this plan exist only to teach quadriceps to absorb 1 100 metres of downhill without seizing at kilometre 36. It is the least enjoyable block and the one nobody who skipped it finished well.</p>
+      </div>
+      <div class="card">
+        <svg class="arc" viewBox="0 0 400 40" preserveAspectRatio="none" aria-hidden="true">
+          <defs><linearGradient id="a3" x1="0" x2="1"><stop offset="0" stop-color="#19f79a"/><stop offset="1" stop-color="#46d8ff"/></linearGradient></defs>
+          <path d="M0 34 C120 4, 280 4, 400 34" stroke="url(#a3)" stroke-width="3" fill="none"/>
+        </svg>
+        <h3 data-i18n="c3h">Every fourth week is smaller</h3>
+        <p data-i18n="c3p">Down weeks are written into the plan as sessions, not as permission. The adaptation happens in them; a runner who trains through four of them arrives at week 13 with nothing left to spend.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="dark">
+  <div class="wrap">
+    <div class="eyebrow" style="color:#6b6d72;text-align:center" data-i18n="d0">From the finish line</div>
+    <h2 style="text-align:center;max-width:820px;margin:var(--spacing-16) auto 0" data-i18n="d1">Two hundred and eleven people have run this plan. A hundred and ninety-six finished the race.</h2>
+    <div class="amber-card">
+      <blockquote data-i18n="d2">“I have run four road marathons and thought the mountain was the same job with a view. Week nine took my legs apart. In the race I passed eleven people on the last descent — all of them faster than me on the flat, all of them walking sideways.”</blockquote>
+      <div class="who">Ирина Кожевникова <span data-i18n="d2w">· Elbrus Trail 42K, 7 h 52 · second attempt, first finish</span></div>
+    </div>
+    <div class="figs">
+      <div><div class="n">196</div><p data-i18n="d3">finishers out of 211 who reached week 16</p></div>
+      <div><div class="n">33 %</div><p data-i18n="d4">of total training time spent going downhill</p></div>
+      <div><div class="n">4</div><p data-i18n="d5">down weeks, and every one of them is compulsory</p></div>
+      <div><div class="n">0</div><p data-i18n="d6">sessions that require a gym, a treadmill or a coach in the room</p></div>
+    </div>
+  </div>
+</div>
+
+<section id="kit">
+  <div class="wrap">
+    <div class="grid-2" style="align-items:start;gap:var(--spacing-72)">
+      <div>
+        <div class="eyebrow" data-i18n="e2">Kit</div>
+        <h2 style="margin-top:var(--spacing-16)" data-i18n="s2">Six things, bought in this order</h2>
+        <p class="lead" style="margin-top:var(--spacing-24)" data-i18n="s2p">Everything else can wait until you know whether you like this. The plan tells you which week to start using each item, so nothing is new to you on race morning.</p>
+        <a class="btn btn-ghost" style="margin-top:var(--spacing-32)" href="#" data-i18n="s2b">Full mandatory kit list</a>
+      </div>
+      <ul class="kit">
+        <li><b data-i18n="ki1">Poles, folding</b><span data-i18n="ki1d">From week 5. They give back about 8 % on a long climb and take two weeks to stop being a nuisance.</span></li>
+        <li><b data-i18n="ki2">Shoes with a real lug</b><span data-i18n="ki2d">From week 1, on trails. Road shoes on wet scree are how the season ends in week 6.</span></li>
+        <li><b data-i18n="ki3">Vest with two soft flasks</b><span data-i18n="ki3d">From week 3, worn on every long day, loaded with what you will actually carry.</span></li>
+        <li><b data-i18n="ki4">Windproof, seam-sealed</b><span data-i18n="ki4d">Mandatory at the start line. Above 2 500 m the weather changes in the time it takes to eat a gel.</span></li>
+        <li><b data-i18n="ki5">Head torch</b><span data-i18n="ki5d">From week 9 if you finish work at six. Descending in the dark is a separate skill and the plan schedules it.</span></li>
+        <li><b data-i18n="ki6">Food you have tested twice</b><span data-i18n="ki6d">From week 7. Sixty grams of carbohydrate an hour, rehearsed on the long day, never invented on the day.</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="price" style="padding-top:0">
+  <div class="wrap">
+    <div class="eyebrow" data-i18n="e3">Pricing</div>
+    <h2 style="margin-top:var(--spacing-16)" data-i18n="s3">The plan is free. The eyes on it are not.</h2>
+    <div class="grid-2" style="margin-top:var(--spacing-48)">
+      <div class="card plan">
+        <h3 data-i18n="p1h">The plan, written out</h3>
+        <div class="price" data-i18n="p1p">Free</div>
+        <ul>
+          <li data-i18n="p1a">All sixteen weeks, session by session</li>
+          <li data-i18n="p1b">Ascent targets and permitted ranges</li>
+          <li data-i18n="p1c">Calendar export, or a printable page</li>
+          <li data-i18n="p1d">The descent block explained in detail</li>
+        </ul>
+        <a class="btn btn-ghost" href="#" data-i18n="p1c2">Take the plan</a>
+      </div>
+      <div class="card plan">
+        <h3 data-i18n="p2h">With a coach reading your week</h3>
+        <div class="price">4 900 ₽ <span style="font-size:17px;letter-spacing:0;font-weight:500;color:var(--color-pewter)" data-i18n="p2p">/ month</span></div>
+        <ul>
+          <li data-i18n="p2a">Everything in the free plan</li>
+          <li data-i18n="p2b">Weekly review of what you actually did</li>
+          <li data-i18n="p2c">The plan rewritten when life happens — and it will</li>
+          <li data-i18n="p2d">A call before the race about pacing the first climb</li>
+          <li data-i18n="p2e">Stop any month, no notice needed</li>
+        </ul>
+        <a class="btn btn-lime" href="#" data-i18n="p2c2">Start week 1 on Monday</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <a class="logo" href="#">
+          <svg width="22" height="22" viewBox="0 0 26 26" fill="none" aria-hidden="true"><rect width="26" height="26" rx="8" fill="#1d2130"/><path d="M6 18l5-8 3 4.5L16.5 11 21 18H6z" fill="#bfff5a"/></svg>
+          Scree
+        </a>
+        <p class="foot-note" data-i18n="ft1">Written by two coaches who between them have twenty-nine mountain finishes and four withdrawals, all four on descents.</p>
+      </div>
+      <div>
+        <h4 data-i18n="fh1">Plan</h4>
+        <ul><li><a href="#plan" data-i18n="fl1">Sixteen weeks</a></li><li><a href="#" data-i18n="fl2">Descent block</a></li><li><a href="#" data-i18n="fl3">Down weeks</a></li><li><a href="#" data-i18n="fl4">Race week</a></li></ul>
+      </div>
+      <div>
+        <h4 data-i18n="fh2">Reading</h4>
+        <ul><li><a href="#" data-i18n="fl5">Why ascent, not distance</a></li><li><a href="#" data-i18n="fl6">Poles, honestly</a></li><li><a href="#" data-i18n="fl7">Eating above 2 500 m</a></li><li><a href="#" data-i18n="fl8">When to stop the plan</a></li></ul>
+      </div>
+      <div>
+        <h4 data-i18n="fh3">Contact</h4>
+        <ul><li><a href="#">week1@scree.run</a></li><li><a href="#" data-i18n="fl9">Coaches</a></li><li><a href="#" data-i18n="fl10">Group starts</a></li><li><a href="#" data-i18n="fl11">Refunds</a></li></ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span data-i18n="fb0">© 2026 Scree. Not medical advice; see a doctor before the first block, not after the third.</span>
+      <span class="right"><a href="#" data-i18n="fb1">Terms</a><a href="#" data-i18n="fb2">Privacy</a></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ── RU/EN. Английский — исходный, русский — перевод под него ── */
+var RU = {
+  n1:'План', n2:'Трасса', n3:'Снаряжение', n4:'Цены', n5:'Войти', n6:'Начать неделю 1',
+  e0:'16 недель подготовки · горный марафон · 42 км',
+  h1a:'Шестнадцать недель до 42 км и', h1b:'2 600 м набора',
+  h2:'План, который считает метры подъёма так же, как другие считают километры, — потому что горе всё равно, насколько вы быстры по равнине. Написан для бегуна, который уже проводит 25 км в воскресенье и ни разу не спускался два часа подряд.',
+  h3:'Начать неделю 1 в понедельник', h4:'Читать все шестнадцать недель',
+  pr0:'Профиль трассы · Elbrus Trail 42K · 2 600 м набора',
+  lg1:'Отсечка на КП2: 5 ч 40', lg2:'Самый длинный спуск: 9 км, −1 100 м', lg3:'Выше 2 500 м: 11 км',
+  rc0:'Написан под эти старты и подгоняется под любой из них',
+  e1:'Построение',
+  s1:'Четыре блока. Каждая четвёртая неделя что-нибудь отнимает.',
+  s1p:'Объём записан в часах и метрах набора, а не в километрах: час подъёма по осыпи и час по ровному асфальту — разная работа, и только одна из них та, на которую вы записались.',
+  th1:'Недели', th2:'Блок', th3:'Часы', th4:'Набор', th5:'Ключевая тренировка недели', th6:'Длинный день',
+  bl1:'База', k1:'Ускорения в горку 6 %, 8 × 40 с, вниз пешком', l1:'2 ч спокойно, любой рельеф',
+  bl2:'Разгрузка', k2:'Ничего тяжёлого. Одна тренировка техники спуска по траве', l2:'1 ч 15, равнина',
+  bl3:'Набор', k3:'Вертикальные отрезки: 4 × 250 м подъёма, крутое — намеренно пешком', l3:'3 ч с набором 900 м, с палками',
+  bl4:'Разгрузка', k4:'Тест: 10 км в соревновательном усилии по холмам, пульс записан', l4:'1 ч 30',
+  bl5:'Спуск', k5:'Объём спуска: 3 × 400 м вниз, забитые квадрицепсы — цель, следующая такая через 48 ч', l5:'4–5 ч с набором 1 400 м',
+  bl6:'Разгрузка', k6:'Репетиция снаряжения: полный рюкзак, гоночная еда, те самые кроссовки', l6:'2 ч, спуск в гоночном темпе',
+  bl7:'Специальный', k7:'Два дня подряд: 4 ч в субботу, 3 ч в воскресенье на уставших ногах, по возможности выше 1 800 м', l7:'Самый большой день плана',
+  bl8:'Подводка', k8:'Коротко и остро. Ничего нового, ничего длинного; сон — это тоже тренировка', l8:'2 ч',
+  bl9:'Гонка', k9:'Три лёгких пробежки, в среду шесть минут в соревновательном усилии', l9:'Суббота, 42 км',
+  c1h:'Единица измерения — набор',
+  c1p:'У каждой недели есть цель по метрам подъёма и допустимый разброс. Набирайте где угодно: горнолыжный склон, лестница, один и тот же восьмидесятиметровый склон двадцать раз. Плану всё равно где — важно, что ноги сделали работу.',
+  c2h:'Ломает людей спуск',
+  c2p:'Три недели этого плана существуют только ради того, чтобы квадрицепсы научились гасить 1 100 метров вниз и не свело на тридцать шестом километре. Самый неприятный блок — и тот, который никто из пропустивших не закончил гонку хорошо.',
+  c3h:'Каждая четвёртая неделя меньше',
+  c3p:'Разгрузочные недели вписаны в план как тренировки, а не как разрешение. Адаптация происходит именно в них: тот, кто пробежит четыре из них насквозь, придёт к тринадцатой неделе без запаса.',
+  d0:'С финиша',
+  d1:'По этому плану бежали двести одиннадцать человек. Сто девяносто шесть закончили гонку.',
+  d2:'«Я пробежала четыре шоссейных марафона и думала, что гора — та же работа, только с видом. Девятая неделя разобрала мне ноги. На гонке я обошла на последнем спуске одиннадцать человек — все быстрее меня по равнине и все шли боком».',
+  d2w:'· Elbrus Trail 42K, 7 ч 52 · вторая попытка, первый финиш',
+  d3:'финишировали из 211 дошедших до шестнадцатой недели',
+  d4:'всего тренировочного времени проведено на спуске',
+  d5:'разгрузочные недели, и каждая из них обязательна',
+  d6:'тренировок, для которых нужен зал, дорожка или тренер в комнате',
+  e2:'Снаряжение',
+  s2:'Шесть вещей, покупаемых именно в этом порядке',
+  s2p:'Всё остальное подождёт, пока вы не поймёте, нравится ли вам это. План говорит, с какой недели начинать пользоваться каждой вещью, чтобы утром в день гонки ничего не было новым.',
+  s2b:'Полный список обязательного снаряжения',
+  ki1:'Палки, складные', ki1d:'С пятой недели. На длинном подъёме возвращают около 8 % и две недели мешают, пока не привыкнешь.',
+  ki2:'Кроссовки с настоящим протектором', ki2d:'С первой недели, на тропе. Шоссейные по мокрой осыпи — это конец сезона на шестой неделе.',
+  ki3:'Жилет с двумя мягкими флягами', ki3d:'С третьей недели, надевается на каждый длинный день и набивается тем, что вы реально понесёте.',
+  ki4:'Ветровка с проклеенными швами', ki4d:'Обязательна на старте. Выше 2 500 м погода меняется за время, которое уходит на один гель.',
+  ki5:'Налобный фонарь', ki5d:'С девятой недели, если вы заканчиваете работу в шесть. Спуск в темноте — отдельный навык, и план его назначает.',
+  ki6:'Еда, проверенная дважды', ki6d:'С седьмой недели. Шестьдесят граммов углеводов в час, отрепетированных на длинном дне, а не придуманных в день гонки.',
+  e3:'Цены',
+  s3:'План бесплатный. Глаза, которые на него смотрят, — нет.',
+  p1h:'План, расписанный целиком', p1p:'Бесплатно',
+  p1a:'Все шестнадцать недель, тренировка за тренировкой',
+  p1b:'Цели по набору и допустимый разброс',
+  p1c:'Выгрузка в календарь или страница на печать',
+  p1d:'Блок спуска, разобранный подробно', p1c2:'Забрать план',
+  p2h:'С тренером, читающим вашу неделю', p2p:'/ месяц',
+  p2a:'Всё, что в бесплатном плане',
+  p2b:'Еженедельный разбор того, что вы сделали на самом деле',
+  p2c:'Перепись плана, когда вмешивается жизнь, — а она вмешается',
+  p2d:'Звонок перед стартом о раскладке на первом подъёме',
+  p2e:'Прекратить можно любым месяцем, предупреждать не нужно', p2c2:'Начать неделю 1 в понедельник',
+  ft1:'Написан двумя тренерами, у которых на двоих двадцать девять горных финишей и четыре схода — все четыре на спусках.',
+  fh1:'План', fl1:'Шестнадцать недель', fl2:'Блок спуска', fl3:'Разгрузочные недели', fl4:'Неделя гонки',
+  fh2:'Чтение', fl5:'Почему набор, а не километры', fl6:'Палки, честно', fl7:'Еда выше 2 500 м', fl8:'Когда план надо прекратить',
+  fh3:'Контакты', fl9:'Тренеры', fl10:'Групповые старты', fl11:'Возвраты',
+  fb0:'© 2026 Scree. Это не медицинская рекомендация: к врачу — до первого блока, а не после третьего.',
+  fb1:'Условия', fb2:'Приватность'
+};
+var EN = {};
+document.querySelectorAll('[data-i18n]').forEach(function (el) { EN[el.dataset.i18n] = el.innerHTML; });
+
+function setLang(l) {
+  var dict = l === 'ru' ? RU : EN;
+  document.querySelectorAll('[data-i18n]').forEach(function (el) {
+    var v = dict[el.dataset.i18n];
+    if (v !== undefined) el.innerHTML = v;
+  });
+  document.documentElement.lang = l;
+  document.documentElement.dataset.lang = l;
+  document.querySelectorAll('.switch button').forEach(function (b) {
+    b.setAttribute('aria-pressed', b.dataset.set === l ? 'true' : 'false');
+  });
+}
+document.querySelectorAll('.switch button').forEach(function (b) {
+  b.addEventListener('click', function () { setLang(b.dataset.set); });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,1 @@
+import{j as t}from"./index-WM7-nNXq.js";import{T as e}from"./text-animate-F4tCGw4G.js";function i(){return t.jsx(e,{animation:"slideLeft",by:"character",children:"Slide left by character"})}export{i as default};

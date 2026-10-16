@@ -1,0 +1,3 @@
+/* Original keyframes: Animista, Ana Travas. https://animista.net/play/entrances/slide-in-fwd/slide-in-fwd-left */
+.slide-in-fwd-left{animation:slide-in-fwd-left 0.4s cubic-bezier(.25,.46,.45,.94) 0s 1 normal both;}
+@keyframes slide-in-fwd-left{0%{-webkit-transform:translateZ(-1400px) translateX(-1000px);transform:translateZ(-1400px) translateX(-1000px);opacity:0}to{-webkit-transform:translateZ(0) translateX(0);transform:translateZ(0) translateX(0);opacity:1}}

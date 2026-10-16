@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ingot — solid brass objects for the desk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ─── Токены дизайн-системы Atoms — вставлены дословно ────────────────── */
+:root {
+  /* Colors */
+  --color-champagne-gold: #c8ad86;
+  --color-candlelight-cream: #fff7dd;
+  --color-obsidian-black: #000000;
+  --color-ember-ash: #66635f;
+
+  /* Typography — Font Families */
+  --font-switzer: 'Switzer', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-system-ui-sans-serif: 'system-ui sans-serif', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* Typography — Scale */
+  --text-caption: 10px;
+  --leading-caption: 1.2;
+  --tracking-caption: 0.18px;
+  --text-body: 14px;
+  --leading-body: 1.4;
+  --text-heading: 44px;
+  --leading-heading: 1.13;
+  --tracking-heading: -1.85px;
+
+  /* Typography — Weights */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+
+  /* Spacing */
+  --spacing-4: 4px;
+  --spacing-6: 6px;
+  --spacing-8: 8px;
+  --spacing-10: 10px;
+  --spacing-16: 16px;
+  --spacing-20: 20px;
+  --spacing-24: 24px;
+  --spacing-36: 36px;
+  --spacing-40: 40px;
+  --spacing-44: 44px;
+  --spacing-48: 48px;
+  --spacing-56: 56px;
+  --spacing-60: 60px;
+  --spacing-80: 80px;
+
+  /* Layout */
+  --page-max-width: 1200px;
+  --section-gap: 80px;
+  --card-padding: 32px;
+  --element-gap: 8-16px;
+
+  /* Border Radius */
+  --radius-md: 4px;
+  --radius-full: 100px;
+
+  /* Named Radii */
+  --radius-tags: 100px;
+  --radius-cards: 4px;
+  --radius-buttons: 4px;
+
+  /* Surfaces */
+  --surface-canvas: #000000;
+  --surface-card: #000000;
+  --surface-muted-surface: #66635f;
+}
+
+/* Подстановка шрифта: Switzer — кастомный. DESIGN.md предлагает Inter,
+   General Sans и Satoshi; кириллица есть у Inter, он и взят. Отрицательный
+   трекинг −1.85px на 44px — подпись системы, «машинная» сборка слова. */
+:root { --font-ui: 'Inter', var(--font-switzer); }
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: var(--font-ui);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  background: var(--surface-canvas);
+  /* Чисто белый в системе запрещён — только тёплый кремовый */
+  color: var(--color-candlelight-cream);
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap { max-width: var(--page-max-width); margin: 0 auto; padding: 0 var(--spacing-24); }
+section { padding: var(--spacing-80) 0; }
+
+/* ─── Типографика: всего три ступени, как в системе ───────────────────── */
+.heading {
+  font-size: var(--text-heading); line-height: var(--leading-heading);
+  letter-spacing: var(--tracking-heading); font-weight: var(--font-weight-regular);
+}
+.caption {
+  font-size: var(--text-caption); line-height: var(--leading-caption);
+  letter-spacing: var(--tracking-caption); text-transform: uppercase;
+  font-weight: var(--font-weight-medium);
+}
+/* 16px оговорён в трекинге системы, но не вынесен в шкалу — заводим явно */
+.lede { font-size: 16px; line-height: 1.5; letter-spacing: -0.5px; }
+.gold { color: var(--color-champagne-gold); }
+.ash { color: var(--color-ember-ash); }
+
+/* ─── Кнопки и ссылки: радиус 4px, теги 100px ─────────────────────────── */
+.ghost-link {
+  display: inline-flex; align-items: center; gap: var(--spacing-8);
+  color: var(--color-candlelight-cream); text-decoration: none;
+  font-size: var(--text-body); line-height: var(--leading-body);
+}
+.ghost-link svg { width: 13px; height: 13px; }
+.ghost-link:hover { color: var(--color-champagne-gold); }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  font-family: var(--font-ui); font-size: var(--text-body);
+  font-weight: var(--font-weight-medium);
+  padding: var(--spacing-10) var(--spacing-20);
+  border-radius: var(--radius-buttons);
+  border: 1px solid var(--color-candlelight-cream);
+  background: transparent; color: var(--color-candlelight-cream);
+  text-decoration: none; cursor: pointer;
+  transition: background-color .15s linear, color .15s linear, border-color .15s linear;
+}
+.btn:hover { background: var(--color-candlelight-cream); color: var(--color-obsidian-black); }
+.btn--gold { border-color: var(--color-champagne-gold); color: var(--color-champagne-gold); }
+.btn--gold:hover { background: var(--color-champagne-gold); color: var(--color-obsidian-black); }
+.tag {
+  display: inline-block; border-radius: var(--radius-tags);
+  border: 1px solid var(--color-champagne-gold);
+  color: var(--color-champagne-gold);
+  padding: var(--spacing-4) var(--spacing-10);
+  font-size: var(--text-caption); line-height: var(--leading-caption);
+  letter-spacing: var(--tracking-caption); text-transform: uppercase;
+  font-weight: var(--font-weight-medium);
+}
+
+/* ─── Навигация: фиксированная, знак слева, три ссылки справа ─────────── */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 20;
+  background: var(--surface-canvas);
+  border-bottom: 1px solid rgba(255, 247, 221, .18);
+}
+.nav__inner {
+  max-width: var(--page-max-width); margin: 0 auto;
+  padding: var(--spacing-16) var(--spacing-24);
+  display: flex; align-items: center; gap: var(--spacing-24);
+}
+.wordmark {
+  font-size: 16px; font-weight: var(--font-weight-medium); letter-spacing: -0.5px;
+  text-transform: uppercase; color: var(--color-candlelight-cream); text-decoration: none;
+}
+.nav__links { display: flex; gap: var(--spacing-24); list-style: none; margin-left: auto; }
+.nav__links a { color: var(--color-candlelight-cream); text-decoration: none; font-size: var(--text-body); }
+.nav__links a:hover { color: var(--color-champagne-gold); }
+.lang { display: inline-flex; border: 1px solid var(--color-ember-ash); border-radius: var(--radius-buttons); overflow: hidden; }
+.lang button {
+  font-family: var(--font-ui); font-size: var(--text-caption);
+  letter-spacing: var(--tracking-caption);
+  padding: var(--spacing-6) var(--spacing-10);
+  border: none; background: transparent; color: var(--color-ember-ash); cursor: pointer;
+}
+.lang button[aria-pressed="true"] { background: var(--color-candlelight-cream); color: var(--color-obsidian-black); }
+.spacer { height: 53px; }
+
+/* ─── Герой: знак, три строки, одна призрачная ссылка ─────────────────── */
+.hero { text-align: center; padding: var(--spacing-80) 0; }
+/* Фирменный артефакт: плитки-уголки в шампанском с лёгкой фактурой */
+.mark { width: 260px; height: 260px; margin: 0 auto var(--spacing-56); display: grid; grid-template-columns: 1fr 1fr; gap: 26px; }
+.mark__q { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 4px; }
+.mark__q i {
+  display: block; border-radius: 2px;
+  background:
+    linear-gradient(140deg, #e0c9a4 0%, var(--color-champagne-gold) 42%, #8d7a5c 100%);
+}
+.mark__q i.off { background: none; }
+.hero .heading { max-width: 18ch; margin: 0 auto var(--spacing-36); }
+.hero__note { margin-top: var(--spacing-36); }
+
+/* ─── Сетка карточек: фона нет, край задаёт волосяная рамка ───────────── */
+.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-20); }
+.card {
+  border: 1px solid rgba(255, 247, 221, .28);
+  border-radius: var(--radius-cards);
+  background: var(--surface-card);
+  padding: var(--card-padding);
+  display: flex; flex-direction: column; gap: var(--spacing-16);
+}
+.card__mark {
+  height: 120px; display: flex; align-items: center; justify-content: center;
+  border-bottom: 1px solid rgba(255, 247, 221, .18);
+  padding-bottom: var(--spacing-16);
+}
+.card__mark svg { width: 66px; height: 66px; color: var(--color-champagne-gold); }
+.card__head { display: flex; align-items: baseline; gap: var(--spacing-10); }
+.card__name { font-size: 16px; letter-spacing: -0.5px; font-weight: var(--font-weight-medium); }
+.card p { color: var(--color-ember-ash); }
+.card__foot { margin-top: auto; display: flex; align-items: center; justify-content: space-between; gap: var(--spacing-10); }
+
+/* ─── Спецификации: строки, разделённые волоском ──────────────────────── */
+.specs { border-top: 1px solid rgba(255, 247, 221, .18); }
+.spec {
+  display: grid; grid-template-columns: 160px 1fr 160px;
+  gap: var(--spacing-24); padding: var(--spacing-20) 0;
+  border-bottom: 1px solid rgba(255, 247, 221, .18);
+  align-items: baseline;
+}
+.spec__k { color: var(--color-champagne-gold); }
+.spec__v { color: var(--color-ember-ash); }
+
+/* ─── Секция-заголовок ────────────────────────────────────────────────── */
+.sec-head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--spacing-24); margin-bottom: var(--spacing-36); }
+
+/* ─── Подвал ──────────────────────────────────────────────────────────── */
+.footer { border-top: 1px solid rgba(255, 247, 221, .18); padding: var(--spacing-48) 0 var(--spacing-24); }
+.footer__grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: var(--spacing-36); }
+.footer__grid h4 { margin-bottom: var(--spacing-16); }
+.footer__grid ul { list-style: none; display: flex; flex-direction: column; gap: var(--spacing-8); }
+.footer__grid a { color: var(--color-ember-ash); text-decoration: none; font-size: var(--text-body); }
+.footer__grid a:hover { color: var(--color-candlelight-cream); }
+.footer__note { color: var(--color-ember-ash); margin-top: var(--spacing-16); max-width: 34ch; }
+.footer__bottom { margin-top: var(--spacing-48); display: flex; justify-content: space-between; color: var(--color-ember-ash); }
+</style>
+</head>
+<body>
+
+<!-- ─── Навигация ─────────────────────────────────────────────────────── -->
+<header class="nav">
+  <div class="nav__inner">
+    <a class="wordmark" href="#top">Ingot</a>
+    <ul class="nav__links">
+      <li><a href="#catalogue" data-i18n="nav.1">Catalogue</a></li>
+      <li><a href="#material" data-i18n="nav.2">Material</a></li>
+      <li><a href="#stockists" data-i18n="nav.3">Stockists</a></li>
+    </ul>
+    <div class="lang">
+      <button type="button" data-set="en" aria-pressed="true">EN</button>
+      <button type="button" data-set="ru" aria-pressed="false">RU</button>
+    </div>
+  </div>
+</header>
+<div class="spacer"></div>
+
+<!-- ─── Герой ─────────────────────────────────────────────────────────── -->
+<div class="hero" id="top">
+  <div class="wrap">
+    <div class="mark" aria-hidden="true">
+      <div class="mark__q"><i></i><i class="off"></i><i></i><i></i></div>
+      <div class="mark__q"><i class="off"></i><i></i><i></i><i></i></div>
+      <div class="mark__q"><i></i><i></i><i></i><i class="off"></i></div>
+      <div class="mark__q"><i></i><i></i><i class="off"></i><i></i></div>
+    </div>
+    <h1 class="heading">
+      <span data-i18n="hero.a">Solid brass objects</span><br>
+      <span data-i18n="hero.b">for people who keep</span><br>
+      <span class="gold" data-i18n="hero.c">one desk for life.</span>
+    </h1>
+    <a class="ghost-link" href="#catalogue">
+      <span data-i18n="hero.cta">See the catalogue</span>
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+    </a>
+    <p class="hero__note caption ash" data-i18n="hero.note">Cast in Tbilisi · unlacquered · sold unfinished</p>
+  </div>
+</div>
+
+<!-- ─── Каталог ───────────────────────────────────────────────────────── -->
+<section id="catalogue">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="caption gold" data-i18n="cat.label">Catalogue · six objects</span>
+      <span class="caption ash" data-i18n="cat.note">Every piece ships raw</span>
+    </div>
+    <div class="grid">
+
+      <article class="card">
+        <div class="card__mark">
+          <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="10" y="24" width="44" height="16" rx="2"/><path d="M18 24v-6M46 24v-6M32 40v8"/>
+          </svg>
+        </div>
+        <div class="card__head">
+          <span class="card__name" data-i18n="p1.n">Bar 180</span>
+          <span class="tag" data-i18n="p1.t">Paperweight</span>
+        </div>
+        <p data-i18n="p1.d">A milled bar of 1.4 kilograms. Holds a stack of paper flat in a draught and does nothing else at all.</p>
+        <div class="card__foot">
+          <span class="caption ash">180 × 40 × 20 MM</span>
+          <span class="caption" data-i18n="p1.p">€145</span>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card__mark">
+          <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M22 14h20l6 36H16z"/><path d="M26 24h12M24 34h16"/>
+          </svg>
+        </div>
+        <div class="card__head">
+          <span class="card__name" data-i18n="p2.n">Cup 04</span>
+          <span class="tag" data-i18n="p2.t">Desk tidy</span>
+        </div>
+        <p data-i18n="p2.d">Spun from a single sheet, seamless, with a rolled lip that will not cut a thumb reaching in for a pencil.</p>
+        <div class="card__foot">
+          <span class="caption ash">Ø 74 × 96 MM</span>
+          <span class="caption" data-i18n="p2.p">€98</span>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card__mark">
+          <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="14" y="18" width="36" height="28" rx="2"/><path d="M14 30h36M32 18v28"/>
+          </svg>
+        </div>
+        <div class="card__head">
+          <span class="card__name" data-i18n="p3.n">Tray 220</span>
+          <span class="tag" data-i18n="p3.t">Catch-all</span>
+        </div>
+        <p data-i18n="p3.d">Two compartments, one shallow and one deep, for the keys and the things you keep meaning to file.</p>
+        <div class="card__foot">
+          <span class="caption ash">220 × 140 × 18 MM</span>
+          <span class="caption" data-i18n="p3.p">€210</span>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card__mark">
+          <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M32 12v34"/><path d="M24 46h16v6H24z"/><circle cx="32" cy="12" r="3"/>
+          </svg>
+        </div>
+        <div class="card__head">
+          <span class="card__name" data-i18n="p4.n">Stem 01</span>
+          <span class="tag" data-i18n="p4.t">Lamp</span>
+        </div>
+        <p data-i18n="p4.d">A single rod, a weighted foot and a dimmer you turn rather than tap. The cable is cloth and replaceable.</p>
+        <div class="card__foot">
+          <span class="caption ash">420 MM · 2700K</span>
+          <span class="caption" data-i18n="p4.p">€480</span>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card__mark">
+          <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="16" y="20" width="32" height="24" rx="2"/><path d="M24 20v-6h16v6M32 30v6"/>
+          </svg>
+        </div>
+        <div class="card__head">
+          <span class="card__name" data-i18n="p5.n">Case 12</span>
+          <span class="tag" data-i18n="p5.t">Card holder</span>
+        </div>
+        <p data-i18n="p5.d">Holds twelve cards and loosens as the brass wears. Machined from bar stock, never folded from sheet.</p>
+        <div class="card__foot">
+          <span class="caption ash">94 × 62 × 9 MM</span>
+          <span class="caption" data-i18n="p5.p">€135</span>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card__mark">
+          <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="32" cy="32" r="18"/><path d="M32 20v12l8 5"/>
+          </svg>
+        </div>
+        <div class="card__head">
+          <span class="card__name" data-i18n="p6.n">Face 60</span>
+          <span class="tag" data-i18n="p6.t">Clock</span>
+        </div>
+        <p data-i18n="p6.d">No numerals, no second hand, no tick you can hear across a room. It is a clock for glancing at, not reading.</p>
+        <div class="card__foot">
+          <span class="caption ash">Ø 160 × 34 MM</span>
+          <span class="caption" data-i18n="p6.p">€390</span>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ─── Материал ──────────────────────────────────────────────────────── -->
+<section id="material">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="caption gold" data-i18n="mat.label">Material</span>
+      <span class="caption ash" data-i18n="mat.note">CuZn37 · half hard</span>
+    </div>
+    <h2 class="heading" style="max-width:22ch;margin-bottom:var(--spacing-36)" data-i18n="mat.title">Brass is the only material that keeps a record of you.</h2>
+    <p class="lede ash" style="max-width:62ch;margin-bottom:var(--spacing-48)" data-i18n="mat.p">We ship every piece unlacquered. Within a month the surface goes from raw yellow to a dull gold, and where your hand rests it stays bright. Nothing about that is a defect, and nothing we could coat it with would be an improvement.</p>
+    <div class="specs">
+      <div class="spec"><span class="spec__k" data-i18n="s1.k">Alloy</span><span data-i18n="s1.v">CuZn37 — 63% copper, 37% zinc. Free-cutting grade, no lead added.</span><span class="spec__v">EN 12164</span></div>
+      <div class="spec"><span class="spec__k" data-i18n="s2.k">Finish</span><span data-i18n="s2.v">Machined, deburred, degreased. No lacquer, no wax, no plating of any kind.</span><span class="spec__v">Ra 0.8</span></div>
+      <div class="spec"><span class="spec__k" data-i18n="s3.k">Patina</span><span data-i18n="s3.v">Begins within days. Reversible with lemon and salt if you ever change your mind.</span><span class="spec__v">30–90 DAYS</span></div>
+      <div class="spec"><span class="spec__k" data-i18n="s4.k">Repair</span><span data-i18n="s4.v">Send a piece back at any age and we will re-machine and return it once, free.</span><span class="spec__v">LIFETIME</span></div>
+      <div class="spec"><span class="spec__k" data-i18n="s5.k">Origin</span><span data-i18n="s5.v">Cast and machined in one workshop in Tbilisi. Stock is bought within the region.</span><span class="spec__v">GEORGIA</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Продавцы ──────────────────────────────────────────────────────── -->
+<section id="stockists">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="caption gold" data-i18n="st.label">Stockists</span>
+      <span class="caption ash" data-i18n="st.note">Nine shops, no marketplaces</span>
+    </div>
+    <div class="specs">
+      <div class="spec"><span class="spec__k" data-i18n="ct.1">Tbilisi</span><span data-i18n="st.1">Aggregate — Chitaia 6</span><span class="spec__v">FULL RANGE</span></div>
+      <div class="spec"><span class="spec__k" data-i18n="ct.2">Lisbon</span><span data-i18n="st.2">Casa Nove — Rua da Boavista 112</span><span class="spec__v">DESK ONLY</span></div>
+      <div class="spec"><span class="spec__k" data-i18n="ct.3">Berlin</span><span data-i18n="st.3">Halyard Store — Torstraße 44</span><span class="spec__v">FULL RANGE</span></div>
+      <div class="spec"><span class="spec__k" data-i18n="ct.4">Kyoto</span><span data-i18n="st.4">Kestrel — Nakagyo-ku, Sanjo</span><span class="spec__v">LAMPS</span></div>
+    </div>
+    <div style="margin-top:var(--spacing-48);display:flex;gap:var(--spacing-10)">
+      <a class="btn btn--gold" href="#catalogue" data-i18n="st.cta1">Order direct</a>
+      <a class="btn" href="#stockists" data-i18n="st.cta2">Become a stockist</a>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Подвал ────────────────────────────────────────────────────────── -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__grid">
+      <div>
+        <a class="wordmark" href="#top">Ingot</a>
+        <p class="footer__note" data-i18n="f.note">Solid brass objects, cast and machined in one workshop. Sold unfinished on purpose.</p>
+      </div>
+      <div>
+        <h4 class="caption gold" data-i18n="f.c1">Catalogue</h4>
+        <ul>
+          <li><a href="#catalogue" data-i18n="f.c1.1">Desk</a></li>
+          <li><a href="#catalogue" data-i18n="f.c1.2">Lighting</a></li>
+          <li><a href="#catalogue" data-i18n="f.c1.3">Carry</a></li>
+          <li><a href="#catalogue" data-i18n="f.c1.4">Archive</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="caption gold" data-i18n="f.c2">Material</h4>
+        <ul>
+          <li><a href="#material" data-i18n="f.c2.1">Alloy</a></li>
+          <li><a href="#material" data-i18n="f.c2.2">Patina</a></li>
+          <li><a href="#material" data-i18n="f.c2.3">Repair</a></li>
+          <li><a href="#material" data-i18n="f.c2.4">Care</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="caption gold" data-i18n="f.c3">Workshop</h4>
+        <ul>
+          <li><a href="#top" data-i18n="f.c3.1">About</a></li>
+          <li><a href="#stockists" data-i18n="f.c3.2">Stockists</a></li>
+          <li><a href="#top" data-i18n="f.c3.3">Shipping</a></li>
+          <li><a href="#top" data-i18n="f.c3.4">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom caption">
+      <span data-i18n="f.copy">© 2026 Ingot Workshop</span>
+      <span data-i18n="f.legal">Terms · Returns within 60 days</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* Английский — исходный; русский — перевод. Дефолт EN, без автодетекта. */
+var I18N = {
+  ru: {
+    "nav.1": "Каталог", "nav.2": "Материал", "nav.3": "Магазины",
+
+    "hero.a": "Латунные предметы",
+    "hero.b": "для тех, у кого",
+    "hero.c": "один стол на всю жизнь.",
+    "hero.cta": "Смотреть каталог",
+    "hero.note": "Отлито в Тбилиси · без лака · продаётся необработанным",
+
+    "cat.label": "Каталог · шесть предметов",
+    "cat.note": "Каждая вещь уезжает сырой",
+    "p1.n": "Bar 180", "p1.t": "Пресс-папье", "p1.p": "€145",
+    "p1.d": "Фрезерованный брусок в 1,4 килограмма. Держит стопку бумаги на сквозняке и больше не умеет ничего.",
+    "p2.n": "Cup 04", "p2.t": "Стакан", "p2.p": "€98",
+    "p2.d": "Выкатан из одного листа, без шва, с завальцованным краем, о который не порежешь палец, доставая карандаш.",
+    "p3.n": "Tray 220", "p3.t": "Лоток", "p3.p": "€210",
+    "p3.d": "Два отделения, мелкое и глубокое, — под ключи и под то, что вы всё собираетесь разобрать.",
+    "p4.n": "Stem 01", "p4.t": "Лампа", "p4.p": "€480",
+    "p4.d": "Один стержень, утяжелённое основание и диммер, который крутят, а не трогают. Провод тканевый и заменяемый.",
+    "p5.n": "Case 12", "p5.t": "Картхолдер", "p5.p": "€135",
+    "p5.d": "Держит двенадцать карт и разнашивается по мере износа латуни. Точён из прутка, а не согнут из листа.",
+    "p6.n": "Face 60", "p6.t": "Часы", "p6.p": "€390",
+    "p6.d": "Без цифр, без секундной стрелки и без тиканья, слышного через комнату. Это часы, на которые взглядывают, а не читают.",
+
+    "mat.label": "Материал",
+    "mat.note": "CuZn37 · полутвёрдая",
+    "mat.title": "Латунь — единственный материал, который ведёт запись о вас.",
+    "mat.p": "Мы отправляем каждую вещь без лака. За месяц поверхность уходит из сырого жёлтого в матовое золото, а там, где лежит рука, остаётся светлой. Ничего дефектного в этом нет, и никакое покрытие это не улучшит.",
+    "s1.k": "Сплав", "s1.v": "CuZn37 — 63% меди, 37% цинка. Автоматная марка, свинец не добавляется.",
+    "s2.k": "Обработка", "s2.v": "Фрезеровка, снятие заусенца, обезжиривание. Ни лака, ни воска, ни гальваники.",
+    "s3.k": "Патина", "s3.v": "Начинается за считаные дни. Обратима лимоном и солью, если вы передумаете.",
+    "s4.k": "Ремонт", "s4.v": "Пришлите вещь в любом возрасте — один раз переточим и вернём бесплатно.",
+    "s5.k": "Происхождение", "s5.v": "Литьё и обработка в одной мастерской в Тбилиси. Пруток закупается в регионе.",
+
+    "ct.1": "Тбилиси",
+    "ct.2": "Лиссабон",
+    "ct.3": "Берлин",
+    "ct.4": "Киото",
+    "st.label": "Магазины",
+    "st.note": "Девять точек, без маркетплейсов",
+    "st.1": "Aggregate — Читая 6",
+    "st.2": "Casa Nove — Rua da Boavista 112",
+    "st.3": "Halyard Store — Torstraße 44",
+    "st.4": "Kestrel — Накагё-ку, Сандзё",
+    "st.cta1": "Заказать напрямую",
+    "st.cta2": "Стать магазином",
+
+    "f.note": "Латунные предметы, литые и точёные в одной мастерской. Продаются необработанными намеренно.",
+    "f.c1": "Каталог",
+    "f.c1.1": "Стол", "f.c1.2": "Свет", "f.c1.3": "С собой", "f.c1.4": "Архив",
+    "f.c2": "Материал",
+    "f.c2.1": "Сплав", "f.c2.2": "Патина", "f.c2.3": "Ремонт", "f.c2.4": "Уход",
+    "f.c3": "Мастерская",
+    "f.c3.1": "О нас", "f.c3.2": "Магазины", "f.c3.3": "Доставка", "f.c3.4": "Контакты",
+    "f.copy": "© 2026 Ingot Workshop",
+    "f.legal": "Условия · Возврат в течение 60 дней"
+  }
+};
+
+(function () {
+  var nodes = document.querySelectorAll('[data-i18n]');
+  var EN = {};
+  nodes.forEach(function (n) { EN[n.getAttribute('data-i18n')] = n.textContent; });
+
+  function apply(lang) {
+    nodes.forEach(function (n) {
+      var k = n.getAttribute('data-i18n');
+      var v = lang === 'ru' ? I18N.ru[k] : EN[k];
+      if (v) n.textContent = v;
+    });
+    document.documentElement.lang = lang;
+    document.documentElement.setAttribute('data-lang', lang);
+    document.querySelectorAll('.lang [data-set]').forEach(function (b) {
+      b.setAttribute('aria-pressed', String(b.getAttribute('data-set') === lang));
+    });
+  }
+  document.querySelectorAll('.lang [data-set]').forEach(function (b) {
+    b.addEventListener('click', function () { apply(b.getAttribute('data-set')); });
+  });
+})();
+</script>
+</body>
+</html>

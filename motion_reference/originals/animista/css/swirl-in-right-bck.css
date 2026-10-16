@@ -1,0 +1,3 @@
+/* Original keyframes: Animista, Ana Travas. https://animista.net/play/entrances/swirl-in/swirl-in-right-bck */
+.swirl-in-right-bck{animation:swirl-in-right-bck 0.65s ease-out 0s 1 normal both;}
+@keyframes swirl-in-right-bck{0%{-webkit-transform:rotate(540deg) scale(5);transform:rotate(540deg) scale(5);-webkit-transform-origin:100% 50%;transform-origin:100% 50%;opacity:0}to{-webkit-transform:rotate(0) scale(1);transform:rotate(0) scale(1);-webkit-transform-origin:100% 50%;transform-origin:100% 50%;opacity:1}}

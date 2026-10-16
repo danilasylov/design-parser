@@ -1,0 +1,3 @@
+/* Original keyframes: Animista, Ana Travas. https://animista.net/play/entrances/rotate-in/rotate-in-ver */
+.rotate-in-ver{animation:rotate-in-ver 0.5s cubic-bezier(.25,.46,.45,.94) 0s 1 normal both;}
+@keyframes rotate-in-ver{0%{-webkit-transform:rotateY(-360deg);transform:rotateY(-360deg);opacity:0}to{-webkit-transform:rotateY(0deg);transform:rotateY(0deg);opacity:1}}

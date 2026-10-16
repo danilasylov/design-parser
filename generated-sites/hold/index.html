@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hold — luggage that survives the hold</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ── Дизайн-система Cowboy (styles.refero.design/style/00ce9181) ──
+   почти монохром: белый холст, charcoal #1d1d1d, структура — хайрлайны #e5e7eb, а не тени
+   радиусы РОВНО два: 8px (карточки, изображения, инпуты) и 9999px (кнопки, навигация, теги)
+   заголовки 72–100px, tracking всегда отрицательный (-.025em) · primary-кнопка только #1d1d1d
+   цвет приходит с продукта и логотипов прессы, интерфейс остаётся тихим
+   фирменный приём — последнее слово дисплей-заголовка уходит в белое через mask-gradient */
+:root{
+  --white:#ffffff; --charcoal:#1d1d1d; --hairline:#e5e7eb; --smoke:#737373; --ash:#a3a3a3;
+  --mist:#f3f4f6; --graphite:#5e5e5e; --bone:#cacaca; --moss:#569d5f; --signal:#2563eb;
+  --sans:'Inter','SuisseIntl',system-ui,-apple-system,sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+  --r:8px; --pill:9999px; --page:1440px; --gap:80px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{background:var(--white);color:var(--charcoal);font:400 16px/1.5 var(--sans);
+     -webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+::selection{background:var(--charcoal);color:var(--white)}
+:focus-visible{outline:2px solid var(--signal);outline-offset:2px;border-radius:var(--r)}
+.wrap{max-width:var(--page);margin:0 auto;padding:0 24px}
+.mono{font-family:var(--mono);font-size:12px;letter-spacing:0}
+.smoke{color:var(--smoke)}
+.cap{font-size:12px;line-height:1.5;color:var(--smoke)}
+
+/* дисплей-заголовки */
+.disp{font-size:clamp(40px,7.6vw,100px);font-weight:500;line-height:.92;letter-spacing:-.025em}
+h2.big{font-size:clamp(32px,4.6vw,72px);font-weight:400;line-height:1;letter-spacing:-.025em}
+h3.mid{font-size:clamp(28px,3vw,44px);font-weight:400;line-height:1.05;letter-spacing:-.88px}
+.fade{background:linear-gradient(90deg,var(--charcoal) 30%,rgba(29,29,29,.15));-webkit-background-clip:text;
+      background-clip:text;color:transparent}
+.fade.on-dark{background:linear-gradient(90deg,#fff 45%,rgba(255,255,255,.45));-webkit-background-clip:text;background-clip:text}
+
+/* ── кнопки ── */
+.btn{display:inline-flex;align-items:center;gap:8px;border-radius:var(--pill);padding:12px 24px;
+     font:500 16px/1 var(--sans);border:1px solid transparent;cursor:pointer;transition:.15s}
+.btn.p{background:var(--charcoal);color:var(--white)}
+.btn.p:hover{background:var(--graphite)}
+.btn.o{border-color:var(--charcoal);color:var(--charcoal)}
+.btn.o:hover{background:var(--mist)}
+.btn.light{background:var(--white);color:var(--charcoal)}
+.btn.olight{border-color:rgba(255,255,255,.6);color:#fff}
+.btn.olight:hover{background:rgba(255,255,255,.12)}
+.btn.sm{padding:8px 16px;font-size:14px}
+.ghostlink{font-weight:500;text-decoration:underline;text-underline-offset:4px}
+
+/* ── announcement + nav ── */
+.ann{background:var(--charcoal);color:var(--white);height:32px;display:flex;align-items:center;justify-content:center;
+     gap:12px;font-size:14px;text-align:center;padding:0 16px}
+.ann b{font-weight:500;text-decoration:underline;text-underline-offset:3px}
+header{position:sticky;top:0;z-index:70;background:var(--white);border-bottom:1px solid var(--hairline)}
+.nav{display:flex;align-items:center;gap:8px;padding:12px 24px}   /* .wrap задаёт padding по бокам — не обнулять его здесь */
+.logo{font-size:20px;font-weight:600;letter-spacing:-.4px;margin-right:24px}
+.nav .links{display:flex;gap:4px;margin-right:auto}
+.nav .links a{padding:8px 16px;border-radius:var(--pill);font-size:16px;font-weight:500}
+.nav .links a:hover,.nav .links a.on{background:var(--mist)}
+.lng{background:none;border:1px solid var(--hairline);border-radius:var(--pill);padding:8px 14px;
+     font:500 13px var(--sans);color:var(--smoke);cursor:pointer}
+.lng:hover{border-color:var(--charcoal)}
+:root[data-lang="en"] .lng [data-l="en"],:root[data-lang="ru"] .lng [data-l="ru"]{color:var(--charcoal)}
+
+/* ── hero: тёмная сцена вместо full-bleed фото ── */
+.hero{background:var(--charcoal);color:var(--white);position:relative;overflow:hidden;min-height:76vh;
+      display:flex;align-items:flex-end;padding:120px 0 48px}
+.hero .scene{position:absolute;inset:0;display:grid;place-items:center end;padding-right:6vw}
+.hero .scene svg{width:min(38vw,520px);height:auto;transform:translateY(-6%)}
+/* dark scrim, как поверх фото у референса — текст всегда читается */
+.hero .scrim{position:absolute;inset:0;z-index:1;
+             background:linear-gradient(90deg,rgba(29,29,29,.94) 32%,rgba(29,29,29,.55) 62%,rgba(29,29,29,.2) 100%)}
+.hero .wrap{position:relative;z-index:2}
+.hero .disp{max-width:14ch}
+.hero .row{display:flex;justify-content:space-between;align-items:flex-end;gap:32px;margin-top:32px;flex-wrap:wrap}
+.hero .meta{display:flex;gap:32px;flex-wrap:wrap;color:rgba(255,255,255,.7)}
+.hero .meta div b{display:block;color:#fff;font-weight:500;font-size:20px;letter-spacing:-.3px}
+
+/* ── секции ── */
+section{padding:var(--gap) 0}
+.mist{background:var(--mist)}
+.lead{max-width:52ch;color:var(--smoke);margin-top:20px}
+
+/* ── продуктовая полоса ── */
+.product{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:48px;align-items:center}
+.product .art{background:var(--mist);border-radius:var(--r);padding:48px;display:grid;place-items:center}
+.product .art svg{width:100%;max-width:420px;height:auto}
+.switch{display:inline-flex;gap:4px;background:var(--mist);border-radius:var(--pill);padding:4px;margin-bottom:24px}
+.switch button{border:0;background:transparent;border-radius:var(--pill);padding:8px 16px;
+               font:500 14px var(--sans);color:var(--smoke);cursor:pointer}
+.switch button.on{background:var(--charcoal);color:var(--white)}
+.plus{list-style:none;margin:24px 0;display:flex;flex-direction:column;gap:10px}
+.plus li{display:flex;gap:10px;font-size:16px}
+.plus li::before{content:"+";color:var(--smoke)}
+.price{display:flex;align-items:baseline;gap:12px;margin:24px 0}
+.price .v{font-size:36px;font-weight:400;letter-spacing:-.7px}
+.acts{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+
+/* ── пресса ── */
+.press{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+.ptile{border:1px solid var(--hairline);border-radius:var(--r);padding:48px 24px;text-align:center;background:var(--white)}
+.ptile .q{font-size:16px;line-height:1.5;min-height:72px}
+.ptile .n{margin-top:20px;font-weight:600;letter-spacing:-.2px}
+.ptile .n.c1{color:#c1272d}.ptile .n.c2{color:#1a4fa0}.ptile .n.c3{color:#0f7b4f}.ptile .n.c4{color:#b8730f}
+
+/* ── бегущая строка ── */
+.marq{background:var(--charcoal);color:var(--white);padding:28px 0;overflow:hidden}
+.marq .row{display:flex;gap:48px;white-space:nowrap;animation:slide 30s linear infinite}
+.marq span{font-size:clamp(28px,4vw,56px);font-weight:400;letter-spacing:-.025em;opacity:.9}
+@keyframes slide{to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){.marq .row{animation:none}}
+
+/* ── сетка «внутри» ── */
+.tech{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:48px}
+.tcard{border:1px solid var(--hairline);border-radius:var(--r);padding:48px}
+.tcard svg{width:24px;height:24px;stroke:var(--charcoal);stroke-width:1.5;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.tcard .t{font-size:20px;font-weight:500;letter-spacing:-.3px;margin:20px 0 8px}
+.tcard p{font-size:14px;color:var(--smoke)}
+
+/* ── цифры ── */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:48px}
+.stat{border-top:1px solid var(--hairline);padding-top:20px}
+.stat .v{font-size:44px;font-weight:400;letter-spacing:-.88px;line-height:1.05}
+.stat .k{color:var(--smoke);font-size:14px;margin-top:8px}
+
+/* ── сравнение ── */
+.cmp{width:100%;border-collapse:collapse;margin-top:40px}
+.cmp th{text-align:left;padding:16px 12px;border-bottom:1px solid var(--charcoal);font-size:14px;font-weight:500}
+.cmp th:first-child{color:var(--smoke);font-weight:400}
+.cmp td{padding:16px 12px;border-bottom:1px solid var(--hairline);font-size:14px}
+.cmp td:first-child{color:var(--smoke)}
+.cmp .yes{color:var(--moss);font-weight:500}
+
+/* ── журнал + keep exploring ── */
+.jgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:48px}
+.jcard{border:1px solid var(--hairline);border-radius:var(--r);overflow:hidden}
+.jcard .im{aspect-ratio:16/10;background:var(--mist);display:grid;place-items:center}
+.jcard .im svg{width:52%;height:auto;opacity:.85}
+.jcard .tx{padding:24px}
+.jcard .d{font-family:var(--mono);font-size:12px;color:var(--smoke)}
+.jcard h4{font-size:20px;font-weight:500;letter-spacing:-.3px;margin-top:8px}
+.explore{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:48px}
+.ex{border:1px solid var(--hairline);border-radius:var(--r);padding:24px;display:flex;justify-content:space-between;
+    align-items:center;gap:12px;font-weight:500}
+.ex:hover{background:var(--mist)}
+
+/* ── финальная тёмная полоса ── */
+.final{background:var(--charcoal);color:var(--white);padding:120px 0;text-align:center}
+.final .disp{margin:0 auto;max-width:16ch}
+.final p{color:rgba(255,255,255,.72);margin:20px auto 32px;max-width:48ch}
+
+/* ── футер ── */
+footer{border-top:1px solid var(--hairline);padding:64px 0 32px}
+.fg{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:32px}
+.fg h6{font-size:14px;font-weight:500;margin-bottom:16px}
+.fg a{display:block;padding:5px 0;font-size:14px;color:var(--smoke)}
+.fg a:hover{color:var(--charcoal)}
+.fbot{margin-top:48px;padding-top:20px;border-top:1px solid var(--hairline);display:flex;justify-content:space-between;
+      gap:16px;flex-wrap:wrap;font-size:12px;color:var(--smoke)}
+
+@media (max-width:1000px){
+  .product{grid-template-columns:1fr;gap:32px}
+  .press,.tech,.jgrid,.explore{grid-template-columns:1fr 1fr}
+  .stats{grid-template-columns:1fr 1fr}
+  .nav .links{display:none}
+  .fg{grid-template-columns:1fr 1fr}
+  .hero{min-height:auto;padding-top:80px}
+  .hero .scene{opacity:.35}
+}
+@media (max-width:620px){
+  .press,.tech,.jgrid,.explore{grid-template-columns:1fr}
+  .cmp .hide{display:none}
+}
+</style>
+</head>
+<body id="top">
+
+<div class="ann">
+  <span data-i18n="ann">Free shipping and a 100-day trial in the EU and UK. <b>Learn more</b></span>
+</div>
+
+<header>
+  <div class="wrap nav">
+    <a class="logo" href="#top">HOLD</a>
+    <div class="links">
+      <a href="#cabin" class="on" data-i18n="nav.cases">Cases</a>
+      <a href="#inside" data-i18n="nav.inside">Inside</a>
+      <a href="#compare" data-i18n="nav.compare">Compare</a>
+      <a href="#made" data-i18n="nav.made">Made</a>
+    </div>
+    <button class="lng" id="lng" aria-label="RU / EN"><span data-l="ru">RU</span> / <span data-l="en">EN</span></button>
+    <a class="btn o sm" href="#compare" data-i18n="nav.help">Help me choose</a>
+    <a class="btn p sm" href="#cabin" data-i18n="nav.buy">Buy</a>
+  </div>
+</header>
+
+<main>
+  <!-- hero -->
+  <div class="hero">
+    <div class="scene" aria-hidden="true">
+      <!-- продукт как техническая графика: единственный источник цвета -->
+      <svg viewBox="0 0 400 300">
+        <defs>
+          <linearGradient id="shellH" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#3f4a52"/><stop offset="1" stop-color="#232b31"/>
+          </linearGradient>
+        </defs>
+        <ellipse cx="200" cy="272" rx="120" ry="12" fill="#000" opacity=".45"/>
+        <rect x="112" y="52" width="176" height="212" rx="18" fill="url(#shellH)" stroke="#5b666f"/>
+        <path d="M148 52v212M200 52v212M252 52v212" stroke="#4c565e"/>
+        <rect x="128" y="70" width="144" height="46" rx="10" fill="#2a333a" stroke="#5b666f"/>
+        <rect x="186" y="30" width="28" height="24" rx="6" fill="#8a949b"/>
+        <rect x="176" y="18" width="48" height="10" rx="5" fill="#b9c1c6"/>
+        <circle cx="140" cy="272" r="12" fill="#111" stroke="#6d777e"/>
+        <circle cx="260" cy="272" r="12" fill="#111" stroke="#6d777e"/>
+        <rect x="176" y="150" width="48" height="14" rx="4" fill="#c9713a"/>
+        <text x="200" y="161" text-anchor="middle" font-family="monospace" font-size="9" fill="#1d1d1d">HOLD 55</text>
+      </svg>
+    </div>
+    <div class="scrim" aria-hidden="true"></div>
+    <div class="wrap">
+      <h1 class="disp" data-i18n="hero.h1">Built for the part of the flight <span class="fade on-dark">you never see</span></h1>
+      <div class="row">
+        <div class="acts">
+          <a class="btn light" href="#cabin" data-i18n="hero.cta1">Discover Hold 55</a>
+          <a class="btn olight" href="#compare" data-i18n="hero.cta2">Compare the range</a>
+        </div>
+        <div class="meta">
+          <div><b>100</b><span data-i18n="hero.m1">days to change your mind</span></div>
+          <div><b>10</b><span data-i18n="hero.m2">year warranty, wheels included</span></div>
+          <div><b>2.4 kg</b><span data-i18n="hero.m3">empty, cabin size</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- продукт 1 -->
+  <section id="cabin">
+    <div class="wrap">
+      <div class="product">
+        <div>
+          <div class="mono" style="margin-bottom:12px">01 / CABIN</div>
+          <h3 class="mid" data-i18n="p1.h">Hold 55 <span class="smoke" data-i18n="p1.sub">The one that fits</span></h3>
+          <p class="lead" data-i18n="p1.lead">Sized to the strictest European cabin rule, not the friendliest one. Opens flat on a hotel bed and closes without a knee.</p>
+          <div class="switch" style="margin-top:24px">
+            <button class="on" data-i18n="sw.grey">Graphite</button>
+            <button data-i18n="sw.sand">Sand</button>
+            <button data-i18n="sw.moss">Moss</button>
+          </div>
+          <ul class="plus">
+            <li data-i18n="p1.f1">55 × 35 × 20 cm, 38 litres</li>
+            <li data-i18n="p1.f2">Recycled polycarbonate shell, 2.4 kg</li>
+            <li data-i18n="p1.f3">Wheels replaceable with a coin</li>
+            <li data-i18n="p1.f4">Laundry side that seals</li>
+          </ul>
+          <div class="price"><span class="v">€295</span><span class="smoke" data-i18n="p1.ship">Ships in 3 days</span></div>
+          <div class="acts">
+            <a class="btn p" href="#" data-i18n="p1.cta">Add to bag</a>
+            <a class="ghostlink" href="#inside" data-i18n="p1.link">See what is inside</a>
+          </div>
+        </div>
+        <div class="art">
+          <svg viewBox="0 0 300 320" role="img" aria-label="Hold 55">
+            <defs><linearGradient id="s1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4a555d"/><stop offset="1" stop-color="#2c353b"/></linearGradient></defs>
+            <ellipse cx="150" cy="300" rx="96" ry="10" fill="#1d1d1d" opacity=".12"/>
+            <rect x="70" y="46" width="160" height="240" rx="18" fill="url(#s1)" stroke="#5b666f"/>
+            <path d="M110 46v240M150 46v240M190 46v240" stroke="#4c565e"/>
+            <rect x="86" y="66" width="128" height="44" rx="10" fill="#2a333a" stroke="#5b666f"/>
+            <rect x="136" y="24" width="28" height="24" rx="6" fill="#8a949b"/>
+            <rect x="126" y="12" width="48" height="10" rx="5" fill="#b9c1c6"/>
+            <circle cx="98" cy="292" r="11" fill="#1d1d1d" stroke="#6d777e"/>
+            <circle cx="202" cy="292" r="11" fill="#1d1d1d" stroke="#6d777e"/>
+            <rect x="126" y="150" width="48" height="14" rx="4" fill="#c9713a"/>
+            <text x="150" y="161" text-anchor="middle" font-family="monospace" font-size="9" fill="#1d1d1d">HOLD 55</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- продукт 2 -->
+  <section class="mist">
+    <div class="wrap">
+      <div class="product">
+        <div class="art" style="background:var(--white)">
+          <svg viewBox="0 0 300 340" role="img" aria-label="Hold 75">
+            <defs><linearGradient id="s2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8d8171"/><stop offset="1" stop-color="#5f574b"/></linearGradient></defs>
+            <ellipse cx="150" cy="318" rx="104" ry="10" fill="#1d1d1d" opacity=".12"/>
+            <rect x="58" y="34" width="184" height="270" rx="20" fill="url(#s2)" stroke="#a1957f"/>
+            <path d="M104 34v270M150 34v270M196 34v270" stroke="#7a6f60"/>
+            <rect x="76" y="56" width="148" height="50" rx="10" fill="#4f483e" stroke="#a1957f"/>
+            <rect x="136" y="12" width="28" height="24" rx="6" fill="#c2b6a0"/>
+            <rect x="126" y="0" width="48" height="10" rx="5" fill="#ded4c2"/>
+            <circle cx="88" cy="310" r="12" fill="#1d1d1d" stroke="#a1957f"/>
+            <circle cx="212" cy="310" r="12" fill="#1d1d1d" stroke="#a1957f"/>
+            <rect x="126" y="166" width="48" height="14" rx="4" fill="#c9713a"/>
+            <text x="150" y="177" text-anchor="middle" font-family="monospace" font-size="9" fill="#1d1d1d">HOLD 75</text>
+          </svg>
+        </div>
+        <div>
+          <div class="mono" style="margin-bottom:12px">02 / CHECKED</div>
+          <h3 class="mid" data-i18n="p2.h">Hold 75 <span class="smoke" data-i18n="p2.sub">The one you check</span></h3>
+          <p class="lead" data-i18n="p2.lead">Built around the twenty-three kilo limit and the people who throw it. Corners are armoured, the shell flexes back, and the handle survives being dragged sideways.</p>
+          <ul class="plus">
+            <li data-i18n="p2.f1">75 × 48 × 28 cm, 96 litres</li>
+            <li data-i18n="p2.f2">4.1 kg empty — 18.9 kg of allowance left</li>
+            <li data-i18n="p2.f3">Compression board with two straps</li>
+            <li data-i18n="p2.f4">TSA lock, replaceable barrel</li>
+          </ul>
+          <div class="price"><span class="v">€395</span><span class="smoke" data-i18n="p2.ship">Ships in 3 days</span></div>
+          <div class="acts">
+            <a class="btn p" href="#" data-i18n="p2.cta">Add to bag</a>
+            <a class="ghostlink" href="#compare" data-i18n="p2.link">Compare with Hold 55</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- пресса -->
+  <section>
+    <div class="wrap">
+      <h2 class="big" data-i18n="pr.h2">Press</h2>
+      <div class="press" style="margin-top:40px">
+        <div class="ptile"><div class="q" data-i18n="pr.q1">“The only cabin case that actually measures what it claims.”</div><div class="n c1">Condé Nast</div></div>
+        <div class="ptile"><div class="q" data-i18n="pr.q2">“Wheels you can replace with a two-euro coin. Finally.”</div><div class="n c2">Monocle</div></div>
+        <div class="ptile"><div class="q" data-i18n="pr.q3">“Three years, ninety flights, one scratch.”</div><div class="n c3">The Verge</div></div>
+        <div class="ptile"><div class="q" data-i18n="pr.q4">“Boring in the way good luggage should be.”</div><div class="n c4">Wallpaper*</div></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="marq">
+    <div class="row">
+      <span data-i18n="marq">Packed in ten minutes, landed in one piece. Packed in ten minutes, landed in one piece.</span>
+      <span data-i18n="marq2">Packed in ten minutes, landed in one piece. Packed in ten minutes, landed in one piece.</span>
+    </div>
+  </div>
+
+  <!-- внутри -->
+  <section id="inside">
+    <div class="wrap">
+      <h2 class="big" data-i18n="in.h2">Everything inside <span class="fade" data-i18n="in.h2b">earns its weight</span></h2>
+      <p class="lead" data-i18n="in.lead">No compartment exists because a render looked good. Each one replaced something travellers were already carrying separately.</p>
+      <div class="tech">
+        <div class="tcard"><svg viewBox="0 0 24 24"><path d="M4 7h16v13H4zM8 7V4h8v3M9 12h6"/></svg>
+          <div class="t" data-i18n="in.1t">Laundry side</div><p data-i18n="in.1p">A sealed panel with a water-resistant liner, so the wet swimsuit stops being everyone's problem.</p></div>
+        <div class="tcard"><svg viewBox="0 0 24 24"><path d="M3 8h18v9H3zM7 8V5h10v3M7 17v2M17 17v2"/></svg>
+          <div class="t" data-i18n="in.2t">Compression board</div><p data-i18n="in.2p">Two straps and a rigid board that takes a four-day pack down to three centimetres of slack.</p></div>
+        <div class="tcard"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg>
+          <div class="t" data-i18n="in.3t">Coin-swap wheels</div><p data-i18n="in.3p">Each wheel comes off with a coin. New sets are eight euros and arrive in the post, not in a repair queue.</p></div>
+        <div class="tcard"><svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+          <div class="t" data-i18n="in.4t">Lock with a spare barrel</div><p data-i18n="in.4p">TSA-approved, and if the mechanism jams the barrel unscrews instead of the case being written off.</p></div>
+        <div class="tcard"><svg viewBox="0 0 24 24"><path d="M4 5h16v14H4z"/><path d="M4 10h16M12 5v14"/></svg>
+          <div class="t" data-i18n="in.5t">Flat-opening shell</div><p data-i18n="in.5p">Opens to 180° on a bed or a hostel floor and stays there. No third hand required.</p></div>
+        <div class="tcard"><svg viewBox="0 0 24 24"><path d="M12 3v18M6 9l6-6 6 6"/><path d="M5 21h14"/></svg>
+          <div class="t" data-i18n="in.6t">Handle that takes the drag</div><p data-i18n="in.6p">Tested sideways at 30 kg for 40 000 cycles, because nobody pulls luggage in a straight line.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- сообщество -->
+  <section class="mist">
+    <div class="wrap">
+      <h2 class="big" data-i18n="co.h2">You will never travel alone</h2>
+      <p class="lead" data-i18n="co.lead">Numbers from the last twelve months, counted the boring way.</p>
+      <div class="stats">
+        <div class="stat"><div class="v">184 000</div><div class="k" data-i18n="co.s1">Cases in circulation</div></div>
+        <div class="stat"><div class="v">1.9%</div><div class="k" data-i18n="co.s2">Returned within 100 days</div></div>
+        <div class="stat"><div class="v">6 200</div><div class="k" data-i18n="co.s3">Wheel sets posted, free</div></div>
+        <div class="stat"><div class="v">41</div><div class="k" data-i18n="co.s4">Countries we ship to</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- сравнение -->
+  <section id="compare">
+    <div class="wrap">
+      <h2 class="big" data-i18n="cm.h2">Which Hold is right for you?</h2>
+      <table class="cmp">
+        <thead><tr>
+          <th data-i18n="cm.th0">&nbsp;</th><th>Hold 55</th><th>Hold 75</th><th class="hide">Hold 55 + 75</th>
+        </tr></thead>
+        <tbody>
+          <tr><td data-i18n="cm.r1">Trip length</td><td data-i18n="cm.v1">2–4 days</td><td data-i18n="cm.v2">5–14 days</td><td class="hide" data-i18n="cm.v3">Any</td></tr>
+          <tr><td data-i18n="cm.r2">Volume</td><td>38 L</td><td>96 L</td><td class="hide">134 L</td></tr>
+          <tr><td data-i18n="cm.r3">Empty weight</td><td>2.4 kg</td><td>4.1 kg</td><td class="hide">6.5 kg</td></tr>
+          <tr><td data-i18n="cm.r4">Fits the strict cabin rule</td><td class="yes" data-i18n="cm.yes">Yes</td><td>—</td><td class="hide yes" data-i18n="cm.yes2">Yes</td></tr>
+          <tr><td data-i18n="cm.r5">Laundry side</td><td class="yes" data-i18n="cm.yes3">Yes</td><td class="yes" data-i18n="cm.yes4">Yes</td><td class="hide yes" data-i18n="cm.yes5">Yes</td></tr>
+          <tr><td data-i18n="cm.r6">Price</td><td>€295</td><td>€395</td><td class="hide">€640</td></tr>
+        </tbody>
+      </table>
+      <div class="acts" style="margin-top:32px">
+        <a class="btn p" href="#cabin" data-i18n="cm.cta">Take the two-question quiz</a>
+        <a class="ghostlink" href="#" data-i18n="cm.link">Download the sizing guide</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- производство -->
+  <section id="made">
+    <div class="wrap">
+      <h2 class="big" data-i18n="md.h2">Designed in Copenhagen. <span class="fade" data-i18n="md.h2b">Assembled in Portugal.</span></h2>
+      <p class="lead" data-i18n="md.lead">Two factories, both visited every quarter, both named on the inside label. Shells are pressed from 62% recycled polycarbonate; the offcuts go back into the press the same week.</p>
+      <div class="jgrid">
+        <div class="jcard">
+          <div class="im"><svg viewBox="0 0 200 130"><rect x="20" y="24" width="160" height="82" rx="8" fill="#e5e7eb"/><path d="M60 24v82M100 24v82M140 24v82" stroke="#cacaca"/><rect x="86" y="8" width="28" height="18" rx="5" fill="#a3a3a3"/></svg></div>
+          <div class="tx"><div class="d">23/03/2026</div><h4 data-i18n="md.j1">Why the shell is 62% recycled and not 100%</h4></div>
+        </div>
+        <div class="jcard">
+          <div class="im"><svg viewBox="0 0 200 130"><circle cx="70" cy="70" r="26" fill="#e5e7eb"/><circle cx="130" cy="70" r="26" fill="#e5e7eb"/><circle cx="70" cy="70" r="8" fill="#a3a3a3"/><circle cx="130" cy="70" r="8" fill="#a3a3a3"/></svg></div>
+          <div class="tx"><div class="d">19/02/2026</div><h4 data-i18n="md.j2">Forty thousand cycles: how we break wheels on purpose</h4></div>
+        </div>
+        <div class="jcard">
+          <div class="im"><svg viewBox="0 0 200 130"><rect x="30" y="30" width="140" height="70" rx="8" fill="#e5e7eb"/><path d="M30 65h140" stroke="#cacaca"/><rect x="90" y="55" width="20" height="20" rx="4" fill="#c9713a"/></svg></div>
+          <div class="tx"><div class="d">08/01/2026</div><h4 data-i18n="md.j3">The orange tab is not branding</h4></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- keep exploring -->
+  <section class="mist">
+    <div class="wrap">
+      <h2 class="big" data-i18n="ke.h2">Keep exploring</h2>
+      <div class="explore">
+        <a class="ex" href="#"><span data-i18n="ke.1">Packing cubes</span><span>→</span></a>
+        <a class="ex" href="#"><span data-i18n="ke.2">Spare parts</span><span>→</span></a>
+        <a class="ex" href="#"><span data-i18n="ke.3">Repairs</span><span>→</span></a>
+        <a class="ex" href="#"><span data-i18n="ke.4">Gift cards</span><span>→</span></a>
+      </div>
+    </div>
+  </section>
+
+  <div class="final">
+    <div class="wrap">
+      <h2 class="disp" data-i18n="fin.h">One hundred days <span class="fade on-dark" data-i18n="fin.h2">to change your mind</span></h2>
+      <p data-i18n="fin.p">Use it, check it, drag it through three airports. If it is not the last case you buy, send it back and we pay the postage.</p>
+      <a class="btn light" href="#cabin" data-i18n="fin.cta">Choose your Hold</a>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="fg">
+      <div>
+        <div class="logo">HOLD</div>
+        <p class="cap" style="max-width:32ch;margin-top:8px" data-i18n="foot.about">Luggage designed in Copenhagen, assembled in Portugal, repaired anywhere.</p>
+      </div>
+      <div>
+        <h6 data-i18n="foot.h1">Shop</h6>
+        <a href="#cabin">Hold 55</a><a href="#cabin">Hold 75</a>
+        <a href="#" data-i18n="ke.1b">Packing cubes</a><a href="#" data-i18n="ke.2b">Spare parts</a>
+      </div>
+      <div>
+        <h6 data-i18n="foot.h2">Support</h6>
+        <a href="#" data-i18n="foot.warranty">Warranty</a><a href="#" data-i18n="foot.repair">Repairs</a>
+        <a href="#" data-i18n="foot.ship">Shipping</a><a href="#" data-i18n="foot.ret">Returns</a>
+      </div>
+      <div>
+        <h6 data-i18n="foot.h3">Company</h6>
+        <a href="#made" data-i18n="foot.made">How it is made</a><a href="#" data-i18n="foot.jobs">Jobs</a>
+        <a href="#" data-i18n="foot.press">Press</a><a href="#" data-i18n="foot.privacy">Privacy</a>
+      </div>
+    </div>
+    <div class="fbot">
+      <span data-i18n="foot.copy">© 2026 Hold — a design exercise, not a real shop</span>
+      <span class="mono">CPH 55.6761° N / LIS 38.7223° N</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+const I18N = {
+  "ann":{en:"Free shipping and a 100-day trial in the EU and UK. <b>Learn more</b>",ru:"Бесплатная доставка и 100 дней на возврат в ЕС и Великобритании. <b>Подробнее</b>"},
+  "nav.cases":{en:"Cases",ru:"Чемоданы"},
+  "nav.inside":{en:"Inside",ru:"Внутри"},
+  "nav.compare":{en:"Compare",ru:"Сравнить"},
+  "nav.made":{en:"Made",ru:"Производство"},
+  "nav.help":{en:"Help me choose",ru:"Помочь выбрать"},
+  "nav.buy":{en:"Buy",ru:"Купить"},
+  "hero.h1":{en:'Built for the part of the flight <span class="fade on-dark">you never see</span>',ru:'Сделан для той части рейса, <span class="fade on-dark">которую вы не видите</span>'},
+  "hero.cta1":{en:"Discover Hold 55",ru:"Смотреть Hold 55"},
+  "hero.cta2":{en:"Compare the range",ru:"Сравнить модели"},
+  "hero.m1":{en:"days to change your mind",ru:"дней, чтобы передумать"},
+  "hero.m2":{en:"year warranty, wheels included",ru:"лет гарантии, включая колёса"},
+  "hero.m3":{en:"empty, cabin size",ru:"пустой, ручная кладь"},
+  "p1.h":{en:'Hold 55 <span class="smoke">The one that fits</span>',ru:'Hold 55 <span class="smoke">Тот, что проходит</span>'},
+  "p1.sub":{en:"The one that fits",ru:"Тот, что проходит"},
+  "p1.lead":{en:"Sized to the strictest European cabin rule, not the friendliest one. Opens flat on a hotel bed and closes without a knee.",ru:"Размер под самое строгое европейское правило ручной клади, а не под самое доброе. Открывается плашмя на кровати в отеле и закрывается без колена."},
+  "sw.grey":{en:"Graphite",ru:"Графит"},
+  "sw.sand":{en:"Sand",ru:"Песок"},
+  "sw.moss":{en:"Moss",ru:"Мох"},
+  "p1.f1":{en:"55 × 35 × 20 cm, 38 litres",ru:"55 × 35 × 20 см, 38 литров"},
+  "p1.f2":{en:"Recycled polycarbonate shell, 2.4 kg",ru:"Корпус из переработанного поликарбоната, 2,4 кг"},
+  "p1.f3":{en:"Wheels replaceable with a coin",ru:"Колёса меняются монетой"},
+  "p1.f4":{en:"Laundry side that seals",ru:"Отделение для грязного, которое закрывается герметично"},
+  "p1.ship":{en:"Ships in 3 days",ru:"Отправка за 3 дня"},
+  "p1.cta":{en:"Add to bag",ru:"В корзину"},
+  "p1.link":{en:"See what is inside",ru:"Что внутри"},
+  "p2.h":{en:'Hold 75 <span class="smoke">The one you check</span>',ru:'Hold 75 <span class="smoke">Тот, что сдают в багаж</span>'},
+  "p2.sub":{en:"The one you check",ru:"Тот, что сдают в багаж"},
+  "p2.lead":{en:"Built around the twenty-three kilo limit and the people who throw it. Corners are armoured, the shell flexes back, and the handle survives being dragged sideways.",ru:"Построен вокруг лимита в двадцать три килограмма и людей, которые его швыряют. Углы усилены, корпус возвращает форму, ручка переживает, когда её тянут вбок."},
+  "p2.f1":{en:"75 × 48 × 28 cm, 96 litres",ru:"75 × 48 × 28 см, 96 литров"},
+  "p2.f2":{en:"4.1 kg empty — 18.9 kg of allowance left",ru:"4,1 кг пустой — остаётся 18,9 кг нормы"},
+  "p2.f3":{en:"Compression board with two straps",ru:"Прижимная панель с двумя ремнями"},
+  "p2.f4":{en:"TSA lock, replaceable barrel",ru:"Замок TSA со сменной личинкой"},
+  "p2.ship":{en:"Ships in 3 days",ru:"Отправка за 3 дня"},
+  "p2.cta":{en:"Add to bag",ru:"В корзину"},
+  "p2.link":{en:"Compare with Hold 55",ru:"Сравнить с Hold 55"},
+  "pr.h2":{en:"Press",ru:"Пресса"},
+  "pr.q1":{en:"“The only cabin case that actually measures what it claims.”",ru:"«Единственный чемодан ручной клади, который реально соответствует заявленным размерам»."},
+  "pr.q2":{en:"“Wheels you can replace with a two-euro coin. Finally.”",ru:"«Колёса, которые меняются монетой в два евро. Наконец-то»."},
+  "pr.q3":{en:"“Three years, ninety flights, one scratch.”",ru:"«Три года, девяносто перелётов, одна царапина»."},
+  "pr.q4":{en:"“Boring in the way good luggage should be.”",ru:"«Скучный ровно так, как и должен быть хороший чемодан»."},
+  "marq":{en:"Packed in ten minutes, landed in one piece. Packed in ten minutes, landed in one piece.",ru:"Собран за десять минут, прилетел целым. Собран за десять минут, прилетел целым."},
+  "marq2":{en:"Packed in ten minutes, landed in one piece. Packed in ten minutes, landed in one piece.",ru:"Собран за десять минут, прилетел целым. Собран за десять минут, прилетел целым."},
+  "in.h2":{en:'Everything inside <span class="fade">earns its weight</span>',ru:'Внутри всё <span class="fade">отрабатывает свой вес</span>'},
+  "in.h2b":{en:"earns its weight",ru:"отрабатывает свой вес"},
+  "in.lead":{en:"No compartment exists because a render looked good. Each one replaced something travellers were already carrying separately.",ru:"Ни одно отделение не появилось потому, что хорошо выглядело на рендере. Каждое заменило то, что путешественники и так носили отдельно."},
+  "in.1t":{en:"Laundry side",ru:"Сторона для грязного"},
+  "in.1p":{en:"A sealed panel with a water-resistant liner, so the wet swimsuit stops being everyone's problem.",ru:"Герметичная панель с водостойкой подкладкой, чтобы мокрый купальник перестал быть общей проблемой."},
+  "in.2t":{en:"Compression board",ru:"Прижимная панель"},
+  "in.2p":{en:"Two straps and a rigid board that takes a four-day pack down to three centimetres of slack.",ru:"Два ремня и жёсткая панель ужимают четырёхдневную укладку до трёх сантиметров запаса."},
+  "in.3t":{en:"Coin-swap wheels",ru:"Колёса под монету"},
+  "in.3p":{en:"Each wheel comes off with a coin. New sets are eight euros and arrive in the post, not in a repair queue.",ru:"Каждое колесо снимается монетой. Новый комплект стоит восемь евро и приходит почтой, а не через очередь в мастерской."},
+  "in.4t":{en:"Lock with a spare barrel",ru:"Замок со сменной личинкой"},
+  "in.4p":{en:"TSA-approved, and if the mechanism jams the barrel unscrews instead of the case being written off.",ru:"Одобрен TSA, а если механизм заклинит — выкручивается личинка, а не списывается чемодан."},
+  "in.5t":{en:"Flat-opening shell",ru:"Раскрывается плашмя"},
+  "in.5p":{en:"Opens to 180° on a bed or a hostel floor and stays there. No third hand required.",ru:"Открывается на 180° на кровати или на полу хостела и так и остаётся. Третья рука не нужна."},
+  "in.6t":{en:"Handle that takes the drag",ru:"Ручка, которая держит рывок"},
+  "in.6p":{en:"Tested sideways at 30 kg for 40 000 cycles, because nobody pulls luggage in a straight line.",ru:"Испытана вбок под 30 кг на 40 000 циклов, потому что никто не везёт чемодан по прямой."},
+  "co.h2":{en:"You will never travel alone",ru:"Вы не поедете в одиночку"},
+  "co.lead":{en:"Numbers from the last twelve months, counted the boring way.",ru:"Цифры за последние двенадцать месяцев, посчитанные скучным способом."},
+  "co.s1":{en:"Cases in circulation",ru:"Чемоданов в обороте"},
+  "co.s2":{en:"Returned within 100 days",ru:"Возвращают в течение 100 дней"},
+  "co.s3":{en:"Wheel sets posted, free",ru:"Комплектов колёс отправлено бесплатно"},
+  "co.s4":{en:"Countries we ship to",ru:"Стран доставки"},
+  "cm.h2":{en:"Which Hold is right for you?",ru:"Какой Hold вам подойдёт?"},
+  "cm.th0":{en:"&nbsp;",ru:"&nbsp;"},
+  "cm.r1":{en:"Trip length",ru:"Длина поездки"},
+  "cm.v1":{en:"2–4 days",ru:"2–4 дня"},
+  "cm.v2":{en:"5–14 days",ru:"5–14 дней"},
+  "cm.v3":{en:"Any",ru:"Любая"},
+  "cm.r2":{en:"Volume",ru:"Объём"},
+  "cm.r3":{en:"Empty weight",ru:"Вес пустого"},
+  "cm.r4":{en:"Fits the strict cabin rule",ru:"Проходит по строгому правилу ручной клади"},
+  "cm.r5":{en:"Laundry side",ru:"Отделение для грязного"},
+  "cm.r6":{en:"Price",ru:"Цена"},
+  "cm.yes":{en:"Yes",ru:"Да"},"cm.yes2":{en:"Yes",ru:"Да"},"cm.yes3":{en:"Yes",ru:"Да"},
+  "cm.yes4":{en:"Yes",ru:"Да"},"cm.yes5":{en:"Yes",ru:"Да"},
+  "cm.cta":{en:"Take the two-question quiz",ru:"Пройти тест из двух вопросов"},
+  "cm.link":{en:"Download the sizing guide",ru:"Скачать гид по размерам"},
+  "md.h2":{en:'Designed in Copenhagen. <span class="fade">Assembled in Portugal.</span>',ru:'Спроектирован в Копенгагене. <span class="fade">Собран в Португалии.</span>'},
+  "md.h2b":{en:"Assembled in Portugal.",ru:"Собран в Португалии."},
+  "md.lead":{en:"Two factories, both visited every quarter, both named on the inside label. Shells are pressed from 62% recycled polycarbonate; the offcuts go back into the press the same week.",ru:"Две фабрики, на обеих бываем каждый квартал, обе названы на внутренней бирке. Корпуса прессуют из поликарбоната на 62% переработанного, а обрезки возвращаются в пресс на той же неделе."},
+  "md.j1":{en:"Why the shell is 62% recycled and not 100%",ru:"Почему корпус переработан на 62%, а не на 100%"},
+  "md.j2":{en:"Forty thousand cycles: how we break wheels on purpose",ru:"Сорок тысяч циклов: как мы намеренно ломаем колёса"},
+  "md.j3":{en:"The orange tab is not branding",ru:"Оранжевый язычок — не брендинг"},
+  "ke.h2":{en:"Keep exploring",ru:"Смотреть дальше"},
+  "ke.1":{en:"Packing cubes",ru:"Органайзеры"},"ke.1b":{en:"Packing cubes",ru:"Органайзеры"},
+  "ke.2":{en:"Spare parts",ru:"Запчасти"},"ke.2b":{en:"Spare parts",ru:"Запчасти"},
+  "ke.3":{en:"Repairs",ru:"Ремонт"},
+  "ke.4":{en:"Gift cards",ru:"Подарочные карты"},
+  "fin.h":{en:'One hundred days <span class="fade on-dark">to change your mind</span>',ru:'Сто дней, <span class="fade on-dark">чтобы передумать</span>'},
+  "fin.h2":{en:"to change your mind",ru:"чтобы передумать"},
+  "fin.p":{en:"Use it, check it, drag it through three airports. If it is not the last case you buy, send it back and we pay the postage.",ru:"Пользуйтесь, сдавайте в багаж, протащите через три аэропорта. Если это не последний купленный вами чемодан — верните, пересылку оплачиваем мы."},
+  "fin.cta":{en:"Choose your Hold",ru:"Выбрать свой Hold"},
+  "foot.about":{en:"Luggage designed in Copenhagen, assembled in Portugal, repaired anywhere.",ru:"Чемоданы: спроектированы в Копенгагене, собраны в Португалии, чинятся где угодно."},
+  "foot.h1":{en:"Shop",ru:"Магазин"},
+  "foot.h2":{en:"Support",ru:"Поддержка"},
+  "foot.h3":{en:"Company",ru:"Компания"},
+  "foot.warranty":{en:"Warranty",ru:"Гарантия"},
+  "foot.repair":{en:"Repairs",ru:"Ремонт"},
+  "foot.ship":{en:"Shipping",ru:"Доставка"},
+  "foot.ret":{en:"Returns",ru:"Возврат"},
+  "foot.made":{en:"How it is made",ru:"Как это сделано"},
+  "foot.jobs":{en:"Jobs",ru:"Вакансии"},
+  "foot.press":{en:"Press",ru:"Пресса"},
+  "foot.privacy":{en:"Privacy",ru:"Приватность"},
+  "foot.copy":{en:"© 2026 Hold — a design exercise, not a real shop",ru:"© 2026 Hold — дизайн-упражнение, не настоящий магазин"}
+};
+function apply(l){
+  const r=document.documentElement;
+  r.lang=l; r.setAttribute('data-lang',l);
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const e=I18N[el.getAttribute('data-i18n')];
+    if(e && e[l]!=null) el.innerHTML=e[l];
+  });
+  try{localStorage.setItem('hold_lang',l);}catch(e){}
+}
+(function(){
+  let l; try{l=localStorage.getItem('hold_lang');}catch(e){}
+  if(!l) l=(navigator.language||'en').toLowerCase().startsWith('ru')?'ru':'en';
+  apply(l);
+  document.getElementById('lng').addEventListener('click',()=>{
+    apply(document.documentElement.getAttribute('data-lang')==='ru'?'en':'ru');
+  });
+  document.querySelectorAll('.switch button').forEach(b=>b.addEventListener('click',()=>{
+    b.parentElement.querySelectorAll('button').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');
+    const shell=document.querySelector('#cabin .art rect[fill^="url"]');
+    const map={0:'#4a555d',1:'#b4a389',2:'#5c7050'};
+    const i=[...b.parentElement.children].indexOf(b);
+    const g=document.querySelector('#s1 stop');
+    if(g){g.setAttribute('stop-color',map[i]||'#4a555d');}
+  }));
+})();
+</script>
+</body>
+</html>

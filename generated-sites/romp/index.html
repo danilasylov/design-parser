@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Romp — A century of considered company</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geologica:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --color-porcelain-canvas: #ffffff;
+  --color-bone: #fcfaee;
+  --color-obsidian: #191817;
+  --color-pure-ink: #000000;
+  --color-graphite: #555555;
+  --color-mist: #e5e5e5;
+  --color-ultramarine-velvet: #060daa;
+
+  --font-beosupreme: 'Geologica', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  --text-caption: 12px; --leading-caption: 1.67; --tracking-caption: 0.288px;
+  --text-body-sm: 14px; --leading-body-sm: 1.43; --tracking-body-sm: -0.196px;
+  --text-body: 16px; --leading-body: 1.5; --tracking-body: -0.224px;
+  --text-subheading: 24px; --leading-subheading: 1.25; --tracking-subheading: -0.336px;
+  --text-heading: 36px; --leading-heading: 1.15; --tracking-heading: -2.016px;
+
+  --font-weight-regular: 400; --font-weight-medium: 500; --font-weight-bold: 700;
+
+  --spacing-4:4px; --spacing-8:8px; --spacing-12:12px; --spacing-16:16px; --spacing-20:20px;
+  --spacing-24:24px; --spacing-32:32px; --spacing-36:36px; --spacing-40:40px; --spacing-48:48px;
+  --spacing-56:56px; --spacing-60:60px; --spacing-80:80px; --spacing-236:236px;
+
+  --page-max-width: 1440px;
+  --section-gap: 70px;
+  --card-padding: 0px;
+  --element-gap: 12px;
+
+  --radius-sm: 2px; --radius-3xl: 40px;
+  --radius-cards: 0px; --radius-badges: 2px; --radius-inputs: 0px; --radius-buttons: 40px;
+
+  --surface-porcelain: #ffffff;
+  --surface-bone: #fcfaee;
+  --surface-ultramarine-chamber: #060daa;
+  --surface-obsidian: #191817;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-beosupreme);
+  background: var(--surface-porcelain);
+  color: var(--color-obsidian);
+  -webkit-font-smoothing: antialiased;
+}
+img, svg { display: block; max-width: 100%; }
+a { text-decoration: none; color: inherit; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+.wrap { max-width: var(--page-max-width); margin: 0 auto; padding: 0 25px; }
+
+/* ---------- Nav ---------- */
+nav {
+  position: sticky; top: 0; z-index: 20;
+  background: var(--surface-porcelain);
+  height: 64px;
+  display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
+  padding: 0 25px;
+}
+.nav-left { display: flex; align-items: center; gap: 16px; }
+.nav-left .lbl { font-size: 12px; font-weight: var(--font-weight-medium); letter-spacing: 0.025em; text-transform: uppercase; }
+.nav-center { text-align: center; }
+.nav-center .word { font-size: 16px; font-weight: var(--font-weight-medium); letter-spacing: 0.01em; }
+.nav-center .sub { font-size: 9px; letter-spacing: 0.143em; color: var(--color-graphite); text-transform: uppercase; margin-top: 2px; }
+.nav-right { display: flex; align-items: center; justify-content: flex-end; gap: 16px; }
+.lang-toggle { display: inline-flex; border: 1px solid var(--color-pure-ink); border-radius: var(--radius-buttons); overflow: hidden; }
+.lang-toggle button { padding: 6px 14px; font-size: 11px; font-weight: 500; letter-spacing: 0.05em; }
+.lang-toggle button.active { background: var(--color-pure-ink); color: #fff; }
+
+/* ---------- Buttons ---------- */
+.ghost-pill {
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: var(--radius-buttons); border: 1px solid var(--color-pure-ink);
+  background: transparent; color: var(--color-pure-ink);
+  padding: 12px 28px; font-size: 14px; font-weight: var(--font-weight-medium);
+  transition: background 0.2s, color 0.2s;
+}
+.ghost-pill:hover { background: var(--color-pure-ink); color: #fff; }
+.ghost-pill.inverted { border-color: #fff; color: #fff; }
+.ghost-pill.inverted:hover { background: #fff; color: var(--color-pure-ink); }
+
+/* ---------- Hero chamber (video-still style) ---------- */
+.hero {
+  position: relative; height: 92vh; min-height: 620px;
+  display: flex; align-items: flex-end; justify-content: center;
+  overflow: hidden; text-align: center;
+}
+.hero-scene {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(circle at 65% 30%, rgba(6,13,170,0.55), transparent 55%),
+    linear-gradient(200deg, #2b2f45 0%, #0c0e18 60%, #000 100%);
+}
+.hero-content { position: relative; z-index: 2; padding-bottom: 72px; color: #fff; }
+.hero .word-name { font-size: 20px; font-weight: var(--font-weight-medium); margin-bottom: 8px; }
+.hero .word-tag { font-size: 16px; color: rgba(255,255,255,0.75); margin-bottom: 28px; }
+
+/* ---------- Section heading ---------- */
+.section { padding: var(--section-gap) 0; }
+.section-heading {
+  font-size: var(--text-heading); font-weight: var(--font-weight-medium);
+  letter-spacing: var(--tracking-heading); color: var(--color-obsidian);
+  text-align: center; margin-bottom: 56px;
+}
+
+/* ---------- Product grid (no card chrome) ---------- */
+.product-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 25px; }
+.product-cell { text-align: center; }
+.product-img {
+  aspect-ratio: 1/1; border-radius: 0; margin-bottom: 16px;
+  display: flex; align-items: center; justify-content: center; overflow: hidden;
+}
+.product-cell .pname { font-size: 16px; font-weight: var(--font-weight-medium); margin-bottom: 8px; }
+.product-cell .pprice { font-size: 14px; color: var(--color-graphite); }
+
+/* ---------- Ultramarine chamber ---------- */
+.chamber {
+  background: var(--surface-ultramarine-chamber); color: #fff;
+  padding: 80px 25px; display: flex; align-items: center; justify-content: space-between; gap: 48px;
+}
+.chamber-visual { flex: 1; aspect-ratio: 4/3; border-radius: 0; position: relative; overflow: hidden; }
+.chamber-text { flex: 1; max-width: 420px; }
+.chamber-text h3 { font-size: var(--text-heading); font-weight: var(--font-weight-medium); letter-spacing: -0.056em; margin-bottom: 16px; }
+.chamber-text p { font-size: var(--text-body); margin-bottom: 28px; }
+
+/* ---------- Micro-labels ---------- */
+.micro-label { display: inline-block; font-size: 10px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; background: var(--color-obsidian); color: #fff; border-radius: var(--radius-badges); padding: 4px 10px; margin-bottom: 16px; }
+
+/* ---------- Bone editorial section ---------- */
+.bone { background: var(--surface-bone); }
+.editorial-row { display: flex; gap: 64px; align-items: center; }
+.editorial-row .txt { flex: 1; }
+.editorial-row .txt p { font-size: var(--text-subheading); font-weight: var(--font-weight-regular); letter-spacing: var(--tracking-subheading); line-height: 1.4; }
+.editorial-row .visual { flex: 1; aspect-ratio: 4/3; background: linear-gradient(145deg, #cfcabb, #8b8574); }
+
+/* ---------- Footer ---------- */
+footer { background: var(--surface-ultramarine-chamber); color: #fff; padding: 56px 25px 32px; }
+.footer-grid { display: flex; justify-content: space-between; margin-bottom: 40px; flex-wrap: wrap; gap: 24px; }
+.footer-grid h5 { font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 14px; opacity: 0.7; }
+.footer-grid a { display: block; font-size: 14px; margin-bottom: 10px; }
+.footer-bottom { font-size: 12px; opacity: 0.6; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 20px; }
+
+[data-i18n] {}
+html[data-lang="en"] [lang-el="ru"] { display: none; }
+html[data-lang="ru"] [lang-el="en"] { display: none; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-left">
+    <span class="lbl">☰ <span lang-el="en">Menu</span><span lang-el="ru">Меню</span></span>
+    <span class="lbl">◎ <span lang-el="en">Search</span><span lang-el="ru">Поиск</span></span>
+  </div>
+  <div class="nav-center">
+    <div class="word">ROMP</div>
+    <div class="sub"><span lang-el="en">Est. 2019</span><span lang-el="ru">Основано в 2019</span></div>
+  </div>
+  <div class="nav-right">
+    <span class="lbl">◎ <span lang-el="en">Account</span><span lang-el="ru">Профиль</span></span>
+    <span class="lbl">⚲ <span lang-el="en">Locate</span><span lang-el="ru">Найти</span></span>
+    <div class="lang-toggle">
+      <button data-set-lang="en" class="active">EN</button>
+      <button data-set-lang="ru">RU</button>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-scene"></div>
+  <div class="hero-content">
+    <div class="word-name"><span lang-el="en">Romp Grace</span><span lang-el="ru">Romp Grace</span></div>
+    <div class="word-tag"><span lang-el="en">A century of considered company, for one hour a day.</span><span lang-el="ru">Век выверенной компании — по часу в день.</span></div>
+    <a href="#book" class="ghost-pill inverted"><span lang-el="en">Discover more</span><span lang-el="ru">Узнать больше</span></a>
+  </div>
+</section>
+
+<section class="section wrap">
+  <div class="section-heading"><span lang-el="en">Explore our services</span><span lang-el="ru">Наши услуги</span></div>
+  <div class="product-grid">
+    <div class="product-cell">
+      <div class="product-img" style="background:linear-gradient(160deg,#e9e6da,#b9b2a0);"></div>
+      <div class="pname"><span lang-el="en">The Morning Walk</span><span lang-el="ru">Утренняя прогулка</span></div>
+      <div class="pprice">$65</div>
+    </div>
+    <div class="product-cell">
+      <div class="product-img" style="background:linear-gradient(160deg,#dfe3e6,#9aa4ab);"></div>
+      <div class="pname"><span lang-el="en">The Standing Weekly</span><span lang-el="ru">Еженедельный абонемент</span></div>
+      <div class="pprice">$780<span style="font-size:11px;">/<span lang-el="en">mo</span><span lang-el="ru">мес</span></span></div>
+    </div>
+    <div class="product-cell">
+      <div class="product-img" style="background:linear-gradient(160deg,#e4d9c8,#a68b62);"></div>
+      <div class="pname"><span lang-el="en">Overnight Companion</span><span lang-el="ru">Компаньон на ночь</span></div>
+      <div class="pprice">$210</div>
+    </div>
+    <div class="product-cell">
+      <div class="product-img" style="background:linear-gradient(160deg,#d9dfe6,#7c8a9a);"></div>
+      <div class="pname"><span lang-el="en">Private Trail Session</span><span lang-el="ru">Приватная лесная сессия</span></div>
+      <div class="pprice">$140</div>
+    </div>
+  </div>
+</section>
+
+<section class="chamber" id="book">
+  <div class="chamber-visual" style="background:linear-gradient(155deg,#1c2140,#060daa);"></div>
+  <div class="chamber-text">
+    <span class="micro-label" style="background:#fff;color:var(--color-ultramarine-velvet);"><span lang-el="en">New</span><span lang-el="ru">Новинка</span></span>
+    <h3><span lang-el="en">Beo Grace, for dogs</span><span lang-el="ru">Beo Grace — для собак</span></h3>
+    <p><span lang-el="en">One handler. One hour. No app to check, no shift changes — the same considered company, every single day.</span>
+       <span lang-el="ru">Один куратор. Один час. Без приложения для контроля, без смены персонала — одна и та же выверенная компания каждый день.</span></p>
+    <a href="#" class="ghost-pill inverted"><span lang-el="en">Discover more</span><span lang-el="ru">Узнать больше</span></a>
+  </div>
+</section>
+
+<section class="section bone">
+  <div class="wrap editorial-row">
+    <div class="txt">
+      <span class="micro-label"><span lang-el="en">Since 1925</span><span lang-el="ru">С 1925 года</span></span>
+      <p><span lang-el="en">A hundred years ago we built listening devices. Today we build the same restraint into an hour with your dog — nothing ornamental, nothing that competes with the walk itself.</span>
+         <span lang-el="ru">Сто лет назад мы делали слуховые приборы. Сегодня та же сдержанность вложена в час с вашей собакой — ничего лишнего, ничего, что отвлекало бы от самой прогулки.</span></p>
+    </div>
+    <div class="visual"></div>
+  </div>
+</section>
+
+<section class="section wrap">
+  <div class="section-heading"><span lang-el="en">A handler for every temperament</span><span lang-el="ru">Куратор под любой темперамент</span></div>
+  <div class="product-grid" style="grid-template-columns:repeat(3,1fr);">
+    <div class="product-cell">
+      <div class="product-img" style="aspect-ratio:4/5;background:linear-gradient(160deg,#eee,#bbb);"></div>
+      <div class="pname">Elin Sørensen</div>
+      <div class="pprice"><span lang-el="en">Calm & senior dogs</span><span lang-el="ru">Спокойные и пожилые собаки</span></div>
+    </div>
+    <div class="product-cell">
+      <div class="product-img" style="aspect-ratio:4/5;background:linear-gradient(160deg,#ddd,#999);"></div>
+      <div class="pname">Kasper Lindqvist</div>
+      <div class="pprice"><span lang-el="en">High-drive breeds</span><span lang-el="ru">Активные породы</span></div>
+    </div>
+    <div class="product-cell">
+      <div class="product-img" style="aspect-ratio:4/5;background:linear-gradient(160deg,#e5e5e5,#8a8a8a);"></div>
+      <div class="pname">Freja Holm</div>
+      <div class="pprice"><span lang-el="en">Nervous & rescue dogs</span><span lang-el="ru">Тревожные и приютские собаки</span></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <h5>ROMP</h5>
+        <a href="#"><span lang-el="en">About</span><span lang-el="ru">О нас</span></a>
+        <a href="#"><span lang-el="en">Craft</span><span lang-el="ru">Мастерство</span></a>
+      </div>
+      <div>
+        <h5><span lang-el="en">Services</span><span lang-el="ru">Услуги</span></h5>
+        <a href="#"><span lang-el="en">Morning Walk</span><span lang-el="ru">Утренняя прогулка</span></a>
+        <a href="#book"><span lang-el="en">Beo Grace</span><span lang-el="ru">Beo Grace</span></a>
+      </div>
+      <div>
+        <h5><span lang-el="en">Handlers</span><span lang-el="ru">Кураторы</span></h5>
+        <a href="#"><span lang-el="en">Meet the team</span><span lang-el="ru">Наша команда</span></a>
+        <a href="#"><span lang-el="en">Apply</span><span lang-el="ru">Откликнуться</span></a>
+      </div>
+      <div>
+        <h5><span lang-el="en">Contact</span><span lang-el="ru">Контакты</span></h5>
+        <a href="#"><span lang-el="en">Concierge</span><span lang-el="ru">Консьерж-служба</span></a>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2026 ROMP. <span lang-el="en">All rights reserved.</span><span lang-el="ru">Все права защищены.</span></div>
+  </div>
+</footer>
+
+<script>
+document.querySelectorAll('[data-set-lang]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const lang = btn.getAttribute('data-set-lang');
+    document.documentElement.setAttribute('lang', lang);
+    document.documentElement.setAttribute('data-lang', lang);
+    document.querySelectorAll('[data-set-lang]').forEach(b => b.classList.toggle('active', b === btn));
+  });
+});
+</script>
+</body>
+</html>

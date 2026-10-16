@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Timbre — Every machine has a voice long before it has a fault</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ───────── ДИЗАЙН-СИСТЕМА VAPI — tokens.css ДОСЛОВНО ───────── */
+:root {
+  /* Colors */
+  --color-void-canvas: #0e0e13;
+  --color-carbon-surface: #09090b;
+  --color-slab-elevated: #18181b;
+  --color-iron-border: #27272a;
+  --color-steel-border: #3f3f46;
+  --color-zinc-mute: #71717a;
+  --color-pearl-border: #d8d7d4;
+  --color-ice-border: #d9e6ef;
+  --color-cream-text: #fffaea;
+  --color-bone-text: #f4f4f5;
+  --color-mercury-text: #a1a1aa;
+  --color-ember-orange: #e96b34;
+  --color-mint-pulse: #62f6b5;
+  --color-spectrogram-blue: #4dcafa;
+  --color-spectrogram-pink: #de94e2;
+  --color-spectrogram-yellow: #ffdd03;
+  --color-spectrogram-violet: #9977ff;
+
+  /* Typography — Font Families */
+  /* seasonSans → Inter, Geist Mono → JetBrains Mono (замены из DESIGN.md, кириллица есть у обоих) */
+  --font-seasonsans: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-geist-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Typography — Scale */
+  --text-label: 12px;
+  --leading-label: 1.5;
+  --text-caption: 14px;
+  --leading-caption: 1.5;
+  --text-body-sm: 16px;
+  --leading-body-sm: 1.5;
+  --text-body: 18px;
+  --leading-body: 1.43;
+  --text-body-lg: 24px;
+  --leading-body-lg: 1.32;
+  --text-heading-sm: 40px;
+  --leading-heading-sm: 1.2;
+  --tracking-heading-sm: -0.64px;
+  --text-heading: 56px;
+  --leading-heading: 1.1;
+  --tracking-heading: -1.12px;
+  --text-heading-lg: 68px;
+  --leading-heading-lg: 1.09;
+  --tracking-heading-lg: -1.5px;
+  --text-display-sm: 96px;
+  --leading-display-sm: 1;
+  --tracking-display-sm: -2.4px;
+  --text-display: 120px;
+  --leading-display: 1;
+  --tracking-display: -3px;
+
+  /* Typography — Weights */
+  --font-weight-light: 300;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-w510: 510;
+  --font-weight-w570: 570;
+  --font-weight-w650: 650;
+
+  /* Spacing */
+  --spacing-unit: 4px;
+  --spacing-4: 4px;
+  --spacing-8: 8px;
+  --spacing-12: 12px;
+  --spacing-16: 16px;
+  --spacing-20: 20px;
+  --spacing-24: 24px;
+  --spacing-28: 28px;
+  --spacing-32: 32px;
+  --spacing-40: 40px;
+  --spacing-48: 48px;
+  --spacing-56: 56px;
+  --spacing-64: 64px;
+  --spacing-80: 80px;
+  --spacing-96: 96px;
+  --spacing-100: 100px;
+  --spacing-120: 120px;
+
+  /* Layout */
+  --page-max-width: 1200px;
+  --section-gap: 80px;
+  --card-padding: 24px;
+  --element-gap: 8px;
+
+  /* Border Radius */
+  --radius-md: 5.6px;
+  --radius-xl: 12px;
+  --radius-3xl: 24px;
+  --radius-full: 9999px;
+
+  /* Named Radii */
+  --radius-cards: 5.6px;
+  --radius-chips: 5.6px;
+  --radius-inputs: 5.6px;
+  --radius-buttons: 9999px;
+
+  /* Surfaces */
+  --surface-void-canvas: #0e0e13;
+  --surface-carbon-surface: #09090b;
+  --surface-slab-elevated: #18181b;
+}
+
+/* ───────── База ───────── */
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--surface-void-canvas);color:var(--color-cream-text);
+  font-family:var(--font-seasonsans);font-size:var(--text-body);line-height:var(--leading-body);
+  font-weight:var(--font-weight-regular);-webkit-font-smoothing:antialiased;
+}
+a{color:inherit;text-decoration:none}
+h1,h2,h3,p,ul,figure{margin:0}
+ul{list-style:none;padding:0}
+
+/* Точечная сетка канвы — считана со скриншота референса (едва различимый растр) */
+.dotfield{
+  background-image:radial-gradient(var(--color-iron-border) 1px, transparent 1px);
+  background-size:24px 24px;background-position:-1px -1px;
+}
+
+.wrap{max-width:var(--page-max-width);margin:0 auto;padding:0 var(--spacing-32)}
+
+/* Мono-метка: не код, а промышленная бирка (+0.08em трекинг) */
+.mono{
+  font-family:var(--font-geist-mono);font-size:var(--text-label);font-weight:var(--font-weight-regular);
+  letter-spacing:.08em;text-transform:uppercase;color:var(--color-zinc-mute);
+}
+
+/* Кнопки: единственная полная пилюля в системе */
+.btn{
+  display:inline-flex;align-items:center;gap:var(--spacing-8);
+  font-family:var(--font-seasonsans);font-size:var(--text-label);font-weight:var(--font-weight-medium);
+  letter-spacing:.08em;text-transform:uppercase;line-height:1;
+  padding:var(--spacing-12) var(--spacing-24);border-radius:var(--radius-buttons);border:0;cursor:pointer;
+  transition:opacity .16s;
+}
+.btn:hover{opacity:.86}
+.btn-ember{background:var(--color-ember-orange);color:var(--color-cream-text)}
+.btn-mint{background:var(--color-mint-pulse);color:var(--color-void-canvas)}
+.btn-sm{padding:var(--spacing-8) var(--spacing-16)}
+
+/* ───────── Навигация ───────── */
+header{
+  position:sticky;top:0;z-index:30;background:rgba(14,14,19,.92);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--color-pearl-border);
+}
+.nav{display:flex;align-items:center;gap:var(--spacing-32);height:64px;max-width:var(--page-max-width);margin:0 auto;padding:0 var(--spacing-32)}
+.wordmark{font-size:var(--text-body);font-weight:var(--font-weight-w650);letter-spacing:.02em;color:var(--color-cream-text)}
+.nav-links{display:flex;gap:var(--spacing-28);margin:0 auto}
+.nav-links a{transition:color .16s}
+.nav-links a:hover{color:var(--color-cream-text)}
+.nav-right{display:flex;align-items:center;gap:var(--spacing-12)}
+
+/* Переключатель языка — та же мono-бирка, без собственного фона */
+.lang{display:flex;align-items:center;gap:var(--spacing-4);border:1px solid var(--color-iron-border);border-radius:var(--radius-chips);padding:3px}
+.lang button{
+  font-family:var(--font-geist-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+  background:transparent;border:0;color:var(--color-zinc-mute);padding:4px 8px;border-radius:3px;cursor:pointer;transition:color .16s,background .16s;
+}
+.lang button[aria-pressed="true"]{background:var(--color-slab-elevated);color:var(--color-cream-text)}
+
+/* ───────── Герой ───────── */
+.hero{padding:var(--spacing-96) 0 0;text-align:center;position:relative;overflow:hidden}
+.hero h1{
+  font-size:var(--text-display-sm);line-height:var(--leading-display-sm);letter-spacing:var(--tracking-display-sm);
+  font-weight:var(--font-weight-light);color:var(--color-cream-text);
+}
+.hero h1 .l2{display:block}
+/* Русский длиннее английского — герой опускается на ступень шкалы, а не ломает первый экран */
+html[data-lang="ru"] .hero h1{font-size:var(--text-heading-lg);line-height:var(--leading-heading-lg);letter-spacing:var(--tracking-heading-lg)}
+html[data-lang="ru"] .closing h2{font-size:var(--text-heading);line-height:var(--leading-heading);letter-spacing:var(--tracking-heading)}
+.hero .sub{
+  max-width:640px;margin:var(--spacing-32) auto 0;font-size:var(--text-body);line-height:var(--leading-body);
+  color:var(--color-mercury-text);font-weight:var(--font-weight-regular);
+}
+.hero-cta{display:flex;gap:var(--spacing-12);justify-content:center;margin-top:var(--spacing-40)}
+
+/* Консоль-пилюля: светлая инверсия — визуальная кульминация героя */
+.console-ring{display:flex;justify-content:center;margin-top:var(--spacing-56)}
+.console{
+  background:var(--color-cream-text);color:var(--color-void-canvas);
+  border-radius:var(--radius-buttons);padding:var(--spacing-16) var(--spacing-40);
+  display:inline-flex;align-items:center;gap:var(--spacing-24);cursor:pointer;border:0;
+  outline:6px solid var(--color-void-canvas);box-shadow:0 0 0 7px var(--color-steel-border);
+  font-family:var(--font-geist-mono);font-size:var(--text-caption);font-weight:var(--font-weight-medium);
+  letter-spacing:.08em;text-transform:uppercase;transition:transform .16s;
+}
+.console:hover{transform:translateY(-1px)}
+.console .dots{display:grid;grid-template-columns:repeat(3,3px);gap:3px}
+.console .dots i{width:3px;height:3px;border-radius:50%;background:var(--color-void-canvas);display:block}
+
+/* Спектрограмма: единственное место, где живут все шесть цветов */
+.spectro{display:flex;align-items:flex-end;gap:3px;height:170px;margin-top:var(--spacing-64);width:100%;padding:0 var(--spacing-24)}
+.spectro b{flex:1 1 0;border-radius:var(--radius-md);display:block;opacity:.9;transition:opacity .2s,transform .2s}
+.spectro.playing b.lit{opacity:1;transform:scaleY(1.18);transform-origin:bottom}
+
+/* ───────── Строка логотипов ───────── */
+.logos{display:grid;grid-template-columns:repeat(6,1fr);border-top:1px solid var(--color-iron-border);border-bottom:1px solid var(--color-iron-border)}
+.logos div{
+  padding:var(--spacing-28) var(--spacing-16);text-align:center;border-right:1px solid var(--color-iron-border);
+  font-size:var(--text-body-sm);font-weight:var(--font-weight-w510);color:var(--color-bone-text);letter-spacing:-.01em;
+}
+.logos div:last-child{border-right:0}
+
+/* ───────── Секции ───────── */
+section{padding:var(--spacing-96) 0}
+.sec-head{margin-bottom:var(--spacing-56)}
+.sec-head h2{
+  font-size:var(--text-heading);line-height:var(--leading-heading);letter-spacing:var(--tracking-heading);
+  font-weight:var(--font-weight-light);color:var(--color-cream-text);max-width:820px;margin-top:var(--spacing-16);
+}
+.sec-head p{margin-top:var(--spacing-20);max-width:600px;color:var(--color-zinc-mute);font-size:var(--text-body-sm);line-height:var(--leading-body-sm)}
+
+/* Список-строки: хайрлайн сверху, никакого card chrome */
+.rows{border-bottom:1px solid var(--color-iron-border)}
+.row{
+  display:grid;grid-template-columns:260px 1fr 140px;gap:var(--spacing-32);align-items:baseline;
+  padding:var(--spacing-24) 0;border-top:1px solid var(--color-iron-border);background:var(--color-carbon-surface);
+  padding-left:var(--spacing-24);padding-right:var(--spacing-24);transition:background .16s;
+}
+.row:hover{background:var(--color-slab-elevated)}
+.row h3{font-size:var(--text-body);font-weight:var(--font-weight-medium);color:var(--color-cream-text)}
+.row p{font-size:var(--text-caption);line-height:var(--leading-caption);color:var(--color-zinc-mute)}
+.row .lead{text-align:right;white-space:nowrap;color:var(--color-mercury-text)}
+
+/* Карточки платформы */
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--spacing-16)}
+.card{
+  background:var(--color-carbon-surface);border:1px solid var(--color-iron-border);border-radius:var(--radius-cards);
+  padding:var(--card-padding);display:flex;flex-direction:column;gap:var(--spacing-12);
+}
+.card .num{color:var(--color-zinc-mute)}
+.card h3{font-size:var(--text-body-lg);line-height:var(--leading-body-lg);font-weight:var(--font-weight-light);letter-spacing:-.01em}
+.card p{font-size:var(--text-caption);line-height:1.6;color:var(--color-zinc-mute)}
+
+/* Код: холодная подсветка вместо привычной красно-зелёной */
+.api{display:grid;grid-template-columns:340px 1fr;gap:var(--spacing-48);align-items:start}
+.api .note{font-size:var(--text-body-sm);line-height:1.6;color:var(--color-zinc-mute)}
+.chips{display:flex;gap:var(--spacing-8);margin-top:var(--spacing-24);flex-wrap:wrap}
+.chip{border:1px solid var(--color-iron-border);border-radius:var(--radius-chips);padding:6px 10px;color:var(--color-mercury-text)}
+pre{
+  margin:0;background:var(--color-carbon-surface);border:1px solid var(--color-iron-border);border-radius:var(--radius-cards);
+  padding:var(--card-padding);overflow-x:auto;
+  font-family:var(--font-geist-mono);font-size:var(--text-caption);line-height:1.7;color:var(--color-mercury-text);
+}
+pre .k{color:var(--color-spectrogram-blue)}
+pre .s{color:var(--color-ice-border)}
+pre .c{color:var(--color-zinc-mute)}
+
+/* Возможности площадки — два столбца строк */
+.specs{display:grid;grid-template-columns:1fr 1fr;gap:0 var(--spacing-48)}
+.spec{padding:var(--spacing-20) 0;border-top:1px solid var(--color-iron-border)}
+.spec h3{font-size:var(--text-body-sm);font-weight:var(--font-weight-medium);margin-bottom:6px}
+.spec p{font-size:var(--text-caption);line-height:var(--leading-caption);color:var(--color-zinc-mute)}
+
+/* Цифры */
+.metrics{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--color-iron-border);border-bottom:1px solid var(--color-iron-border)}
+.metric{padding:var(--spacing-40) var(--spacing-24);border-right:1px solid var(--color-iron-border)}
+.metric:last-child{border-right:0}
+.metric b{display:block;font-size:var(--text-heading-sm);line-height:var(--leading-heading-sm);letter-spacing:var(--tracking-heading-sm);font-weight:var(--font-weight-light);color:var(--color-cream-text)}
+.metric span{display:block;margin-top:var(--spacing-12);color:var(--color-zinc-mute);font-size:var(--text-caption)}
+
+/* Финальный призыв */
+.closing{text-align:center;padding:var(--spacing-120) 0}
+.closing h2{font-size:var(--text-heading-lg);line-height:var(--leading-heading-lg);letter-spacing:var(--tracking-heading-lg);font-weight:var(--font-weight-light)}
+.closing p{margin:var(--spacing-24) auto 0;max-width:520px;color:var(--color-zinc-mute);font-size:var(--text-body-sm)}
+.closing .hero-cta{margin-top:var(--spacing-40)}
+
+/* Подвал */
+footer{border-top:1px solid var(--color-iron-border);padding:var(--spacing-56) 0 var(--spacing-40)}
+.foot{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:var(--spacing-32)}
+.foot h4{margin:0 0 var(--spacing-16);font-family:var(--font-geist-mono);font-size:var(--text-label);letter-spacing:.08em;text-transform:uppercase;color:var(--color-zinc-mute);font-weight:var(--font-weight-regular)}
+.foot li{margin-bottom:var(--spacing-8);font-size:var(--text-caption);color:var(--color-mercury-text)}
+.foot li a:hover{color:var(--color-cream-text)}
+.foot .about{font-size:var(--text-caption);line-height:1.6;color:var(--color-zinc-mute);max-width:280px;margin-top:var(--spacing-16)}
+.legal{display:flex;justify-content:space-between;margin-top:var(--spacing-48);padding-top:var(--spacing-20);border-top:1px solid var(--color-iron-border)}
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="nav">
+    <a class="wordmark" href="#top">TIMBRE</a>
+    <div class="nav-links mono">
+      <a href="#signals" data-i18n="nav1">Signals</a>
+      <a href="#platform" data-i18n="nav2">Platform</a>
+      <a href="#api" data-i18n="nav3">API</a>
+      <a href="#plants" data-i18n="nav4">Plants</a>
+    </div>
+    <div class="nav-right">
+      <div class="lang">
+        <button data-set="en" aria-pressed="true">EN</button>
+        <button data-set="ru" aria-pressed="false">RU</button>
+      </div>
+      <a class="btn btn-ember btn-sm" href="#closing" data-i18n="cta1">Request a demo</a>
+      <a class="btn btn-mint btn-sm" href="#closing" data-i18n="cta2">Listen live</a>
+    </div>
+  </nav>
+</header>
+
+<main id="top">
+
+  <section class="hero dotfield">
+    <div class="wrap">
+      <h1>
+        <span data-i18n="h1a">Every machine has a voice</span>
+        <span class="l2" data-i18n="h1b">long before it has a fault</span>
+      </h1>
+      <p class="sub" data-i18n="hsub">Timbre listens to the bearings, spindles and pumps you already run — and reports the week their sound starts to drift.</p>
+      <div class="hero-cta">
+        <a class="btn btn-ember" href="#closing"><span data-i18n="cta1b">Request a demo</span> →</a>
+        <a class="btn btn-mint" href="#signals" data-i18n="cta2b">Hear the six</a>
+      </div>
+      <div class="console-ring">
+        <button class="console" id="play">
+          <span data-i18n="play">Play a failing bearing</span>
+          <span class="dots"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+        </button>
+      </div>
+    </div>
+    <div class="spectro" id="spectro" aria-hidden="true"></div>
+  </section>
+
+  <div class="logos">
+    <div>NORDWERK</div><div>HALLE 7</div><div>KAMA MOTORS</div>
+    <div>BALTIC PULP</div><div>STEELYARD</div><div>ORBIS FOODS</div>
+  </div>
+
+  <section id="signals">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="mono" data-i18n="lab1">Signals</div>
+        <h2 data-i18n="s1h">Six sounds that arrive before a stop</h2>
+        <p data-i18n="s1p">None of them are audible from the walkway. All of them repeat on a schedule the microphone can count.</p>
+      </div>
+      <div class="rows">
+        <article class="row">
+          <h3 data-i18n="r1t">Bearing spall</h3>
+          <p data-i18n="r1d">A rolling element chips. The chip answers once per revolution — a click buried ten decibels under the motor.</p>
+          <div class="lead mono" data-i18n="r1l">6–9 weeks</div>
+        </article>
+        <article class="row">
+          <h3 data-i18n="r2t">Pump cavitation</h3>
+          <p data-i18n="r2d">Vapour bubbles collapse against the impeller. It sounds like gravel in a bucket, and it eats the blade edge first.</p>
+          <div class="lead mono" data-i18n="r2l">3 weeks</div>
+        </article>
+        <article class="row">
+          <h3 data-i18n="r3t">Belt slip</h3>
+          <p data-i18n="r3d">A squeal that shows up only under load, and only in the first minute of a shift — right when nobody is standing there.</p>
+          <div class="lead mono" data-i18n="r3l">10 days</div>
+        </article>
+        <article class="row">
+          <h3 data-i18n="r4t">Gear mesh wear</h3>
+          <p data-i18n="r4d">Tooth contact loses its rhythm. The mesh frequency grows sidebands that no operator would ever name out loud.</p>
+          <div class="lead mono" data-i18n="r4l">5 weeks</div>
+        </article>
+        <article class="row">
+          <h3 data-i18n="r5t">Rotor imbalance</h3>
+          <p data-i18n="r5d">One thump per turn, louder by a fraction of a decibel each week, until the coupling finally answers for it.</p>
+          <div class="lead mono" data-i18n="r5l">2 weeks</div>
+        </article>
+        <article class="row">
+          <h3 data-i18n="r6t">Loose anchor bolts</h3>
+          <p data-i18n="r6d">The frame replies to the motor half a beat late, and the floor slab starts carrying sound it was never meant to carry.</p>
+          <div class="lead mono" data-i18n="r6l">4 weeks</div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="platform">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="mono" data-i18n="lab2">Platform</div>
+        <h2 data-i18n="s2h">One console for every line</h2>
+      </div>
+      <div class="cards">
+        <div class="card">
+          <div class="num mono">01</div>
+          <h3 data-i18n="c1t">The listener</h3>
+          <p data-i18n="c1d">A sealed microphone on a magnet, powered over Ethernet. Nothing is wired into the machine, nothing touches the PLC, nothing needs recertifying.</p>
+        </div>
+        <div class="card">
+          <div class="num mono">02</div>
+          <h3 data-i18n="c2t">The model</h3>
+          <p data-i18n="c2d">Trained on the first fourteen days of your own line. A bearing in Kaluga does not sound like the same bearing in Turin, and we stopped pretending otherwise.</p>
+        </div>
+        <div class="card">
+          <div class="num mono">03</div>
+          <h3 data-i18n="c3t">The console</h3>
+          <p data-i18n="c3d">One page per line: a drift bar, a date, and the ten seconds of audio that made the call. There is no dashboard to assemble.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="api">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="mono" data-i18n="lab3">Integrations</div>
+        <h2 data-i18n="s3h">API-first by design</h2>
+      </div>
+      <div class="api">
+        <div>
+          <p class="note" data-i18n="s3p">Every verdict is a stream event, and every event keeps the clip that produced it. Route them into the maintenance system you already run — or read them straight off the socket.</p>
+          <div class="chips mono">
+            <span class="chip">WEBSOCKET</span><span class="chip">REST</span><span class="chip">MQTT</span><span class="chip">OPC UA</span>
+          </div>
+        </div>
+        <pre><span class="c"># stream one line, verdicts only</span>
+curl -N https://api.timbre.industries/v1/lines/<span class="s">press-07</span> \
+  -H <span class="s">"Authorization: Bearer $TIMBRE_KEY"</span>
+
+{
+  <span class="k">"asset"</span>:      <span class="s">"press-07.spindle"</span>,
+  <span class="k">"state"</span>:      <span class="s">"drifting"</span>,
+  <span class="k">"since"</span>:      <span class="s">"2026-03-11T04:12:00Z"</span>,
+  <span class="k">"band_hz"</span>:    [2100, 3600],
+  <span class="k">"confidence"</span>: 0.91,
+  <span class="k">"clip"</span>:       <span class="s">"/press-07/0412.wav"</span>
+}</pre>
+      </div>
+    </div>
+  </section>
+
+  <section id="plants">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="mono" data-i18n="lab4">Built for plants</div>
+        <h2 data-i18n="s4h">What the floor gets on day one</h2>
+      </div>
+      <div class="specs">
+        <div class="spec"><h3 data-i18n="p1t">On-premise inference</h3><p data-i18n="p1d">Audio never leaves the building. Only verdicts cross the firewall.</p></div>
+        <div class="spec"><h3 data-i18n="p2t">Air-gapped updates</h3><p data-i18n="p2d">Model updates arrive quarterly as a signed image, on a stick, by hand.</p></div>
+        <div class="spec"><h3 data-i18n="p3t">Shift-aware alerting</h3><p data-i18n="p3d">An alert at 03:00 goes to whoever is actually on the floor at 03:00.</p></div>
+        <div class="spec"><h3 data-i18n="p4t">Ninety days of audio</h3><p data-i18n="p4d">Raw sound is kept per asset for a quarter, then collapses to verdicts.</p></div>
+        <div class="spec"><h3 data-i18n="p5t">Four-hour replacement</h3><p data-i18n="p5d">Any listener, anywhere we deploy, swapped within the same shift.</p></div>
+        <div class="spec"><h3 data-i18n="p6t">Audit trail</h3><p data-i18n="p6d">Every verdict keeps its clip, so a disputed call can be replayed.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="metrics">
+    <div class="metric"><b>11,400</b><span data-i18n="m1">assets under listening</span></div>
+    <div class="metric"><b>4.2</b><span data-i18n="m2">weeks of median warning</span></div>
+    <div class="metric"><b>0</b><span data-i18n="m3">wires into the machine</span></div>
+  </div>
+
+  <section class="closing" id="closing">
+    <div class="wrap">
+      <h2 data-i18n="clh">Put a microphone on the worst machine you own</h2>
+      <p data-i18n="clp">Fourteen days of listening, one line, no integration. If the sound never drifts, you have lost nothing but a magnet.</p>
+      <div class="hero-cta">
+        <a class="btn btn-ember" href="#"><span data-i18n="cta1c">Request a demo</span> →</a>
+        <a class="btn btn-mint" href="#" data-i18n="cta2c">Talk to an engineer</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <div class="wordmark">TIMBRE</div>
+        <p class="about" data-i18n="fabout">Acoustic condition monitoring for rotating equipment. Built in Tallinn, deployed in eleven plants across the Baltics and Central Europe.</p>
+      </div>
+      <div>
+        <h4 data-i18n="fh1">Product</h4>
+        <ul>
+          <li><a href="#signals" data-i18n="fl1">Signals</a></li>
+          <li><a href="#platform" data-i18n="fl2">The listener</a></li>
+          <li><a href="#api" data-i18n="fl3">API reference</a></li>
+          <li><a href="#plants" data-i18n="fl4">Deployment</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 data-i18n="fh2">Company</h4>
+        <ul>
+          <li><a href="#" data-i18n="fl5">About</a></li>
+          <li><a href="#" data-i18n="fl6">Field notes</a></li>
+          <li><a href="#" data-i18n="fl7">Careers</a></li>
+          <li><a href="#" data-i18n="fl8">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 data-i18n="fh3">Legal</h4>
+        <ul>
+          <li><a href="#" data-i18n="fl9">Data handling</a></li>
+          <li><a href="#" data-i18n="fl10">Security</a></li>
+          <li><a href="#" data-i18n="fl11">Terms</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="legal mono">
+      <span>© 2026 TIMBRE OÜ</span>
+      <span data-i18n="fnote">Tallinn · Riga · Brno</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ── Спектрограмма: шесть цветов системы, только здесь и нигде больше ── */
+(function () {
+  var colors = ['--color-spectrogram-blue','--color-spectrogram-pink','--color-spectrogram-yellow',
+                '--color-spectrogram-violet','--color-mint-pulse','--color-ember-orange'];
+  var el = document.getElementById('spectro');
+  var N = 190, html = '';
+  for (var i = 0; i < N; i++) {
+    /* детерминированная «амплитуда»: три синуса + затухание к краям */
+    var t = i / N;
+    var a = Math.sin(t * 61) * .34 + Math.sin(t * 23.7 + 1.2) * .3
+          + Math.sin(t * 8.1 + .4) * .22 + Math.sin(t * 137) * .14;
+    var h = Math.round(12 + (a * .5 + .5) * 150);
+    html += '<b style="height:' + h + 'px;background:var(' + colors[i % colors.length] + ')"></b>';
+  }
+  el.innerHTML = html;
+
+  /* Кнопка-консоль «проигрывает» запись: бегунок по столбцам, без звука */
+  var bars = el.querySelectorAll('b'), timer = null;
+  document.getElementById('play').addEventListener('click', function () {
+    if (timer) { clearInterval(timer); timer = null; }
+    el.classList.add('playing');
+    var i = 0;
+    timer = setInterval(function () {
+      bars.forEach(function (b, n) { b.classList.toggle('lit', n >= i - 6 && n <= i); });
+      if (++i > N + 6) {
+        clearInterval(timer); timer = null;
+        el.classList.remove('playing');
+        bars.forEach(function (b) { b.classList.remove('lit'); });
+      }
+    }, 16);
+  });
+})();
+
+/* ── RU/EN. Английский — исходный, русский — перевод под него ── */
+var RU = {
+  nav1:'Сигналы', nav2:'Платформа', nav3:'API', nav4:'Площадки',
+  cta1:'Запросить демо', cta2:'Живой эфир', cta1b:'Запросить демо', cta2b:'Послушать шесть',
+  h1a:'У каждого станка есть голос', h1b:'задолго до того, как есть поломка',
+  hsub:'Тембр слушает подшипники, шпиндели и насосы, которые у вас уже работают, — и сообщает, на какой неделе их звук начал уходить.',
+  play:'Проиграть умирающий подшипник',
+  lab1:'Сигналы', s1h:'Шесть звуков, которые приходят раньше остановки',
+  s1p:'Ни один из них не слышен с прохода. Все они повторяются по расписанию, которое микрофон умеет считать.',
+  r1t:'Выкрашивание подшипника', r1d:'Тело качения скалывается. Скол отвечает раз в оборот — щелчок на десять децибел ниже мотора.', r1l:'6–9 недель',
+  r2t:'Кавитация в насосе', r2d:'Пузырьки пара схлопываются о рабочее колесо. Звучит как гравий в ведре и первым съедает кромку лопасти.', r2l:'3 недели',
+  r3t:'Проскальзывание ремня', r3d:'Визг, который появляется только под нагрузкой и только в первую минуту смены — ровно когда рядом никого нет.', r3l:'10 дней',
+  r4t:'Износ зубьев', r4d:'Контакт зубьев теряет ритм. У зубцовой частоты вырастают боковые полосы, которые оператор никогда не назовёт вслух.', r4l:'5 недель',
+  r5t:'Дисбаланс ротора', r5d:'Один удар за оборот, громче на доли децибела каждую неделю, пока за это не ответит муфта.', r5l:'2 недели',
+  r6t:'Ослабленные анкеры', r6d:'Рама отвечает мотору на полтакта позже, и плита пола начинает нести звук, который нести не должна.', r6l:'4 недели',
+  lab2:'Платформа', s2h:'Одна консоль на каждую линию',
+  c1t:'Слушатель', c1d:'Герметичный микрофон на магните с питанием по Ethernet. Ничего не врезается в станок, ничего не трогает ПЛК, ничего не нужно пересертифицировать.',
+  c2t:'Модель', c2d:'Учится на первых четырнадцати днях вашей же линии. Подшипник в Калуге звучит не так, как тот же подшипник в Турине, и мы перестали делать вид, что иначе.',
+  c3t:'Консоль', c3d:'Одна страница на линию: полоса ухода, дата и те десять секунд записи, из-за которых сработало. Дашборд собирать не нужно.',
+  lab3:'Интеграции', s3h:'API прежде интерфейса',
+  s3p:'Каждый вердикт — событие потока, и каждое событие хранит запись, которая его породила. Отправьте их в ту систему ТОиР, что у вас уже есть, — или читайте прямо из сокета.',
+  lab4:'Для площадок', s4h:'Что цех получает в первый же день',
+  p1t:'Расчёт на месте', p1d:'Звук не покидает здание. Через файрвол уходят только вердикты.',
+  p2t:'Обновления без сети', p2d:'Раз в квартал модель приезжает подписанным образом, на флешке, руками.',
+  p3t:'Оповещение по смене', p3d:'Тревога в 03:00 уходит тому, кто в 03:00 действительно в цеху.',
+  p4t:'Девяносто дней записи', p4d:'Сырой звук хранится по каждому узлу квартал, потом схлопывается в вердикты.',
+  p5t:'Замена за четыре часа', p5d:'Любой слушатель, где бы мы ни стояли, меняется в ту же смену.',
+  p6t:'След решений', p6d:'У каждого вердикта остаётся его запись — спорный случай можно переслушать.',
+  m1:'узлов под прослушкой', m2:'недели предупреждения в медиане', m3:'проводов внутрь станка',
+  clh:'Повесьте микрофон на худший станок, какой у вас есть',
+  clp:'Четырнадцать дней прослушки, одна линия, без интеграции. Если звук так и не уйдёт — вы потеряли только магнит.',
+  cta1c:'Запросить демо', cta2c:'Поговорить с инженером',
+  fabout:'Акустический контроль состояния вращающегося оборудования. Сделано в Таллине, работает на одиннадцати площадках Балтии и Центральной Европы.',
+  fh1:'Продукт', fl1:'Сигналы', fl2:'Слушатель', fl3:'Справочник API', fl4:'Внедрение',
+  fh2:'Компания', fl5:'О нас', fl6:'Полевые заметки', fl7:'Вакансии', fl8:'Контакты',
+  fh3:'Правовое', fl9:'Работа с данными', fl10:'Безопасность', fl11:'Условия',
+  fnote:'Таллин · Рига · Брно'
+};
+var EN = {};
+document.querySelectorAll('[data-i18n]').forEach(function (el) { EN[el.dataset.i18n] = el.innerHTML; });
+
+function setLang(l) {
+  var dict = l === 'ru' ? RU : EN;
+  document.querySelectorAll('[data-i18n]').forEach(function (el) {
+    var v = dict[el.dataset.i18n];
+    if (v !== undefined) el.innerHTML = v;
+  });
+  document.documentElement.lang = l;
+  document.documentElement.dataset.lang = l;
+  document.querySelectorAll('.lang button').forEach(function (b) {
+    b.setAttribute('aria-pressed', b.dataset.set === l ? 'true' : 'false');
+  });
+}
+document.querySelectorAll('.lang button').forEach(function (b) {
+  b.addEventListener('click', function () { setLang(b.dataset.set); });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,3 @@
+/* Original keyframes: Animista, Ana Travas. https://animista.net/play/entrances/rotate-in-2/rotate-in-2-cw */
+.rotate-in-2-cw{animation:rotate-in-2-cw 0.5s cubic-bezier(.25,.46,.45,.94) 0s 1 normal both;}
+@keyframes rotate-in-2-cw{0%{-webkit-transform:rotate(-45deg);transform:rotate(-45deg);opacity:0}to{-webkit-transform:rotate(0);transform:rotate(0);opacity:1}}

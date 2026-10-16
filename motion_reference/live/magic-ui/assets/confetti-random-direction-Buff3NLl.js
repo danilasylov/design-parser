@@ -1,0 +1,1 @@
+import{j as t}from"./index-WM7-nNXq.js";import{C as o}from"./confetti-D5B_MdBr.js";import"./confetti.module-B5JVzsfH.js";import"./button-CLeK08vN.js";import"./index-D4omu1s7.js";import"./index-CFN0zKgi.js";function s(){return t.jsx("div",{className:"relative",children:t.jsx(o,{options:{get angle(){return Math.random()*360}},children:"Random Confetti 🎉"})})}export{s as default};

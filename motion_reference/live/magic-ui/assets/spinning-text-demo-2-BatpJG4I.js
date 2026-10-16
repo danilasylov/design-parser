@@ -1,0 +1,1 @@
+import{j as r}from"./index-WM7-nNXq.js";import{S as e}from"./spinning-text-tQu_n_D9.js";function i(){return r.jsx(e,{reverse:!0,className:"text-4xl",duration:4,radius:6,children:"learn more • earn more • grow more •"})}export{i as default};

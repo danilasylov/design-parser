@@ -1,0 +1,3 @@
+/* Original keyframes: Animista, Ana Travas. https://animista.net/play/basic/rotate/rotate-vert-right */
+.rotate-vert-right{animation:rotate-vert-right 0.5s cubic-bezier(.645,.045,.355,1) 0s 1 normal both;}
+@keyframes rotate-vert-right{0%{-webkit-transform:rotateY(0);transform:rotateY(0);-webkit-transform-origin:right;transform-origin:right}to{-webkit-transform:rotateY(-360deg);transform:rotateY(-360deg);-webkit-transform-origin:right;transform-origin:right}}

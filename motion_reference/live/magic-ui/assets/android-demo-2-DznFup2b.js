@@ -1,0 +1,1 @@
+import{j as e}from"./index-WM7-nNXq.js";import{A as r}from"./android-CIr_p8J7.js";function i(){return e.jsx("div",{className:"relative",children:e.jsx(r,{className:"size-full",src:"./external/5c35be486972b6ffbb.jpg"})})}export{i as default};

@@ -1,0 +1,78 @@
+import { r as i, j as a, c as l } from "./inline-Mcm4wFdg.js";
+const p = ({
+  className: u,
+  children: d,
+  borderSize: o = 2,
+  borderRadius: f = 20,
+  neonColors: n = {
+    firstColor: "#ff00aa",
+    secondColor: "#00FFF1"
+  },
+  ...h
+}) => {
+  const e = i.useRef(null), [t, c] = i.useState({ width: 0, height: 0 });
+  return i.useEffect(() => {
+    const r = () => {
+      if (e.current) {
+        const { offsetWidth: s, offsetHeight: b } = e.current;
+        c({ width: s, height: b });
+      }
+    };
+    return r(), window.addEventListener("resize", r), () => {
+      window.removeEventListener("resize", r);
+    };
+  }, []), i.useEffect(() => {
+    if (e.current) {
+      const { offsetWidth: r, offsetHeight: s } = e.current;
+      c({ width: r, height: s });
+    }
+  }, [d]), /* @__PURE__ */ a.jsx(
+    "div",
+    {
+      ref: e,
+      style: {
+        "--border-size": `${o}px`,
+        "--border-radius": `${f}px`,
+        "--neon-first-color": n.firstColor,
+        "--neon-second-color": n.secondColor,
+        "--card-width": `${t.width}px`,
+        "--card-height": `${t.height}px`,
+        "--card-content-radius": `${f - o}px`,
+        "--pseudo-element-background-image": `linear-gradient(0deg, ${n.firstColor}, ${n.secondColor})`,
+        "--pseudo-element-width": `${t.width + o * 2}px`,
+        "--pseudo-element-height": `${t.height + o * 2}px`,
+        "--after-blur": `${t.width / 3}px`
+      },
+      className: l(
+        "relative z-10 size-full rounded-(--border-radius)",
+        u
+      ),
+      ...h,
+      children: /* @__PURE__ */ a.jsx(
+        "div",
+        {
+          className: l(
+            "relative size-full min-h-[inherit] rounded-(--card-content-radius) bg-gray-100 p-6",
+            "before:absolute before:-top-(--border-size) before:-left-(--border-size) before:-z-10 before:block",
+            "before:h-(--pseudo-element-height) before:w-(--pseudo-element-width) before:rounded-(--border-radius) before:content-['']",
+            "before:bg-[linear-gradient(0deg,var(--neon-first-color),var(--neon-second-color))] before:bg-size-[100%_200%]",
+            "before:animate-background-position-spin",
+            "after:absolute after:-top-(--border-size) after:-left-(--border-size) after:-z-10 after:block",
+            "after:h-(--pseudo-element-height) after:w-(--pseudo-element-width) after:rounded-(--border-radius) after:blur-(--after-blur) after:content-['']",
+            "after:bg-[linear-gradient(0deg,var(--neon-first-color),var(--neon-second-color))] after:bg-size-[100%_200%] after:opacity-80",
+            "after:animate-background-position-spin",
+            "dark:bg-neutral-900",
+            "wrap-break-word"
+          ),
+          children: d
+        }
+      )
+    }
+  );
+};
+function x() {
+  return /* @__PURE__ */ a.jsx(p, { className: "max-w-sm items-center justify-center text-center", children: /* @__PURE__ */ a.jsx("span", { className: "pointer-events-none z-10 h-full bg-linear-to-br from-[#ff2975] from-35% to-[#00FFF1] bg-clip-text text-center text-3xl leading-none font-bold tracking-tighter text-balance whitespace-pre-wrap text-transparent md:text-5xl xl:text-6xl dark:drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)]", children: "Neon Gradient Card" }) });
+}
+export {
+  x as default
+};

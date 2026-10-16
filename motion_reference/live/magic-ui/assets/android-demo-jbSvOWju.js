@@ -1,0 +1,1 @@
+import{j as r}from"./index-WM7-nNXq.js";import{A as s}from"./android-CIr_p8J7.js";function o(){return r.jsx("div",{className:"relative",children:r.jsx(s,{className:"size-full"})})}export{o as default};

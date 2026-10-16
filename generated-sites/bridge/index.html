@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>bridge — frames printed to your face</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* ─────────────────────────────────────────────────────────────
+   Дизайн-система: Zellerfeld (refero a6efcd16) — tokens.css дословно
+   ───────────────────────────────────────────────────────────── */
+:root {
+  /* Colors */
+  --color-electric-cobalt: #000aff;
+  --color-pale-iris: #e5e7ff;
+  --color-ink-black: #111111;
+  --color-pure-white: #ffffff;
+  --color-plaster: #ecedee;
+  --color-slate: #a1a4aa;
+  --color-fog: #d7d7d7;
+  --color-graphite: #444955;
+  --color-ash: #737780;
+  --color-charcoal: #3b3b3b;
+
+  /* Typography — Font Families */
+  --font-roobert: 'Roobert', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-space-mono: 'Space Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Typography — Scale */
+  --text-caption: 13px;
+  --leading-caption: 1.4;
+  --tracking-caption: -0.52px;
+  --text-body-lg: 16px;
+  --leading-body-lg: 1.4;
+  --tracking-body-lg: -0.64px;
+  --text-subheading: 20px;
+  --leading-subheading: 1.35;
+  --tracking-subheading: -0.8px;
+  --text-heading-sm: 32px;
+  --leading-heading-sm: 1.2;
+  --tracking-heading-sm: -1.28px;
+  --text-heading: 40px;
+  --leading-heading: 1.15;
+  --tracking-heading: -1.6px;
+  --text-heading-lg: 64px;
+  --leading-heading-lg: 1;
+  --tracking-heading-lg: -2.56px;
+  --text-display: 128px;
+  --leading-display: 1;
+  --tracking-display: -5.12px;
+
+  /* Typography — Weights */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Spacing */
+  --spacing-4: 4px;
+  --spacing-8: 8px;
+  --spacing-12: 12px;
+  --spacing-16: 16px;
+  --spacing-20: 20px;
+  --spacing-24: 24px;
+  --spacing-32: 32px;
+  --spacing-40: 40px;
+  --spacing-48: 48px;
+  --spacing-64: 64px;
+  --spacing-96: 96px;
+  --spacing-100: 100px;
+  --spacing-120: 120px;
+
+  /* Layout */
+  --page-max-width: 1440px;
+  --section-gap: 80px;
+  --card-padding: 20px;
+  --element-gap: 16px;
+
+  /* Border Radius */
+  --radius-cards: 10px;
+  --radius-pills: 30px;
+  --radius-badges: 30px;
+  --radius-images: 10px;
+  --radius-inputs: 10px;
+  --radius-buttons: 10px;
+
+  /* Shadows */
+  --shadow-float: 0 8px 24px rgba(0, 0, 0, 0.15);
+  --shadow-see-all: 0 1px 2px rgba(0, 0, 0, 0.04);
+
+  /* Surfaces */
+  --surface-canvas: #ffffff;
+  --surface-plaster: #ecedee;
+  --surface-fog: #d7d7d7;
+  --surface-ink: #111111;
+}
+
+/* Мои подстановки: Roobert закрыт — Inter, первая замена из DESIGN.md, с кириллицей.
+   Space Mono кириллицы не знает, поэтому метаданные набраны JetBrains Mono (тоже из
+   списка замен). Фотографии товара в системе несут всю картинку; снимков у офлайн-
+   сборки нет, поэтому каждая оправа нарисована SVG и лежит на плитке-плинтусе,
+   как того требует правило «объект и есть герой». */
+:root {
+  --font-roobert: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-space-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --announce: #000340;   /* полоса объявления в системе — глубокий тёмно-синий */
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--surface-canvas);
+  color: var(--color-ink-black);
+  font-family: var(--font-roobert);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--text-body-lg); line-height: var(--leading-body-lg); letter-spacing: -0.04em;
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, p, ul, li { margin: 0; padding: 0; list-style: none; font-weight: var(--font-weight-regular); }
+a { color: inherit; text-decoration: none; }
+.mono { font-family: var(--font-space-mono); letter-spacing: 0; }
+.cap { font-size: var(--text-caption); line-height: var(--leading-caption); letter-spacing: var(--tracking-caption); }
+.ash { color: var(--color-ash); }
+.rail { max-width: var(--page-max-width); margin: 0 auto; padding: 0 var(--spacing-40); }
+
+/* ── Полоса объявления и навигация ─────────────────────────────────── */
+.announce { background: var(--announce); color: var(--color-pure-white); text-align: center; padding: var(--spacing-8) 0; }
+.nav { display: flex; align-items: center; gap: var(--spacing-16); height: 56px; padding: 0 var(--spacing-24); border-bottom: 1px solid var(--color-plaster); }
+.iconbtn { width: 40px; height: 40px; border-radius: var(--radius-pills); border: 1px solid var(--color-plaster); background: var(--surface-canvas); display: grid; place-items: center; cursor: pointer; }
+.pill {
+  border: 1px solid var(--color-ink-black); background: var(--surface-canvas); color: var(--color-ink-black);
+  border-radius: var(--radius-buttons); padding: var(--spacing-8) 14px;
+  font-family: inherit; font-size: 14px; font-weight: var(--font-weight-medium); letter-spacing: -0.04em; cursor: pointer;
+}
+.pill.quiet { border-color: var(--color-plaster); color: var(--color-ash); }
+.pill.quiet[aria-pressed="true"] { border-color: var(--color-electric-cobalt); color: var(--color-electric-cobalt); }
+.wordmark { display: flex; align-items: center; gap: var(--spacing-8); margin: 0 auto; font-size: var(--text-subheading); font-weight: var(--font-weight-semibold); letter-spacing: -0.04em; }
+.navright { display: flex; align-items: center; gap: var(--spacing-8); }
+
+/* ── Герой: объект на плинтусе вместо съёмки ───────────────────────── */
+.hero { position: relative; background: var(--surface-plaster); min-height: 720px; overflow: hidden; }
+.hero .obj { position: absolute; inset: 0; display: grid; place-items: center; }
+.hero .obj svg { width: 1180px; max-width: 92%; height: auto; opacity: .96; }
+.hero .over { position: absolute; left: var(--spacing-40); bottom: 96px; }
+.badge {
+  display: inline-block; border-radius: var(--radius-badges); padding: var(--spacing-4) var(--spacing-8);
+  font-size: 12px; font-weight: var(--font-weight-semibold); letter-spacing: -0.04em;
+  background: var(--color-electric-cobalt); color: var(--color-pure-white);
+}
+.badge.sold { background: var(--color-slate); }
+.badge.variant { background: var(--color-pale-iris); color: var(--color-ink-black); }
+.hero h1 { margin-top: var(--spacing-16); font-size: var(--text-display); line-height: var(--leading-display); letter-spacing: var(--tracking-display); font-weight: var(--font-weight-bold); }
+.hero .sub { margin-top: var(--spacing-12); font-size: 15px; color: var(--color-charcoal); }
+.floatcard {
+  position: absolute; right: var(--spacing-40); top: 96px; width: 300px;
+  background: var(--surface-canvas); border-radius: 14px; padding: var(--card-padding); box-shadow: var(--shadow-float);
+}
+.floatcard .row { display: flex; gap: var(--spacing-12); align-items: flex-start; }
+.floatcard .thumb { width: 60px; height: 60px; border-radius: var(--radius-images); background: var(--surface-plaster); display: grid; place-items: center; flex: none; }
+.floatcard .nm { font-size: var(--text-body-lg); font-weight: var(--font-weight-semibold); }
+.floatcard p { margin-top: var(--spacing-16); font-size: var(--text-caption); color: var(--color-charcoal); }
+.btn-dark {
+  display: block; width: 100%; margin-top: var(--spacing-16); text-align: center;
+  background: var(--color-ink-black); color: var(--color-pure-white); border: 0;
+  border-radius: var(--radius-buttons); padding: var(--spacing-12) var(--spacing-20);
+  font-family: inherit; font-size: 15px; font-weight: var(--font-weight-medium); letter-spacing: -0.04em; cursor: pointer;
+}
+.slides { position: absolute; left: var(--spacing-40); right: var(--spacing-40); bottom: var(--spacing-24); display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-12); }
+.slides div { border-top: 2px solid rgba(17,17,17,.2); padding-top: var(--spacing-8); }
+.slides div.on { border-top-color: var(--color-ink-black); }
+
+/* ── Секции ────────────────────────────────────────────────────────── */
+section { padding-top: var(--section-gap); }
+.sechead { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--spacing-20); }
+.sechead h2 { font-size: var(--text-subheading); line-height: var(--leading-subheading); letter-spacing: var(--tracking-subheading); font-weight: var(--font-weight-semibold); }
+.arrows { display: flex; gap: var(--spacing-8); }
+.arrow { width: 40px; height: 40px; border: 1px solid var(--color-plaster); border-radius: var(--radius-buttons); background: var(--surface-canvas); display: grid; place-items: center; color: var(--color-ash); cursor: pointer; }
+
+.grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--spacing-16); }
+.pcard { position: relative; background: var(--surface-plaster); border-radius: var(--radius-cards); padding: var(--card-padding); overflow: hidden; }
+.pcard .rank { position: absolute; right: -10px; top: -40px; font-size: 220px; line-height: 1; font-weight: var(--font-weight-bold); color: rgba(255,255,255,.6); letter-spacing: -0.04em; }
+.pcard .shot { position: relative; height: 190px; display: grid; place-items: center; }
+.pcard .shot svg { width: 84%; height: auto; }
+.pcard .bmark { width: 40px; height: 40px; background: var(--surface-canvas); border: 1px solid var(--color-plaster); border-radius: 6px; display: grid; place-items: center; margin-top: var(--spacing-16); }
+.pcard .nm { margin-top: var(--spacing-8); font-size: var(--text-body-lg); font-weight: var(--font-weight-semibold); }
+.pcard .by { font-size: 12px; color: var(--color-ash); }
+.pcard .pr { font-size: 12px; }
+.pcard .bg { position: absolute; left: var(--spacing-12); top: var(--spacing-12); }
+
+.seeall {
+  display: block; width: 100%; margin-top: var(--spacing-32); text-align: center;
+  background: var(--surface-canvas); color: var(--color-ink-black); border: 1px solid var(--color-plaster);
+  border-radius: var(--radius-buttons); padding: var(--spacing-12) var(--spacing-24);
+  font-family: inherit; font-size: var(--text-body-lg); font-weight: var(--font-weight-medium); letter-spacing: -0.04em;
+  box-shadow: var(--shadow-see-all); cursor: pointer;
+}
+
+/* ── Полоса «о нас пишут» ──────────────────────────────────────────── */
+.press { margin-top: var(--section-gap); }
+.press .lab { text-align: center; font-size: 12px; color: var(--color-ash); margin-bottom: var(--spacing-24); }
+.press .bar { background: var(--surface-ink); height: 100px; display: flex; align-items: center; justify-content: space-around; padding: 0 var(--spacing-40); }
+.press .bar span { color: rgba(255,255,255,.6); font-weight: var(--font-weight-bold); font-size: 22px; letter-spacing: -0.04em; }
+
+/* ── Посадка: спецификация ─────────────────────────────────────────── */
+.fit { display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-48); align-items: start; }
+.fit h2 { font-size: var(--text-heading); line-height: var(--leading-heading); letter-spacing: var(--tracking-heading); font-weight: var(--font-weight-bold); }
+.fit p { margin-top: var(--spacing-16); color: var(--color-charcoal); }
+.specs { border-top: 1px solid var(--color-plaster); }
+.specs .r { display: grid; grid-template-columns: 1fr auto; gap: var(--spacing-16); padding: var(--spacing-12) 0; border-bottom: 1px solid var(--color-plaster); }
+.specs .r span:last-child { font-family: var(--font-space-mono); font-size: 14px; }
+.iris { background: var(--color-pale-iris); border-radius: var(--radius-cards); padding: var(--spacing-20); margin-top: var(--spacing-20); }
+
+footer { margin-top: var(--section-gap); padding: var(--spacing-40) 0 var(--spacing-64); border-top: 1px solid var(--color-plaster); display: flex; justify-content: space-between; gap: var(--spacing-24); }
+</style>
+</head>
+<body>
+
+<svg style="position:absolute;width:0;height:0" aria-hidden="true">
+  <!-- оправы: линия 1.5px, только чернильный чёрный, как требуют иконки системы -->
+  <symbol id="f-round" viewBox="0 0 420 150">
+    <g fill="none" stroke="#111111" stroke-width="6">
+      <circle cx="128" cy="76" r="52"/><circle cx="292" cy="76" r="52"/>
+      <path d="M180 70c14-8 46-8 60 0M76 70L20 52M344 70l56-18"/>
+    </g>
+  </symbol>
+  <symbol id="f-square" viewBox="0 0 420 150">
+    <g fill="none" stroke="#111111" stroke-width="6">
+      <rect x="70" y="34" width="112" height="80" rx="14"/><rect x="238" y="34" width="112" height="80" rx="14"/>
+      <path d="M182 60h56M70 52L18 40M350 52l52-12"/>
+    </g>
+  </symbol>
+  <symbol id="f-cat" viewBox="0 0 420 150">
+    <g fill="none" stroke="#111111" stroke-width="6">
+      <path d="M66 46c22-14 90-14 116 6 6 30-24 52-54 52s-62-30-62-58z"/>
+      <path d="M354 46c-22-14-90-14-116 6-6 30 24 52 54 52s62-30 62-58z"/>
+      <path d="M182 58h56M66 46L18 36M354 46l48-10"/>
+    </g>
+  </symbol>
+  <symbol id="f-hex" viewBox="0 0 420 150">
+    <g fill="none" stroke="#111111" stroke-width="6">
+      <path d="M100 38h56l28 38-28 38h-56L72 76z"/><path d="M264 38h56l28 38-28 38h-56l-28-38z"/>
+      <path d="M184 76h52M72 62L20 46M348 62l52-16"/>
+    </g>
+  </symbol>
+  <symbol id="f-brow" viewBox="0 0 420 150">
+    <g stroke="#111111" stroke-width="6" fill="none">
+      <path d="M62 44h124M234 44h124" stroke-width="14"/>
+      <path d="M70 44c0 44 20 62 54 62s54-18 54-62"/><path d="M242 44c0 44 20 62 54 62s54-18 54-62"/>
+      <path d="M186 48h48M62 44L16 34M358 44l46-10"/>
+    </g>
+  </symbol>
+  <symbol id="f-rimless" viewBox="0 0 420 150">
+    <g fill="none" stroke="#111111" stroke-width="4">
+      <path d="M74 62c22-16 84-16 106 0 4 30-20 48-52 48s-58-20-54-48z" stroke-dasharray="1 0"/>
+      <path d="M346 62c-22-16-84-16-106 0-4 30 20 48 52 48s58-20 54-48z"/>
+      <path d="M180 62h60" stroke-width="6"/><path d="M74 58L18 44M346 58l56-14" stroke-width="6"/>
+    </g>
+  </symbol>
+  <symbol id="f-aviator" viewBox="0 0 420 150">
+    <g fill="none" stroke="#111111" stroke-width="6">
+      <path d="M64 44h124l-16 62c-6 22-72 26-88 2z"/><path d="M356 44H232l16 62c6 22 72 26 88 2z"/>
+      <path d="M188 48h44M64 44L14 32M356 44l50-12"/>
+    </g>
+  </symbol>
+  <symbol id="f-oval" viewBox="0 0 420 150">
+    <g fill="none" stroke="#111111" stroke-width="6">
+      <ellipse cx="128" cy="76" rx="60" ry="44"/><ellipse cx="292" cy="76" rx="60" ry="44"/>
+      <path d="M188 70h44M68 66L18 50M352 66l50-16"/>
+    </g>
+  </symbol>
+</svg>
+
+<div class="announce cap" data-i18n="a0">Printed on Thursdays. Fitted from a phone scan.</div>
+
+<nav class="nav">
+  <button class="iconbtn" aria-label="menu">
+    <svg width="16" height="16" viewBox="0 0 16 16"><g fill="#111"><circle cx="4" cy="4" r="2"/><circle cx="12" cy="4" r="2"/><circle cx="4" cy="12" r="2"/><circle cx="12" cy="12" r="2"/></g></svg>
+  </button>
+  <button class="pill" data-i18n="n1">Shop</button>
+  <span class="wordmark">
+    <svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><g fill="none" stroke="#111" stroke-width="2.4"><circle cx="8" cy="15" r="6"/><circle cx="22" cy="15" r="3.4"/><path d="M14 13c2-1.4 3-1.4 4.8-.6M2 12L0 9"/></g></svg>
+    bridge
+  </span>
+  <span class="navright">
+    <button class="pill quiet" data-set="en" aria-pressed="true">EN</button>
+    <button class="pill quiet" data-set="ru" aria-pressed="false">RU</button>
+    <button class="iconbtn" aria-label="search">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#111" stroke-width="1.5"><circle cx="7" cy="7" r="5"/><path d="M11 11l4 4"/></svg>
+    </button>
+    <span class="cap ash" data-i18n="n2">Account</span>
+  </span>
+</nav>
+
+<header class="hero">
+  <div class="obj"><svg viewBox="0 0 420 150"><use href="#f-cat"/></svg></div>
+  <div class="over">
+    <span class="badge" data-i18n="h0">New in</span>
+    <h1>vitrine 04</h1>
+    <p class="sub" data-i18n="h1">Printed in one piece, not assembled from six, and weighed in front of you.</p>
+  </div>
+  <aside class="floatcard">
+    <div class="row">
+      <span class="thumb"><svg width="46" height="18" viewBox="0 0 420 150"><use href="#f-cat"/></svg></span>
+      <span>
+        <span class="nm">vitrine 04</span><br>
+        <span class="mono ash" style="font-size:12px" data-i18n="h2">By the bench</span><br>
+        <span class="mono" style="font-size:14px;font-weight:600">€184,00</span>
+      </span>
+    </div>
+    <p data-i18n="h3">Twenty-two grams. Printed to a scan of your face, so the bridge sits where your nose is, not where the average nose is.</p>
+    <button class="btn-dark" data-i18n="h4">Shop vitrine 04</button>
+  </aside>
+  <div class="slides mono cap">
+    <div class="on">01</div><div>02</div><div>03</div>
+  </div>
+</header>
+
+<div class="rail">
+
+  <section>
+    <div class="sechead">
+      <h2 data-i18n="s1">Top 10</h2>
+      <span class="arrows"><button class="arrow">‹</button><button class="arrow">›</button></span>
+    </div>
+    <div class="grid4">
+      <article class="pcard">
+        <span class="rank">1</span>
+        <div class="shot"><svg viewBox="0 0 420 150"><use href="#f-round"/></svg></div>
+        <div class="bmark"><svg width="20" height="8" viewBox="0 0 420 150"><use href="#f-round"/></svg></div>
+        <div class="nm">halbe 02</div>
+        <div class="by mono" data-i18n="p1b">By the bench</div>
+        <div class="pr mono">€162,00</div>
+      </article>
+      <article class="pcard">
+        <span class="rank">2</span>
+        <div class="shot"><svg viewBox="0 0 420 150"><use href="#f-square"/></svg></div>
+        <div class="bmark"><svg width="20" height="8" viewBox="0 0 420 150"><use href="#f-square"/></svg></div>
+        <div class="nm">kante 01</div>
+        <div class="by mono" data-i18n="p2b">By hall workshop</div>
+        <div class="pr mono">€148,00</div>
+      </article>
+      <article class="pcard">
+        <span class="rank">3</span>
+        <div class="shot"><svg viewBox="0 0 420 150"><use href="#f-hex"/></svg></div>
+        <div class="bmark"><svg width="20" height="8" viewBox="0 0 420 150"><use href="#f-hex"/></svg></div>
+        <div class="nm">sechs 03</div>
+        <div class="by mono" data-i18n="p3b">By the bench</div>
+        <div class="pr mono">€176,00</div>
+      </article>
+      <article class="pcard">
+        <span class="rank">4</span>
+        <div class="shot"><svg viewBox="0 0 420 150"><use href="#f-oval"/></svg></div>
+        <div class="bmark"><svg width="20" height="8" viewBox="0 0 420 150"><use href="#f-oval"/></svg></div>
+        <div class="nm">oval 07</div>
+        <div class="by mono" data-i18n="p4b">By atelier nord</div>
+        <div class="pr mono">€139,00</div>
+      </article>
+    </div>
+  </section>
+
+  <section>
+    <div class="sechead">
+      <h2 data-i18n="s2">Featured new releases</h2>
+      <span class="arrows"><button class="arrow">‹</button><button class="arrow">›</button></span>
+    </div>
+    <div class="grid4">
+      <article class="pcard">
+        <span class="badge bg" data-i18n="g1">New in</span>
+        <div class="shot"><svg viewBox="0 0 420 150"><use href="#f-brow"/></svg></div>
+        <div class="bmark"><svg width="20" height="8" viewBox="0 0 420 150"><use href="#f-brow"/></svg></div>
+        <div class="nm">braue 05</div>
+        <div class="by mono" data-i18n="p5b">By hall workshop</div>
+        <div class="pr mono">€169,00</div>
+      </article>
+      <article class="pcard">
+        <span class="badge variant bg" data-i18n="g2">New colour</span>
+        <div class="shot"><svg viewBox="0 0 420 150"><use href="#f-aviator"/></svg></div>
+        <div class="bmark"><svg width="20" height="8" viewBox="0 0 420 150"><use href="#f-aviator"/></svg></div>
+        <div class="nm">flug 02</div>
+        <div class="by mono" data-i18n="p6b">By atelier nord</div>
+        <div class="pr mono">€158,00</div>
+      </article>
+      <article class="pcard">
+        <span class="badge sold bg" data-i18n="g3">Sold out</span>
+        <div class="shot"><svg viewBox="0 0 420 150"><use href="#f-rimless"/></svg></div>
+        <div class="bmark"><svg width="20" height="8" viewBox="0 0 420 150"><use href="#f-rimless"/></svg></div>
+        <div class="nm">rand 00</div>
+        <div class="by mono" data-i18n="p7b">By the bench</div>
+        <div class="pr mono">€196,00</div>
+      </article>
+      <article class="pcard">
+        <span class="badge bg" data-i18n="g4">New in</span>
+        <div class="shot"><svg viewBox="0 0 420 150"><use href="#f-cat"/></svg></div>
+        <div class="bmark"><svg width="20" height="8" viewBox="0 0 420 150"><use href="#f-cat"/></svg></div>
+        <div class="nm">vitrine 04</div>
+        <div class="by mono" data-i18n="p8b">By the bench</div>
+        <div class="pr mono">€184,00</div>
+      </article>
+    </div>
+    <button class="seeall" data-i18n="s3">See all 34 frames</button>
+  </section>
+
+</div>
+
+<div class="press">
+  <div class="lab mono" data-i18n="pr0">Featured in</div>
+  <div class="bar">
+    <span>DEZEEN</span><span>DISEGNO</span><span>MONOCLE</span><span>WALLPAPER*</span><span>FRAME</span>
+  </div>
+</div>
+
+<div class="rail">
+  <section class="fit">
+    <div>
+      <h2 data-i18n="s4">The fit is a measurement,<br>not a size.</h2>
+      <p data-i18n="f1">A frame has six numbers. Four of them are yours and come out of a thirty-second scan on a phone: pupillary distance, bridge width, the angle your ears sit at, and how far the temple has to run before it turns down.</p>
+      <p data-i18n="f2">We print on Thursdays, in batches of forty. If your scan lands on Friday it waits — a batch that runs half empty costs more powder per frame, and that would end up in your price.</p>
+      <div class="iris">
+        <span class="cap" data-i18n="f3">A scan that fails is refunded the same day. About one in nine fails, usually because of a fringe.</span>
+      </div>
+    </div>
+    <div class="specs">
+      <div class="r"><span data-i18n="k1">Pupillary distance</span><span>63.5 mm</span></div>
+      <div class="r"><span data-i18n="k2">Bridge width</span><span>19 mm</span></div>
+      <div class="r"><span data-i18n="k3">Lens width</span><span>52 mm</span></div>
+      <div class="r"><span data-i18n="k4">Temple length</span><span>145 mm</span></div>
+      <div class="r"><span data-i18n="k5">Pantoscopic tilt</span><span>8°</span></div>
+      <div class="r"><span data-i18n="k6">Weight, frame only</span><span>22 g</span></div>
+      <div class="r"><span data-i18n="k7">Material</span><span data-i18n="k7v">PA11, bio-based</span></div>
+      <div class="r"><span data-i18n="k8">Print batch</span><span>TH-142</span></div>
+      <div class="r"><span data-i18n="k9">Reprint if it does not sit</span><span data-i18n="k9v">once, free</span></div>
+    </div>
+  </section>
+
+  <footer class="cap ash">
+    <span data-i18n="fo1">bridge · frames printed to a scan · Hamburg</span>
+    <span class="mono">hello@bridge.frames</span>
+    <span data-i18n="fo2">Batches leave every Thursday, 17:00</span>
+  </footer>
+</div>
+
+<script>
+/* ── RU/EN. Английский — исходный, русский — перевод под него ── */
+var RU = {
+  a0:'Печатаем по четвергам. Посадка — по скану с телефона.',
+  n1:'Каталог', n2:'Кабинет',
+  h0:'Новинка',
+  h1:'Печатается одной деталью, а не собирается из шести, и взвешивается при вас.',
+  h2:'От мастерской',
+  h3:'Двадцать два грамма. Печатается по скану вашего лица, поэтому переносица садится туда, где нос у вас, а не там, где он у среднего человека.',
+  h4:'Купить vitrine 04',
+  s1:'Топ-10', s2:'Новые выпуски', s3:'Показать все 34 оправы',
+  p1b:'От мастерской', p2b:'От мастерской Halle', p3b:'От мастерской', p4b:'От ателье Nord',
+  p5b:'От мастерской Halle', p6b:'От ателье Nord', p7b:'От мастерской', p8b:'От мастерской',
+  g1:'Новинка', g2:'Новый цвет', g3:'Распродано', g4:'Новинка',
+  pr0:'О нас пишут',
+  s4:'Посадка — это замер,<br>а не размер.',
+  f1:'У оправы шесть чисел. Четыре из них ваши и берутся из тридцатисекундного скана на телефоне: межзрачковое расстояние, ширина переносицы, угол посадки ушей и то, сколько заушник идёт прямо, прежде чем загнуться.',
+  f2:'Печатаем по четвергам партиями по сорок штук. Если скан пришёл в пятницу — он ждёт: наполовину пустая партия стоит больше порошка на оправу, и это оказалось бы в вашей цене.',
+  f3:'Неудачный скан возвращается деньгами в тот же день. Не проходит примерно каждый девятый, чаще всего из-за чёлки.',
+  k1:'Межзрачковое расстояние', k2:'Ширина переносицы', k3:'Ширина линзы',
+  k4:'Длина заушника', k5:'Пантоскопический угол', k6:'Вес без линз',
+  k7:'Материал', k7v:'PA11, из растительного сырья',
+  k8:'Партия печати', k9:'Перепечать, если не село', k9v:'один раз, бесплатно',
+  fo1:'bridge · оправы, печатаемые по скану · Гамбург',
+  fo2:'Партии уходят каждый четверг в 17:00'
+};
+var EN = {};
+document.querySelectorAll('[data-i18n]').forEach(function (el) { EN[el.dataset.i18n] = el.innerHTML; });
+
+function setLang(l) {
+  var dict = l === 'ru' ? RU : EN;
+  document.querySelectorAll('[data-i18n]').forEach(function (el) {
+    var v = dict[el.dataset.i18n];
+    if (v !== undefined) el.innerHTML = v;
+  });
+  document.documentElement.lang = l;
+  document.documentElement.dataset.lang = l;
+  document.querySelectorAll('[data-set]').forEach(function (b) {
+    b.setAttribute('aria-pressed', b.dataset.set === l ? 'true' : 'false');
+  });
+}
+document.querySelectorAll('[data-set]').forEach(function (b) {
+  b.addEventListener('click', function () { setLang(b.dataset.set); });
+});
+</script>
+</body>
+</html>

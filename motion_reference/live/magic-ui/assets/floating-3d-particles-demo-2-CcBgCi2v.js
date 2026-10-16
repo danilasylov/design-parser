@@ -1,0 +1,1 @@
+import{z as t,j as o}from"./index-WM7-nNXq.js";import{F as d}from"./floating-3d-particles-D8akxHU9.js";function s(){const{resolvedTheme:e}=t(),r=e==="dark"?"#c4b5fd":"#6d28d9";return o.jsx("div",{className:"bg-background relative h-[500px] w-full overflow-hidden rounded-lg border",children:o.jsx(d,{color:r,depth:.8,opacity:.55,quantity:1e3})})}export{s as default};

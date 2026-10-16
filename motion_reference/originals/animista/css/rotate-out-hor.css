@@ -1,0 +1,3 @@
+/* Original keyframes: Animista, Ana Travas. https://animista.net/play/exits/rotate-out/rotate-out-hor */
+.rotate-out-hor{animation:rotate-out-hor 0.5s cubic-bezier(.55,.085,.68,.53) 0s 1 normal both;}
+@keyframes rotate-out-hor{0%{-webkit-transform:rotateX(360deg);transform:rotateX(360deg);opacity:1}to{-webkit-transform:rotateX(0deg);transform:rotateX(0deg);opacity:0}}

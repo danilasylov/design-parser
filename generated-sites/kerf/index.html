@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>Kerf — laser cutting and bending, quoted in forty seconds</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════════════════════════════
+   Дизайн-система Andercore — styles.refero.design/style/2d4ced28-e579-4fa0-84bc-836dd008034f
+   :root ниже вставлен ДОСЛОВНО со вкладки CSS Variables.
+   ══════════════════════════════════════════════════════════════════ */
+:root {
+  /* Colors */
+  --color-signal-red: #e32735;
+  --color-carbon: #0b0405;
+  --color-graphite: #150e0f;
+  --color-steel: #382e30;
+  --color-slate: #858182;
+  --color-chalk: #ffffff;
+  --color-foil: #000000;
+
+  /* Typography — Font Families */
+  --font-archivo: 'Archivo', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-space-mono: 'Space Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Typography — Scale */
+  --text-caption: 12px;
+  --leading-caption: 1.5;
+  --text-body-sm: 14px;
+  --leading-body-sm: 1.5;
+  --tracking-body-sm: -0.28px;
+  --text-body: 16px;
+  --leading-body: 1.5;
+  --tracking-body: -0.32px;
+  --text-subheading: 24px;
+  --leading-subheading: 1.2;
+  --tracking-subheading: -0.48px;
+  --text-heading: 40px;
+  --leading-heading: 1.2;
+  --tracking-heading: -0.8px;
+  --text-display: 56px;
+  --leading-display: 1.1;
+  --tracking-display: -1.12px;
+
+  /* Typography — Weights */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+
+  /* Spacing */
+  --spacing-unit: 8px;
+  --spacing-8: 8px;
+  --spacing-16: 16px;
+  --spacing-24: 24px;
+  --spacing-32: 32px;
+  --spacing-40: 40px;
+  --spacing-48: 48px;
+  --spacing-64: 64px;
+
+  /* Layout */
+  --page-max-width: 1200px;
+  --section-gap: 80px;
+  --card-padding: 32px;
+  --element-gap: 24px;
+
+  /* Border Radius */
+  --radius-md: 4px;
+
+  /* Named Radii */
+  --radius-cards: 4px;
+  --radius-badges: 4px;
+  --radius-inputs: 4px;
+  --radius-buttons: 4px;
+
+  /* Surfaces */
+  --surface-canvas-light: #ffffff;
+  --surface-canvas-dark: #0b0405;
+  --surface-card-surface: #150e0f;
+}
+
+/* Подстановки шрифтов. Archivo кириллицы не имеет; из трёх замен DESIGN.md
+   (Inter, DM Sans, Geist) кириллица есть только у Inter. Space Mono кириллицы
+   тоже не имеет — взят IBM Plex Mono из списка замен. */
+:root {
+  --font-ui: 'Inter', var(--font-archivo);
+  --font-mono: 'IBM Plex Mono', var(--font-space-mono);
+}
+
+* { box-sizing: border-box; }
+html { -webkit-font-smoothing: antialiased; }
+body {
+  margin: 0;
+  background: var(--surface-canvas-dark);
+  color: var(--color-chalk);
+  font-family: var(--font-ui);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  letter-spacing: -0.02em;
+  font-weight: var(--font-weight-regular);
+}
+svg { display: block; }
+a { color: inherit; text-decoration: none; }
+h1, h2, h3, h4, p, ul { margin: 0; padding: 0; }
+ul { list-style: none; }
+
+.wrap { max-width: var(--page-max-width); margin: 0 auto; padding: 0 var(--spacing-24); }
+.sec { padding: var(--section-gap) 0; }
+.d { font-size: var(--text-display); line-height: var(--leading-display); letter-spacing: var(--tracking-display); font-weight: var(--font-weight-medium); }
+.h { font-size: var(--text-heading); line-height: var(--leading-heading); letter-spacing: var(--tracking-heading); font-weight: var(--font-weight-medium); }
+.sh { font-size: var(--text-subheading); line-height: var(--leading-subheading); letter-spacing: var(--tracking-subheading); font-weight: var(--font-weight-medium); }
+.sm { font-size: var(--text-body-sm); line-height: var(--leading-body-sm); letter-spacing: var(--tracking-body-sm); }
+.slate { color: var(--color-slate); }
+.mono { font-family: var(--font-mono); font-size: var(--text-caption); line-height: var(--leading-caption); letter-spacing: normal; }
+
+/* значок-инструмент: контур, не заливка */
+.badge {
+  display: inline-block;
+  border: 1px solid var(--color-slate);
+  border-radius: var(--radius-badges);
+  color: var(--color-slate);
+  padding: var(--spacing-8) 12px;
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: uppercase;
+}
+
+/* кнопки: красная — единственная приоритетная на поверхности */
+.btn {
+  display: inline-block;
+  background: var(--color-signal-red);
+  color: var(--color-chalk);
+  border: 1px solid var(--color-signal-red);
+  border-radius: var(--radius-buttons);
+  padding: 12px 24px;
+  font-family: var(--font-ui);
+  font-size: var(--text-body-sm);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--tracking-body-sm);
+  line-height: 1.2;
+  cursor: pointer;
+}
+.btn:hover { background: #c81f2c; border-color: #c81f2c; }
+.btn-ghost { background: var(--surface-card-surface); border-color: var(--color-steel); color: var(--color-chalk); }
+.btn-ghost:hover { background: var(--color-steel); border-color: var(--color-steel); }
+.btn-light { background: var(--color-signal-red); }
+
+/* шапка — единственная светлая поверхность */
+nav {
+  background: var(--surface-canvas-light);
+  color: var(--color-carbon);
+  display: flex; align-items: center; gap: var(--spacing-32);
+  padding: var(--spacing-16) var(--spacing-32);
+}
+nav .logo { font-weight: var(--font-weight-medium); letter-spacing: 0.02em; }
+nav .links { display: flex; gap: var(--spacing-24); margin-left: var(--spacing-32); }
+nav .links a { font-size: var(--text-body-sm); }
+nav .links a:hover { color: var(--color-signal-red); }
+nav .right { margin-left: auto; display: flex; align-items: center; gap: var(--spacing-24); }
+.lang { display: inline-flex; gap: 5px; align-items: center; font-family: var(--font-mono); font-size: var(--text-caption); }
+.lang button { font: inherit; border: none; background: none; padding: 0; cursor: pointer; color: var(--color-slate); text-transform: uppercase; }
+.lang button[aria-pressed="true"] { color: var(--color-carbon); }
+.lang span { color: var(--color-slate); }
+
+/* герой */
+.hero { padding: var(--section-gap) 0; }
+.hero-in { display: grid; grid-template-columns: 1.1fr 1fr; gap: var(--spacing-64); align-items: center; }
+.hero .badge { margin-bottom: var(--spacing-24); }
+.hero p { margin-top: var(--spacing-24); max-width: 46ch; }
+.hero .acts { display: flex; gap: var(--spacing-16); margin-top: var(--spacing-40); }
+
+/* плоский макет интерфейса — диаграмма, а не скриншот */
+.mock { background: var(--surface-card-surface); border: 1px solid var(--color-steel); border-radius: var(--radius-cards); padding: var(--card-padding); }
+.mock .bar { display: flex; align-items: center; gap: var(--spacing-8); padding-bottom: var(--spacing-16); border-bottom: 1px solid var(--color-steel); margin-bottom: var(--spacing-24); }
+.mock .dot { width: 8px; height: 8px; border-radius: var(--radius-md); background: var(--color-steel); }
+.mock .dot.red { background: var(--color-signal-red); }
+.mock .line { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--color-steel); }
+.mock .line:last-child { border-bottom: none; }
+.mock .total { display: flex; justify-content: space-between; align-items: baseline; margin-top: var(--spacing-24); padding-top: var(--spacing-16); border-top: 1px solid var(--color-steel); }
+
+/* шаги */
+.steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-32); border-top: 1px solid var(--color-steel); padding-top: var(--spacing-24); }
+.step .row { display: flex; justify-content: space-between; align-items: baseline; }
+.step .name { font-size: var(--text-body-sm); font-weight: var(--font-weight-medium); }
+.step.on .name { color: var(--color-signal-red); }
+.step .rule { height: 2px; background: transparent; margin-top: var(--spacing-8); }
+.step.on .rule { background: var(--color-signal-red); }
+.step p { margin-top: var(--spacing-16); }
+
+/* карточки */
+.three { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-32); margin-top: var(--spacing-48); }
+.card { border: 1px solid var(--color-steel); border-radius: var(--radius-cards); padding: var(--card-padding); }
+.card .sh { margin: var(--spacing-24) 0 var(--spacing-8); }
+.card .panel { background: var(--surface-card-surface); border: 1px solid var(--color-steel); border-radius: var(--radius-cards); padding: var(--spacing-16); }
+
+/* таблица возможностей */
+.tbl { width: 100%; border-collapse: collapse; margin-top: var(--spacing-48); }
+.tbl th, .tbl td { text-align: left; padding: var(--spacing-16) 0; border-bottom: 1px solid var(--color-steel); font-weight: var(--font-weight-regular); vertical-align: top; }
+.tbl th { width: 260px; font-family: var(--font-mono); font-size: var(--text-caption); letter-spacing: normal; text-transform: uppercase; color: var(--color-slate); }
+.tbl tr:first-child th, .tbl tr:first-child td { border-top: 1px solid var(--color-steel); }
+
+.sechead { display: flex; justify-content: space-between; align-items: flex-end; gap: var(--spacing-48); }
+.sechead .h { max-width: 18ch; }
+
+footer { border-top: 1px solid var(--color-steel); padding: var(--spacing-64) 0 var(--spacing-24); }
+.fcols { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: var(--spacing-32); }
+.fcols h4 { margin-bottom: var(--spacing-16); font-size: var(--text-body-sm); font-weight: var(--font-weight-medium); }
+.fcols li { margin-bottom: var(--spacing-8); }
+.fcols li a { font-size: var(--text-body-sm); color: var(--color-slate); }
+.flegal { display: flex; justify-content: space-between; margin-top: var(--spacing-48); padding-top: var(--spacing-24); border-top: 1px solid var(--color-steel); }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">KERF</div>
+  <div class="links">
+    <a href="#quote" data-i18n="n1">Quote</a>
+    <a href="#shop" data-i18n="n2">The shop</a>
+    <a href="#specs" data-i18n="n3">Tolerances</a>
+    <a href="#terms" data-i18n="n4">Terms</a>
+  </div>
+  <div class="right">
+    <div class="lang"><button data-set="en" aria-pressed="true">EN</button><span>/</span><button data-set="ru" aria-pressed="false">RU</button></div>
+    <a class="sm" href="#quote" data-i18n="nlog">Log in</a>
+    <a class="btn" href="#quote" data-i18n="ncta">Upload a DXF</a>
+  </div>
+</nav>
+
+<!-- ── герой ────────────────────────────────────────────────────── -->
+<section class="hero">
+  <div class="wrap hero-in">
+    <div>
+      <span class="badge" data-i18n="hb">Contract cutting · Tula</span>
+      <h1 class="d" data-i18n="h1">Upload the part. The price comes back in forty seconds.</h1>
+      <p class="slate" data-i18n="hp">Two fibre lasers, one press brake and a welding bay. You send a DXF, we cost it against the actual sheet we have on the rack, and you get a number you can put in a purchase order — not a request to call us.</p>
+      <div class="acts">
+        <a class="btn" href="#quote" data-i18n="ha1">Get a price</a>
+        <a class="btn btn-ghost" href="#specs" data-i18n="ha2">What we can cut</a>
+      </div>
+    </div>
+    <div class="mock">
+      <div class="bar">
+        <span class="dot red"></span><span class="dot"></span><span class="dot"></span>
+        <span class="mono slate" style="margin-left:auto" data-i18n="mk0">quote / 4180-11</span>
+      </div>
+      <div class="line"><span class="sm" data-i18n="mk1">Material</span><span class="mono" data-i18n="mk1v">S235 · 3 mm</span></div>
+      <div class="line"><span class="sm" data-i18n="mk2">Cut length</span><span class="mono" data-i18n="mk2v">4 812 mm</span></div>
+      <div class="line"><span class="sm" data-i18n="mk3">Pierces</span><span class="mono">34</span></div>
+      <div class="line"><span class="sm" data-i18n="mk4">Bends</span><span class="mono">6</span></div>
+      <div class="line"><span class="sm" data-i18n="mk5">Nesting waste</span><span class="mono">11.4%</span></div>
+      <div class="line"><span class="sm" data-i18n="mk6">Quantity</span><span class="mono">40</span></div>
+      <div class="total">
+        <span class="mono slate" data-i18n="mk7">Per part, VAT incl.</span>
+        <span class="sh">418 ₽</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── шаги ─────────────────────────────────────────────────────── -->
+<section class="sec" style="padding-top:0">
+  <div class="wrap">
+    <div class="steps">
+      <div class="step on">
+        <div class="row"><span class="name" data-i18n="s1">Upload</span><span class="mono slate">01</span></div>
+        <div class="rule"></div>
+        <p class="sm slate" data-i18n="s1d">DXF, DWG or a STEP body. We read the geometry, not your drawing frame, so a messy file is fine.</p>
+      </div>
+      <div class="step">
+        <div class="row"><span class="name" data-i18n="s2">Price</span><span class="mono slate">02</span></div>
+        <div class="rule"></div>
+        <p class="sm slate" data-i18n="s2d">Costed against the sheet on the rack today, with the nesting waste shown separately so you can see what a different quantity would do.</p>
+      </div>
+      <div class="step">
+        <div class="row"><span class="name" data-i18n="s3">Ship</span><span class="mono slate">03</span></div>
+        <div class="rule"></div>
+        <p class="sm slate" data-i18n="s3d">Three working days for cut-only, five with bending. You get the machine log and the measured first article with the delivery.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── три карточки ─────────────────────────────────────────────── -->
+<section class="sec" id="shop">
+  <div class="wrap">
+    <div class="sechead">
+      <div>
+        <span class="badge" style="margin-bottom:var(--spacing-24);display:inline-block" data-i18n="cb">The shop</span>
+        <h2 class="h" data-i18n="c0">One building, three machines, no brokers</h2>
+      </div>
+      <a class="btn btn-ghost" href="#quote" data-i18n="cbtn">Book a visit</a>
+    </div>
+    <div class="three">
+      <div class="card">
+        <div class="panel">
+          <svg width="100%" height="120" viewBox="0 0 300 120" fill="none" stroke="#382e30" stroke-width="1">
+            <rect x="10" y="10" width="280" height="100"/>
+            <path d="M40 40 h60 v18 h-24 v24 h-36 z" stroke="#ffffff"/>
+            <path d="M130 40 h54 a10 10 0 0 1 0 20 h-54 z" stroke="#ffffff"/>
+            <circle cx="215" cy="52" r="14" stroke="#ffffff"/>
+            <circle cx="215" cy="52" r="4" stroke="#e32735"/>
+            <path d="M130 78 h130" stroke-dasharray="3 4"/>
+          </svg>
+        </div>
+        <h3 class="sh" data-i18n="k1t">Fibre laser, 6 kW</h3>
+        <p class="sm slate" data-i18n="k1d">Sheet up to 3000 × 1500. Steel to 20 mm, stainless to 12, aluminium to 10. Two machines, so one breaking down is not your problem.</p>
+      </div>
+      <div class="card">
+        <div class="panel">
+          <svg width="100%" height="120" viewBox="0 0 300 120" fill="none" stroke="#382e30" stroke-width="1">
+            <rect x="10" y="10" width="280" height="100"/>
+            <path d="M50 84 h80 l40 -40" stroke="#ffffff" stroke-width="1.6"/>
+            <path d="M170 44 h70" stroke="#ffffff" stroke-width="1.6"/>
+            <path d="M130 84 l40 -40" stroke="#e32735" stroke-width="1.6"/>
+            <path d="M50 96 h190" stroke-dasharray="3 4"/>
+            <path d="M140 30 v20" /><path d="M160 30 v20"/>
+          </svg>
+        </div>
+        <h3 class="sh" data-i18n="k2t">Press brake, 135 t</h3>
+        <p class="sm slate" data-i18n="k2d">Three metres of bed, offline programmed from the same file you sent. Bend allowances are ours to get right, not yours.</p>
+      </div>
+      <div class="card">
+        <div class="panel">
+          <svg width="100%" height="120" viewBox="0 0 300 120" fill="none" stroke="#382e30" stroke-width="1">
+            <rect x="10" y="10" width="280" height="100"/>
+            <path d="M60 80 h180" stroke="#ffffff" stroke-width="1.6"/>
+            <path d="M60 80 l30 -34 h120 l30 34" stroke="#ffffff"/>
+            <circle cx="150" cy="46" r="5" fill="#e32735" stroke="none"/>
+            <path d="M96 62 h108" stroke-dasharray="2 4"/>
+          </svg>
+        </div>
+        <h3 class="sh" data-i18n="k3t">Welding bay</h3>
+        <p class="sm slate" data-i18n="k3d">MIG and TIG, two certified welders. Small assemblies go out finished; big ones go out in flat packs with a jig drawing.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── допуски ──────────────────────────────────────────────────── -->
+<section class="sec" id="specs">
+  <div class="wrap">
+    <span class="badge" style="margin-bottom:var(--spacing-24);display:inline-block" data-i18n="tb">Tolerances</span>
+    <h2 class="h" data-i18n="t0">The numbers we will actually hold</h2>
+    <table class="tbl">
+      <tr><th data-i18n="p1">Cut accuracy</th><td data-i18n="v1">±0.1 mm on the contour up to 6 mm plate; ±0.2 mm above it. Measured on the first article of every batch, not on a sample from last year.</td></tr>
+      <tr><th data-i18n="p2">Bend angle</th><td data-i18n="v2">±0.5° with a measured first bend. Anything tighter is a conversation, and usually the answer is a jig rather than a promise.</td></tr>
+      <tr><th data-i18n="p3">Edge</th><td data-i18n="v3">Nitrogen cut on stainless and aluminium, so the edge takes paint without grinding. Oxygen on thick mild steel, and we say so on the quote.</td></tr>
+      <tr><th data-i18n="p4">Materials</th><td data-i18n="v4">S235, S355, AISI 304 and 430, AlMg3, brass on request. We hold the first four on the rack; the rest adds four days.</td></tr>
+      <tr><th data-i18n="p5">Minimum order</th><td data-i18n="v5">There is none. One part is a normal order and gets the same first-article measurement as four hundred.</td></tr>
+      <tr><th data-i18n="p6">What we refuse</th><td data-i18n="v6">Galvanised sheet, anything painted, and drawings without a material specified. The first two poison the machine, the third poisons the schedule.</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ── условия и призыв ─────────────────────────────────────────── -->
+<section class="sec" id="terms">
+  <div class="wrap">
+    <div class="sechead" style="align-items:center">
+      <div>
+        <span class="badge" style="margin-bottom:var(--spacing-24);display:inline-block" data-i18n="qb">Terms</span>
+        <h2 class="h" data-i18n="q0">Three days, or the next order is on us</h2>
+        <p class="slate" style="max-width:52ch;margin-top:var(--spacing-24)" data-i18n="q1">We miss the date roughly twice a year and we do not argue about it — the credit appears on your next invoice without you asking. Prepayment for the first order, thirty days after that.</p>
+      </div>
+      <div id="quote">
+        <a class="btn" href="#quote" data-i18n="q2">Upload a DXF</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="fcols">
+      <div>
+        <div class="sh">KERF</div>
+        <p class="sm slate" style="max-width:32ch;margin-top:var(--spacing-16)" data-i18n="fa">Contract laser cutting, bending and welding. One building in Tula, since 2019.</p>
+      </div>
+      <div>
+        <h4 data-i18n="fh1">Ordering</h4>
+        <ul><li><a href="#quote" data-i18n="fl1">Upload a file</a></li><li><a href="#specs" data-i18n="fl2">Materials</a></li><li><a href="#terms" data-i18n="fl3">Lead times</a></li></ul>
+      </div>
+      <div>
+        <h4 data-i18n="fh2">The shop</h4>
+        <ul><li><a href="#shop" data-i18n="fl4">Machines</a></li><li><a href="#specs" data-i18n="fl5">Tolerances</a></li><li><a href="#shop" data-i18n="fl6">Visit</a></li></ul>
+      </div>
+      <div>
+        <h4 data-i18n="fh3">Contact</h4>
+        <ul><li><a href="#quote" data-i18n="fl7">Write to us</a></li><li><a href="#quote" data-i18n="fl8">Requisites</a></li><li><a href="#quote" data-i18n="fl9">Careers</a></li></ul>
+      </div>
+    </div>
+    <div class="flegal mono slate">
+      <span>© 2026 Kerf</span>
+      <span data-i18n="fn">Tula · first article measured on every batch</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ── RU/EN. Английский — исходный, русский — перевод под него ── */
+var RU = {
+  n1:'Расчёт', n2:'Цех', n3:'Допуски', n4:'Условия', nlog:'Войти', ncta:'Загрузить DXF',
+  hb:'Контрактная резка · Тула',
+  h1:'Загрузите деталь. Цена вернётся через сорок секунд.',
+  hp:'Два волоконных лазера, листогиб и сварочный пост. Вы присылаете DXF, мы считаем его по тому листу, который реально лежит на стеллаже, и вы получаете число, которое можно вписать в заявку, — а не просьбу позвонить.',
+  ha1:'Получить цену', ha2:'Что мы режем',
+  mk0:'расчёт / 4180-11',
+  mk1:'Материал', mk1v:'Ст3 · 3 мм',
+  mk2:'Длина реза', mk2v:'4 812 мм', mk3:'Врезок', mk4:'Гибов', mk5:'Отход раскроя', mk6:'Количество',
+  mk7:'За деталь, с НДС',
+  s1:'Загрузка', s1d:'DXF, DWG или тело STEP. Мы читаем геометрию, а не вашу рамку, поэтому неаккуратный файл — не беда.',
+  s2:'Расчёт', s2d:'Считаем по листу, который сегодня на стеллаже, и показываем отход раскроя отдельно — чтобы было видно, что даст другое количество.',
+  s3:'Отгрузка', s3d:'Три рабочих дня на резку, пять с гибкой. Вместе с деталями приходит журнал станка и замеренный первый образец.',
+  cb:'Цех', c0:'Одно здание, три станка, без посредников', cbtn:'Записаться на визит',
+  k1t:'Волоконный лазер, 6 кВт',
+  k1d:'Лист до 3000 × 1500. Сталь до 20 мм, нержавейка до 12, алюминий до 10. Машины две, поэтому поломка одной — не ваша проблема.',
+  k2t:'Листогиб, 135 т',
+  k2d:'Три метра стола, программируется офлайн из того же файла, что вы прислали. Припуски на гиб — наша забота, а не ваша.',
+  k3t:'Сварочный пост',
+  k3d:'MIG и TIG, два аттестованных сварщика. Мелкие узлы уходят готовыми, крупные — плоским пакетом с чертежом кондуктора.',
+  tb:'Допуски', t0:'Числа, которые мы действительно держим',
+  p1:'Точность реза', v1:'±0,1 мм по контуру до 6 мм; ±0,2 мм выше. Замеряется на первом образце каждой партии, а не на прошлогоднем образце.',
+  p2:'Угол гиба', v2:'±0,5° с замером первого гиба. Всё, что жёстче, — предмет разговора, и обычно ответ это кондуктор, а не обещание.',
+  p3:'Кромка', v3:'Азот на нержавейке и алюминии — кромка красится без зачистки. Кислород на толстой чёрной стали, и мы пишем об этом в расчёте.',
+  p4:'Материалы', v4:'Ст3, 09Г2С, AISI 304 и 430, АМг3, латунь под заказ. Первые четыре лежат на стеллаже, остальное добавляет четыре дня.',
+  p5:'Минимальный заказ', v5:'Его нет. Одна деталь — нормальный заказ, и первый образец у неё замеряется так же, как у четырёхсот.',
+  p6:'От чего отказываемся', v6:'Оцинковка, всё крашеное и чертежи без указанного материала. Первые два травят станок, третий травит график.',
+  qb:'Условия', q0:'Три дня — или следующий заказ за наш счёт',
+  q1:'Мы срываем срок примерно дважды в год и не спорим об этом: скидка появляется в следующем счёте без вашей просьбы. Первый заказ по предоплате, дальше тридцать дней.',
+  q2:'Загрузить DXF',
+  fa:'Контрактная лазерная резка, гибка и сварка. Одно здание в Туле, с 2019 года.',
+  fh1:'Заказ', fl1:'Загрузить файл', fl2:'Материалы', fl3:'Сроки',
+  fh2:'Цех', fl4:'Станки', fl5:'Допуски', fl6:'Приехать',
+  fh3:'Связь', fl7:'Написать нам', fl8:'Реквизиты', fl9:'Вакансии',
+  fn:'Тула · первый образец замеряется в каждой партии'
+};
+var EN = {};
+document.querySelectorAll('[data-i18n]').forEach(function (el) { EN[el.dataset.i18n] = el.innerHTML; });
+function setLang(l) {
+  var dict = l === 'ru' ? RU : EN;
+  document.querySelectorAll('[data-i18n]').forEach(function (el) {
+    var v = dict[el.dataset.i18n];
+    if (v !== undefined) el.innerHTML = v;
+  });
+  document.documentElement.lang = l;
+  document.documentElement.dataset.lang = l;
+  document.querySelectorAll('.lang button').forEach(function (b) {
+    b.setAttribute('aria-pressed', b.dataset.set === l ? 'true' : 'false');
+  });
+}
+document.querySelectorAll('.lang button').forEach(function (b) {
+  b.addEventListener('click', function () { setLang(b.dataset.set); });
+});
+</script>
+</body>
+</html>

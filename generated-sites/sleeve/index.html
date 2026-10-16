@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>Sleeve — one album, both sides, every night</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500&family=Unbounded:wght@700&display=swap" rel="stylesheet">
+<style>
+/* ─────────────────────────────────────────────────────────────
+   Дизайн-система: Symbol Audio (refero 3b742f76) — tokens.css дословно
+   ───────────────────────────────────────────────────────────── */
+:root {
+  /* Colors */
+  --color-evergreen-gallery: #1c3c27;
+  --color-frost-white: #fffffd;
+  --color-pewter-mist: #dfe2e5;
+  --color-onyx: #000000;
+  --color-bone: #fffcda;
+  --color-ink-shadow: #0e1e14;
+  --color-marquee-cobalt: #447cf0;
+  --color-ember-lacquer: #c72a00;
+
+  /* Typography — Font Families */
+  --font-chalet-londonsixty: 'Chalet-LondonSixty', ui-sans-serif, system-ui, sans-serif;
+  --font-supremell-bold: 'SupremeLL-Bold', ui-sans-serif, system-ui, sans-serif;
+
+  /* Typography — Scale */
+  --text-caption: 11px;      --leading-caption: 1.33;
+  --text-body: 15px;         --leading-body: 1.5;
+  --text-subheading: 20px;   --leading-subheading: 1.33;
+  --text-heading-sm: 34px;   --leading-heading-sm: 1.25;  --tracking-heading-sm: -0.68px;
+  --text-heading: 52px;      --leading-heading: 1.13;     --tracking-heading: -1.04px;
+  --text-display: 80px;      --leading-display: 1;        --tracking-display: -1.6px;
+
+  /* Typography — Weights */
+  --font-weight-regular: 400;
+
+  /* Spacing */
+  --spacing-4: 4px; --spacing-8: 8px; --spacing-16: 16px; --spacing-20: 20px;
+  --spacing-40: 40px; --spacing-100: 100px; --spacing-200: 200px;
+
+  /* Layout */
+  --page-max-width: 1280px; --section-gap: 40px; --card-padding: 20px; --element-gap: 20px;
+
+  /* Border Radius */
+  --radius-md: 6px; --radius-full: 9999px;
+  --radius-tags: 9999px; --radius-cards: 0px; --radius-badges: 9999px; --radius-buttons: 9999px;
+
+  /* Surfaces */
+  --surface-evergreen-canvas: #1c3c27;
+  --surface-frost-card: #fffffd;
+  --surface-bone-alternate: #fffcda;
+}
+
+/* Подстановки шрифтов: Chalet и SupremeLL недоступны. Взяты геометрические
+   гарнитуры того же среднего века с кириллицей — Jost на весь текст,
+   Unbounded только на дисплейные моменты, как SupremeLL в системе. */
+:root {
+  --font-chalet-londonsixty: 'Jost', 'Chalet-LondonSixty', sans-serif;
+  --font-supremell-bold: 'Unbounded', 'SupremeLL-Bold', sans-serif;
+  --hero-wordmark: 330px; /* дисплейный знак уходит за оба края, как на скриншоте */
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--surface-evergreen-canvas);
+  color: var(--color-pewter-mist);
+  font-family: var(--font-chalet-londonsixty);
+  font-size: var(--text-body); line-height: var(--leading-body);
+  font-weight: var(--font-weight-regular);
+  padding-bottom: 34px; /* место под бегущую строку */
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, p { margin: 0; font-weight: var(--font-weight-regular); }
+a { color: inherit; text-decoration: none; }
+.wrap { max-width: var(--page-max-width); margin: 0 auto; padding-left: var(--spacing-20); padding-right: var(--spacing-20); }
+.disp { font-family: var(--font-supremell-bold); }
+
+/* ── Навигация ─────────────────────────────────────────────────────── */
+.nav { position: absolute; top: 0; left: 0; right: 0; z-index: 10; display: flex; align-items: center; gap: var(--spacing-20); padding: var(--spacing-20) var(--spacing-20); }
+.nav .mark { font-family: var(--font-supremell-bold); font-size: 14px; color: var(--color-frost-white); }
+.nav .mid { flex: 1; display: flex; justify-content: center; gap: var(--spacing-40); }
+.nav a.l { font-size: var(--text-body); color: var(--color-pewter-mist); }
+.nav a.l:hover { text-decoration: underline; }
+.lang { display: flex; gap: var(--spacing-8); font-size: var(--text-body); }
+.lang button { background: none; border: 0; padding: 0; cursor: pointer; font-family: inherit; font-size: var(--text-body); color: rgba(223,226,229,.5); }
+.lang button[aria-pressed="true"] { color: var(--color-frost-white); }
+
+/* ── Герой ─────────────────────────────────────────────────────────── */
+.hero { position: relative; overflow: hidden; }
+.hero .panes { display: grid; grid-template-columns: 1fr 1fr; }
+.hero .panes svg { display: block; width: 100%; height: auto; }
+.hero .word {
+  position: absolute; left: -20%; right: -20%; top: 30px;
+  font-family: var(--font-supremell-bold);
+  font-size: var(--hero-wordmark); line-height: var(--leading-display); letter-spacing: var(--tracking-display);
+  color: var(--color-ember-lacquer);
+  text-align: center; white-space: nowrap; pointer-events: none;
+}
+
+/* ── Секции ────────────────────────────────────────────────────────── */
+section { padding: var(--spacing-100) 0 0; }
+h2 { font-family: var(--font-supremell-bold); font-size: var(--text-heading); line-height: var(--leading-heading); letter-spacing: var(--tracking-heading); color: var(--color-frost-white); }
+h2.sm { font-size: var(--text-heading-sm); line-height: var(--leading-heading-sm); letter-spacing: var(--tracking-heading-sm); }
+.lede { margin-top: var(--spacing-20); max-width: 620px; font-size: var(--text-subheading); line-height: var(--leading-subheading); }
+
+/* Карточка-плакат */
+.tonight { display: grid; grid-template-columns: 460px 1fr; gap: var(--spacing-40); margin-top: var(--spacing-40); align-items: start; }
+.card { background: var(--surface-frost-card); border: 1px solid var(--color-pewter-mist); border-radius: var(--radius-cards); padding: var(--card-padding); color: var(--color-onyx); }
+.card svg { display: block; width: 100%; height: auto; }
+.badge {
+  display: inline-block; border: 1px solid var(--color-evergreen-gallery); border-radius: var(--radius-badges);
+  padding: 6px 14px; font-size: var(--text-caption); color: var(--color-evergreen-gallery); line-height: var(--leading-caption);
+}
+.card .nm { margin-top: var(--spacing-16); font-size: var(--text-body); color: var(--color-onyx); }
+.card .pr { margin-top: var(--spacing-4); font-size: var(--text-body); color: var(--color-onyx); }
+.btn-out {
+  display: inline-block; border: 1px solid var(--color-evergreen-gallery); border-radius: var(--radius-buttons);
+  padding: 12px var(--spacing-20); background: none; color: var(--color-evergreen-gallery);
+  font-family: inherit; font-size: var(--text-body); cursor: pointer; margin-top: var(--spacing-16);
+}
+.btn-out:hover { background: var(--color-evergreen-gallery); color: var(--color-frost-white); }
+
+.meta { margin-top: var(--spacing-20); }
+.meta .r { display: grid; grid-template-columns: 176px 1fr; gap: var(--spacing-20); padding: var(--spacing-8) 0; border-bottom: 1px solid rgba(223,226,229,.2); font-size: var(--text-body); }
+.meta .r span:first-child { color: rgba(223,226,229,.6); }
+
+/* Сетка вечеров */
+.grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--spacing-20); margin-top: var(--spacing-40); }
+
+/* Костяная полоса */
+.bone { background: var(--surface-bone-alternate); color: var(--color-onyx); margin-top: var(--spacing-100); padding: var(--spacing-100) 0; }
+.bone h2 { color: var(--color-onyx); }
+.bone .lede { color: var(--color-ink-shadow); }
+.bone .cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-40); margin-top: var(--spacing-40); }
+.bone .col h3 { font-family: var(--font-supremell-bold); font-size: var(--text-subheading); line-height: var(--leading-subheading); }
+.bone .col p { margin-top: var(--spacing-8); font-size: var(--text-body); }
+
+/* Аппаратура */
+.kit { margin-top: var(--spacing-40); border-top: 1px solid rgba(223,226,229,.2); }
+.kit .r { display: grid; grid-template-columns: 220px 1fr 156px; gap: var(--spacing-20); padding: var(--spacing-16) 0; border-bottom: 1px solid rgba(223,226,229,.2); }
+.kit .n { color: var(--color-frost-white); font-size: var(--text-subheading); line-height: var(--leading-subheading); }
+.kit .d { font-size: var(--text-body); color: rgba(223,226,229,.75); }
+.kit .y { font-size: var(--text-body); color: rgba(223,226,229,.6); text-align: right; }
+
+footer { margin-top: var(--spacing-100); padding: var(--spacing-40) 0 var(--spacing-100); border-top: 1px solid rgba(223,226,229,.2); }
+.foot { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: var(--spacing-20); font-size: var(--text-body); }
+.foot .h { color: rgba(223,226,229,.6); }
+.foot a, .foot span.i { display: block; margin-top: var(--spacing-8); }
+.foot .big { font-family: var(--font-supremell-bold); font-size: var(--text-heading-sm); letter-spacing: var(--tracking-heading-sm); color: var(--color-frost-white); }
+
+/* Бегущая строка */
+.marquee {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 30;
+  background: var(--surface-evergreen-canvas); border-top: 1px solid rgba(223,226,229,.2);
+  overflow: hidden; white-space: nowrap; padding: var(--spacing-8) 0;
+}
+.marquee .run { display: inline-block; animation: run 38s linear infinite; font-size: 13px; color: var(--color-pewter-mist); }
+.marquee u { text-decoration: underline; }
+@keyframes run { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <nav class="nav">
+    <span class="mark">Sleeve</span>
+    <div class="mid">
+      <a class="l" href="#tonight" data-i18n="n1">Tonight</a>
+      <a class="l" href="#week" data-i18n="n2">This week</a>
+      <a class="l" href="#room" data-i18n="n3">The room</a>
+      <a class="l" href="#kit" data-i18n="n4">The system</a>
+    </div>
+    <div class="lang">
+      <button data-set="en" aria-pressed="true">En</button>
+      <button data-set="ru" aria-pressed="false">Ru</button>
+    </div>
+    <a class="l" href="#tonight" data-i18n="n5">Book a seat</a>
+  </nav>
+
+  <div class="panes" aria-hidden="true">
+    <!-- «фотографий» нет: комната и вертушка нарисованы в палитре системы -->
+    <svg viewBox="0 0 720 620">
+      <rect width="720" height="620" fill="#0e1e14"/>
+      <rect x="0" y="0" width="720" height="380" fill="#1c3c27"/>
+      <g stroke="#dfe2e5" stroke-width="2" fill="none" opacity=".55">
+        <path d="M0 380h720M60 0v380M180 0v380M300 0v380M420 0v380M540 0v380M660 0v380"/>
+      </g>
+      <!-- кресло -->
+      <path d="M180 560v-90c0-60 40-96 100-96h60c60 0 100 36 100 96v90z" fill="#fffcda"/>
+      <path d="M180 500h260v60H180z" fill="#dfe2e5"/>
+      <path d="M200 560v40M420 560v40" stroke="#0e1e14" stroke-width="8"/>
+      <!-- колонка -->
+      <rect x="520" y="300" width="140" height="290" fill="#fffcda"/>
+      <circle cx="590" cy="380" r="42" fill="#1c3c27"/><circle cx="590" cy="380" r="16" fill="#0e1e14"/>
+      <circle cx="590" cy="500" r="24" fill="#1c3c27"/>
+      <!-- лампа -->
+      <path d="M70 340l60-60 60 60z" fill="#c72a00"/><path d="M130 340v250" stroke="#dfe2e5" stroke-width="4"/>
+      <ellipse cx="130" cy="592" rx="46" ry="10" fill="#dfe2e5"/>
+    </svg>
+    <svg viewBox="0 0 720 620">
+      <rect width="720" height="620" fill="#1c3c27"/>
+      <rect x="40" y="40" width="640" height="540" fill="#0e1e14"/>
+      <!-- пластинка -->
+      <circle cx="330" cy="310" r="220" fill="#111"/>
+      <g stroke="#1c3c27" stroke-width="2" fill="none" opacity=".8">
+        <circle cx="330" cy="310" r="200"/><circle cx="330" cy="310" r="176"/><circle cx="330" cy="310" r="152"/>
+        <circle cx="330" cy="310" r="128"/><circle cx="330" cy="310" r="104"/>
+      </g>
+      <circle cx="330" cy="310" r="78" fill="#c72a00"/>
+      <circle cx="330" cy="310" r="8" fill="#0e1e14"/>
+      <!-- тонарм -->
+      <g stroke="#dfe2e5" stroke-width="10" stroke-linecap="round" fill="none">
+        <path d="M628 132L430 340"/>
+      </g>
+      <circle cx="632" cy="126" r="26" fill="#dfe2e5"/>
+      <path d="M418 330l26 26-18 18-26-26z" fill="#fffcda"/>
+      <!-- индикатор -->
+      <rect x="70" y="520" width="180" height="34" fill="#1c3c27"/>
+      <rect x="78" y="528" width="120" height="18" fill="#447cf0"/>
+    </svg>
+  </div>
+  <div class="word">Sleeve</div>
+</div>
+
+<section class="wrap" id="tonight">
+  <h2 data-i18n="t_h">Tonight…</h2>
+  <div class="tonight">
+    <div class="card">
+      <span class="badge" data-i18n="t_b">Side A at 20:45</span>
+      <svg viewBox="0 0 400 400" style="margin-top:20px" aria-hidden="true">
+        <rect width="400" height="400" fill="#1c3c27"/>
+        <circle cx="200" cy="176" r="112" fill="#c72a00"/>
+        <path d="M88 176a112 112 0 0 1 224 0z" fill="#fffcda"/>
+        <rect x="60" y="312" width="280" height="10" fill="#fffcda"/>
+        <rect x="60" y="336" width="180" height="10" fill="#dfe2e5"/>
+      </svg>
+      <div class="nm" data-i18n="t_n">Alice Coltrane — Journey in Satchidananda</div>
+      <div class="pr" data-i18n="t_p">from £9 a seat · 1971 Impulse! pressing</div>
+      <button class="btn-out" data-i18n="t_c">Book a seat</button>
+    </div>
+    <div>
+      <p class="lede" data-i18n="t_l">One record, both sides, in order, from the record. Doors at 20:15, needle down at 20:45, and between the first and the last groove the room does not talk.</p>
+      <div class="meta">
+        <div class="r"><span data-i18n="m1">Running time</span><span>36 min · 4 tracks</span></div>
+        <div class="r"><span data-i18n="m2">Between sides</span><span data-i18n="m2v">seven minutes, bar open</span></div>
+        <div class="r"><span data-i18n="m3">Seats</span><span data-i18n="m3v">28, all facing the speakers</span></div>
+        <div class="r"><span data-i18n="m4">Introduced by</span><span data-i18n="m4v">whoever chose it, in under two minutes</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="wrap" id="week">
+  <h2 class="sm" data-i18n="w_h">This week…</h2>
+  <div class="grid4">
+    <div class="card">
+      <svg viewBox="0 0 400 400" aria-hidden="true">
+        <rect width="400" height="400" fill="#fffcda"/>
+        <rect x="40" y="40" width="320" height="320" fill="#1c3c27"/>
+        <path d="M40 360L200 40l160 320z" fill="#c72a00"/>
+        <circle cx="200" cy="264" r="52" fill="#fffcda"/>
+      </svg>
+      <div class="nm" data-i18n="w1n">Wed · Talk Talk — Spirit of Eden</div>
+      <div class="pr" data-i18n="w1p">from £9 · 1988</div>
+    </div>
+    <div class="card">
+      <svg viewBox="0 0 400 400" aria-hidden="true">
+        <rect width="400" height="400" fill="#447cf0"/>
+        <rect x="0" y="180" width="400" height="40" fill="#fffffd"/>
+        <rect x="0" y="240" width="400" height="24" fill="#fffcda"/>
+        <circle cx="300" cy="110" r="64" fill="#1c3c27"/>
+        <rect x="40" y="300" width="200" height="14" fill="#0e1e14"/>
+      </svg>
+      <div class="nm" data-i18n="w2n">Thu · Sade — Love Deluxe</div>
+      <div class="pr" data-i18n="w2p">from £9 · 1992</div>
+    </div>
+    <div class="card">
+      <svg viewBox="0 0 400 400" aria-hidden="true">
+        <rect width="400" height="400" fill="#0e1e14"/>
+        <g fill="#fffcda"><rect x="60" y="60" width="80" height="280"/><rect x="170" y="120" width="80" height="220"/><rect x="280" y="180" width="60" height="160"/></g>
+        <rect x="60" y="340" width="280" height="12" fill="#c72a00"/>
+      </svg>
+      <div class="nm" data-i18n="w3n">Fri · Steve Reich — Music for 18 Musicians</div>
+      <div class="pr" data-i18n="w3p">from £11 · 1978</div>
+    </div>
+    <div class="card">
+      <svg viewBox="0 0 400 400" aria-hidden="true">
+        <rect width="400" height="400" fill="#c72a00"/>
+        <circle cx="200" cy="200" r="140" fill="none" stroke="#fffcda" stroke-width="14"/>
+        <circle cx="200" cy="200" r="90" fill="none" stroke="#1c3c27" stroke-width="14"/>
+        <circle cx="200" cy="200" r="34" fill="#fffcda"/>
+      </svg>
+      <div class="nm" data-i18n="w4n">Sat · Fela Kuti — Zombie</div>
+      <div class="pr" data-i18n="w4p">from £9 · 1976</div>
+    </div>
+  </div>
+</section>
+
+<div class="bone" id="room">
+  <div class="wrap">
+    <h2 data-i18n="r_h">The room…</h2>
+    <p class="lede" data-i18n="r_l">A single room above a bicycle shop with twenty-eight chairs, one pair of horns and no screen of any kind. It seats fewer people than the licence allows because the back row is where the sound stops being good.</p>
+    <div class="cols">
+      <div class="col"><h3 data-i18n="r1">No talking on a side</h3><p data-i18n="r1d">Between sides, in the corridor and at the bar, talk all you like. While the needle is down the only permitted sounds are the record and the room.</p></div>
+      <div class="col"><h3 data-i18n="r2">No phones out</h3><p data-i18n="r2d">Not a rule about photography, a rule about light. A screen at the back of a dark room reaches everyone in front of it.</p></div>
+      <div class="col"><h3 data-i18n="r3">Come for the whole thing</h3><p data-i18n="r3d">Doors close when side A starts and open again at the break. If you are late, the bar has your seat number and a stool.</p></div>
+    </div>
+    <button class="btn-out" data-i18n="r_c">Book a seat</button>
+  </div>
+</div>
+
+<section class="wrap" id="kit">
+  <h2 class="sm" data-i18n="k_h">The system…</h2>
+  <p class="lede" data-i18n="k_l">Bought second hand over nine years, repaired locally, listed here because people ask before they arrive.</p>
+  <div class="kit">
+    <div class="r"><span class="n">Garrard 401</span><span class="d" data-i18n="k1">Idler drive, rebuilt bearing, plinth in oiled walnut made two streets away.</span><span class="y">1968</span></div>
+    <div class="r"><span class="n">SME 3009 / Denon DL-103</span><span class="d" data-i18n="k2">Arm and cartridge. Stylus replaced every 900 hours, log kept behind the bar.</span><span class="y">1972 · 1976</span></div>
+    <div class="r"><span class="n">Quad II</span><span class="d" data-i18n="k3">Valve monoblocks, recapped in 2021. They run warm and we let them.</span><span class="y">1959</span></div>
+    <div class="r"><span class="n">Altec 604E in Onken bass bins</span><span class="d" data-i18n="k4">Coaxial drivers in cabinets built for the room, not the other way round.</span><span class="y">1970</span></div>
+    <div class="r"><span class="n" data-i18n="k5n">The room itself</span><span class="d" data-i18n="k5">Plaster, cork, a wool curtain and eleven bookshelves that are there for the reflections, not the books.</span><span class="y">1904</span></div>
+  </div>
+</section>
+
+<footer class="wrap">
+  <div class="foot">
+    <div>
+      <div class="big">Sleeve</div>
+      <span class="i" data-i18n="fa">Above the bicycle shop, 14 Kirk Wynd</span>
+      <span class="i" data-i18n="fb">Wednesday to Saturday · one record a night</span>
+    </div>
+    <div>
+      <div class="h" data-i18n="fh1">Nights</div>
+      <a href="#tonight" data-i18n="fl1">Tonight</a>
+      <a href="#week" data-i18n="fl2">This week</a>
+      <a href="#week" data-i18n="fl3">Past records</a>
+    </div>
+    <div>
+      <div class="h" data-i18n="fh2">The room</div>
+      <a href="#room" data-i18n="fl4">Rules</a>
+      <a href="#kit" data-i18n="fl5">The system</a>
+      <a href="#room" data-i18n="fl6">Suggest a record</a>
+    </div>
+    <div>
+      <div class="h" data-i18n="fh3">Contact</div>
+      <a href="#tonight" data-i18n="fl7">door@sleeve.club</a>
+      <span class="i" data-i18n="fl8">Seats released Sunday, 18:00</span>
+    </div>
+  </div>
+</footer>
+
+<div class="marquee"><span class="run" id="run"></span></div>
+
+<script>
+/* ── Бегущая строка ── */
+function marquee(l) {
+  var t = l === 'ru'
+    ? 'Сегодня: Alice Coltrane — Journey in Satchidananda · игла в 20:45 · <u>Забронировать место</u> · '
+    : 'Tonight: Alice Coltrane — Journey in Satchidananda · needle down 20:45 · <u>Book a seat</u> · ';
+  document.getElementById('run').innerHTML = new Array(9).join(t);
+}
+marquee('en');
+
+/* ── RU/EN. Английский — исходный, русский — перевод под него ── */
+var RU = {
+  n1:'Сегодня', n2:'Неделя', n3:'Зал', n4:'Аппаратура', n5:'Забронировать',
+  t_h:'Сегодня…', t_b:'Сторона A в 20:45',
+  t_n:'Alice Coltrane — Journey in Satchidananda',
+  t_p:'от £9 за место · прессинг Impulse! 1971 года',
+  t_c:'Забронировать место',
+  t_l:'Одна пластинка, обе стороны, по порядку, с винила. Двери в 20:15, игла опускается в 20:45, и между первой и последней канавкой зал молчит.',
+  m1:'Хронометраж', m2:'Между сторонами', m2v:'семь минут, бар работает',
+  m3:'Мест', m3v:'28, все лицом к колонкам',
+  m4:'Представляет', m4v:'тот, кто выбрал пластинку, — меньше чем за две минуты',
+  w_h:'На этой неделе…',
+  w1n:'Ср · Talk Talk — Spirit of Eden', w1p:'от £9 · 1988',
+  w2n:'Чт · Sade — Love Deluxe', w2p:'от £9 · 1992',
+  w3n:'Пт · Steve Reich — Music for 18 Musicians', w3p:'от £11 · 1978',
+  w4n:'Сб · Fela Kuti — Zombie', w4p:'от £9 · 1976',
+  r_h:'Зал…',
+  r_l:'Одна комната над велосипедной мастерской: двадцать восемь стульев, одна пара рупоров и ни одного экрана. Мест меньше, чем разрешает лицензия, потому что задний ряд — это место, где звук перестаёт быть хорошим.',
+  r1:'Во время стороны не разговаривают', r1d:'Между сторонами, в коридоре и у бара — сколько угодно. Пока игла опущена, звучать имеют право только пластинка и зал.',
+  r2:'Телефоны убраны', r2d:'Это правило не про съёмку, а про свет. Экран в глубине тёмного зала достаёт всех, кто сидит впереди.',
+  r3:'Приходите на всё целиком', r3d:'Двери закрываются, когда начинается сторона A, и открываются в перерыве. Опоздали — у бара есть ваш номер места и табурет.',
+  r_c:'Забронировать место',
+  k_h:'Аппаратура…',
+  k_l:'Куплена подержанной за девять лет, чинится здесь же и перечислена тут, потому что об этом спрашивают ещё до прихода.',
+  k1:'Пассик-идлер, перебран подшипник, корпус из промасленного ореха сделан в двух улицах отсюда.',
+  k2:'Тонарм и головка. Игла меняется каждые 900 часов, журнал лежит за баром.',
+  k3:'Ламповые моноблоки, конденсаторы заменены в 2021-м. Они греются, и мы им это позволяем.',
+  k4:'Коаксиальные динамики в корпусах, построенных под этот зал, а не наоборот.',
+  k5n:'Сам зал', k5:'Штукатурка, пробка, шерстяная штора и одиннадцать книжных полок, которые стоят здесь ради отражений, а не ради книг.',
+  fa:'Над велосипедной мастерской, Кирк-Уинд, 14', fb:'Со среды по субботу · одна пластинка за вечер',
+  fh1:'Вечера', fl1:'Сегодня', fl2:'Эта неделя', fl3:'Прошлые пластинки',
+  fh2:'Зал', fl4:'Правила', fl5:'Аппаратура', fl6:'Предложить пластинку',
+  fh3:'Связь', fl7:'door@sleeve.club', fl8:'Места открываются в воскресенье, 18:00'
+};
+var EN = {};
+document.querySelectorAll('[data-i18n]').forEach(function (el) { EN[el.dataset.i18n] = el.innerHTML; });
+
+function setLang(l) {
+  var dict = l === 'ru' ? RU : EN;
+  document.querySelectorAll('[data-i18n]').forEach(function (el) {
+    var v = dict[el.dataset.i18n];
+    if (v !== undefined) el.innerHTML = v;
+  });
+  document.documentElement.lang = l;
+  document.documentElement.dataset.lang = l;
+  document.querySelectorAll('.lang button').forEach(function (b) {
+    b.setAttribute('aria-pressed', b.dataset.set === l ? 'true' : 'false');
+  });
+  marquee(l);
+}
+document.querySelectorAll('.lang button').forEach(function (b) {
+  b.addEventListener('click', function () { setLang(b.dataset.set); });
+});
+</script>
+</body>
+</html>

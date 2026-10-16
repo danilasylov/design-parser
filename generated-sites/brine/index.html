@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>Brine — pickles, kraut and the liquid they live in</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@1000&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* ─────────────────────────────────────────────────────────────
+   Дизайн-система: Yellowbird® (refero 22cc86bc) — tokens.css дословно
+   ───────────────────────────────────────────────────────────── */
+:root {
+  /* Colors */
+  --color-sunglow: #ffe845;
+  --color-sauce-bottle-black: #000000;
+  --color-pure-white: #ffffff;
+  --color-buttermilk: #fbfaf2;
+  --color-cool-link-blue: #007aff;
+
+  /* Typography — Font Families */
+  --font-gooper: 'Gooper', ui-serif, Georgia, serif;
+  --font-abc-monument-grotesk: 'ABC Monument Grotesk', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-pitch-sans: 'Pitch Sans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* Typography — Scale */
+  --text-caption: 14px;
+  --leading-caption: 1.2;
+  --tracking-caption: -0.56px;
+  --text-body-sm: 16px;
+  --leading-body-sm: 1.3;
+  --tracking-body-sm: -0.18px;
+  --text-body: 18px;
+  --leading-body: 1.3;
+  --tracking-body-2: -0.18px;
+  --text-subheading: 27px;
+  --leading-subheading: 1.2;
+  --tracking-subheading: -0.57px;
+  --text-heading: 41px;
+  --leading-heading: 1.1;
+  --tracking-heading: -0.45px;
+  --text-heading-lg: 61px;
+  --leading-heading-lg: 0.9;
+  --tracking-heading-lg: -0.67px;
+  --text-display: 91px;
+  --leading-display: 1.05;
+  --tracking-display: -2.55px;
+
+  /* Typography — Weights */
+  --font-weight-regular: 400;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Spacing */
+  --spacing-4: 4px;
+  --spacing-8: 8px;
+  --spacing-16: 16px;
+  --spacing-20: 20px;
+  --spacing-24: 24px;
+  --spacing-32: 32px;
+  --spacing-40: 40px;
+  --spacing-60: 60px;
+  --spacing-80: 80px;
+
+  /* Layout */
+  --page-max-width: 1280px;
+  --section-gap: 80px;
+  --card-padding: 24px;
+  --element-gap: 20px;
+
+  /* Border Radius */
+  --radius-tags: 6px;
+  --radius-cards: 30px;
+  --radius-images: 30px;
+  --radius-buttons: 14px;
+  --radius-stickers: 36px;
+
+  /* Surfaces */
+  --surface-sunglow-canvas: #ffe845;
+  --surface-cream-card: #fbfaf2;
+  --surface-white-card: #ffffff;
+  --surface-black-button: #000000;
+}
+
+/* Мои подстановки: Gooper закрыт, а все три замены из DESIGN.md (Bagel Fat One,
+   Fraunces 900, Bowlby One) не знают кириллицы — взят Nunito 1000, самый пухлый
+   скруглённый гротеск с кириллицей. Monument Grotesk и Pitch Sans заменены на Inter
+   (первая замена в обоих списках): 400 везде, 600 только на бейджах, как в системе. */
+:root {
+  --font-gooper: 'Nunito', ui-sans-serif, system-ui, sans-serif;
+  --font-abc-monument-grotesk: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-pitch-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --text-hero-sub: 45px;      /* «hero subhead 45px/1.0» из описания компонента */
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--surface-sunglow-canvas);
+  color: var(--color-sauce-bottle-black);
+  font-family: var(--font-abc-monument-grotesk);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--text-body); line-height: var(--leading-body); letter-spacing: var(--tracking-body-2);
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, p, ul, li { margin: 0; padding: 0; list-style: none; font-weight: var(--font-weight-regular); }
+a { color: inherit; text-decoration: none; }
+.rail { max-width: var(--page-max-width); margin: 0 auto; padding: 0 var(--spacing-40); }
+.cap { font-size: var(--text-caption); line-height: var(--leading-caption); letter-spacing: var(--tracking-caption); }
+.up { text-transform: uppercase; letter-spacing: -0.011em; }
+.num { font-variant-numeric: tabular-nums; }
+
+/* ── Полоса объявления и навигация ─────────────────────────────────── */
+.announce { background: var(--color-sauce-bottle-black); color: var(--color-pure-white); text-align: center; padding: var(--spacing-8) 0; }
+.nav { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: var(--spacing-20) var(--spacing-40); }
+.nav .l, .nav .r { display: flex; gap: var(--spacing-24); align-items: center; }
+.nav .r { justify-content: flex-end; }
+.nav a, .nav button { font-family: inherit; font-size: var(--text-body); text-transform: uppercase; letter-spacing: -0.011em; background: none; border: 0; padding: 0; cursor: pointer; color: var(--color-sauce-bottle-black); }
+.nav button[aria-pressed="false"] { opacity: .45; }
+
+/* ── Герой ─────────────────────────────────────────────────────────── */
+.hero { text-align: center; padding: var(--spacing-40) 0 var(--spacing-80); }
+.hero .mark { position: relative; display: inline-block; }
+.hero .mark svg { position: absolute; left: 50%; top: -50px; transform: translateX(-50%); width: 104px; height: auto; }
+.hero h1 {
+  font-family: var(--font-gooper); font-weight: 1000;
+  font-size: var(--text-display); line-height: var(--leading-display); letter-spacing: var(--tracking-display);
+}
+.hero .sub { margin: var(--spacing-32) auto 0; max-width: 900px; font-size: var(--text-hero-sub); line-height: 1; letter-spacing: -0.014em; }
+
+/* ── Товарная сетка ────────────────────────────────────────────────── */
+section { padding-top: var(--section-gap); }
+.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-32); }
+.pcard {
+  position: relative; background: var(--surface-white-card);
+  border: 2px solid var(--color-sauce-bottle-black); border-radius: var(--radius-cards);
+  padding: var(--spacing-40) var(--card-padding) var(--card-padding); text-align: center;
+}
+.pcard.cream { background: var(--surface-cream-card); }
+.pcard .badge {
+  position: absolute; left: 50%; top: -19px; transform: translateX(-50%);
+  background: var(--color-sunglow); border: 1.5px solid var(--color-sauce-bottle-black); border-radius: var(--radius-tags);
+  padding: var(--spacing-8) var(--spacing-16);
+  font-family: var(--font-pitch-sans); font-weight: var(--font-weight-semibold); font-size: var(--text-body-sm);
+  text-transform: uppercase; letter-spacing: -0.012em; white-space: nowrap;
+}
+.pcard .jar { height: 230px; display: grid; place-items: center; }
+.pcard .jar svg { height: 100%; width: auto; }
+.pcard .nm { margin-top: var(--spacing-20); font-size: var(--text-subheading); line-height: var(--leading-subheading); letter-spacing: var(--tracking-subheading); }
+.pcard .de { margin-top: var(--spacing-8); font-size: var(--text-body-sm); }
+.pcard .pr { margin-top: var(--spacing-16); font-size: var(--text-body); }
+
+.btn {
+  display: inline-block; background: var(--surface-black-button); color: var(--color-pure-white);
+  border: 0; border-radius: var(--radius-buttons); padding: 15px 18px;
+  font-family: inherit; font-size: var(--text-body); text-transform: uppercase; letter-spacing: -0.011em; cursor: pointer;
+}
+.btn.ghost { background: transparent; color: var(--color-cool-link-blue); border: 1.5px solid var(--color-cool-link-blue); border-radius: 10px; padding: 10px 18px; text-transform: none; }
+.center { text-align: center; margin-top: var(--spacing-40); display: flex; gap: var(--spacing-16); justify-content: center; align-items: center; }
+
+/* ── Стикер-звезда: ровно один на экран ────────────────────────────── */
+.sticker {
+  display: inline-grid; place-items: center; width: 190px; height: 190px;
+  background: var(--color-sunglow); border: 2px solid var(--color-sauce-bottle-black); border-radius: var(--radius-stickers);
+  transform: rotate(-5deg); text-align: center; padding: var(--spacing-16);
+  font-size: var(--text-body); text-transform: uppercase; letter-spacing: -0.011em; line-height: 1.15;
+}
+
+/* ── Кремовая карточка с цифрами ───────────────────────────────────── */
+.creamcard { background: var(--surface-cream-card); border: 2px solid var(--color-sauce-bottle-black); border-radius: var(--radius-cards); padding: var(--spacing-40); }
+.facts { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--spacing-32); }
+.facts .f .n { font-size: var(--text-heading); line-height: var(--leading-heading); letter-spacing: var(--tracking-heading); }
+.facts .f .t { margin-top: var(--spacing-8); font-size: var(--text-body-sm); }
+.split { display: grid; grid-template-columns: 1.3fr 1fr; gap: var(--spacing-40); align-items: center; }
+
+/* ── Отзыв ─────────────────────────────────────────────────────────── */
+.quote { text-align: center; padding: var(--section-gap) 0 0; }
+.quote p { font-size: var(--text-hero-sub); line-height: 1.05; letter-spacing: -0.014em; max-width: 1000px; margin: 0 auto; }
+.quote .att { margin-top: var(--spacing-24); font-family: var(--font-pitch-sans); font-size: var(--text-body-sm); text-transform: uppercase; letter-spacing: 0.05em; }
+.quote .arrows { display: flex; justify-content: space-between; margin-top: var(--spacing-24); font-size: var(--text-subheading); }
+
+.rule { height: 1px; background: var(--color-sauce-bottle-black); margin-top: var(--section-gap); }
+footer { padding: var(--spacing-40) 0 var(--spacing-60); display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: var(--spacing-32); }
+footer h4 { font-size: var(--text-body-sm); text-transform: uppercase; letter-spacing: -0.011em; margin-bottom: var(--spacing-16); }
+footer a { display: block; font-size: var(--text-body-sm); line-height: 1.9; }
+</style>
+</head>
+<body>
+
+<svg style="position:absolute;width:0;height:0" aria-hidden="true">
+  <!-- маскот: колючий кочан. Только чёрная линия, без заливки — как птица в системе -->
+  <symbol id="mascot" viewBox="0 0 140 120">
+    <g fill="none" stroke="#000" stroke-width="5" stroke-linejoin="round" stroke-linecap="round">
+      <path d="M70 16c22 0 40 16 40 36s-18 42-40 42-40-22-40-42 18-36 40-36z"/>
+      <path d="M70 16l-8-14 20 6 6-12 6 16 14-6-6 16M30 52l-16-8 12-2-10-12 18 6M110 52l16-8-12-2 10-12-18 6"/>
+      <path d="M56 58c4-6 10-6 14 0M70 58c4-6 10-6 14 0"/>
+      <path d="M58 76c8 8 18 8 26 0"/>
+    </g>
+  </symbol>
+  <symbol id="jar-cuke" viewBox="0 0 200 260">
+    <g fill="none" stroke="#000" stroke-width="5">
+      <rect x="52" y="14" width="96" height="26" rx="6"/>
+      <path d="M60 40h80c14 0 22 16 22 40v144c0 12-8 20-20 20H58c-12 0-20-8-20-20V80c0-24 8-40 22-40z"/>
+      <path d="M74 96c0-10 8-14 14-8s8 30 2 44-16 10-16-4zM104 108c2-10 12-12 16-4s2 32-6 42-16 4-14-8z"/>
+      <path d="M78 168c0-10 10-14 16-6s6 34-2 44-16 6-16-6z"/>
+      <path d="M44 122c8 4 22 6 34 2M120 200c14-2 26-8 38-16"/>
+    </g>
+  </symbol>
+  <symbol id="jar-kraut" viewBox="0 0 200 260">
+    <g fill="none" stroke="#000" stroke-width="5">
+      <rect x="52" y="14" width="96" height="26" rx="6"/>
+      <path d="M60 40h80c14 0 22 16 22 40v144c0 12-8 20-20 20H58c-12 0-20-8-20-20V80c0-24 8-40 22-40z"/>
+      <path d="M52 96c14 10 28-6 42 4s26-6 40 4M52 124c14 10 28-6 42 4s26-6 40 4M52 152c14 10 28-6 42 4s26-6 40 4M52 180c14 10 28-6 42 4s26-6 40 4"/>
+    </g>
+  </symbol>
+  <symbol id="jar-brine" viewBox="0 0 200 260">
+    <g fill="none" stroke="#000" stroke-width="5">
+      <path d="M74 12h52v26l24 30v170c0 12-8 20-20 20H70c-12 0-20-8-20-20V68l24-30z"/>
+      <path d="M74 38h52"/>
+      <path d="M50 120c14 8 26-8 40 0s26-8 40 0s14 6 20 2" stroke-dasharray="0"/>
+      <path d="M66 172h68M66 196h68" stroke-width="4"/>
+      <path d="M84 84h32" stroke-width="4"/>
+    </g>
+  </symbol>
+</svg>
+
+<div class="announce cap" data-i18n="a0">Ships cold, Tuesdays and Fridays · free over 45 €</div>
+
+<nav class="nav">
+  <span class="l">
+    <a href="#shop" data-i18n="n1">Shop</a>
+    <a href="#how" data-i18n="n2">How</a>
+    <a href="#find" data-i18n="n3">Find us</a>
+  </span>
+  <svg style="width:52px;height:44px" viewBox="0 0 140 120" aria-hidden="true"><use href="#mascot"/></svg>
+  <span class="r">
+    <button data-set="en" aria-pressed="true">EN</button>
+    <button data-set="ru" aria-pressed="false">RU</button>
+    <a href="#shop" data-i18n="n4">Cart</a>
+  </span>
+</nav>
+
+<header class="hero rail">
+  <span class="mark">
+    <svg viewBox="0 0 140 120" aria-hidden="true"><use href="#mascot"/></svg>
+    <h1>Brine</h1>
+  </span>
+  <p class="sub" data-i18n="h1">We salt cucumbers, cabbage and one stubborn batch of green tomatoes, and we sell the liquid they lived in — because that is the part people came for anyway.</p>
+</header>
+
+<div class="rail">
+
+  <section id="shop">
+    <div class="grid3">
+      <article class="pcard">
+        <span class="badge" data-i18n="b1">Sour, 21 days</span>
+        <div class="jar"><svg viewBox="0 0 200 260"><use href="#jar-cuke"/></svg></div>
+        <div class="nm" data-i18n="c1">Cucumbers, barrel-sour</div>
+        <div class="de" data-i18n="c1d">3.5 % salt, dill crowns, blackcurrant leaf, no vinegar anywhere near them</div>
+        <div class="pr num">6,40 € · 720 ml</div>
+      </article>
+      <article class="pcard cream">
+        <span class="badge" data-i18n="b2">Small batch</span>
+        <div class="jar"><svg viewBox="0 0 200 260"><use href="#jar-kraut"/></svg></div>
+        <div class="nm" data-i18n="c2">Kraut, shredded fine</div>
+        <div class="de" data-i18n="c2d">2 % salt, carrot, caraway, pressed under a stone for eleven days</div>
+        <div class="pr num">5,80 € · 500 g</div>
+      </article>
+      <article class="pcard">
+        <span class="badge" data-i18n="b3">The liquid</span>
+        <div class="jar"><svg viewBox="0 0 200 260"><use href="#jar-brine"/></svg></div>
+        <div class="nm" data-i18n="c3">Brine, straight</div>
+        <div class="de" data-i18n="c3d">Strained, chilled, nothing added. For soup, for dough, for the morning after</div>
+        <div class="pr num">3,20 € · 500 ml</div>
+      </article>
+    </div>
+    <div class="center">
+      <a class="btn" href="#shop" data-i18n="s0">Shop all nine jars</a>
+      <a class="btn ghost" href="#how" data-i18n="s1">Read how it is made</a>
+    </div>
+  </section>
+
+  <section id="how">
+    <div class="creamcard">
+      <div class="split">
+        <div>
+          <h2 style="font-size:var(--text-heading);line-height:var(--leading-heading);letter-spacing:var(--tracking-heading)" data-i18n="h2">Salt, time, and a stone on top.</h2>
+          <p style="margin-top:var(--spacing-20);max-width:640px" data-i18n="h3">No vinegar, no starter culture, no pasteurising at the end — which is why the jars go out cold and come with a date rather than a shelf life. What ferments in the jar keeps working in your fridge, slowly, and by week six the cucumbers are sour enough to make a soup out of nothing.</p>
+          <div class="facts" style="margin-top:var(--spacing-40)">
+            <div class="f"><div class="n num">3.5 %</div><div class="t" data-i18n="f1">Salt in the cucumber crock</div></div>
+            <div class="f"><div class="n num">21</div><div class="t" data-i18n="f2">Days before the first jar is filled</div></div>
+            <div class="f"><div class="n num">+4 °C</div><div class="t" data-i18n="f3">Cellar, from day three onward</div></div>
+            <div class="f"><div class="n num">0</div><div class="t" data-i18n="f4">Millilitres of vinegar in the building</div></div>
+          </div>
+        </div>
+        <div style="text-align:center">
+          <span class="sticker" data-i18n="st">Brine sold<br>separately.<br>Yes, really</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="quote">
+    <p data-i18n="q1">“I bought the brine for a rassolnik and drank half of it walking to the tram. That is not a complaint.”</p>
+    <div class="att" data-i18n="q2">Kaja M. · Tallinn · third order</div>
+    <div class="arrows"><button style="background:none;border:0;cursor:pointer;font:inherit">‹</button><button style="background:none;border:0;cursor:pointer;font:inherit">›</button></div>
+  </section>
+
+  <div class="rule"></div>
+
+  <footer id="find">
+    <div>
+      <span style="font-family:var(--font-gooper);font-weight:1000;font-size:var(--text-subheading)">Brine</span>
+      <p class="cap" style="margin-top:var(--spacing-16)" data-i18n="fo0">Kalamaja market hall, stall 14 · Tallinn · we take back clean jars for 0,50 €</p>
+    </div>
+    <div>
+      <h4 data-i18n="fh1">Shop</h4>
+      <a href="#shop" data-i18n="fl1">Cucumbers</a>
+      <a href="#shop" data-i18n="fl2">Kraut</a>
+      <a href="#shop" data-i18n="fl3">Brine</a>
+    </div>
+    <div>
+      <h4 data-i18n="fh2">How</h4>
+      <a href="#how" data-i18n="fl4">The crock</a>
+      <a href="#how" data-i18n="fl5">Keeping it</a>
+      <a href="#how" data-i18n="fl6">Jar deposit</a>
+    </div>
+    <div>
+      <h4 data-i18n="fh3">Us</h4>
+      <a href="#find">hello@brine.jar</a>
+      <a href="#find" data-i18n="fl7">Tue &amp; Fri, 09:00—15:00</a>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+/* ── RU/EN. Английский — исходный, русский — перевод под него ── */
+var RU = {
+  a0:'Отгрузка холодной, вторник и пятница · бесплатно от 45 €',
+  n1:'Лавка', n2:'Как делаем', n3:'Где найти', n4:'Корзина',
+  h1:'Мы солим огурцы, капусту и одну упрямую партию зелёных помидоров — и продаём отдельно ту жидкость, в которой они жили, потому что за ней всё равно и приходят.',
+  b1:'Кислые, 21 день', b2:'Малая партия', b3:'Та самая жидкость',
+  c1:'Огурцы бочкового посола',
+  c1d:'3,5 % соли, зонтики укропа, лист чёрной смородины и ни капли уксуса рядом',
+  c2:'Капуста, шинкованная мелко',
+  c2d:'2 % соли, морковь, тмин, одиннадцать дней под камнем',
+  c3:'Рассол, без ничего',
+  c3d:'Процежен, охлаждён, ничего не добавлено. Для супа, для теста, для утра',
+  s0:'Все девять банок', s1:'Как это делается',
+  h2:'Соль, время и камень сверху.',
+  h3:'Ни уксуса, ни закваски, ни пастеризации в конце — поэтому банки уезжают холодными и с датой, а не со сроком годности. То, что бродило в банке, продолжает работать у вас в холодильнике, медленно, и к шестой неделе огурцы кислые настолько, что суп получается из ничего.',
+  f1:'Соли в огуречной кадке', f2:'Дней до первой банки',
+  f3:'Погреб, с третьего дня', f4:'Миллилитров уксуса в здании',
+  st:'Рассол —<br>отдельно.<br>Да, правда',
+  q1:'«Взяла рассол на рассольник и выпила половину по дороге к трамваю. Это не жалоба.»',
+  q2:'Кая М. · Таллин · третий заказ',
+  fo0:'Рынок Каламая, место 14 · Таллин · чистые банки принимаем по 0,50 €',
+  fh1:'Лавка', fl1:'Огурцы', fl2:'Капуста', fl3:'Рассол',
+  fh2:'Как делаем', fl4:'Кадка', fl5:'Как хранить', fl6:'Залог за банку',
+  fh3:'Мы', fl7:'Вт и Пт, 09:00—15:00'
+};
+var EN = {};
+document.querySelectorAll('[data-i18n]').forEach(function (el) { EN[el.dataset.i18n] = el.innerHTML; });
+
+function setLang(l) {
+  var dict = l === 'ru' ? RU : EN;
+  document.querySelectorAll('[data-i18n]').forEach(function (el) {
+    var v = dict[el.dataset.i18n];
+    if (v !== undefined) el.innerHTML = v;
+  });
+  document.documentElement.lang = l;
+  document.documentElement.dataset.lang = l;
+  document.querySelectorAll('[data-set]').forEach(function (b) {
+    b.setAttribute('aria-pressed', b.dataset.set === l ? 'true' : 'false');
+  });
+}
+document.querySelectorAll('[data-set]').forEach(function (b) {
+  b.addEventListener('click', function () { setLang(b.dataset.set); });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+{
+  "name": "vesper-kinetic-studio",
+  "private": true,
+  "scripts": {"build": "node build.mjs"},
+  "devDependencies": {"three": "0.186.1", "esbuild": "0.28.2"}
+}

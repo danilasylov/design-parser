@@ -1,0 +1,3 @@
+/* Original keyframes: Animista, Ana Travas. https://animista.net/play/background/ken-burns/kenburns-top-left */
+.kenburns-top-left{animation:kenburns-top-left 5s ease-out 0s 1 normal both;}
+@keyframes kenburns-top-left{0%{-webkit-transform:scale(1) translate(0,0);transform:scale(1) translate(0,0);-webkit-transform-origin:16% 16%;transform-origin:16% 16%}to{-webkit-transform:scale(1.25) translate(-20px,-15px);transform:scale(1.25) translate(-20px,-15px);-webkit-transform-origin:top left;transform-origin:top left}}

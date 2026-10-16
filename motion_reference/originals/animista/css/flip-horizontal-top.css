@@ -1,0 +1,3 @@
+/* Original keyframes: Animista, Ana Travas. https://animista.net/play/basic/flip/flip-horizontal-top */
+.flip-horizontal-top{animation:flip-horizontal-top 0.4s cubic-bezier(.455,.03,.515,.955) 0s 1 normal both;}
+@keyframes flip-horizontal-top{0%{-webkit-transform:rotateX(0);transform:rotateX(0)}to{-webkit-transform:rotateX(180deg);transform:rotateX(180deg)}}

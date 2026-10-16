@@ -1,0 +1,1 @@
+import React from "react";export default function Link({href,children,prefetch,replace,scroll,legacyBehavior,...props}){return <a href={href} {...props}>{children}</a>}

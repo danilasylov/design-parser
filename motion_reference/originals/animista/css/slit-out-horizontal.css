@@ -1,0 +1,3 @@
+/* Original keyframes: Animista, Ana Travas. https://animista.net/play/exits/slit-out/slit-out-horizontal */
+.slit-out-horizontal{animation:slit-out-horizontal 0.5s ease-in 0s 1 normal both;}
+@keyframes slit-out-horizontal{0%{-webkit-transform:translateZ(0) rotateX(0);transform:translateZ(0) rotateX(0);opacity:1}54%{-webkit-transform:translateZ(-160px) rotateX(87deg);transform:translateZ(-160px) rotateX(87deg);opacity:1}to{-webkit-transform:translateZ(-800px) rotateX(90deg);transform:translateZ(-800px) rotateX(90deg);opacity:0}}

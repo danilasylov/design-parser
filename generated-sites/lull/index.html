@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lull — sleep you can finally read</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+/* ─── Токены дизайн-системы Valo — вставлены дословно ─────────────────── */
+:root {
+  /* Colors */
+  --color-void: #000000;
+  --color-bone: #e5e7eb;
+  --color-paper: #ffffff;
+  --color-graphite: #4d4d4d;
+  --color-spectrum-wash: #1b66f8;
+  --gradient-spectrum-wash: linear-gradient(270deg, rgb(158, 61, 178), rgb(27, 102, 248), rgb(36, 218, 217), rgb(179, 198, 232));
+  --color-deep-field: #1e233c;
+  --gradient-deep-field: linear-gradient(90deg, rgb(30, 35, 60), rgb(10, 64, 153));
+  --color-atmospheric-fade: #1951a2;
+  --gradient-atmospheric-fade: linear-gradient(90deg, rgb(25, 81, 162), rgb(112, 218, 180));
+
+  /* Typography — Font Families */
+  --font-valo: 'Valo', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* Typography — Scale */
+  --text-caption: 10px;
+  --leading-caption: 1.4;
+  --tracking-caption: 1px;
+  --text-body: 15px;
+  --leading-body: 1.63;
+  --text-subheading: 18px;
+  --leading-subheading: 1.4;
+  --text-heading-sm: 24px;
+  --leading-heading-sm: 1.33;
+  --tracking-heading-sm: -0.31px;
+  --text-heading: 38px;
+  --leading-heading: 1.2;
+  --tracking-heading: -0.49px;
+  --text-heading-lg: 60px;
+  --leading-heading-lg: 1.2;
+  --tracking-heading-lg: -0.78px;
+  --text-display: 100px;
+  --leading-display: 1;
+  --tracking-display: -2.7px;
+
+  /* Typography — Weights */
+  --font-weight-light: 300;
+  --font-weight-regular: 400;
+  --font-weight-bold: 700;
+
+  /* Spacing */
+  --spacing-unit: 4px;
+  --spacing-16: 16px;
+  --spacing-20: 20px;
+  --spacing-36: 36px;
+  --spacing-108: 108px;
+  --spacing-216: 216px;
+
+  /* Layout */
+  --page-max-width: 1200px;
+  --section-gap: 45px;
+  --element-gap: 18-20px;
+
+  /* Border Radius */
+  --radius-full: 9999px;
+
+  /* Named Radii */
+  --radius-icons: 9999px;
+  --radius-links: 9999px;
+  --radius-buttons: 9999px;
+
+  /* Surfaces */
+  --surface-void-canvas: #000000;
+  --surface-gradient-footer-band: #1b66f8;
+}
+
+/* Подстановка шрифта: Valo — кастомный. DESIGN.md предлагает Inter, и он же
+   единственный из списка с кириллицей. Вес 300 несёт и дисплей, и текст —
+   это и есть «шёпот», названный голосом бренда. */
+:root { --font-ui: 'Inter', var(--font-valo); }
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: var(--font-ui);
+  font-weight: var(--font-weight-light);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  background: var(--surface-void-canvas);
+  color: var(--color-paper);
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "clig" on, "liga" on;
+}
+
+.wrap { max-width: var(--page-max-width); margin: 0 auto; padding: 0 var(--spacing-36); }
+section { padding: var(--spacing-108) 0; }
+
+/* ─── Типографика: вес 300 везде, 700 только на микро-метках ──────────── */
+.display {
+  font-size: var(--text-display); line-height: var(--leading-display);
+  letter-spacing: var(--tracking-display); font-weight: var(--font-weight-light);
+}
+.h-lg { font-size: var(--text-heading-lg); line-height: var(--leading-heading-lg); letter-spacing: var(--tracking-heading-lg); font-weight: var(--font-weight-light); }
+.h { font-size: var(--text-heading); line-height: var(--leading-heading); letter-spacing: var(--tracking-heading); font-weight: var(--font-weight-light); }
+.h-sm { font-size: var(--text-heading-sm); line-height: var(--leading-heading-sm); letter-spacing: var(--tracking-heading-sm); font-weight: var(--font-weight-light); }
+.sub { font-size: var(--text-subheading); line-height: var(--leading-subheading); }
+.sub--anchor { font-weight: var(--font-weight-bold); }
+.body { font-size: var(--text-body); line-height: var(--leading-body); }
+.bone { color: var(--color-bone); }
+/* Метка секции: типографический флажок, без фона и рамки */
+.label {
+  display: block; font-size: var(--text-caption); line-height: var(--leading-caption);
+  letter-spacing: var(--tracking-caption); text-transform: uppercase;
+  font-weight: var(--font-weight-bold); color: var(--color-paper);
+  padding-top: 18px; margin-bottom: var(--spacing-36);
+}
+/* Градиент — ровно одно слово в заголовке, заливкой текста и больше нигде */
+.wash {
+  background: var(--gradient-spectrum-wash);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent; color: transparent;
+}
+
+/* ─── Круглая кнопка-стрелка: единственный примитив взаимодействия ────── */
+.arrow-link { display: inline-flex; align-items: center; gap: var(--spacing-20); text-decoration: none; color: var(--color-paper); }
+.arrow-link__circle {
+  width: 48px; height: 48px; border-radius: var(--radius-icons);
+  border: 1px solid var(--color-bone); flex: none;
+  display: flex; align-items: center; justify-content: center;
+  transition: background-color .15s linear, color .15s linear;
+}
+.arrow-link__circle svg { width: 18px; height: 18px; }
+.arrow-link:hover .arrow-link__circle { background: var(--color-paper); color: var(--color-void); }
+.arrow-link span { font-size: var(--text-subheading); line-height: var(--leading-subheading); }
+
+/* ─── Навигация ───────────────────────────────────────────────────────── */
+.nav {
+  max-width: var(--page-max-width); margin: 0 auto;
+  padding: var(--spacing-36) var(--spacing-36);
+  display: flex; align-items: center; gap: var(--spacing-36);
+}
+.brand { font-size: var(--text-heading-sm); letter-spacing: var(--tracking-heading-sm); color: var(--color-paper); text-decoration: none; }
+.nav__links { display: flex; gap: var(--spacing-36); list-style: none; margin-left: auto; }
+.nav__links a {
+  color: var(--color-paper); text-decoration: none;
+  font-size: 13px; letter-spacing: var(--tracking-caption);
+}
+.nav__links a:hover { color: var(--color-bone); }
+.lang { display: inline-flex; border: 1px solid var(--color-graphite); border-radius: var(--radius-buttons); overflow: hidden; }
+.lang button {
+  font-family: var(--font-ui); font-weight: var(--font-weight-light);
+  font-size: var(--text-caption); letter-spacing: var(--tracking-caption);
+  padding: 8px 14px; border: none; background: transparent; color: var(--color-bone); cursor: pointer;
+}
+.lang button[aria-pressed="true"] { background: var(--color-paper); color: var(--color-void); }
+
+/* ─── Герой: всё по левому краю ───────────────────────────────────────── */
+.hero { padding: var(--spacing-108) 0 var(--spacing-216); }
+.hero .display { max-width: 14ch; }
+.hero__sub { max-width: 56ch; margin: var(--spacing-36) 0; color: var(--color-bone); }
+
+/* ─── Разделитель-волосок ─────────────────────────────────────────────── */
+.rule { height: 1px; background: var(--color-bone); width: 100%; }
+
+/* ─── Парная раскладка: кольцо слева, текст справа ────────────────────── */
+.paired { display: grid; grid-template-columns: 420px 1fr; gap: var(--spacing-108); align-items: center; }
+.torus { width: 400px; height: 400px; }
+
+/* ─── Нумерованные блоки ──────────────────────────────────────────────── */
+.numbered { display: flex; flex-direction: column; gap: 23px; margin-top: var(--spacing-36); }
+.item { display: grid; grid-template-columns: 48px 1fr; gap: var(--spacing-20); align-items: start; }
+.item__n { font-size: 13px; letter-spacing: var(--tracking-caption); color: var(--color-bone); padding-top: 4px; }
+.item__b { display: flex; flex-direction: column; gap: 14px; }
+.item__b p { color: var(--color-bone); max-width: 58ch; }
+
+/* ─── Показатели: плоско, без карточек ────────────────────────────────── */
+.figures { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--spacing-36); margin-top: var(--spacing-36); }
+.figure b { display: block; font-size: var(--text-heading-lg); line-height: var(--leading-heading-lg); letter-spacing: var(--tracking-heading-lg); font-weight: var(--font-weight-light); }
+.figure span { display: block; color: var(--color-bone); margin-top: var(--spacing-16); }
+
+/* ─── Полоса-градиент в подвале: единственный уход от чёрного ─────────── */
+.footer {
+  background: var(--gradient-deep-field);
+  background-image: linear-gradient(90deg, rgb(30, 35, 60) 0%, rgb(10, 64, 153) 45%, rgb(25, 81, 162) 70%, rgb(112, 218, 180) 100%);
+  padding: var(--spacing-108) 0 var(--spacing-36);
+}
+.footer__top { display: flex; align-items: baseline; gap: var(--spacing-36); }
+.footer__links { display: flex; gap: var(--spacing-20); list-style: none; margin-left: auto; flex-wrap: wrap; }
+.footer__links a { color: var(--color-paper); text-decoration: none; font-size: 13px; }
+.footer__links a:hover { color: var(--color-bone); }
+.footer__bottom { margin-top: var(--spacing-108); font-size: 13px; color: var(--color-bone); }
+</style>
+</head>
+<body>
+
+<!-- ─── Навигация ─────────────────────────────────────────────────────── -->
+<header>
+  <nav class="nav">
+    <a class="brand" href="#top">Lull</a>
+    <ul class="nav__links">
+      <li><a href="#approach" data-i18n="nav.1">Approach</a></li>
+      <li><a href="#measure" data-i18n="nav.2">What we measure</a></li>
+      <li><a href="#evidence" data-i18n="nav.3">Evidence</a></li>
+      <li><a href="#join" data-i18n="nav.4">Clinic</a></li>
+    </ul>
+    <div class="lang" style="margin-left:var(--spacing-36)">
+      <button type="button" data-set="en" aria-pressed="true">EN</button>
+      <button type="button" data-set="ru" aria-pressed="false">RU</button>
+    </div>
+  </nav>
+</header>
+
+<!-- ─── Герой ─────────────────────────────────────────────────────────── -->
+<div class="wrap hero" id="top">
+  <h1 class="display">
+    <span data-i18n="hero.a">We make bad nights</span>
+    <span class="wash" data-i18n="hero.b">readable</span>
+  </h1>
+  <p class="hero__sub sub" data-i18n="hero.sub">Lull combines an at-home sleep study, six weeks of wearable signal and a clinician who actually reads it — and ends with a plan rather than a score out of a hundred.</p>
+  <a class="arrow-link" href="#approach">
+    <span class="arrow-link__circle">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </span>
+    <span data-i18n="hero.cta">Explore the programme</span>
+  </a>
+</div>
+
+<!-- ─── Подход: кольцо + нумерованные блоки ───────────────────────────── -->
+<section id="approach">
+  <div class="wrap">
+    <span class="label" data-i18n="ap.label">Approach</span>
+    <div class="paired">
+      <div>
+        <!-- Единственная «картинка» системы: тонкое кольцо с градиентным штрихом -->
+        <svg class="torus" viewBox="0 0 400 400" fill="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="wash" x1="400" y1="0" x2="0" y2="400" gradientUnits="userSpaceOnUse">
+              <stop offset="0" stop-color="#9e3db2"/>
+              <stop offset="0.38" stop-color="#1b66f8"/>
+              <stop offset="0.72" stop-color="#24dad9"/>
+              <stop offset="1" stop-color="#b3c6e8"/>
+            </linearGradient>
+          </defs>
+          <circle cx="200" cy="200" r="168" stroke="url(#wash)" stroke-width="1.5"/>
+          <circle cx="200" cy="200" r="118" stroke="url(#wash)" stroke-width="1" opacity=".55"/>
+          <ellipse cx="200" cy="200" rx="168" ry="54" stroke="url(#wash)" stroke-width="1" opacity=".4"/>
+        </svg>
+      </div>
+      <div>
+        <h2 class="h" data-i18n="ap.title">Six weeks, three instruments, one clinician</h2>
+        <div class="numbered">
+          <div class="item">
+            <span class="item__n">01</span>
+            <div class="item__b">
+              <span class="sub sub--anchor" data-i18n="ap.1t">A night recorded at home</span>
+              <p class="body" data-i18n="ap.1d">A courier brings a five-channel recorder on a Tuesday. You sleep in your own bed, in your own noise, and send it back in the morning.</p>
+            </div>
+          </div>
+          <div class="item">
+            <span class="item__n">02</span>
+            <div class="item__b">
+              <span class="sub sub--anchor" data-i18n="ap.2t">Six weeks of ordinary nights</span>
+              <p class="body" data-i18n="ap.2d">The wearable you already own keeps going. We use it for trend, never for diagnosis — one night is an anecdote, forty is a signal.</p>
+            </div>
+          </div>
+          <div class="item">
+            <span class="item__n">03</span>
+            <div class="item__b">
+              <span class="sub sub--anchor" data-i18n="ap.3t">A person reads all of it</span>
+              <p class="body" data-i18n="ap.3d">A sleep physician goes through the trace and the diary together, then writes you a plan in sentences. No dashboard, no score, no streak to protect.</p>
+            </div>
+          </div>
+        </div>
+        <a class="arrow-link" style="margin-top:var(--spacing-36)" href="#measure">
+          <span class="arrow-link__circle">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+          <span data-i18n="ap.cta">See what we measure</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><div class="rule"></div></div>
+
+<!-- ─── Что меряем ────────────────────────────────────────────────────── -->
+<section id="measure">
+  <div class="wrap">
+    <span class="label" data-i18n="me.label">What we measure</span>
+    <h2 class="h-lg" style="max-width:20ch" data-i18n="me.title">Five channels, and the reason each one is there</h2>
+    <div class="numbered" style="max-width:74ch">
+      <div class="item">
+        <span class="item__n">01</span>
+        <div class="item__b">
+          <span class="sub sub--anchor" data-i18n="me.1t">Airflow and effort</span>
+          <p class="body" data-i18n="me.1d">Separates a pause you stop breathing through from a pause you fight through. The difference decides the whole treatment path.</p>
+        </div>
+      </div>
+      <div class="item">
+        <span class="item__n">02</span>
+        <div class="item__b">
+          <span class="sub sub--anchor" data-i18n="me.2t">Oxygen saturation</span>
+          <p class="body" data-i18n="me.2d">Sampled every second, not averaged per minute. The dips are short by nature and an average erases exactly the thing we are looking for.</p>
+        </div>
+      </div>
+      <div class="item">
+        <span class="item__n">03</span>
+        <div class="item__b">
+          <span class="sub sub--anchor" data-i18n="me.3t">Body position</span>
+          <p class="body" data-i18n="me.3d">For roughly a third of people the whole problem only appears on their back. Position turns an unexplained result into an obvious one.</p>
+        </div>
+      </div>
+      <div class="item">
+        <span class="item__n">04</span>
+        <div class="item__b">
+          <span class="sub sub--anchor" data-i18n="me.4t">Heart rate variability</span>
+          <p class="body" data-i18n="me.4d">Reads the arousals a person never remembers — the ones that shorten deep sleep without ever waking anybody properly.</p>
+        </div>
+      </div>
+      <div class="item">
+        <span class="item__n">05</span>
+        <div class="item__b">
+          <span class="sub sub--anchor" data-i18n="me.5t">What you write down</span>
+          <p class="body" data-i18n="me.5d">Two lines a morning. Coffee, alcohol, the argument at eleven. It is the only channel that explains the other four.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><div class="rule"></div></div>
+
+<!-- ─── Доказательства ────────────────────────────────────────────────── -->
+<section id="evidence">
+  <div class="wrap">
+    <span class="label" data-i18n="ev.label">Evidence</span>
+    <h2 class="h" style="max-width:26ch" data-i18n="ev.title">Numbers we are willing to publish</h2>
+    <div class="figures">
+      <div class="figure"><b>4 100</b><span class="body" data-i18n="ev.1">studies read by a physician since 2021</span></div>
+      <div class="figure"><b>31%</b><span class="body" data-i18n="ev.2">turned out not to need a device at all</span></div>
+      <div class="figure"><b>9</b><span class="body" data-i18n="ev.3">nights median before a plan is written</span></div>
+      <div class="figure"><b>0</b><span class="body" data-i18n="ev.4">sleep scores shown anywhere in the product</span></div>
+    </div>
+    <a class="arrow-link" style="margin-top:var(--spacing-108)" href="#join">
+      <span class="arrow-link__circle">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </span>
+      <span data-i18n="ev.cta">Book the first night</span>
+    </a>
+  </div>
+</section>
+
+<!-- ─── Подвал ────────────────────────────────────────────────────────── -->
+<footer class="footer" id="join">
+  <div class="wrap">
+    <div class="footer__top">
+      <a class="brand" href="#top">Lull</a>
+      <ul class="footer__links">
+        <li><a href="#approach" data-i18n="f.1">Approach</a></li>
+        <li><a href="#measure" data-i18n="f.2">Measurement</a></li>
+        <li><a href="#evidence" data-i18n="f.3">Evidence</a></li>
+        <li><a href="#join" data-i18n="f.4">Clinic</a></li>
+        <li><a href="#join" data-i18n="f.5">Privacy</a></li>
+        <li><a href="#join" data-i18n="f.6">Terms</a></li>
+      </ul>
+    </div>
+    <div class="footer__bottom" data-i18n="f.copy">© 2026 Lull Sleep Medicine · Tbilisi and Lisbon · not a substitute for emergency care</div>
+  </div>
+</footer>
+
+<script>
+/* Английский — исходный; русский — перевод. Дефолт EN, без автодетекта. */
+var I18N = {
+  ru: {
+    "nav.1": "Подход", "nav.2": "Что меряем", "nav.3": "Данные", "nav.4": "Клиника",
+
+    "hero.a": "Мы делаем плохие ночи",
+    "hero.b": "читаемыми",
+    "hero.sub": "Lull собирает домашнее исследование сна, шесть недель сигнала с носимого устройства и врача, который всё это действительно читает, — и заканчивается планом, а не оценкой по стобалльной шкале.",
+    "hero.cta": "Посмотреть программу",
+
+    "ap.label": "Подход",
+    "ap.title": "Шесть недель, три инструмента, один врач",
+    "ap.1t": "Ночь, записанная дома",
+    "ap.1d": "Курьер привозит пятиканальный регистратор во вторник. Вы спите в своей кровати, в своём шуме, и утром отправляете прибор обратно.",
+    "ap.2t": "Шесть недель обычных ночей",
+    "ap.2d": "Носимое устройство, которое у вас уже есть, продолжает писать. Мы используем его для тренда и никогда для диагноза: одна ночь — это анекдот, сорок — сигнал.",
+    "ap.3t": "Всё это читает человек",
+    "ap.3d": "Сомнолог разбирает запись вместе с дневником и пишет вам план предложениями. Без дашборда, без баллов и без серии, которую нужно беречь.",
+    "ap.cta": "Что именно мы меряем",
+
+    "me.label": "Что меряем",
+    "me.title": "Пять каналов и причина, зачем нужен каждый",
+    "me.1t": "Поток и усилие",
+    "me.1d": "Отделяет паузу, в которую вы перестаёте дышать, от паузы, которую вы продавливаете. Разница определяет весь дальнейший путь лечения.",
+    "me.2t": "Сатурация",
+    "me.2d": "Снимается каждую секунду, а не усредняется по минуте. Провалы коротки по своей природе, и среднее стирает ровно то, что мы ищем.",
+    "me.3t": "Положение тела",
+    "me.3d": "Примерно у трети людей вся проблема появляется только на спине. Позиция превращает необъяснимый результат в очевидный.",
+    "me.4t": "Вариабельность пульса",
+    "me.4d": "Показывает микропробуждения, которых человек не помнит, — те, что укорачивают глубокий сон, никого толком не разбудив.",
+    "me.5t": "То, что вы записываете",
+    "me.5d": "Две строки каждое утро. Кофе, алкоголь, ссора в одиннадцать. Это единственный канал, который объясняет остальные четыре.",
+
+    "ev.label": "Данные",
+    "ev.title": "Цифры, которые мы готовы публиковать",
+    "ev.1": "исследований прочитано врачом с 2021 года",
+    "ev.2": "выяснилось, что прибор им вообще не нужен",
+    "ev.3": "ночей — медиана до того, как написан план",
+    "ev.4": "баллов сна показано где-либо в продукте",
+    "ev.cta": "Записаться на первую ночь",
+
+    "f.1": "Подход", "f.2": "Измерения", "f.3": "Данные", "f.4": "Клиника",
+    "f.5": "Приватность", "f.6": "Условия",
+    "f.copy": "© 2026 Lull Sleep Medicine · Тбилиси и Лиссабон · не заменяет неотложную помощь"
+  }
+};
+
+(function () {
+  var nodes = document.querySelectorAll('[data-i18n]');
+  var EN = {};
+  nodes.forEach(function (n) { EN[n.getAttribute('data-i18n')] = n.textContent; });
+
+  function apply(lang) {
+    nodes.forEach(function (n) {
+      var k = n.getAttribute('data-i18n');
+      var v = lang === 'ru' ? I18N.ru[k] : EN[k];
+      if (v) n.textContent = v;
+    });
+    document.documentElement.lang = lang;
+    document.documentElement.setAttribute('data-lang', lang);
+    document.querySelectorAll('.lang [data-set]').forEach(function (b) {
+      b.setAttribute('aria-pressed', String(b.getAttribute('data-set') === lang));
+    });
+  }
+  document.querySelectorAll('.lang [data-set]').forEach(function (b) {
+    b.addEventListener('click', function () { apply(b.getAttribute('data-set')); });
+  });
+})();
+</script>
+</body>
+</html>

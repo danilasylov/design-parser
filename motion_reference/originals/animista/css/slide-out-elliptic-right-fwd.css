@@ -1,0 +1,3 @@
+/* Original keyframes: Animista, Ana Travas. https://animista.net/play/exits/slide-out-elliptic/slide-out-elliptic-right-fwd */
+.slide-out-elliptic-right-fwd{animation:slide-out-elliptic-right-fwd 0.7s cubic-bezier(.55,.085,.68,.53) 0s 1 normal both;}
+@keyframes slide-out-elliptic-right-fwd{0%{-webkit-transform:translateX(0) rotateY(0) scale(1);transform:translateX(0) rotateY(0) scale(1);-webkit-transform-origin:600px 50%;transform-origin:600px 50%;opacity:1}to{-webkit-transform:translateX(1000px) rotateY(20deg) scale(6);transform:translateX(1000px) rotateY(20deg) scale(6);-webkit-transform-origin:-100% 50%;transform-origin:-100% 50%;opacity:0}}

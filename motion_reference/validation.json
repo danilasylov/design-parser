@@ -1,0 +1,140 @@
+{
+  "checked_on": "2026-10-14",
+  "catalog_counts": {
+    "examples": 1944,
+    "types_with_examples": 23,
+    "classes_with_examples": 213,
+    "by_provider": {
+      "react-bits": 216,
+      "animista": 662,
+      "magic-ui": 79,
+      "codrops": 987
+    },
+    "by_type": {
+      "Появление и исчезновение": 337,
+      "Курсоры и следы указателя": 78,
+      "Частицы и физика": 71,
+      "3D-сцены и объекты": 130,
+      "Стекло, металл, свет и поверхности": 46,
+      "Переходы страниц и изображений": 106,
+      "Анимация текста": 196,
+      "Анимированные фоны": 95,
+      "Кнопки, поля и реакции интерфейса": 119,
+      "Галереи, слайдеры и карточки": 89,
+      "Числа, графики и карты": 28,
+      "Меню, навигация и компоновка": 113,
+      "Анимация при прокрутке": 137,
+      "Загрузка и прогресс": 14,
+      "Базовые трансформации": 218,
+      "Акцент и привлечение внимания": 37,
+      "Шаблоны страниц и статичные элементы": 13,
+      "Линии, контуры и формы": 42,
+      "Персонажи и существа": 4,
+      "Глитч, пиксели и стилизация": 17,
+      "Звук и музыкальные интерфейсы": 27,
+      "Генеративные системы и шейдеры": 6,
+      "Другие оригинальные эксперименты": 21
+    },
+    "video_examples": 1201,
+    "live_magic_examples": 170,
+    "css_examples": 662,
+    "codrops_repository_archives": 612,
+    "codrops_unavailable_repositories": [
+      {
+        "repository": "AhmedKabbej/gobzzzmusicplayer2024",
+        "source_url": "https://codeload.github.com/AhmedKabbej/gobzzzmusicplayer2024/legacy.zip/HEAD",
+        "status": "failed",
+        "error": "HTTP Error 404: Not Found"
+      },
+      {
+        "repository": "mattverse/what-i-love",
+        "source_url": "https://codeload.github.com/mattverse/what-i-love/legacy.zip/HEAD",
+        "status": "failed",
+        "error": "HTTP Error 404: Not Found"
+      },
+      {
+        "repository": "rock-biter/fire-trails",
+        "source_url": "https://codeload.github.com/rock-biter/fire-trails/legacy.zip/HEAD",
+        "status": "failed",
+        "error": "HTTP Error 404: Not Found"
+      },
+      {
+        "repository": "sergejcodes/codrops-minze-demo",
+        "source_url": "https://codeload.github.com/sergejcodes/codrops-minze-demo/legacy.zip/HEAD",
+        "status": "failed",
+        "error": "HTTP Error 404: Not Found"
+      }
+    ],
+    "static_references": 13,
+    "saved_indexed_assets": 5620
+  },
+  "sqlite_integrity": "ok",
+  "foreign_key_violations": [],
+  "all_indexed_file_paths_exist": true,
+  "assets_hashed": 5620,
+  "magic_ui_original_demo_mounts": 170,
+  "source_snapshot_note": "Codrops archives contain original code and text resources, with SHA-pinned provenance. Binary media of those source projects is available in the linked upstream repositories. Original Codrops preview videos are included separately.",
+  "scope": "Public catalog snapshot, including related static templates and unlisted-but-public registry components. Source-based classification is an inference.",
+  "ui_checks": {
+    "landing": {
+      "title": "База веб-анимаций — оригинальные примеры",
+      "cards": 24,
+      "total": "1 944",
+      "classes": "213",
+      "errors": []
+    },
+    "magicFilter": "79 найдено",
+    "magicModal": {
+      "title": "Android",
+      "iframe": "live/magic-ui/index.html?demo=android-demo"
+    },
+    "search": "21 найдено",
+    "cursorFilter": "78 найдено",
+    "mobileOverflow": false,
+    "animista": {
+      "count": 662,
+      "failed": [],
+      "keyframes": 671
+    },
+    "animistaSample": {
+      "name": "flip-scale-up-hor",
+      "objectId": "card-object-hf",
+      "animation": "flip-scale-up-hor",
+      "valid": true
+    },
+    "localMagicMedia": {
+      "images": 24,
+      "loaded": 24,
+      "animations": 8
+    },
+    "legacyButton": {
+      "afterClick": "Subscribed",
+      "errors": []
+    },
+    "dottedMap": {
+      "svg": 1,
+      "errors": []
+    }
+  },
+  "css_variant_validation": {
+    "count": 662,
+    "failures": []
+  },
+  "video_container_validation": {
+    "files": 1410,
+    "failures": []
+  },
+  "metadata_counts": {
+    "resources": 35,
+    "patterns": 309,
+    "families": 24,
+    "sources": 59,
+    "preset_specifications": 1,
+    "implementations": 1944,
+    "assets": 5620,
+    "examples": 1944,
+    "example_classes": 213
+  },
+  "legacy_local_previews": 13,
+  "static_reference_count": 14
+}

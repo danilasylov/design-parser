@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Semaphore — The archive of public wayfinding pictograms</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Source+Serif+4:ital,opsz,wght@1,8..60,400&display=swap" rel="stylesheet">
+<style>
+/* ─── Токены дизайн-системы LogoArchive — вставлены дословно ──────────── */
+:root {
+  /* Colors */
+  --color-canvas-charcoal: #27272a;
+  --color-elevated-ink: #18181b;
+  --color-slate-surface: #343538;
+  --color-deep-void: #000000;
+  --color-near-black: #0c0c0e;
+  --color-pure-white: #ffffff;
+  --color-fog-gray: #a8afb7;
+  --color-mist-gray: #dadee4;
+  --color-dim-stone: #8c8c8d;
+  --color-signal-yellow: #fde533;
+
+  /* Typography — Font Families */
+  --font-suisse-international: 'Suisse International', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-suisse-works-book: 'Suisse Works Book', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* Typography — Scale */
+  --text-caption: 12px;
+  --leading-caption: 1.5;
+  --text-body-sm: 14px;
+  --leading-body-sm: 1.75;
+  --text-body: 16px;
+  --leading-body: 1.75;
+  --text-subheading: 19px;
+  --leading-subheading: 1.2;
+  --text-heading-sm: 24px;
+  --leading-heading-sm: 1.2;
+  --text-heading: 28px;
+  --leading-heading: 1;
+  --text-display: 65px;
+  --leading-display: 1;
+  --text-display-lg: 96px;
+  --leading-display-lg: 0.9;
+
+  /* Typography — Weights */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+
+  /* Spacing */
+  --spacing-unit: 4px;
+  --spacing-4: 4px;
+  --spacing-8: 8px;
+  --spacing-12: 12px;
+  --spacing-16: 16px;
+  --spacing-20: 20px;
+  --spacing-24: 24px;
+  --spacing-32: 32px;
+  --spacing-36: 36px;
+  --spacing-40: 40px;
+  --spacing-80: 80px;
+  --spacing-100: 100px;
+
+  /* Layout */
+  --page-max-width: 1200px;
+  --section-gap: 64px;
+  --card-padding: 32px;
+  --element-gap: 8px;
+
+  /* Border Radius */
+  --radius-md: 4px;
+  --radius-2xl: 20px;
+  --radius-3xl: 28px;
+  --radius-3xl-2: 40px;
+  --radius-full: 999px;
+
+  /* Named Radii */
+  --radius-cards: 28px;
+  --radius-large: 40px;
+  --radius-tiles: 20px;
+  --radius-badges: 999px;
+  --radius-subtle: 4px;
+  --radius-buttons: 999px;
+
+  /* Surfaces */
+  --surface-deep-void: #000000;
+  --surface-near-black: #0c0c0;
+  --surface-elevated-ink: #18181b;
+  --surface-canvas-charcoal: #27272a;
+  --surface-slate-surface: #343538;
+}
+
+/* Подстановки шрифтов: Suisse International и Suisse Works — кастомные.
+   DESIGN.md предлагает Inter / Söhne / Neue Haas Grotesk для первого
+   и Söhne Buch Italic / GT Sectra Italic для второго; с кириллицей проходят
+   Inter и Source Serif 4 Italic (низкоконтрастная текстовая антиква,
+   ближайшая по характеру к Suisse Works). */
+:root {
+  --font-ui: 'Inter', var(--font-suisse-international);
+  --font-italic: 'Source Serif 4', var(--font-suisse-works-book);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: var(--font-ui);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  background: var(--surface-canvas-charcoal);
+  color: var(--color-pure-white);
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap { max-width: var(--page-max-width); margin: 0 auto; padding: 0 var(--spacing-24); }
+section { padding: var(--spacing-80) 0; }
+
+/* ─── Типографика ─────────────────────────────────────────────────────── */
+.display-lg {
+  font-size: var(--text-display-lg);
+  line-height: var(--leading-display-lg);
+  font-weight: var(--font-weight-regular);
+  letter-spacing: -0.02em;
+  text-align: center;
+}
+.display {
+  font-size: var(--text-display);
+  line-height: var(--leading-display);
+  font-weight: var(--font-weight-regular);
+  letter-spacing: -0.02em;
+  text-align: center;
+}
+/* Сигнатура системы: роман 400 + медиум 500 + курсивная антиква на 1–2 словах */
+.it { font-family: var(--font-italic); font-style: italic; font-weight: 400; }
+.dim { color: var(--color-fog-gray); font-weight: var(--font-weight-medium); }
+
+.lede {
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--color-fog-gray);
+  text-align: center;
+  max-width: 62ch;
+  margin: 0 auto;
+}
+.caption { font-size: var(--text-caption); line-height: var(--leading-caption); color: var(--color-fog-gray); }
+.body-sm { font-size: var(--text-body-sm); line-height: var(--leading-body-sm); }
+
+/* ─── Капсулы со знаками внутри заголовка (снято со скриншота) ────────── */
+.caps {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-8);
+  padding: 0 var(--spacing-20);
+  margin: 0 0.1em;
+  border-radius: var(--radius-badges);
+  vertical-align: baseline;
+  transform: translateY(0.12em);
+}
+.caps--light { background: var(--color-pure-white); color: var(--color-deep-void); }
+.caps--slate { background: var(--color-slate-surface); color: var(--color-pure-white); }
+.caps svg { width: 0.52em; height: 0.52em; display: block; }
+
+/* ─── Кнопки: всё пилюли 999px ────────────────────────────────────────── */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  font-family: var(--font-ui);
+  font-size: var(--text-body-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.2;
+  padding: 12px 20px;
+  border-radius: var(--radius-buttons);
+  border: 1px solid transparent;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background .15s linear, color .15s linear, border-color .15s linear;
+}
+.btn--primary { background: var(--color-signal-yellow); color: var(--color-deep-void); }
+.btn--primary:hover { background: var(--color-pure-white); }
+.btn--secondary { background: var(--color-slate-surface); color: var(--color-pure-white); }
+.btn--secondary:hover { background: var(--color-canvas-charcoal); border-color: var(--color-slate-surface); }
+.btn--ghost {
+  background: transparent; color: var(--color-pure-white);
+  border-color: var(--color-slate-surface);
+  font-size: var(--text-caption); padding: 6px 14px;
+}
+.btn--ghost:hover { background: var(--color-slate-surface); }
+
+.badge {
+  display: inline-block;
+  background: var(--color-signal-yellow);
+  color: var(--color-deep-void);
+  font-size: var(--text-caption);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.5;
+  padding: 4px 12px;
+  border-radius: var(--radius-badges);
+}
+
+/* ─── Навигация: 64px, чёрная, монограмма слева, гост справа ──────────── */
+.nav {
+  height: 64px;
+  background: var(--surface-deep-void);
+  display: flex; align-items: center;
+}
+.nav__inner {
+  width: 100%; max-width: var(--page-max-width); margin: 0 auto;
+  padding: 0 var(--spacing-24);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.mono {
+  display: inline-flex; align-items: center; gap: var(--spacing-8);
+  color: var(--color-pure-white); text-decoration: none;
+  font-size: var(--text-body-sm); font-weight: var(--font-weight-medium);
+  letter-spacing: 0.02em;
+}
+.mono__mark {
+  width: 24px; height: 24px; border-radius: var(--radius-subtle);
+  background: var(--color-pure-white); color: var(--color-deep-void);
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.mono__mark svg { width: 14px; height: 14px; }
+.nav__right { display: flex; align-items: center; gap: var(--spacing-8); }
+.lang { display: inline-flex; border: 1px solid var(--color-slate-surface); border-radius: var(--radius-badges); overflow: hidden; }
+.lang button {
+  font-family: var(--font-ui); font-size: var(--text-caption); line-height: 1.5;
+  padding: 5px 12px; border: none; background: transparent; color: var(--color-fog-gray); cursor: pointer;
+}
+.lang button[aria-pressed="true"] { background: var(--color-pure-white); color: var(--color-deep-void); }
+
+/* ─── Герой: центрированный текстовый блок ────────────────────────────── */
+.hero { padding: var(--spacing-100) 0 var(--spacing-80); }
+.hero__actions {
+  display: flex; justify-content: center; gap: var(--spacing-12);
+  margin-top: var(--spacing-32);
+}
+.hero__note { text-align: center; margin-top: var(--spacing-16); }
+.hero .lede { margin-top: var(--spacing-32); }
+
+/* ─── Сетка образцов: плитки-«музейные подставки» ─────────────────────── */
+.specimens { display: grid; grid-template-columns: repeat(6, 1fr); gap: var(--spacing-16); }
+.tile {
+  background: var(--surface-elevated-ink);
+  border: 1px solid var(--color-canvas-charcoal);
+  border-radius: var(--radius-tiles);
+  padding: var(--spacing-32);
+  display: flex; flex-direction: column; align-items: center; gap: var(--spacing-16);
+}
+.tile svg { width: 44px; height: 44px; color: var(--color-pure-white); }
+.tile span { font-size: var(--text-caption); line-height: 1.5; color: var(--color-fog-gray); text-align: center; }
+
+/* ─── Заголовок секции по центру ──────────────────────────────────────── */
+.sec-head { text-align: center; margin-bottom: var(--spacing-40); }
+.sec-head .badge { margin-bottom: var(--spacing-20); }
+.sec-head .display { margin-bottom: var(--spacing-24); }
+
+/* ─── Окно продукта ───────────────────────────────────────────────────── */
+.window {
+  background: var(--surface-canvas-charcoal);
+  border: 1px solid var(--color-slate-surface);
+  border-radius: var(--radius-tiles);
+  overflow: hidden;
+}
+.window__bar {
+  height: 40px; display: flex; align-items: center; gap: var(--spacing-8);
+  padding: 0 var(--spacing-16);
+  background: var(--surface-canvas-charcoal);
+  border-bottom: 1px solid var(--color-slate-surface);
+}
+.dot { width: 10px; height: 10px; border-radius: 50%; background: var(--color-slate-surface); }
+.window__title { margin-left: var(--spacing-12); font-size: var(--text-caption); color: var(--color-fog-gray); }
+.window__body { display: grid; grid-template-columns: 220px 1fr 260px; background: var(--surface-elevated-ink); }
+.pane { padding: var(--spacing-20); }
+.pane + .pane { border-left: 1px solid var(--color-canvas-charcoal); }
+.pane__label {
+  font-size: var(--text-caption); color: var(--color-fog-gray);
+  text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: var(--spacing-16);
+}
+.syslist { list-style: none; display: flex; flex-direction: column; gap: var(--spacing-4); }
+.syslist li {
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: var(--text-body-sm); line-height: 1.6;
+  padding: 6px 10px; border-radius: var(--radius-subtle);
+  color: var(--color-fog-gray);
+}
+.syslist li.is-active { background: var(--color-canvas-charcoal); color: var(--color-pure-white); }
+.syslist li.is-active::before {
+  content: ""; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--color-signal-yellow); margin-right: 8px;
+}
+.syslist .n { font-size: var(--text-caption); color: var(--color-dim-stone); }
+.gridmini { display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--spacing-8); }
+.gridmini div {
+  aspect-ratio: 1; border-radius: var(--radius-subtle);
+  background: var(--surface-canvas-charcoal);
+  display: flex; align-items: center; justify-content: center;
+}
+.gridmini svg { width: 26px; height: 26px; color: var(--color-pure-white); }
+.gridmini div.is-sel { outline: 1px solid var(--color-signal-yellow); }
+.detail { display: flex; flex-direction: column; gap: var(--spacing-12); }
+.detail__big {
+  height: 120px; border-radius: var(--radius-subtle);
+  background: var(--surface-canvas-charcoal);
+  display: flex; align-items: center; justify-content: center;
+}
+.detail__big svg { width: 56px; height: 56px; color: var(--color-pure-white); }
+.row {
+  display: flex; justify-content: space-between; gap: var(--spacing-12);
+  font-size: var(--text-caption); line-height: 1.6;
+  padding: 6px 0; border-bottom: 1px solid var(--color-canvas-charcoal);
+}
+.row span:first-child { color: var(--color-fog-gray); }
+
+/* ─── Карточки систем ─────────────────────────────────────────────────── */
+.cards3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-16); }
+.card {
+  background: var(--surface-elevated-ink);
+  border: 1px solid var(--color-canvas-charcoal);
+  border-radius: var(--radius-cards);
+  padding: var(--card-padding);
+  display: flex; flex-direction: column; gap: var(--spacing-16);
+}
+.card__marks { display: flex; gap: var(--spacing-12); }
+.card__marks svg { width: 30px; height: 30px; color: var(--color-pure-white); }
+.card h3 { font-size: var(--text-heading-sm); line-height: var(--leading-heading-sm); font-weight: var(--font-weight-medium); }
+.card p { font-size: var(--text-body-sm); line-height: var(--leading-body-sm); color: var(--color-fog-gray); }
+.card__meta { display: flex; gap: var(--spacing-16); margin-top: auto; }
+.card__meta span { font-size: var(--text-caption); color: var(--color-dim-stone); }
+
+/* ─── Тарифы ──────────────────────────────────────────────────────────── */
+.plans { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--spacing-16); max-width: 780px; margin: 0 auto; }
+.plan {
+  background: var(--surface-elevated-ink);
+  border: 1px solid var(--color-canvas-charcoal);
+  border-radius: var(--radius-cards);
+  padding: var(--card-padding);
+  display: flex; flex-direction: column; gap: var(--spacing-20);
+}
+.plan__name { font-size: var(--text-heading-sm); line-height: var(--leading-heading-sm); font-weight: var(--font-weight-medium); }
+.plan__price { font-size: var(--text-display); line-height: var(--leading-display); color: var(--color-signal-yellow); letter-spacing: -0.02em; }
+.plan__price small { font-size: var(--text-body-sm); color: var(--color-fog-gray); letter-spacing: 0; }
+.plan ul { list-style: none; display: flex; flex-direction: column; gap: var(--spacing-4); }
+.plan li { display: flex; align-items: flex-start; gap: var(--spacing-8); font-size: var(--text-body-sm); line-height: var(--leading-body-sm); padding: 4px 0; }
+.plan li svg { width: 14px; height: 14px; margin-top: 7px; flex: none; color: var(--color-pure-white); }
+.plan .btn { margin-top: auto; }
+
+/* ─── Финал ───────────────────────────────────────────────────────────── */
+.final { text-align: center; }
+.final .display { margin-bottom: var(--spacing-24); }
+.final__actions { display: flex; justify-content: center; gap: var(--spacing-12); margin-top: var(--spacing-32); }
+
+/* ─── Подвал ──────────────────────────────────────────────────────────── */
+.footer { border-top: 1px solid var(--color-slate-surface); padding: var(--spacing-40) 0; }
+.footer__inner { display: flex; justify-content: space-between; align-items: center; gap: var(--spacing-24); }
+.footer__links { display: flex; gap: var(--spacing-24); list-style: none; }
+.footer__links a { color: var(--color-fog-gray); text-decoration: none; font-size: var(--text-body-sm); }
+.footer__links a:hover { color: var(--color-pure-white); }
+</style>
+</head>
+<body>
+
+<!-- Пиктограммы: единственная «образность» системы — белая линейная графика -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="p-walk" viewBox="0 0 32 32">
+    <circle cx="17" cy="5" r="3" fill="currentColor"/>
+    <path d="M17 9 L13 17 L9 26 M17 9 L21 15 L20 26 M13 13 L23 12" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol>
+  <symbol id="p-arrow" viewBox="0 0 32 32">
+    <path d="M16 4 L28 16 L20 16 L20 28 L12 28 L12 16 L4 16 Z" fill="currentColor"/>
+  </symbol>
+  <symbol id="p-train" viewBox="0 0 32 32">
+    <rect x="6" y="4" width="20" height="18" rx="4" fill="currentColor"/>
+    <rect x="9" y="8" width="14" height="6" rx="1" fill="#18181b"/>
+    <circle cx="11" cy="18" r="2" fill="#18181b"/><circle cx="21" cy="18" r="2" fill="#18181b"/>
+    <path d="M9 24 L5 29 M23 24 L27 29" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="p-plane" viewBox="0 0 32 32">
+    <path d="M16 2 C18 2 19 5 19 9 L19 13 L29 20 L29 23 L19 20 L19 25 L23 28 L23 30 L16 28 L9 30 L9 28 L13 25 L13 20 L3 23 L3 20 L13 13 L13 9 C13 5 14 2 16 2 Z" fill="currentColor"/>
+  </symbol>
+  <symbol id="p-stairs" viewBox="0 0 32 32">
+    <path d="M4 28 L4 22 L11 22 L11 16 L18 16 L18 10 L25 10 L25 4 L29 4 L29 28 Z" fill="currentColor"/>
+  </symbol>
+  <symbol id="p-lift" viewBox="0 0 32 32">
+    <rect x="5" y="4" width="22" height="24" rx="2" fill="none" stroke="currentColor" stroke-width="2.5"/>
+    <path d="M12 14 L16 9 L20 14 Z M12 19 L16 24 L20 19 Z" fill="currentColor"/>
+  </symbol>
+  <symbol id="p-exit" viewBox="0 0 32 32">
+    <path d="M4 4 L16 4 L16 28 L4 28 Z" fill="none" stroke="currentColor" stroke-width="2.5"/>
+    <path d="M20 16 L29 16 M25 11 L29 16 L25 21" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol>
+  <symbol id="p-bike" viewBox="0 0 32 32">
+    <circle cx="8" cy="22" r="6" fill="none" stroke="currentColor" stroke-width="2.5"/>
+    <circle cx="24" cy="22" r="6" fill="none" stroke="currentColor" stroke-width="2.5"/>
+    <path d="M8 22 L14 10 L20 10 M14 10 L24 22 M11 22 L18 22" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="p-info" viewBox="0 0 32 32">
+    <circle cx="16" cy="16" r="13" fill="none" stroke="currentColor" stroke-width="2.5"/>
+    <circle cx="16" cy="9" r="2" fill="currentColor"/>
+    <rect x="14" y="13" width="4" height="12" rx="1" fill="currentColor"/>
+  </symbol>
+  <symbol id="p-cup" viewBox="0 0 32 32">
+    <path d="M5 9 L24 9 L23 24 L6 24 Z" fill="currentColor"/>
+    <path d="M24 12 L28 12 A3 3 0 0 1 28 19 L23.6 19" fill="none" stroke="currentColor" stroke-width="2.5"/>
+    <path d="M4 28 L26 28" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="p-bag" viewBox="0 0 32 32">
+    <rect x="5" y="11" width="22" height="16" rx="2" fill="currentColor"/>
+    <path d="M12 11 L12 6 L20 6 L20 11" fill="none" stroke="currentColor" stroke-width="2.5"/>
+  </symbol>
+  <symbol id="p-tick" viewBox="0 0 32 32">
+    <path d="M5 17 L13 25 L27 7" stroke="currentColor" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol>
+  <symbol id="p-mark" viewBox="0 0 32 32">
+    <rect x="2" y="2" width="28" height="28" rx="3" fill="currentColor"/>
+    <path d="M9 23 L16 9 L23 23 Z" fill="#000"/>
+  </symbol>
+</svg>
+
+<!-- ─── Навигация ─────────────────────────────────────────────────────── -->
+<header class="nav">
+  <div class="nav__inner">
+    <a class="mono" href="#top">
+      <span class="mono__mark"><svg><use href="#p-mark"/></svg></span>
+      <span>Semaphore</span>
+    </a>
+    <div class="nav__right">
+      <div class="lang">
+        <button type="button" data-set="en" aria-pressed="true">EN</button>
+        <button type="button" data-set="ru" aria-pressed="false">RU</button>
+      </div>
+      <a class="btn btn--ghost" href="#plans" data-i18n="nav.login">Log in</a>
+    </div>
+  </div>
+</header>
+
+<!-- ─── Герой ─────────────────────────────────────────────────────────── -->
+<section class="hero" id="top">
+  <div class="wrap">
+    <h1 class="display-lg">
+      <span data-i18n="hero.a">The</span>
+      <span class="it" data-i18n="hero.b">complete</span>
+      <span data-i18n="hero.c">archive of public</span><span class="caps caps--light"><svg><use href="#p-walk"/></svg><svg><use href="#p-arrow"/></svg><svg><use href="#p-train"/></svg></span><span data-i18n="hero.d">pictograms.</span>
+      <span class="dim" data-i18n="hero.e">As drawn by the world's best signage teams.</span>
+    </h1>
+    <p class="lede" data-i18n="hero.lede">Featuring 4,800+ carefully redrawn pictograms from 140 signage systems, measured against the originals. New systems added monthly.</p>
+    <div class="hero__actions">
+      <a class="btn btn--primary" href="#plans" data-i18n="hero.cta1">Get started for £6.50/month</a>
+      <a class="btn btn--secondary" href="#plans" data-i18n="hero.cta2">See pricing</a>
+    </div>
+    <p class="hero__note caption" data-i18n="hero.note">Free for students and transit staff.</p>
+  </div>
+</section>
+
+<!-- ─── Образцы ───────────────────────────────────────────────────────── -->
+<section>
+  <div class="wrap">
+    <div class="specimens">
+      <div class="tile"><svg><use href="#p-walk"/></svg><span data-i18n="sp.1">Pedestrian · Tokyo 1964</span></div>
+      <div class="tile"><svg><use href="#p-train"/></svg><span data-i18n="sp.2">Rail · Munich 1972</span></div>
+      <div class="tile"><svg><use href="#p-plane"/></svg><span data-i18n="sp.3">Air · Schiphol 1967</span></div>
+      <div class="tile"><svg><use href="#p-stairs"/></svg><span data-i18n="sp.4">Stairs · AIGA 1974</span></div>
+      <div class="tile"><svg><use href="#p-lift"/></svg><span data-i18n="sp.5">Lift · Expo 67</span></div>
+      <div class="tile"><svg><use href="#p-exit"/></svg><span data-i18n="sp.6">Exit · MTA 1970</span></div>
+      <div class="tile"><svg><use href="#p-bike"/></svg><span data-i18n="sp.7">Cycles · Delft 1978</span></div>
+      <div class="tile"><svg><use href="#p-info"/></svg><span data-i18n="sp.8">Information · Otl Aicher</span></div>
+      <div class="tile"><svg><use href="#p-cup"/></svg><span data-i18n="sp.9">Refreshment · Heathrow</span></div>
+      <div class="tile"><svg><use href="#p-bag"/></svg><span data-i18n="sp.10">Baggage · Frankfurt 1975</span></div>
+      <div class="tile"><svg><use href="#p-arrow"/></svg><span data-i18n="sp.11">Direction · Moscow 1980</span></div>
+      <div class="tile"><svg><use href="#p-mark"/></svg><span data-i18n="sp.12">Semaphore redraw</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Окно продукта ─────────────────────────────────────────────────── -->
+<section id="archive">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="badge" data-i18n="arch.badge">A new format of signage research</span>
+      <h2 class="display">
+        <span data-i18n="arch.a">Not a mood board.</span>
+        <span class="it" data-i18n="arch.b">A measured</span>
+        <span data-i18n="arch.c">archive.</span>
+      </h2>
+      <p class="lede" data-i18n="arch.lede">Every mark is redrawn from the original specification sheet, kept on its own grid, and filed with the system it belonged to — stroke widths, clearances and all.</p>
+    </div>
+    <div class="window">
+      <div class="window__bar">
+        <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+        <span class="window__title" data-i18n="win.title">Semaphore — Munich 1972 · Otl Aicher</span>
+      </div>
+      <div class="window__body">
+        <div class="pane">
+          <div class="pane__label" data-i18n="win.systems">Systems</div>
+          <ul class="syslist">
+            <li class="is-active"><span data-i18n="win.s1">Munich 1972</span><span class="n">180</span></li>
+            <li><span data-i18n="win.s2">Tokyo 1964</span><span class="n">39</span></li>
+            <li><span data-i18n="win.s3">Schiphol 1967</span><span class="n">64</span></li>
+            <li><span data-i18n="win.s4">AIGA / DOT 1974</span><span class="n">50</span></li>
+            <li><span data-i18n="win.s5">Expo 67 Montréal</span><span class="n">72</span></li>
+            <li><span data-i18n="win.s6">Moscow Metro 1980</span><span class="n">41</span></li>
+            <li><span data-i18n="win.s7">Heathrow 1985</span><span class="n">58</span></li>
+          </ul>
+        </div>
+        <div class="pane">
+          <div class="pane__label" data-i18n="win.grid">180 marks · redrawn</div>
+          <div class="gridmini">
+            <div class="is-sel"><svg><use href="#p-walk"/></svg></div>
+            <div><svg><use href="#p-train"/></svg></div>
+            <div><svg><use href="#p-plane"/></svg></div>
+            <div><svg><use href="#p-stairs"/></svg></div>
+            <div><svg><use href="#p-lift"/></svg></div>
+            <div><svg><use href="#p-exit"/></svg></div>
+            <div><svg><use href="#p-bike"/></svg></div>
+            <div><svg><use href="#p-info"/></svg></div>
+            <div><svg><use href="#p-cup"/></svg></div>
+            <div><svg><use href="#p-bag"/></svg></div>
+            <div><svg><use href="#p-arrow"/></svg></div>
+            <div><svg><use href="#p-walk"/></svg></div>
+            <div><svg><use href="#p-train"/></svg></div>
+            <div><svg><use href="#p-stairs"/></svg></div>
+            <div><svg><use href="#p-exit"/></svg></div>
+          </div>
+        </div>
+        <div class="pane detail">
+          <div class="pane__label" data-i18n="win.detail">Specimen</div>
+          <div class="detail__big"><svg><use href="#p-walk"/></svg></div>
+          <div class="row"><span data-i18n="win.r1">System</span><span>Munich 1972</span></div>
+          <div class="row"><span data-i18n="win.r2">Designer</span><span>Otl Aicher</span></div>
+          <div class="row"><span data-i18n="win.r3">Grid</span><span>48 × 48</span></div>
+          <div class="row"><span data-i18n="win.r4">Stroke</span><span>6 units</span></div>
+          <div class="row"><span data-i18n="win.r5">Formats</span><span>SVG · EPS · PDF</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Системы ───────────────────────────────────────────────────────── -->
+<section id="systems">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 class="display">
+        <span data-i18n="sys.a">Systems, not</span>
+        <span class="it" data-i18n="sys.b">stray</span>
+        <span data-i18n="sys.c">icons.</span>
+      </h2>
+      <p class="lede" data-i18n="sys.lede">A pictogram only means anything next to its siblings. Semaphore files them the way they were designed — as complete families, with the sheets that specified them.</p>
+    </div>
+    <div class="cards3">
+      <article class="card">
+        <div class="card__marks">
+          <svg><use href="#p-walk"/></svg><svg><use href="#p-stairs"/></svg><svg><use href="#p-lift"/></svg>
+        </div>
+        <h3 data-i18n="sys.1.t">Munich 1972</h3>
+        <p data-i18n="sys.1.d">Otl Aicher's 180 marks on a 48-unit grid, the set that taught every airport since how a body should be abbreviated.</p>
+        <div class="card__meta"><span data-i18n="sys.1.m1">180 marks</span><span data-i18n="sys.1.m2">Complete sheets</span></div>
+      </article>
+      <article class="card">
+        <div class="card__marks">
+          <svg><use href="#p-plane"/></svg><svg><use href="#p-bag"/></svg><svg><use href="#p-info"/></svg>
+        </div>
+        <h3 data-i18n="sys.2.t">AIGA / DOT 1974</h3>
+        <p data-i18n="sys.2.d">Fifty marks commissioned for American transit hubs and released without copyright — the most copied family in the archive.</p>
+        <div class="card__meta"><span data-i18n="sys.2.m1">50 marks</span><span data-i18n="sys.2.m2">Public domain</span></div>
+      </article>
+      <article class="card">
+        <div class="card__marks">
+          <svg><use href="#p-arrow"/></svg><svg><use href="#p-train"/></svg><svg><use href="#p-exit"/></svg>
+        </div>
+        <h3 data-i18n="sys.3.t">Moscow Metro 1980</h3>
+        <p data-i18n="sys.3.d">Drawn for the Olympiad and still underground: heavier strokes, tighter clearances, an arrow that behaves unlike any other in the archive.</p>
+        <div class="card__meta"><span data-i18n="sys.3.m1">41 marks</span><span data-i18n="sys.3.m2">Bilingual set</span></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Тарифы ────────────────────────────────────────────────────────── -->
+<section id="plans">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 class="display">
+        <span data-i18n="pl.a">One archive,</span>
+        <span class="it" data-i18n="pl.b">two</span>
+        <span data-i18n="pl.c">ways in.</span>
+      </h2>
+      <p class="lede" data-i18n="pl.lede">Everything is included in both plans. The only difference is how often you are billed.</p>
+    </div>
+    <div class="plans">
+      <div class="plan">
+        <div class="plan__name" data-i18n="pl.1.n">Monthly</div>
+        <div class="plan__price">£6.50 <small data-i18n="pl.1.p">/ month</small></div>
+        <ul>
+          <li><svg><use href="#p-tick"/></svg><span data-i18n="pl.1.f1">All 140 systems, 4,800+ marks</span></li>
+          <li><svg><use href="#p-tick"/></svg><span data-i18n="pl.1.f2">SVG, EPS and PDF downloads</span></li>
+          <li><svg><use href="#p-tick"/></svg><span data-i18n="pl.1.f3">Original specification sheets</span></li>
+          <li><svg><use href="#p-tick"/></svg><span data-i18n="pl.1.f4">Cancel at any time</span></li>
+        </ul>
+        <a class="btn btn--secondary" href="#plans" data-i18n="pl.1.cta">Start monthly</a>
+      </div>
+      <div class="plan">
+        <div class="plan__name" data-i18n="pl.2.n">Annual</div>
+        <div class="plan__price">£58 <small data-i18n="pl.2.p">/ year</small></div>
+        <ul>
+          <li><svg><use href="#p-tick"/></svg><span data-i18n="pl.2.f1">Everything in the monthly plan</span></li>
+          <li><svg><use href="#p-tick"/></svg><span data-i18n="pl.2.f2">Two months free</span></li>
+          <li><svg><use href="#p-tick"/></svg><span data-i18n="pl.2.f3">The printed index, posted once a year</span></li>
+          <li><svg><use href="#p-tick"/></svg><span data-i18n="pl.2.f4">Early access to new systems</span></li>
+        </ul>
+        <a class="btn btn--primary" href="#plans" data-i18n="pl.2.cta">Start annual</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Финал ─────────────────────────────────────────────────────────── -->
+<section class="final">
+  <div class="wrap">
+    <h2 class="display">
+      <span data-i18n="fin.a">Somebody drew</span>
+      <span class="it" data-i18n="fin.b">every</span>
+      <span data-i18n="fin.c">sign you have ever followed.</span>
+    </h2>
+    <p class="lede" data-i18n="fin.lede">Four thousand eight hundred of them are filed, measured and ready to download.</p>
+    <div class="final__actions">
+      <a class="btn btn--primary" href="#plans" data-i18n="fin.cta1">Get started for £6.50/month</a>
+      <a class="btn btn--secondary" href="#archive" data-i18n="fin.cta2">Browse the archive</a>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Подвал ────────────────────────────────────────────────────────── -->
+<footer class="footer">
+  <div class="wrap footer__inner">
+    <a class="mono" href="#top">
+      <span class="mono__mark"><svg><use href="#p-mark"/></svg></span>
+      <span>Semaphore</span>
+    </a>
+    <ul class="footer__links">
+      <li><a href="#archive" data-i18n="f.1">Archive</a></li>
+      <li><a href="#systems" data-i18n="f.2">Systems</a></li>
+      <li><a href="#plans" data-i18n="f.3">Pricing</a></li>
+      <li><a href="#top" data-i18n="f.4">Licence</a></li>
+    </ul>
+    <span class="caption" data-i18n="f.copy">© 2026 Semaphore Archive</span>
+  </div>
+</footer>
+
+<script>
+/* Английский — исходный; русский — перевод. Дефолт EN, без автодетекта. */
+var I18N = {
+  ru: {
+    "nav.login": "Войти",
+
+    "hero.a": "Полный",
+    "hero.b": "архив",
+    "hero.c": "общественных",
+    "hero.d": "пиктограмм.",
+    "hero.e": "В том виде, в каком их начертили лучшие в мире бюро навигации.",
+    "hero.lede": "4 800 знаков из 140 систем навигации, перерисованных по оригинальным спецификациям и сверенных с ними. Новые системы — каждый месяц.",
+    "hero.cta1": "Подписка за 590 ₽ в месяц",
+    "hero.cta2": "Смотреть тарифы",
+    "hero.note": "Бесплатно студентам и сотрудникам транспорта.",
+
+    "sp.1": "Пешеход · Токио 1964",
+    "sp.2": "Поезд · Мюнхен 1972",
+    "sp.3": "Авиа · Схипхол 1967",
+    "sp.4": "Лестница · AIGA 1974",
+    "sp.5": "Лифт · Экспо-67",
+    "sp.6": "Выход · MTA 1970",
+    "sp.7": "Велосипед · Делфт 1978",
+    "sp.8": "Информация · Отль Айхер",
+    "sp.9": "Буфет · Хитроу",
+    "sp.10": "Багаж · Франкфурт 1975",
+    "sp.11": "Направление · Москва 1980",
+    "sp.12": "Перерисовка Semaphore",
+
+    "arch.badge": "Новый формат исследования навигации",
+    "arch.a": "Не мудборд.",
+    "arch.b": "Измеренный",
+    "arch.c": "архив.",
+    "arch.lede": "Каждый знак перерисован с оригинального листа спецификации, лежит на своей сетке и хранится вместе с системой, которой принадлежал, — с толщинами штриха и полями.",
+
+    "win.title": "Semaphore — Мюнхен 1972 · Отль Айхер",
+    "win.systems": "Системы",
+    "win.s1": "Мюнхен 1972",
+    "win.s2": "Токио 1964",
+    "win.s3": "Схипхол 1967",
+    "win.s4": "AIGA / DOT 1974",
+    "win.s5": "Экспо-67, Монреаль",
+    "win.s6": "Метро Москвы 1980",
+    "win.s7": "Хитроу 1985",
+    "win.grid": "180 знаков · перерисовано",
+    "win.detail": "Образец",
+    "win.r1": "Система",
+    "win.r2": "Автор",
+    "win.r3": "Сетка",
+    "win.r4": "Штрих",
+    "win.r5": "Форматы",
+
+    "sys.a": "Системы, а не",
+    "sys.b": "случайные",
+    "sys.c": "иконки.",
+    "sys.lede": "Пиктограмма что-то значит только рядом со своими родственниками. Semaphore хранит их так, как их проектировали, — целыми семействами и вместе с листами, которые их задавали.",
+    "sys.1.t": "Мюнхен 1972",
+    "sys.1.d": "180 знаков Отля Айхера на сетке в 48 единиц — набор, который научил все последующие аэропорты сокращать человеческую фигуру.",
+    "sys.1.m1": "180 знаков",
+    "sys.1.m2": "Полные листы",
+    "sys.2.t": "AIGA / DOT 1974",
+    "sys.2.d": "Пятьдесят знаков, заказанных для американских транспортных узлов и выпущенных без копирайта, — самое копируемое семейство в архиве.",
+    "sys.2.m1": "50 знаков",
+    "sys.2.m2": "Общественное достояние",
+    "sys.3.t": "Метро Москвы 1980",
+    "sys.3.d": "Нарисованы к Олимпиаде и до сих пор под землёй: штрих тяжелее, поля плотнее, а стрелка ведёт себя не так, как любая другая в архиве.",
+    "sys.3.m1": "41 знак",
+    "sys.3.m2": "Двуязычный набор",
+
+    "pl.a": "Один архив,",
+    "pl.b": "два",
+    "pl.c": "входа.",
+    "pl.lede": "В обоих тарифах есть всё. Разница только в том, как часто выставляется счёт.",
+    "pl.1.n": "Помесячно",
+    "pl.1.p": "/ месяц",
+    "pl.1.f1": "Все 140 систем, 4 800 знаков",
+    "pl.1.f2": "Скачивание в SVG, EPS и PDF",
+    "pl.1.f3": "Оригинальные листы спецификаций",
+    "pl.1.f4": "Отмена в любой момент",
+    "pl.1.cta": "Взять помесячно",
+    "pl.2.n": "Год",
+    "pl.2.p": "/ год",
+    "pl.2.f1": "Всё, что в помесячном тарифе",
+    "pl.2.f2": "Два месяца бесплатно",
+    "pl.2.f3": "Печатный указатель раз в год почтой",
+    "pl.2.f4": "Ранний доступ к новым системам",
+    "pl.2.cta": "Взять на год",
+
+    "fin.a": "Каждый знак, за которым вы шли,",
+    "fin.b": "кто-то",
+    "fin.c": "начертил.",
+    "fin.lede": "Четыре тысячи восемьсот из них разобраны, измерены и готовы к скачиванию.",
+    "fin.cta1": "Подписка за 590 ₽ в месяц",
+    "fin.cta2": "Смотреть архив",
+
+    "f.1": "Архив",
+    "f.2": "Системы",
+    "f.3": "Тарифы",
+    "f.4": "Лицензия",
+    "f.copy": "© 2026 Semaphore Archive"
+  }
+};
+
+(function () {
+  var nodes = document.querySelectorAll('[data-i18n]');
+  var EN = {};
+  nodes.forEach(function (n) { EN[n.getAttribute('data-i18n')] = n.textContent; });
+
+  function apply(lang) {
+    nodes.forEach(function (n) {
+      var k = n.getAttribute('data-i18n');
+      var v = lang === 'ru' ? I18N.ru[k] : EN[k];
+      if (v) n.textContent = v;
+    });
+    document.documentElement.lang = lang;
+    document.documentElement.setAttribute('data-lang', lang);
+    document.querySelectorAll('.lang [data-set]').forEach(function (b) {
+      b.setAttribute('aria-pressed', String(b.getAttribute('data-set') === lang));
+    });
+  }
+
+  document.querySelectorAll('.lang [data-set]').forEach(function (b) {
+    b.addEventListener('click', function () { apply(b.getAttribute('data-set')); });
+  });
+})();
+</script>
+</body>
+</html>

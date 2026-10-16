@@ -1,0 +1,1 @@
+import{K as n,L as c,N as p}from"./index-WM7-nNXq.js";import{u as f}from"./use-motion-value-CgwDMN_v.js";function l(a,s){const t=f(s()),e=()=>t.set(s());return e(),n(()=>{const r=()=>p.preRender(e,!1,!0),u=a.map(o=>o.on("change",r));return()=>{u.forEach(o=>o()),c(e)}}),t}export{l as u};

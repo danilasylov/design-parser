@@ -1,0 +1,1 @@
+import{j as o}from"./index-WM7-nNXq.js";import{T as t}from"./typing-animation-DeQgNHt8.js";import"./use-in-view-CknktuZ9.js";function s(){return o.jsx(t,{words:["First","Second","Final"],loop:!1})}export{s as default};

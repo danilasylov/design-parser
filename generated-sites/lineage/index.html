@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>Lineage — an atlas of who taught whom</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400&family=Golos+Text:wght@400&display=swap" rel="stylesheet">
+<style>
+/* ─────────────────────────────────────────────────────────────
+   Дизайн-система: V–A–C Sreda (refero b634cbce) — tokens.css дословно
+   ───────────────────────────────────────────────────────────── */
+:root {
+  /* Colors */
+  --color-ink-black: #000000;
+  --color-paper-white: #ffffff;
+  --color-pencil-gray: #999999;
+
+  /* Typography — Font Families */
+  --font-diagramatika-display: 'Diagramatika Display', 'Space Grotesk', sans-serif;
+  --font-diagramatika-text: 'Diagramatika Text', 'Inter', sans-serif;
+  --font-arial: Arial, Helvetica, sans-serif;
+
+  /* Typography — Scale */
+  --text-caption: 13px;     --leading-caption: 1.2;
+  --text-body-sm: 16px;     --leading-body-sm: 1.2;
+  --text-body: 20px;        --leading-body: 1.2;
+  --text-subheading: 24px;  --leading-subheading: 1.1;
+  --text-heading: 48px;     --leading-heading: 0.8;
+  --text-display: 80px;     --leading-display: 0.8;
+
+  /* Typography — Weights */
+  --font-weight-regular: 400;
+
+  /* Spacing */
+  --spacing-5: 5px;  --spacing-10: 10px; --spacing-12: 12px; --spacing-13: 13px;
+  --spacing-20: 20px; --spacing-26: 26px; --spacing-48: 48px; --spacing-50: 50px;
+
+  /* Layout */
+  --section-gap: 50px;
+  --card-padding: 20px;
+  --element-gap: 20px;
+
+  /* Border Radius */
+  --radius-tags: 0px; --radius-cards: 0px; --radius-inputs: 0px; --radius-buttons: 0px;
+
+  /* Surfaces */
+  --surface-paper-canvas: #ffffff;
+  --surface-ink-plane: #000000;
+}
+
+/* Подстановки шрифтов: у названных в DESIGN.md замен (Space Grotesk / Inter)
+   кириллицы нет либо она уже занята — взяты гротески того же класса с кириллицей.
+   Оба держатся на весе 400, как требует система. */
+:root {
+  --font-diagramatika-display: 'Onest', 'Space Grotesk', sans-serif;
+  --font-diagramatika-text: 'Golos Text', 'Inter', sans-serif;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--color-paper-white);
+  color: var(--color-ink-black);
+  font-family: var(--font-diagramatika-text);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  font-weight: var(--font-weight-regular);
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, p { margin: 0; font-weight: var(--font-weight-regular); }
+a { color: inherit; text-decoration: none; }
+.pad { padding-left: var(--spacing-20); padding-right: var(--spacing-20); }
+
+.disp { font-family: var(--font-diagramatika-display); font-size: var(--text-display); line-height: var(--leading-display); }
+.head { font-family: var(--font-diagramatika-display); font-size: var(--text-heading); line-height: var(--leading-heading); }
+.sub  { font-size: var(--text-subheading); line-height: var(--leading-subheading); }
+.sm   { font-size: var(--text-body-sm); line-height: var(--leading-body-sm); }
+.cap  { font-size: var(--text-caption); line-height: var(--leading-caption); color: var(--color-pencil-gray); }
+
+/* Коннекторы — линия и есть компонент */
+.rule { flex: 1; height: 0; border-top: 1px solid var(--color-ink-black); }
+.rule.dashed { border-top-style: dashed; }
+.rule.dotted { border-top-style: dotted; }
+
+/* ── Герой-схема ────────────────────────────────────────────────────── */
+.hero { position: relative; padding-top: var(--spacing-20); }
+.hero-lines { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.row-top { display: flex; align-items: center; gap: var(--spacing-20); }
+.fig { margin-top: var(--spacing-10); margin-left: 21%; }
+.row-mid { display: flex; align-items: center; gap: var(--spacing-20); margin-top: 118px; }
+.lang { display: flex; gap: var(--spacing-10); align-items: baseline; font-size: var(--text-body-sm); }
+.lang button {
+  background: none; border: 0; padding: 0; cursor: pointer;
+  font-family: inherit; font-size: var(--text-body-sm); color: var(--color-ink-black);
+}
+.lang button[aria-pressed="false"] { color: var(--color-pencil-gray); }
+.mark { font-family: var(--font-diagramatika-display); font-size: var(--text-display); line-height: var(--leading-display); white-space: nowrap; }
+.desc { width: 560px; flex: none; }
+.row-nav { display: flex; align-items: baseline; gap: var(--spacing-20); margin-top: 150px; }
+.navitem { text-align: center; }
+.navitem .l { font-size: var(--text-subheading); line-height: var(--leading-subheading); white-space: nowrap; }
+.scrolldown { text-align: center; font-size: var(--text-subheading); margin-top: var(--spacing-20); }
+
+/* ── Секции ─────────────────────────────────────────────────────────── */
+section { padding: var(--section-gap) 0; }
+.anchor { display: flex; align-items: center; gap: var(--spacing-20); }
+.anchor .t { white-space: nowrap; }
+.cols { display: flex; gap: var(--spacing-50); margin-top: var(--spacing-26); }
+.cols p { flex: 1; }
+.cols p + p { margin-top: 0; }
+
+/* Диаграмма преемственности */
+.atlas { width: 100%; height: auto; display: block; margin-top: var(--spacing-26); }
+.atlas text { font-family: var(--font-diagramatika-text); font-size: 15px; fill: #000; }
+.atlas text.y { font-size: 12px; fill: var(--color-pencil-gray); }
+.atlas path, .atlas line { stroke: #000; fill: none; }
+
+/* Списки-цепочки */
+.chains { margin-top: var(--spacing-26); }
+.chain { display: flex; align-items: baseline; gap: var(--spacing-20); padding: var(--spacing-12) 0; }
+.chain .n { white-space: nowrap; }
+.chain .m { white-space: nowrap; color: var(--color-pencil-gray); font-size: var(--text-caption); }
+
+/* Инвертированная полоса */
+.band { background: var(--surface-ink-plane); color: var(--color-paper-white); padding: 100px var(--spacing-20); margin: var(--section-gap) 0; }
+.band .q { font-family: var(--font-diagramatika-display); font-size: var(--text-heading); line-height: var(--leading-heading); max-width: 1000px; }
+.band .cap { color: #999999; margin-top: var(--spacing-26); }
+
+/* Шаги */
+.steps { margin-top: var(--spacing-26); }
+.step { display: flex; align-items: baseline; gap: var(--spacing-20); padding: var(--spacing-20) 0; }
+.step .n { width: 44px; flex: none; color: var(--color-pencil-gray); font-size: var(--text-caption); }
+.step .t { width: 260px; flex: none; }
+.step .d { flex: 1; }
+
+/* Форма — единственное «действие» в системе: обводка, без заливки */
+.form { display: flex; gap: var(--spacing-10); margin-top: var(--spacing-26); max-width: 640px; }
+.form input {
+  flex: 1; border: 1px solid var(--color-ink-black); border-radius: var(--radius-inputs);
+  padding: var(--spacing-10) var(--spacing-20); font-family: inherit; font-size: var(--text-body); color: var(--color-ink-black);
+  background: none;
+}
+.form input::placeholder { color: var(--color-pencil-gray); }
+.ghostbtn {
+  border: 1px solid var(--color-ink-black); border-radius: var(--radius-buttons); background: none;
+  padding: var(--spacing-10) var(--spacing-20); font-family: inherit; font-size: var(--text-body);
+  color: var(--color-ink-black); cursor: pointer;
+}
+.ghostbtn:hover { background: var(--color-ink-black); color: var(--color-paper-white); }
+
+footer { padding: var(--section-gap) 0 var(--spacing-50); }
+.footrow { display: flex; align-items: baseline; gap: var(--spacing-20); padding: var(--spacing-12) 0; }
+.footrow a:hover { border-bottom: 1px solid var(--color-ink-black); }
+</style>
+</head>
+<body>
+
+<header class="hero pad">
+  <svg class="hero-lines" aria-hidden="true"><path id="ln1"/><path id="ln2"/></svg>
+
+  <div class="row-top">
+    <span class="disp" id="w1" data-i18n="w1">Who</span>
+    <i class="rule"></i>
+    <span class="disp" data-i18n="w2">taught</span>
+    <i class="rule"></i>
+    <span class="disp" data-i18n="w3">whom</span>
+  </div>
+  <div class="fig cap">fig. 1</div>
+
+  <div class="row-mid">
+    <div class="lang">
+      <button data-set="en" aria-pressed="true">En</button><span class="cap">/</span><button data-set="ru" aria-pressed="false">Ru</button>
+    </div>
+    <i class="rule"></i>
+    <span class="mark" id="mark">Lineage</span>
+    <i class="rule"></i>
+    <p class="desc" data-i18n="desc">An atlas of teaching: 1 840 people, 2 611 attributions of the form <em>A taught B</em>, each one carrying the document it came from. No influence, no schools of thought, no spiritual descent — only the years two people were in the same room and one of them was marking the other's work.</p>
+  </div>
+
+  <div class="row-nav">
+    <span class="navitem"><span class="l" data-i18n="nv1">← Browse</span><br><span class="cap" data-i18n="nc1">1 840 entries</span></span>
+    <i class="rule dotted"></i>
+    <span class="navitem" id="nvmid"><span class="l" data-i18n="nv2">Search</span><br><span class="cap" data-i18n="nc2">by name, city, year</span></span>
+    <i class="rule dotted"></i>
+    <span class="navitem"><span class="l" data-i18n="nv3">Contribute →</span><br><span class="cap" data-i18n="nc3">with a source, always</span></span>
+  </div>
+  <div class="scrolldown">↓</div>
+</header>
+
+<section class="pad" id="atlas">
+  <div class="anchor">
+    <span class="sm t" data-i18n="a1">One chain of four generations</span>
+    <i class="rule dashed"></i>
+    <span class="head t" data-i18n="a1h">fig. 2</span>
+  </div>
+
+  <svg class="atlas" viewBox="0 0 1400 560" aria-hidden="true">
+    <!-- горизонты поколений -->
+    <g stroke-dasharray="1 4">
+      <line x1="0" y1="70" x2="150" y2="70"/>
+      <line x1="0" y1="210" x2="150" y2="210"/>
+      <line x1="0" y1="350" x2="150" y2="350"/>
+      <line x1="0" y1="490" x2="150" y2="490"/>
+    </g>
+    <g class="y">
+      <text class="y" x="0" y="58">1919—1934</text>
+      <text class="y" x="0" y="198">1946—1971</text>
+      <text class="y" x="0" y="338">1972—1998</text>
+      <text class="y" x="0" y="478">1999—</text>
+    </g>
+
+    <!-- связи «учил → учился» -->
+    <g stroke-dasharray="4 4">
+      <path d="M210 78 C 210 140, 150 150, 150 202"/>
+      <path d="M210 78 C 240 140, 470 150, 500 202"/>
+      <path d="M640 78 C 660 140, 840 150, 860 202"/>
+      <path d="M640 78 C 620 140, 520 150, 500 202"/>
+      <path d="M1080 78 C 1090 140, 1180 150, 1190 202"/>
+    </g>
+    <g stroke-dasharray="4 4">
+      <path d="M150 218 C 150 280, 120 290, 120 342"/>
+      <path d="M500 218 C 500 280, 430 290, 430 342"/>
+      <path d="M500 218 C 540 280, 730 290, 760 342"/>
+      <path d="M860 218 C 880 280, 970 290, 1000 342"/>
+      <path d="M1190 218 C 1190 280, 1300 290, 1300 342"/>
+    </g>
+    <g stroke-dasharray="4 4">
+      <path d="M120 358 C 120 420, 200 430, 230 482"/>
+      <path d="M430 358 C 430 420, 560 430, 600 482"/>
+      <path d="M760 358 C 780 420, 900 430, 930 482"/>
+      <path d="M1000 358 C 1020 420, 1230 430, 1270 482"/>
+      <path d="M1300 358 C 1300 420, 1290 430, 1270 482"/>
+    </g>
+
+    <!-- узлы -->
+    <g>
+      <circle cx="210" cy="70" r="3" fill="#000" stroke="none"/><text x="222" y="62">Ilse Roth</text><text class="y" x="222" y="80">Weimar, preliminary course</text>
+      <circle cx="640" cy="70" r="3" fill="#000" stroke="none"/><text x="652" y="62">Jan Verhoeven</text><text class="y" x="652" y="80">Rotterdam, evening class</text>
+      <circle cx="1080" cy="70" r="3" fill="#000" stroke="none"/><text x="1092" y="62">Márta Szabó</text><text class="y" x="1092" y="80">Budapest, workshop 4</text>
+
+      <circle cx="150" cy="210" r="3" fill="#000" stroke="none"/><text x="162" y="202">Otmar Krebs</text><text class="y" x="162" y="220">Ulm, form theory</text>
+      <circle cx="500" cy="210" r="3" fill="#000" stroke="none"/><text x="512" y="202">Nadia Farkas</text><text class="y" x="512" y="220">Milan, typography</text>
+      <circle cx="860" cy="210" r="3" fill="#000" stroke="none"/><text x="872" y="202">Piet de Groot</text><text class="y" x="872" y="220">Amsterdam, lettering</text>
+      <circle cx="1190" cy="210" r="3" fill="#000" stroke="none"/><text x="1202" y="202">Lars Kjeldsen</text><text class="y" x="1202" y="220">Oslo, drawing</text>
+
+      <circle cx="120" cy="350" r="3" fill="#000" stroke="none"/><text x="132" y="342">Věra Hájková</text><text class="y" x="132" y="360">Brno, studio II</text>
+      <circle cx="430" cy="350" r="3" fill="#000" stroke="none"/><text x="442" y="342">Ana Ferreiro</text><text class="y" x="442" y="360">Porto, printmaking</text>
+      <circle cx="760" cy="350" r="3" fill="#000" stroke="none"/><text x="772" y="342">Yusuf Demir</text><text class="y" x="772" y="360">Istanbul, night studio</text>
+      <circle cx="1000" cy="350" r="3" fill="#000" stroke="none"/><text x="1012" y="342">Kaja Lind</text><text class="y" x="1012" y="360">Stockholm, seminar</text>
+      <circle cx="1300" cy="350" r="3" fill="#000" stroke="none"/><text x="1288" y="342" text-anchor="end">Hanne Bruun</text><text class="y" x="1288" y="360" text-anchor="end">Aarhus, colour</text>
+
+      <circle cx="230" cy="490" r="3" fill="#000" stroke="none"/><text x="242" y="482">Iva Marković</text><text class="y" x="242" y="500">Belgrade, teaching now</text>
+      <circle cx="600" cy="490" r="3" fill="#000" stroke="none"/><text x="612" y="482">Noor Haddad</text><text class="y" x="612" y="500">Beirut, teaching now</text>
+      <circle cx="930" cy="490" r="3" fill="#000" stroke="none"/><text x="942" y="482">Timo Ranta</text><text class="y" x="942" y="500">Helsinki, teaching now</text>
+      <circle cx="1270" cy="490" r="3" fill="#000" stroke="none"/><text x="1258" y="482" text-anchor="end">Sara Weiss</text><text class="y" x="1258" y="500" text-anchor="end">Vienna, teaching now</text>
+    </g>
+  </svg>
+  <div class="cap" style="margin-top:20px" data-i18n="figcap">fig. 2 — one of 74 chains that reach from a room in 1919 to a room this term. Dashed line: the teacher signed the student's year. Solid circle: the person also taught.</div>
+</section>
+
+<section class="pad" id="method">
+  <div class="anchor">
+    <span class="sm t" data-i18n="m1">Method</span>
+    <i class="rule dashed"></i>
+    <span class="head t" data-i18n="m1h">What counts</span>
+  </div>
+  <div class="cols">
+    <p data-i18n="m_p1">An attribution enters the atlas when three things exist: a room, a period, and a piece of paper. The paper can be a class list, a diploma with a signature, a payroll entry, a letter in which one of them complains about the other. Anything else — a stated admiration, a manifesto co-signed, an obituary claiming a debt — is filed, and stays out of the diagram.</p>
+    <p data-i18n="m_p2">We do not weight the line. A person who ran a two-week workshop and a person who supervised six years of work are connected by the same 1px dashed rule, because we have no honest way to measure the difference and every attempt to invent one has made the atlas worse.</p>
+    <p data-i18n="m_p3">Where a source contradicts another source, both are shown and the entry is marked open. Two hundred and eleven entries are open. They are the most interesting part of the atlas and the reason it is not printed.</p>
+  </div>
+</section>
+
+<div class="band">
+  <div class="q" data-i18n="band">A school is not a building. It is a person who taught someone who taught you, and a piece of paper that says they were both there.</div>
+  <div class="cap" data-i18n="bandcap">fig. 3 — from the introduction, 2024 edition</div>
+</div>
+
+<section class="pad" id="chains">
+  <div class="anchor">
+    <span class="sm t" data-i18n="c1">Seventy-four chains</span>
+    <i class="rule dashed"></i>
+    <span class="head t" data-i18n="c1h">The longest ones</span>
+  </div>
+  <div class="chains">
+    <div class="chain"><span class="n sub" data-i18n="ch1">Weimar → Ulm → Brno → Belgrade</span><i class="rule dotted"></i><span class="m" data-i18n="ch1m">1919—now · 11 people · 34 sources</span></div>
+    <div class="chain"><span class="n sub" data-i18n="ch2">Rotterdam → Milan → Porto → Beirut</span><i class="rule dotted"></i><span class="m" data-i18n="ch2m">1924—now · 9 people · 27 sources</span></div>
+    <div class="chain"><span class="n sub" data-i18n="ch3">Budapest → Oslo → Aarhus → Vienna</span><i class="rule dotted"></i><span class="m" data-i18n="ch3m">1931—now · 8 people · 22 sources</span></div>
+    <div class="chain"><span class="n sub" data-i18n="ch4">Amsterdam → Istanbul → Helsinki</span><i class="rule dotted"></i><span class="m" data-i18n="ch4m">1928—now · 7 people · 19 sources</span></div>
+    <div class="chain"><span class="n sub" data-i18n="ch5">Leipzig → Prague → Tbilisi → Lisbon</span><i class="rule dotted"></i><span class="m" data-i18n="ch5m">1933—now · 7 people · 16 sources</span></div>
+    <div class="chain"><span class="n sub" data-i18n="ch6">Kraków → Zagreb → Ghent</span><i class="rule dotted"></i><span class="m" data-i18n="ch6m">1946—now · 6 people · 14 sources</span></div>
+  </div>
+</section>
+
+<section class="pad" id="entry">
+  <div class="anchor">
+    <span class="sm t" data-i18n="e1">Procedure</span>
+    <i class="rule dashed"></i>
+    <span class="head t" data-i18n="e1h">How an entry is made</span>
+  </div>
+  <div class="steps">
+    <div class="step"><span class="n">01</span><span class="t sub" data-i18n="s1t">Someone writes in</span><span class="d" data-i18n="s1d">Two names, one room, the years, and a scan. Six hundred and forty of the current entries began as an email from a relative.</span></div>
+    <div class="step"><span class="n">02</span><span class="t sub" data-i18n="s2t">Two readers, separately</span><span class="d" data-i18n="s2d">Neither knows what the other decided until both have written a line. If the lines disagree the entry goes to open and stays there until a third document turns up.</span></div>
+    <div class="step"><span class="n">03</span><span class="t sub" data-i18n="s3t">The source is deposited</span><span class="d" data-i18n="s3d">A copy goes to the archive with the entry number written on it. Nothing is in the atlas that we cannot show you within one click.</span></div>
+    <div class="step"><span class="n">04</span><span class="t sub" data-i18n="s4t">The line is drawn</span><span class="d" data-i18n="s4d">Dashed, 1px, the same as every other line. Publication happens every other Wednesday, which is the only ceremony we have.</span></div>
+  </div>
+</section>
+
+<section class="pad" id="contribute">
+  <div class="anchor">
+    <span class="sm t" data-i18n="k1">Contribute</span>
+    <i class="rule dashed"></i>
+    <span class="head t" data-i18n="k1h">Send a line</span>
+  </div>
+  <div class="cols">
+    <p data-i18n="k_p1">If you taught, or were taught, and there is a document — a class list, a signed sheet, a photograph with a date on the back — the atlas would like it. Write once and we will answer within two weeks, including when the answer is that the source is not enough.</p>
+  </div>
+  <form class="form" onsubmit="return false">
+    <input type="email" placeholder="you@example.com" aria-label="email">
+    <button class="ghostbtn" data-i18n="k_btn">Send a line</button>
+  </form>
+</section>
+
+<footer class="pad">
+  <div class="footrow"><span class="sm" data-i18n="f1">Lineage</span><i class="rule dotted"></i><span class="cap" data-i18n="f1m">an atlas of who taught whom</span></div>
+  <div class="footrow"><a class="sm" href="#atlas" data-i18n="f2">Browse the atlas</a><i class="rule dotted"></i><span class="cap" data-i18n="f2m">1 840 people</span></div>
+  <div class="footrow"><a class="sm" href="#method" data-i18n="f3">Method and sources</a><i class="rule dotted"></i><span class="cap" data-i18n="f3m">211 entries open</span></div>
+  <div class="footrow"><a class="sm" href="#contribute" data-i18n="f4">lines@lineage.atlas</a><i class="rule dotted"></i><span class="cap" data-i18n="f4m">updated every other Wednesday</span></div>
+</footer>
+
+<script>
+/* ── Коннекторы героя: линии рисуются по реальным координатам элементов ── */
+(function () {
+  var svg = document.querySelector('.hero-lines');
+  var hero = document.querySelector('.hero');
+  var w1 = document.getElementById('w1'), mark = document.getElementById('mark'), mid = document.getElementById('nvmid');
+  if (!svg || !hero) return;
+  function draw() {
+    var H = hero.getBoundingClientRect();
+    svg.setAttribute('viewBox', '0 0 ' + H.width + ' ' + H.height);
+    function box(el) { var r = el.getBoundingClientRect(); return { l: r.left - H.left, r: r.right - H.left, t: r.top - H.top, b: r.bottom - H.top, cx: r.left + r.width / 2 - H.left }; }
+    var a = box(w1), b = box(mark), c = box(mid);
+    var p1 = document.getElementById('ln1'), p2 = document.getElementById('ln2');
+    p1.setAttribute('d', 'M' + (a.l + 12) + ' ' + (a.b - 6) + ' L' + (b.l - 8) + ' ' + (b.t + 18));
+    p1.setAttribute('stroke', '#000'); p1.setAttribute('stroke-dasharray', '10 8'); p1.setAttribute('fill', 'none');
+    var sx = b.l + 40, sy = b.b - 6, ex = c.cx, ey = c.t - 14;
+    p2.setAttribute('d', 'M' + sx + ' ' + sy + ' C ' + (sx + 60) + ' ' + (sy + 90) + ', ' + (ex - 40) + ' ' + (ey - 130) + ', ' + ex + ' ' + ey);
+    p2.setAttribute('stroke', '#000'); p2.setAttribute('stroke-dasharray', '1 6'); p2.setAttribute('stroke-linecap', 'round'); p2.setAttribute('fill', 'none');
+  }
+  draw();
+  window.addEventListener('resize', draw);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(draw);
+})();
+
+/* ── RU/EN. Английский — исходный, русский — перевод под него ── */
+var RU = {
+  w1:'Кто', w2:'кого', w3:'учил',
+  desc:'Атлас преподавания: 1 840 человек, 2 611 утверждений вида <em>A учил B</em>, и у каждого — документ, из которого оно взято. Никакого «влияния», никаких школ мысли и духовного родства — только годы, когда двое были в одной комнате, и один из них подписывал работы другого.',
+  nv1:'← Смотреть', nc1:'1 840 записей',
+  nv2:'Искать', nc2:'по имени, городу, году',
+  nv3:'Прислать →', nc3:'всегда с источником',
+  a1:'Одна цепочка в четыре поколения', a1h:'рис. 2',
+  figcap:'рис. 2 — одна из 74 цепочек, которые дотягиваются из комнаты 1919 года до комнаты этого семестра. Пунктир: преподаватель подписал год студента. Закрашенная точка: этот человек потом сам преподавал.',
+  m1:'Метод', m1h:'Что считается',
+  m_p1:'Утверждение попадает в атлас, когда есть три вещи: комната, период и лист бумаги. Бумагой может быть список группы, диплом с подписью, ведомость, письмо, в котором один жалуется на другого. Всё остальное — высказанное восхищение, общий манифест, некролог с признанием долга — регистрируется и в схему не идёт.',
+  m_p2:'Мы не взвешиваем линию. Человек, проведший двухнедельный воркшоп, и человек, который вёл шесть лет работы, соединены одним и тем же пунктиром в 1 пиксель: честного способа измерить разницу у нас нет, а каждая попытка его придумать делала атлас хуже.',
+  m_p3:'Если источники противоречат друг другу, показываются оба, а запись помечается открытой. Открытых записей двести одиннадцать. Это самая интересная часть атласа и причина, по которой он не печатается.',
+  band:'Школа — это не здание. Это человек, который научил того, кто научил вас, и лист бумаги, подтверждающий, что оба там были.',
+  bandcap:'рис. 3 — из предисловия к изданию 2024 года',
+  c1:'Семьдесят четыре цепочки', c1h:'Самые длинные',
+  ch1:'Веймар → Ульм → Брно → Белград', ch1m:'1919—сейчас · 11 человек · 34 источника',
+  ch2:'Роттердам → Милан → Порту → Бейрут', ch2m:'1924—сейчас · 9 человек · 27 источников',
+  ch3:'Будапешт → Осло → Орхус → Вена', ch3m:'1931—сейчас · 8 человек · 22 источника',
+  ch4:'Амстердам → Стамбул → Хельсинки', ch4m:'1928—сейчас · 7 человек · 19 источников',
+  ch5:'Лейпциг → Прага → Тбилиси → Лиссабон', ch5m:'1933—сейчас · 7 человек · 16 источников',
+  ch6:'Краков → Загреб → Гент', ch6m:'1946—сейчас · 6 человек · 14 источников',
+  e1:'Порядок', e1h:'Как появляется запись',
+  s1t:'Кто-то пишет нам', s1d:'Два имени, одна комната, годы и скан. Шестьсот сорок нынешних записей начались с письма от родственника.',
+  s2t:'Двое читают порознь', s2d:'Ни один не знает решения другого, пока оба не напишут строку. Если строки расходятся, запись уходит в открытые и остаётся там, пока не найдётся третий документ.',
+  s3t:'Источник кладётся в архив', s3d:'Копия уходит в архив с номером записи на ней. В атласе нет ничего, что мы не можем показать вам в один клик.',
+  s4t:'Линия проводится', s4d:'Пунктир, 1 пиксель, такой же, как все прочие. Публикация — по средам через одну, и это единственная церемония, которая у нас есть.',
+  k1:'Участие', k1h:'Прислать строку',
+  k_p1:'Если вы преподавали или у вас преподавали и есть документ — список группы, подписанный лист, фотография с датой на обороте, — атлас его ждёт. Напишите один раз, ответим в течение двух недель, в том числе если ответ будет «источника недостаточно».',
+  k_btn:'Отправить',
+  f1:'Lineage', f1m:'атлас того, кто кого учил',
+  f2:'Смотреть атлас', f2m:'1 840 человек',
+  f3:'Метод и источники', f3m:'211 записей открыты',
+  f4:'lines@lineage.atlas', f4m:'обновляется по средам через одну'
+};
+var EN = {};
+document.querySelectorAll('[data-i18n]').forEach(function (el) { EN[el.dataset.i18n] = el.innerHTML; });
+
+function setLang(l) {
+  var dict = l === 'ru' ? RU : EN;
+  document.querySelectorAll('[data-i18n]').forEach(function (el) {
+    var v = dict[el.dataset.i18n];
+    if (v !== undefined) el.innerHTML = v;
+  });
+  document.documentElement.lang = l;
+  document.documentElement.dataset.lang = l;
+  document.querySelectorAll('.lang button').forEach(function (b) {
+    b.setAttribute('aria-pressed', b.dataset.set === l ? 'true' : 'false');
+  });
+  window.dispatchEvent(new Event('resize'));
+}
+document.querySelectorAll('.lang button').forEach(function (b) {
+  b.addEventListener('click', function () { setLang(b.dataset.set); });
+});
+</script>
+</body>
+</html>

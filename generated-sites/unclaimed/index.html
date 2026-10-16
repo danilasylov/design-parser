@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>Unclaimed — the lost property office of a city transit system</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Wix+Madefor+Display:wght@400;500&family=Wix+Madefor+Text:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ─────────────────────────────────────────────────────────────
+   Дизайн-система: Uber (refero caf8d2ef) — tokens.css дословно
+   ───────────────────────────────────────────────────────────── */
+:root {
+  /* Colors */
+  --color-jet-black: #000000;
+  --color-paper-white: #ffffff;
+  --color-mist-gray: #f6f6f6;
+  --color-charcoal: #333333;
+  --color-iron-gray: #767676;
+  --color-ash-gray: #afafaf;
+  --color-slate: #5e5e5e;
+  --color-graphite: #4b4b4b;
+  --color-faded-teal: #9dcdd6;
+
+  /* Typography — Font Families */
+  /* UberMove → Wix Madefor Display, UberMoveText → Wix Madefor Text (обе с кириллицей) */
+  --font-ubermove: 'Wix Madefor Display', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-ubermovetext: 'Wix Madefor Text', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* Typography — Scale */
+  --text-caption: 12px;
+  --leading-caption: 1.67;
+  --text-body-sm: 14px;
+  --leading-body-sm: 1.5;
+  --text-body: 16px;
+  --leading-body: 1.43;
+  --text-subheading: 18px;
+  --leading-subheading: 1.33;
+  --text-heading-sm: 24px;
+  --leading-heading-sm: 1.33;
+  --text-heading: 36px;
+  --leading-heading: 1.22;
+  --text-display: 52px;
+  --leading-display: 1.23;
+
+  /* Typography — Weights */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+
+  /* Spacing */
+  --spacing-4: 4px;
+  --spacing-8: 8px;
+  --spacing-12: 12px;
+  --spacing-16: 16px;
+  --spacing-20: 20px;
+  --spacing-24: 24px;
+  --spacing-32: 32px;
+  --spacing-36: 36px;
+  --spacing-48: 48px;
+  --spacing-64: 64px;
+
+  /* Layout */
+  --page-max-width: 1200px;
+  --section-gap: 64px;
+  --card-padding: 24px;
+  --element-gap: 16px;
+
+  /* Border Radius */
+  --radius-lg: 8px;
+  --radius-full: 999px;
+  --radius-cards: 8px;
+  --radius-pills: 9999px;
+  --radius-inputs: 8px;
+  --radius-buttons: 8px;
+
+  /* Surfaces */
+  --surface-paper-white: #ffffff;
+  --surface-mist-gray: #f6f6f6;
+  --surface-jet-black: #000000;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--surface-paper-white);
+  color: var(--color-jet-black);
+  font-family: var(--font-ubermovetext);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  font-weight: var(--font-weight-regular);
+  padding-bottom: 64px;   /* под липкую чёрную полосу */
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; text-decoration: none; }
+h1, h2, h3, h4, p, ul, ol, figure { margin: 0; }
+ul { list-style: none; padding: 0; }
+
+.wrap { max-width: var(--page-max-width); margin: 0 auto; padding: 0 var(--spacing-24); }
+section { padding: var(--spacing-64) 0; }
+
+h1 { font-family: var(--font-ubermove); font-size: var(--text-display); line-height: var(--leading-display); font-weight: var(--font-weight-regular); letter-spacing: -0.01em; }
+h2 { font-family: var(--font-ubermove); font-size: var(--text-heading); line-height: var(--leading-heading); font-weight: var(--font-weight-regular); letter-spacing: -0.01em; }
+h3 { font-family: var(--font-ubermove); font-size: var(--text-subheading); line-height: var(--leading-subheading); font-weight: var(--font-weight-medium); }
+p.lead { font-size: var(--text-subheading); line-height: var(--leading-subheading); color: var(--color-charcoal); }
+.muted { color: var(--color-iron-gray); }
+
+/* ── Чёрная навигация ── */
+.nav { background: var(--surface-jet-black); color: var(--color-paper-white); }
+.nav .wrap { height: 60px; display: flex; align-items: center; gap: var(--spacing-24); }
+.nav .logo { font-family: var(--font-ubermove); font-size: 20px; font-weight: var(--font-weight-medium); }
+.nav-links { display: flex; gap: var(--spacing-20); }
+.nav-links a { font-size: var(--text-body-sm); }
+.nav-right { margin-left: auto; display: flex; align-items: center; gap: var(--spacing-16); font-size: var(--text-body-sm); }
+.pill-white { background: var(--color-paper-white); color: var(--color-jet-black); border-radius: var(--radius-pills); padding: 8px 16px; font-size: var(--text-body-sm); font-weight: var(--font-weight-medium); }
+.lang { display: inline-flex; align-items: center; gap: 6px; }
+.lang button { background: none; border: 0; color: var(--color-paper-white); font-family: inherit; font-size: var(--text-body-sm); padding: 0; cursor: pointer; opacity: 0.55; }
+.lang button[aria-pressed="true"] { opacity: 1; font-weight: var(--font-weight-medium); }
+
+/* ── Кнопки и поля ── */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border-radius: var(--radius-buttons); padding: 14px 20px; font-family: inherit; font-size: var(--text-body); font-weight: var(--font-weight-medium); cursor: pointer; border: 0; }
+.btn-black { background: var(--color-jet-black); color: var(--color-paper-white); }
+.btn-gray { background: var(--surface-mist-gray); color: var(--color-jet-black); }
+.field { display: flex; align-items: center; gap: 12px; background: var(--surface-mist-gray); border-radius: var(--radius-inputs); padding: 14px 16px; font-size: var(--text-body); color: var(--color-iron-gray); }
+.field svg { flex: none; }
+.toggle { display: inline-flex; gap: 6px; background: var(--surface-mist-gray); border-radius: var(--radius-pills); padding: 4px; }
+.toggle span { border-radius: var(--radius-pills); padding: 7px 14px; font-size: var(--text-body-sm); }
+.toggle span.on { background: var(--color-paper-white); font-weight: var(--font-weight-medium); }
+
+/* ── Хиро ── */
+.hero { padding: var(--spacing-48) 0 var(--spacing-64); }
+.hero .split { display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-48); align-items: start; }
+.hero .form { margin-top: var(--spacing-32); display: grid; gap: var(--spacing-16); max-width: 460px; }
+.hero .row { display: flex; align-items: center; gap: var(--spacing-16); }
+.hero .row a { font-size: var(--text-body-sm); text-decoration: underline; }
+.panel { background: var(--surface-mist-gray); border-radius: var(--radius-cards); overflow: hidden; }
+.panel svg { display: block; width: 100%; height: auto; }
+
+/* ── Карточки ── */
+.cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--spacing-16); }
+.card { background: var(--surface-mist-gray); border-radius: var(--radius-cards); padding: var(--card-padding); display: flex; flex-direction: column; }
+.card .n { font-family: var(--font-ubermove); font-size: var(--text-heading); line-height: 1.1; }
+.card p { font-size: var(--text-body-sm); color: var(--color-charcoal); margin-top: var(--spacing-8); }
+.card .ill { margin-top: auto; padding-top: var(--spacing-16); }
+.card .ill svg { display: block; }
+
+/* ── Таблица найденного ── */
+table { width: 100%; border-collapse: collapse; font-size: var(--text-body-sm); }
+thead th { text-align: left; font-weight: var(--font-weight-medium); color: var(--color-iron-gray); padding-bottom: var(--spacing-12); border-bottom: 1px solid var(--color-ash-gray); }
+tbody td { padding: var(--spacing-16) var(--spacing-16) var(--spacing-16) 0; border-bottom: 1px solid var(--color-mist-gray); vertical-align: top; }
+td.id { font-weight: var(--font-weight-medium); width: 130px; }
+td.dim { color: var(--color-iron-gray); }
+.state { display: inline-block; border-radius: var(--radius-pills); background: var(--surface-mist-gray); padding: 4px 12px; font-size: var(--text-caption); }
+.state.k { background: var(--color-jet-black); color: var(--color-paper-white); }
+
+/* ── Шаги ── */
+.steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-32); }
+.step .n { width: 28px; height: 28px; border-radius: var(--radius-pills); background: var(--color-jet-black); color: var(--color-paper-white); display: flex; align-items: center; justify-content: center; font-size: var(--text-body-sm); font-weight: var(--font-weight-medium); }
+.step h3 { margin: var(--spacing-16) 0 var(--spacing-8); }
+.step p { font-size: var(--text-body-sm); color: var(--color-charcoal); }
+
+/* ── Правила ── */
+.rules li { display: grid; grid-template-columns: 230px 1fr; gap: var(--spacing-24); padding: var(--spacing-20) 0; border-top: 1px solid var(--color-mist-gray); font-size: var(--text-body-sm); }
+.rules li b { font-weight: var(--font-weight-medium); }
+.rules li span { color: var(--color-charcoal); }
+
+/* ── Депо ── */
+.depots { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-16); }
+.depot { background: var(--surface-mist-gray); border-radius: var(--radius-cards); padding: var(--card-padding); }
+.depot b { display: block; font-family: var(--font-ubermove); font-size: var(--text-subheading); font-weight: var(--font-weight-medium); }
+.depot p { font-size: var(--text-body-sm); color: var(--color-charcoal); margin-top: var(--spacing-8); }
+.depot .hrs { font-size: var(--text-body-sm); margin-top: var(--spacing-12); }
+
+/* ── Подвал ── */
+footer { background: var(--surface-jet-black); color: var(--color-paper-white); padding: var(--spacing-64) 0 var(--spacing-48); }
+.foot { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--spacing-32); }
+footer h4 { font-size: var(--text-body-sm); font-weight: var(--font-weight-medium); margin-bottom: var(--spacing-16); }
+footer li { padding: 5px 0; font-size: var(--text-body-sm); color: var(--color-ash-gray); }
+footer li a:hover { color: var(--color-paper-white); }
+.foot-bottom { margin-top: var(--spacing-48); padding-top: var(--spacing-24); border-top: 1px solid var(--color-graphite); display: flex; font-size: var(--text-body-sm); color: var(--color-ash-gray); }
+.foot-bottom .right { margin-left: auto; display: flex; gap: var(--spacing-24); }
+
+/* ── Липкая чёрная полоса ── */
+.sticky {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;
+  background: var(--surface-jet-black); color: var(--color-paper-white);
+}
+.sticky .wrap { height: 64px; display: flex; align-items: center; gap: var(--spacing-16); }
+.sticky .t { font-size: var(--text-body-sm); }
+.sticky .pill-white { margin-left: auto; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap">
+    <a class="logo" href="#">Unclaimed</a>
+    <div class="nav-links">
+      <a href="#search" data-i18n="n1">Search</a>
+      <a href="#how" data-i18n="n2">Claiming</a>
+      <a href="#rules" data-i18n="n3">Rules</a>
+      <a href="#depots" data-i18n="n4">Depots</a>
+    </div>
+    <div class="nav-right">
+      <span class="lang">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#ffffff" stroke-width="1.3" aria-hidden="true"><circle cx="8" cy="8" r="6.5"/><path d="M1.5 8h13M8 1.5c1.8 2 2.6 4.2 2.6 6.5S9.8 12.5 8 14.5C6.2 12.5 5.4 10.3 5.4 8S6.2 3.5 8 1.5Z"/></svg>
+        <button type="button" data-set="en" aria-pressed="true">EN</button><span style="opacity:.55">/</span><button type="button" data-set="ru" aria-pressed="false">RU</button>
+      </span>
+      <a href="#" data-i18n="n5">Log in</a>
+      <a class="pill-white" href="#" data-i18n="n6">Report a loss</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="split">
+      <div>
+        <h1 data-i18n="h1">Left on the 14:20 tram. It is probably still with us.</h1>
+        <div class="form">
+          <div class="toggle"><span class="on" data-i18n="tg1">Search what was found</span><span data-i18n="tg2">Report what I lost</span></div>
+          <div class="field">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="#000" aria-hidden="true"><path d="M8 1a5 5 0 0 0-5 5c0 3.6 5 9 5 9s5-5.4 5-9a5 5 0 0 0-5-5Zm0 7a2 2 0 1 1 0-4 2 2 0 0 1 0 4Z"/></svg>
+            <span data-i18n="f1">Line, route or station</span>
+          </div>
+          <div class="field">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="#000" aria-hidden="true"><path d="M8 1.5A6.5 6.5 0 1 0 14.5 8 6.5 6.5 0 0 0 8 1.5Zm.75 6.75H11v1.5H7.25V4h1.5Z"/></svg>
+            <span data-i18n="f2">Date and approximate time</span>
+          </div>
+          <div class="field">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="#000" aria-hidden="true"><path d="M2 4h12v9H2z" opacity=".25"/><path d="M2 3.5h12a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5H2a.5.5 0 0 1-.5-.5V4a.5.5 0 0 1 .5-.5Zm4.5-2h3v2h-3z"/></svg>
+            <span data-i18n="f3">What it is — bag, phone, umbrella, documents…</span>
+          </div>
+          <div class="row">
+            <a class="btn btn-black" href="#found" data-i18n="f4">Search found items</a>
+            <a href="#" data-i18n="f5">I already have a case number</a>
+          </div>
+        </div>
+      </div>
+      <div class="panel">
+        <svg viewBox="0 0 560 460" aria-hidden="true">
+          <rect width="560" height="460" fill="#f6f6f6"/>
+          <!-- полки -->
+          <rect x="40" y="120" width="480" height="8" fill="#333333"/>
+          <rect x="40" y="270" width="480" height="8" fill="#333333"/>
+          <rect x="40" y="420" width="480" height="8" fill="#333333"/>
+          <!-- верхняя полка -->
+          <rect x="70" y="52" width="96" height="68" rx="6" fill="#e2762c"/>
+          <rect x="86" y="38" width="64" height="18" rx="9" fill="#c25c1c"/>
+          <rect x="188" y="66" width="70" height="54" rx="4" fill="#1f6f78"/>
+          <rect x="196" y="80" width="54" height="6" fill="#9dcdd6"/>
+          <rect x="196" y="94" width="38" height="6" fill="#9dcdd6"/>
+          <circle cx="312" cy="94" r="26" fill="#d9b26a"/>
+          <path d="M312 76v18l12 8" stroke="#4b4b4b" stroke-width="3" fill="none"/>
+          <rect x="368" y="60" width="46" height="60" rx="6" fill="#2b3a67"/>
+          <rect x="376" y="70" width="30" height="38" rx="2" fill="#9dcdd6"/>
+          <path d="M440 120V78a22 22 0 0 1 44 0v42" stroke="#8c3b2e" stroke-width="8" fill="none"/>
+          <!-- средняя полка -->
+          <path d="M70 270c0-46 30-76 62-76s62 30 62 76Z" fill="#c0392b"/>
+          <path d="M132 270v22a10 10 0 0 0 20 0" stroke="#4b4b4b" stroke-width="6" fill="none"/>
+          <rect x="214" y="196" width="86" height="74" rx="8" fill="#3f7a5e"/>
+          <rect x="238" y="182" width="38" height="16" rx="8" fill="#2e5c46"/>
+          <rect x="318" y="212" width="58" height="58" rx="6" fill="#d9b26a"/>
+          <path d="M334 212v-14h26v14" stroke="#4b4b4b" stroke-width="4" fill="none"/>
+          <rect x="396" y="222" width="96" height="48" rx="4" fill="#e2762c"/>
+          <rect x="404" y="234" width="80" height="4" fill="#ffffff"/>
+          <rect x="404" y="246" width="52" height="4" fill="#ffffff"/>
+          <!-- нижняя полка -->
+          <rect x="70" y="356" width="110" height="64" rx="6" fill="#2b3a67"/>
+          <rect x="88" y="374" width="74" height="8" fill="#9dcdd6"/>
+          <circle cx="228" cy="392" r="28" fill="#8c3b2e"/>
+          <circle cx="228" cy="392" r="10" fill="#f6f6f6"/>
+          <rect x="278" y="352" width="64" height="68" rx="4" fill="#3f7a5e"/>
+          <rect x="286" y="364" width="48" height="6" fill="#ffffff"/>
+          <rect x="286" y="378" width="34" height="6" fill="#ffffff"/>
+          <path d="M368 420v-40a18 18 0 0 1 36 0v40" fill="#d9b26a"/>
+          <rect x="424" y="368" width="68" height="52" rx="6" fill="#1f6f78"/>
+          <path d="M440 368v-12h36v12" stroke="#4b4b4b" stroke-width="4" fill="none"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <h2 style="margin-bottom:var(--spacing-24)" data-i18n="s0">What the depots are holding right now</h2>
+    <div class="cards">
+      <div class="card">
+        <div class="n">4 812</div>
+        <p data-i18n="cd1">umbrellas, of which 3 100 are black and nobody will ever describe them well enough</p>
+        <div class="ill"><svg width="60" height="60" viewBox="0 0 60 60" aria-hidden="true"><path d="M8 34c0-14 10-24 22-24s22 10 22 24Z" fill="#c0392b"/><path d="M30 34v14a6 6 0 0 0 12 0" stroke="#333" stroke-width="4" fill="none"/></svg></div>
+      </div>
+      <div class="card">
+        <div class="n">1 190</div>
+        <p data-i18n="cd2">sets of keys — the item most often reclaimed, usually within a day</p>
+        <div class="ill"><svg width="60" height="60" viewBox="0 0 60 60" aria-hidden="true"><circle cx="20" cy="24" r="12" fill="none" stroke="#d9b26a" stroke-width="6"/><path d="M28 30l22 22M42 44l6-6M48 50l6-6" stroke="#d9b26a" stroke-width="6" fill="none"/></svg></div>
+      </div>
+      <div class="card">
+        <div class="n">312</div>
+        <p data-i18n="cd3">phones, held in a locked cabinet and never opened by us</p>
+        <div class="ill"><svg width="60" height="60" viewBox="0 0 60 60" aria-hidden="true"><rect x="16" y="6" width="28" height="48" rx="5" fill="#2b3a67"/><rect x="20" y="12" width="20" height="32" fill="#9dcdd6"/></svg></div>
+      </div>
+      <div class="card">
+        <div class="n">2 044</div>
+        <p data-i18n="cd4">documents and cards, returned by post free of charge if you ask</p>
+        <div class="ill"><svg width="60" height="60" viewBox="0 0 60 60" aria-hidden="true"><rect x="8" y="14" width="44" height="32" rx="4" fill="#3f7a5e"/><rect x="14" y="22" width="14" height="14" fill="#ffffff"/><rect x="32" y="24" width="14" height="4" fill="#ffffff"/><rect x="32" y="32" width="10" height="4" fill="#ffffff"/></svg></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="found" style="padding-top:0">
+  <div class="wrap">
+    <h2 data-i18n="fd0">Found in the last three days</h2>
+    <p class="lead" style="margin:var(--spacing-16) 0 var(--spacing-32);max-width:720px" data-i18n="fd0p">Descriptions are deliberately partial. If an item is yours you will know the detail that is missing here, and that detail is what we ask for at the counter.</p>
+    <table>
+      <thead>
+        <tr><th data-i18n="t1">Case</th><th data-i18n="t2">Item</th><th data-i18n="t3">Found on</th><th data-i18n="t4">Depot</th><th data-i18n="t5">Held until</th><th data-i18n="t6">State</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="id">26-08-4471</td><td data-i18n="i1">Green backpack, textbooks inside, one bottle</td><td class="dim" data-i18n="p1">Tram 14, 18.08, evening</td><td class="dim">Sadovaya</td><td class="dim">17.11.2026</td><td><span class="state" data-i18n="st1">Waiting</span></td></tr>
+        <tr><td class="id">26-08-4470</td><td data-i18n="i2">Keys, four of them, wooden fob with letters</td><td class="dim" data-i18n="p2">Bus 61, 18.08, morning</td><td class="dim">Zarechye</td><td class="dim">17.11.2026</td><td><span class="state" data-i18n="st2">Waiting</span></td></tr>
+        <tr><td class="id">26-08-4468</td><td data-i18n="i3">Insulated flask, dented, sticker partly torn off</td><td class="dim" data-i18n="p3">Metro, Line 2, 17.08</td><td class="dim">Sadovaya</td><td class="dim">16.11.2026</td><td><span class="state" data-i18n="st3">Waiting</span></td></tr>
+        <tr><td class="id">26-08-4463</td><td data-i18n="i4">Child's coat, size 116, something in the left pocket</td><td class="dim" data-i18n="p4">Tram 3, 17.08, afternoon</td><td class="dim">Depo-1</td><td class="dim">16.11.2026</td><td><span class="state k" data-i18n="st4">Matched — come in</span></td></tr>
+        <tr><td class="id">26-08-4459</td><td data-i18n="i5">Documents in a folder, name known to us</td><td class="dim" data-i18n="p5">Bus 8, 16.08</td><td class="dim">Sadovaya</td><td class="dim">—</td><td><span class="state k" data-i18n="st5">Posted to owner</span></td></tr>
+        <tr><td class="id">26-08-4455</td><td data-i18n="i6">Violin, three-quarter size, case with two stickers</td><td class="dim" data-i18n="p6">Metro, Line 1, 16.08</td><td class="dim">Depo-1</td><td class="dim">15.11.2026</td><td><span class="state" data-i18n="st6">Waiting</span></td></tr>
+      </tbody>
+    </table>
+    <a class="btn btn-gray" style="margin-top:var(--spacing-32)" href="#" data-i18n="fd1">Browse all 9 114 items</a>
+  </div>
+</section>
+
+<section id="how" style="padding-top:0">
+  <div class="wrap">
+    <h2 style="margin-bottom:var(--spacing-32)" data-i18n="hw0">Getting it back takes three steps and one detail nobody else knows</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="n">1</div>
+        <h3 data-i18n="hw1h">Describe it, then wait a day</h3>
+        <p data-i18n="hw1p">Line, date, approximate time, and what the item is. Anything found in the previous twenty-four hours may still be travelling to the depot — most matches happen on the second day, not the first.</p>
+      </div>
+      <div class="step">
+        <div class="n">2</div>
+        <h3 data-i18n="hw2h">Name the detail we hid</h3>
+        <p data-i18n="hw2p">Every listing leaves something out: what is written on the fob, what is in the left pocket, which sticker is torn. Say it on the phone or in the form and the case is yours without an argument at the counter.</p>
+      </div>
+      <div class="step">
+        <div class="n">3</div>
+        <h3 data-i18n="hw3h">Collect, or ask for the post</h3>
+        <p data-i18n="hw3p">Bring any identity document to the depot the item is held at. Documents, cards and keys are posted free of charge; anything larger costs what the post office charges us, and nothing more.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="rules" style="padding-top:0">
+  <div class="wrap">
+    <div class="split" style="display:grid;grid-template-columns:1fr 1fr;gap:var(--spacing-48);align-items:start">
+      <div>
+        <h2 data-i18n="rl0">What happens to what is never claimed</h2>
+        <p class="lead" style="margin-top:var(--spacing-16)" data-i18n="rl0p">About sixty per cent of everything found is never asked for. The rules for it were written by the transit authority and are printed at every counter; this is the same text, shorter.</p>
+        <a class="btn btn-gray" style="margin-top:var(--spacing-24)" href="#" data-i18n="rl0b">Read the full regulation</a>
+      </div>
+      <ul class="rules">
+        <li><b data-i18n="r1b">Ninety days</b><span data-i18n="r1">Everything is held for ninety days from the day it reaches a depot, not from the day it was lost. Documents are held for a year.</span></li>
+        <li><b data-i18n="r2b">Perishables, one day</b><span data-i18n="r2">Food and flowers are photographed, listed, and disposed of the same evening. The photograph stays in the case for a year.</span></li>
+        <li><b data-i18n="r3b">Phones are not opened</b><span data-i18n="r3">Locked devices stay locked. We will not switch one on to find its owner, and we will not let anyone else do it either.</span></li>
+        <li><b data-i18n="r4b">After ninety days</b><span data-i18n="r4">Items go to a monthly public sale; clothing and children's things go to two shelters. Proceeds pay for the depots and are published quarterly.</span></li>
+        <li><b data-i18n="r5b">Money and jewellery</b><span data-i18n="r5">Held for a year in the safe at Sadovaya, then transferred to the city budget. Every transfer is listed with its case number.</span></li>
+        <li><b data-i18n="r6b">Nothing is thrown away quietly</b><span data-i18n="r6">Every item that leaves a depot leaves with a line in the register saying where it went, and the register is public.</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="depots" style="padding-top:0">
+  <div class="wrap">
+    <h2 style="margin-bottom:var(--spacing-24)" data-i18n="dp0">Three counters, and one of them is open on Sunday</h2>
+    <div class="depots">
+      <div class="depot">
+        <b>Sadovaya</b>
+        <p data-i18n="dp1">Sadovaya 41, entrance from the yard. Holds documents, money, phones and everything from the metro.</p>
+        <div class="hrs" data-i18n="dp1h">Mon–Sat 08:00–20:00 · Sun 10:00–16:00</div>
+      </div>
+      <div class="depot">
+        <b>Zarechye</b>
+        <p data-i18n="dp2">Bus park 3, Zarechnaya 8. Everything found on buses 40–90 and on the night routes.</p>
+        <div class="hrs" data-i18n="dp2h">Mon–Fri 09:00–18:00 · closed on weekends</div>
+      </div>
+      <div class="depot">
+        <b>Depo-1</b>
+        <p data-i18n="dp3">Tram depot, Proletarskaya 2. Large items — instruments, prams, bicycles, sports bags.</p>
+        <div class="hrs" data-i18n="dp3h">Tue–Sat 10:00–19:00</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <div class="logo" style="font-family:var(--font-ubermove);font-size:20px;font-weight:500;margin-bottom:var(--spacing-16)">Unclaimed</div>
+        <ul>
+          <li><a href="#" data-i18n="fl1">About the service</a></li>
+          <li><a href="#" data-i18n="fl2">Register of disposals</a></li>
+          <li><a href="#" data-i18n="fl3">Quarterly report</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 data-i18n="fh1">Find</h4>
+        <ul><li><a href="#search" data-i18n="fl4">Search items</a></li><li><a href="#" data-i18n="fl5">Report a loss</a></li><li><a href="#" data-i18n="fl6">Check a case</a></li><li><a href="#" data-i18n="fl7">Post it to me</a></li></ul>
+      </div>
+      <div>
+        <h4 data-i18n="fh2">Rules</h4>
+        <ul><li><a href="#rules" data-i18n="fl8">Holding periods</a></li><li><a href="#" data-i18n="fl9">Monthly sale</a></li><li><a href="#" data-i18n="fl10">Complaints</a></li><li><a href="#" data-i18n="fl11">Regulation text</a></li></ul>
+      </div>
+      <div>
+        <h4 data-i18n="fh3">Contact</h4>
+        <ul><li><a href="#">8 800 200-41-41</a></li><li><a href="#">lost@transit.city</a></li><li><a href="#depots" data-i18n="fl12">Depots and hours</a></li><li><a href="#" data-i18n="fl13">For drivers</a></li></ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span data-i18n="fb0">© 2026 City transit lost property service</span>
+      <span class="right"><a href="#" data-i18n="fb1">Privacy</a><a href="#" data-i18n="fb2">Accessibility</a></span>
+    </div>
+  </div>
+</footer>
+
+<div class="sticky">
+  <div class="wrap">
+    <span class="t" data-i18n="sk1">Lost something today? Reporting it takes two minutes and works better than waiting.</span>
+    <a class="pill-white" href="#" data-i18n="sk2">Report a loss</a>
+  </div>
+</div>
+
+<script>
+/* ── RU/EN. Английский — исходный, русский — перевод под него ── */
+var RU = {
+  n1:'Поиск', n2:'Как забрать', n3:'Правила', n4:'Пункты выдачи', n5:'Войти', n6:'Заявить о пропаже',
+  h1:'Забыли в трамвае в 14:20. Скорее всего, оно до сих пор у нас.',
+  tg1:'Искать среди найденного', tg2:'Заявить о пропаже',
+  f1:'Маршрут, линия или станция',
+  f2:'Дата и примерное время',
+  f3:'Что это — сумка, телефон, зонт, документы…',
+  f4:'Искать среди найденного', f5:'У меня уже есть номер дела',
+  s0:'Что сейчас лежит в пунктах выдачи',
+  cd1:'зонтов, из них 3 100 чёрных — и описать их достаточно точно не сможет никто',
+  cd2:'связок ключей: вещь, за которой возвращаются чаще всего, обычно в тот же день',
+  cd3:'телефонов; лежат в запертом шкафу, и мы их не включаем',
+  cd4:'документов и карт; по просьбе отправляем почтой бесплатно',
+  fd0:'Найдено за последние три дня',
+  fd0p:'Описания намеренно неполные. Если вещь ваша, вы знаете ту деталь, которой здесь не хватает, — именно её и спросят на стойке.',
+  t1:'Дело', t2:'Вещь', t3:'Где найдено', t4:'Пункт', t5:'Хранится до', t6:'Состояние',
+  i1:'Зелёный рюкзак, внутри учебники и одна бутылка', p1:'Трамвай 14, 18.08, вечер', st1:'Ждёт',
+  i2:'Ключи, четыре штуки, деревянный брелок с буквами', p2:'Автобус 61, 18.08, утро', st2:'Ждёт',
+  i3:'Термос, помятый, наклейка частично содрана', p3:'Метро, линия 2, 17.08', st3:'Ждёт',
+  i4:'Детская куртка, рост 116, в левом кармане кое-что есть', p4:'Трамвай 3, 17.08, день', st4:'Опознана — приходите',
+  i5:'Документы в папке, имя нам известно', p5:'Автобус 8, 16.08', st5:'Отправлено владельцу',
+  i6:'Скрипка, три четверти, футляр с двумя наклейками', p6:'Метро, линия 1, 16.08', st6:'Ждёт',
+  fd1:'Смотреть все 9 114 вещей',
+  hw0:'Забрать — это три шага и одна деталь, которую больше никто не знает',
+  hw1h:'Опишите и подождите сутки',
+  hw1p:'Маршрут, дата, примерное время и что за вещь. Всё найденное за последние сутки может ещё ехать в пункт выдачи: большинство совпадений случается на второй день, а не на первый.',
+  hw2h:'Назовите деталь, которую мы спрятали',
+  hw2p:'В каждом описании чего-то не хватает: что написано на брелоке, что лежит в левом кармане, какая наклейка порвана. Скажите это по телефону или в форме — и дело закрывается без спора на стойке.',
+  hw3h:'Заберите сами или попросите почтой',
+  hw3p:'Приходите в пункт с любым документом. Документы, карты и ключи отправляем бесплатно; всё, что крупнее, стоит ровно столько, сколько берёт почта, и ни рублём больше.',
+  rl0:'Что происходит с тем, за чем не пришли',
+  rl0p:'Примерно за шестьдесят процентов найденного не приходит никто. Правила для этого написаны транспортным управлением и висят на каждой стойке; здесь тот же текст, только короче.',
+  rl0b:'Читать регламент целиком',
+  r1b:'Девяносто дней', r1:'Всё хранится девяносто дней со дня поступления в пункт, а не со дня потери. Документы — год.',
+  r2b:'Скоропортящееся — сутки', r2:'Еду и цветы фотографируют, вносят в реестр и утилизируют в тот же вечер. Фотография остаётся в деле на год.',
+  r3b:'Телефоны не вскрывают', r3:'Заблокированные устройства остаются заблокированными. Мы не включаем их, чтобы найти владельца, и не позволяем это делать другим.',
+  r4b:'После девяноста дней', r4:'Вещи уходят на ежемесячную открытую распродажу, одежда и детское — в два приюта. Выручка идёт на содержание пунктов и публикуется раз в квартал.',
+  r5b:'Деньги и украшения', r5:'Хранятся год в сейфе на Садовой, затем передаются в городской бюджет. Каждая передача указана с номером дела.',
+  r6b:'Ничего не выбрасывают втихую', r6:'Любая вещь покидает пункт со строкой в реестре, куда именно она ушла, и реестр открыт.',
+  dp0:'Три стойки, и одна из них работает в воскресенье',
+  dp1:'Садовая, 41, вход со двора. Документы, деньги, телефоны и всё, что найдено в метро.',
+  dp1h:'Пн–сб 08:00–20:00 · вс 10:00–16:00',
+  dp2:'Автопарк 3, Заречная, 8. Всё, что найдено на автобусах 40–90 и на ночных маршрутах.',
+  dp2h:'Пн–пт 09:00–18:00 · выходные закрыто',
+  dp3:'Трамвайное депо, Пролетарская, 2. Крупное: инструменты, коляски, велосипеды, спортивные сумки.',
+  dp3h:'Вт–сб 10:00–19:00',
+  fl1:'О службе', fl2:'Реестр выбытия', fl3:'Квартальный отчёт',
+  fh1:'Найти', fl4:'Поиск вещей', fl5:'Заявить о пропаже', fl6:'Проверить дело', fl7:'Отправьте почтой',
+  fh2:'Правила', fl8:'Сроки хранения', fl9:'Ежемесячная распродажа', fl10:'Жалобы', fl11:'Текст регламента',
+  fh3:'Контакты', fl12:'Пункты и часы', fl13:'Водителям',
+  fb0:'© 2026 Служба находок городского транспорта', fb1:'Приватность', fb2:'Доступность',
+  sk1:'Потеряли что-то сегодня? Заявить — две минуты, и это работает лучше, чем ждать.',
+  sk2:'Заявить о пропаже'
+};
+var EN = {};
+document.querySelectorAll('[data-i18n]').forEach(function (el) { EN[el.dataset.i18n] = el.innerHTML; });
+
+function setLang(l) {
+  var dict = l === 'ru' ? RU : EN;
+  document.querySelectorAll('[data-i18n]').forEach(function (el) {
+    var v = dict[el.dataset.i18n];
+    if (v !== undefined) el.innerHTML = v;
+  });
+  document.documentElement.lang = l;
+  document.documentElement.dataset.lang = l;
+  document.querySelectorAll('.lang button').forEach(function (b) {
+    b.setAttribute('aria-pressed', b.dataset.set === l ? 'true' : 'false');
+  });
+}
+document.querySelectorAll('.lang button').forEach(function (b) {
+  b.addEventListener('click', function () { setLang(b.dataset.set); });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>Panel — game items you actually hold</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300&family=Roboto+Condensed:wght@400;500;700&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════════════════════════════
+   Дизайн-система Eclipse — styles.refero.design/style/fd2e0187-e67b-4869-8cfd-9de9e58d2868
+   :root ниже вставлен ДОСЛОВНО со вкладки CSS Variables.
+   ══════════════════════════════════════════════════════════════════ */
+:root {
+  /* Colors */
+  --color-eclipse-green: #a1fea0;
+  --color-ink-black: #000000;
+  --color-paper-white: #ffffff;
+
+  /* Typography — Font Families */
+  --font-barlow-condensed: 'Barlow Condensed', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-gt-alpina-condensed: 'GT Alpina Condensed', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-atlas-typewriter: 'Atlas Typewriter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-math: 'math', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* Typography — Scale */
+  --text-caption: 12px;
+  --leading-caption: 1.5;
+  --tracking-caption: 0.2px;
+  --text-body-sm: 14px;
+  --leading-body-sm: 1.2;
+  --text-body: 16px;
+  --leading-body: 1.6;
+  --tracking-body: 0.2px;
+  --text-body-lg: 18px;
+  --leading-body-lg: 1.56;
+  --tracking-body-lg: 0.2px;
+  --text-subheading: 32px;
+  --leading-subheading: 1.2;
+  --text-heading-sm: 48px;
+  --leading-heading-sm: 1;
+  --tracking-heading-sm: -0.03px;
+  --text-heading: 80px;
+  --leading-heading: 0.9;
+  --tracking-heading: -0.04px;
+  --text-heading-lg: 120px;
+  --leading-heading-lg: 0.83;
+  --tracking-heading-lg: -0.06px;
+  --text-display: 182px;
+  --leading-display: 0.8;
+  --tracking-display: -0.06px;
+
+  /* Typography — Weights */
+  --font-weight-thin: 100;
+  --font-weight-extralight: 200;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+
+  /* Spacing */
+  --spacing-unit: 4px;
+  --spacing-4: 4px;
+  --spacing-8: 8px;
+  --spacing-16: 16px;
+  --spacing-20: 20px;
+  --spacing-24: 24px;
+  --spacing-32: 32px;
+  --spacing-36: 36px;
+  --spacing-40: 40px;
+  --spacing-48: 48px;
+  --spacing-52: 52px;
+  --spacing-60: 60px;
+  --spacing-64: 64px;
+  --spacing-120: 120px;
+  --spacing-140: 140px;
+
+  /* Layout */
+  --page-max-width: 1200px;
+  --section-gap: 80px;
+  --card-padding: 32px;
+  --element-gap: 10-16px;
+
+  /* Border Radius */
+  --radius-3xl: 25px;
+  --radius-full: 100px;
+
+  /* Named Radii */
+  --radius-cards: 25px;
+  --radius-pills: 100px;
+  --radius-badges: 25px;
+  --radius-buttons: 25px;
+
+  /* Surfaces */
+  --surface-paper-white: #ffffff;
+  --surface-eclipse-green: #a1fea0;
+  --surface-ink-black: #000000;
+}
+
+/* Подстановки шрифтов. GT Alpina Condensed → Cormorant Garamond 300: DESIGN.md
+   называет именно «Cormorant Garamond Condensed Light», кириллица есть; более
+   лёгких начертаний у семейства нет, поэтому 300 — минимально доступный вес.
+   Barlow Condensed кириллицы не имеет — взят Roboto Condensed, тот же узкий
+   гротеск с кириллицей. Atlas Typewriter → IBM Plex Mono (из списка замен;
+   у Space Mono кириллицы нет). --element-gap в токенах нечисловой («10-16px»),
+   поэтому взят --spacing-16. */
+:root {
+  --font-disp: 'Cormorant Garamond', var(--font-gt-alpina-condensed);
+  --font-ui: 'Roboto Condensed', var(--font-barlow-condensed);
+  --font-mono: 'IBM Plex Mono', var(--font-atlas-typewriter);
+}
+
+* { box-sizing: border-box; }
+html { -webkit-font-smoothing: antialiased; }
+body {
+  margin: 0;
+  background: var(--surface-paper-white);
+  color: var(--color-ink-black);
+  font-family: var(--font-ui);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  letter-spacing: var(--tracking-body);
+  font-weight: var(--font-weight-regular);
+}
+svg { display: block; }
+a { color: inherit; text-decoration: none; }
+h1, h2, h3, h4, p, ul { margin: 0; padding: 0; }
+ul { list-style: none; }
+
+.wrap { max-width: var(--page-max-width); margin: 0 auto; padding: 0 var(--spacing-24); }
+.sec { padding: var(--section-gap) 0; }
+
+/* дисплей — волосяной серифный, вес 300 */
+.disp { font-family: var(--font-disp); font-weight: 300; }
+.d-lg { font-size: var(--text-heading-lg); line-height: var(--leading-heading-lg); letter-spacing: -0.06em; }
+.d { font-size: var(--text-heading); line-height: var(--leading-heading); letter-spacing: -0.04em; }
+.d-sm { font-size: var(--text-heading-sm); line-height: var(--leading-heading-sm); letter-spacing: -0.03em; }
+.sub { font-size: var(--text-subheading); line-height: var(--leading-subheading); }
+
+/* «этикетка» — только капслок с трекингом 0.2em */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+.lg { font-size: var(--text-body-lg); line-height: var(--leading-body-lg); }
+
+/* кнопки: зелёная и рядом с ней контурная — всегда парой */
+.btn {
+  display: inline-block;
+  background: var(--surface-eclipse-green);
+  color: var(--color-ink-black);
+  border: 1px solid var(--color-ink-black);
+  border-radius: var(--radius-buttons);
+  padding: 14px 28px;
+  font-family: var(--font-ui);
+  font-size: var(--text-body);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.2;
+  cursor: pointer;
+}
+.btn:hover { border-width: 2px; padding: 13px 27px; }
+.btn-out { background: transparent; }
+.btn-on-dark { border-color: var(--color-paper-white); color: var(--color-paper-white); }
+.btn-nav { border-radius: var(--radius-pills); padding: 10px 22px; font-size: var(--text-body-sm); }
+
+/* навигация: белая, вордмарк по центру */
+nav { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: var(--spacing-20) var(--spacing-32); border-bottom: 1px solid var(--color-ink-black); }
+nav .left { display: flex; gap: var(--spacing-24); }
+nav .left a { font-weight: var(--font-weight-medium); }
+nav .left a:hover { border-bottom: 1px solid var(--color-ink-black); }
+nav .mark { font-family: var(--font-disp); font-weight: 300; font-size: var(--text-subheading); letter-spacing: -0.02em; }
+nav .right { display: flex; gap: var(--spacing-16); align-items: center; justify-content: flex-end; }
+.lang { display: inline-flex; gap: 5px; align-items: center; font-family: var(--font-mono); font-size: var(--text-caption); letter-spacing: 0.1em; }
+.lang button { font: inherit; text-transform: uppercase; border: none; background: none; padding: 0; cursor: pointer; color: #888; }
+.lang button[aria-pressed="true"] { color: var(--color-ink-black); }
+.lang span { color: #888; }
+
+/* герой — чёрная полоса во всю ширину */
+.hero { background: var(--surface-ink-black); color: var(--color-paper-white); text-align: center; padding: var(--spacing-64) 0 var(--spacing-40); }
+.hero .eyebrow { color: var(--color-eclipse-green); }
+.hero h1 { max-width: 14ch; margin: var(--spacing-32) auto 0; }
+.hero p { max-width: 52ch; margin: var(--spacing-32) auto 0; }
+.hero .acts { display: flex; gap: var(--spacing-16); justify-content: center; margin: var(--spacing-40) 0 var(--spacing-48); }
+.hero .art { display: flex; justify-content: center; }
+
+/* бегущая полоса */
+.marquee { border-top: 1px solid var(--color-ink-black); border-bottom: 1px solid var(--color-ink-black); overflow: hidden; padding: var(--spacing-16) 0; }
+.marquee .track { display: flex; gap: var(--spacing-48); white-space: nowrap; width: max-content; animation: run 32s linear infinite; }
+@keyframes run { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+/* карточки */
+.three { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-24); margin-top: var(--spacing-48); }
+.card { border: 1px solid var(--color-ink-black); border-radius: var(--radius-cards); padding: var(--card-padding); }
+.card.spot { background: var(--surface-eclipse-green); }
+.card .eyebrow { margin-bottom: var(--spacing-24); }
+.card h3 { margin-bottom: var(--spacing-16); }
+
+/* два столбца */
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-64); align-items: center; }
+
+/* строки-шаги */
+.rows { margin-top: var(--spacing-48); border-top: 1px solid var(--color-ink-black); }
+.row { display: grid; grid-template-columns: 90px 1fr 260px; gap: var(--spacing-32); padding: var(--spacing-32) 0; border-bottom: 1px solid var(--color-ink-black); align-items: start; }
+
+footer { background: var(--surface-ink-black); color: var(--color-paper-white); padding: var(--spacing-64) 0 var(--spacing-32); }
+.fcols { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: var(--spacing-40); }
+.fcols h4 { margin-bottom: var(--spacing-16); color: var(--color-eclipse-green); }
+.fcols li { margin-bottom: var(--spacing-8); }
+.flegal { display: flex; justify-content: space-between; margin-top: var(--spacing-64); padding-top: var(--spacing-24); border-top: 1px solid var(--color-paper-white); }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="left">
+    <a href="#how" data-i18n="n1">How it works</a>
+    <a href="#fees" data-i18n="n2">Fees</a>
+    <a href="#studios" data-i18n="n3">For studios</a>
+  </div>
+  <div class="mark">Panel</div>
+  <div class="right">
+    <div class="lang"><button data-set="en" aria-pressed="true">EN</button><span>/</span><button data-set="ru" aria-pressed="false">RU</button></div>
+    <a class="btn btn-nav" href="#open" data-i18n="ncta">Open a vault</a>
+  </div>
+</nav>
+
+<!-- ── герой ────────────────────────────────────────────────────── -->
+<section class="hero">
+  <div class="wrap">
+    <div class="eyebrow" data-i18n="hk">Custody for game items · Since 2023</div>
+    <h1 class="disp d-lg" data-i18n="h1">The sword is yours when the studio shuts down</h1>
+    <p class="lg" data-i18n="hp">Panel holds the items you buy inside games in a vault you control, so a server going dark is an inconvenience and not a loss. Studios keep their economy; you keep the thing you paid for.</p>
+    <div class="acts">
+      <a class="btn" href="#open" data-i18n="ha1">Open a vault</a>
+      <a class="btn btn-out btn-on-dark" href="#how" data-i18n="ha2">Read how it works</a>
+    </div>
+  </div>
+  <div class="art">
+    <!-- плоская cel-графика: затмение, облака и мотоцикл контуром -->
+    <svg width="900" height="330" viewBox="0 0 900 330" fill="none">
+      <circle cx="450" cy="120" r="86" fill="#a1fea0"/>
+      <circle cx="418" cy="106" r="86" fill="#000000"/>
+      <path d="M120 244 q28 -44 74 -30 q16 -44 68 -34 q34 -40 82 -10 q42 -20 66 12 h-290 z" fill="#a1fea0"/>
+      <path d="M520 250 q30 -40 76 -26 q22 -40 70 -28 q38 -30 76 6 h-222 z" fill="#a1fea0"/>
+      <g stroke="#ffffff" stroke-width="3" stroke-linejoin="round">
+        <circle cx="330" cy="286" r="34"/><circle cx="560" cy="286" r="34"/>
+        <path d="M330 286 L410 286 L446 226 L520 226 L560 286"/>
+        <path d="M410 286 L446 286"/>
+        <path d="M446 226 L432 196 L470 196"/>
+        <path d="M520 226 L556 196 L590 208"/>
+        <path d="M470 196 q26 -34 58 -12"/>
+      </g>
+      <g stroke="#a1fea0" stroke-width="3">
+        <path d="M258 300 h-60"/><path d="M238 316 h-70"/><path d="M700 300 h60"/><path d="M718 316 h70"/>
+      </g>
+    </svg>
+  </div>
+</section>
+
+<!-- ── бегущая строка ───────────────────────────────────────────── -->
+<div class="marquee">
+  <div class="track eyebrow">
+    <span data-i18n="mq1">11 studios connected ✦ 640 000 items in custody ✦ withdrawals settle in 40 seconds ✦ two audits a year, both published ✦</span>
+    <span data-i18n="mq2">11 studios connected ✦ 640 000 items in custody ✦ withdrawals settle in 40 seconds ✦ two audits a year, both published ✦</span>
+  </div>
+</div>
+
+<!-- ── как это работает ─────────────────────────────────────────── -->
+<section class="sec" id="how">
+  <div class="wrap">
+    <div class="eyebrow" data-i18n="w0">How it works</div>
+    <h2 class="disp d" style="max-width:16ch;margin-top:var(--spacing-24)" data-i18n="w1">Three parties, one ledger, no surprises</h2>
+    <div class="three">
+      <div class="card">
+        <div class="eyebrow">01</div>
+        <h3 class="disp sub" data-i18n="c1t">The studio issues</h3>
+        <p data-i18n="c1d">Items are minted against the studio's own supply rules. We never create an item and we cannot change a drop rate — the game stays the game.</p>
+      </div>
+      <div class="card spot">
+        <div class="eyebrow">02</div>
+        <h3 class="disp sub" data-i18n="c2t">The vault holds</h3>
+        <p data-i18n="c2d">Your items sit in a vault keyed to you, not to an account on a server. Losing your login is a support ticket; losing the studio is not your problem.</p>
+      </div>
+      <div class="card">
+        <div class="eyebrow">03</div>
+        <h3 class="disp sub" data-i18n="c3t">The market clears</h3>
+        <p data-i18n="c3d">Sales settle in forty seconds and the studio takes its royalty in the same transaction, which is the only reason studios agreed to any of this.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── что происходит, когда игра закрывается ───────────────────── -->
+<section class="sec" style="padding-top:0">
+  <div class="wrap two">
+    <div>
+      <div class="eyebrow" data-i18n="s0">When a game closes</div>
+      <h2 class="disp d-sm" style="margin:var(--spacing-24) 0" data-i18n="s1">Four hundred servers went dark last year. Items in eleven of those games survived.</h2>
+      <p data-i18n="s2">A closed game is not a hack and not a scandal — it is a Tuesday. What Panel changes is what is left afterwards: a signed record of what you held, a vault that still opens, and a market where somebody who still cares can buy it.</p>
+      <div class="acts" style="display:flex;gap:var(--spacing-16);margin-top:var(--spacing-32)">
+        <a class="btn" href="#open" data-i18n="s3">Open a vault</a>
+        <a class="btn btn-out" href="#fees" data-i18n="s4">See the fees</a>
+      </div>
+    </div>
+    <div>
+      <svg width="100%" height="380" viewBox="0 0 520 380" fill="none">
+        <rect x="10" y="10" width="500" height="360" rx="25" stroke="#000000"/>
+        <path d="M10 96 h500" stroke="#000000"/>
+        <circle cx="52" cy="53" r="12" fill="#a1fea0" stroke="#000000"/>
+        <text x="82" y="59" font-family="IBM Plex Mono, monospace" font-size="13" letter-spacing="2" fill="#000000">VAULT 0x41C8</text>
+        <g stroke="#000000">
+          <rect x="40" y="130" width="200" height="90" rx="25"/>
+          <rect x="280" y="130" width="200" height="90" rx="25" fill="#a1fea0"/>
+          <rect x="40" y="248" width="200" height="90" rx="25" fill="#a1fea0"/>
+          <rect x="280" y="248" width="200" height="90" rx="25"/>
+        </g>
+        <g font-family="IBM Plex Mono, monospace" font-size="12" letter-spacing="2" fill="#000000">
+          <text x="66" y="168">HELIOS BLADE</text><text x="66" y="192">SERVER CLOSED</text>
+          <text x="306" y="168">SALT MASK</text><text x="306" y="192">TRADEABLE</text>
+          <text x="66" y="286">TIDE LANTERN</text><text x="66" y="310">TRADEABLE</text>
+          <text x="306" y="286">RUNNER 04</text><text x="306" y="310">SERVER CLOSED</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ── комиссии ─────────────────────────────────────────────────── -->
+<section class="sec" id="fees">
+  <div class="wrap">
+    <div class="eyebrow" data-i18n="f0">Fees</div>
+    <h2 class="disp d" style="max-width:14ch;margin-top:var(--spacing-24)" data-i18n="f1">Written down, all of them</h2>
+    <div class="rows">
+      <div class="row">
+        <span class="eyebrow">01</span>
+        <span data-i18n="f2a">Holding an item in a vault. Costs us nothing, so it costs you nothing, and that will not quietly change next year.</span>
+        <span class="disp sub" data-i18n="f2b">Free</span>
+      </div>
+      <div class="row">
+        <span class="eyebrow">02</span>
+        <span data-i18n="f3a">Selling on the market. Taken from the sale, never from the balance, and split with the studio in the same transaction.</span>
+        <span class="disp sub">2.5%</span>
+      </div>
+      <div class="row">
+        <span class="eyebrow">03</span>
+        <span data-i18n="f4a">Cashing out to a bank card, including the payment provider's cut, which we publish in the receipt rather than burying it.</span>
+        <span class="disp sub">1.1%</span>
+      </div>
+      <div class="row">
+        <span class="eyebrow">04</span>
+        <span data-i18n="f5a">Moving an item out to a wallet you control elsewhere. We would rather you stayed, but the door is not locked.</span>
+        <span class="disp sub" data-i18n="f5b">Free</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── для студий ───────────────────────────────────────────────── -->
+<section class="sec" id="studios" style="padding-top:0">
+  <div class="wrap">
+    <div class="card spot" style="padding:var(--spacing-64)">
+      <div class="eyebrow" data-i18n="st0">For studios</div>
+      <h2 class="disp d-sm" style="max-width:22ch;margin:var(--spacing-24) 0" data-i18n="st1">You keep the economy. We keep the receipts.</h2>
+      <p style="max-width:56ch" data-i18n="st2">Panel does not touch drop rates, supply or pricing — those stay in your build. What you get is a royalty that pays on every resale for as long as the item exists, and a promise you can make to players that costs you nothing to keep.</p>
+      <div class="acts" style="display:flex;gap:var(--spacing-16);margin-top:var(--spacing-32)">
+        <a class="btn btn-out" href="#open" data-i18n="st3">Talk to us</a>
+        <a class="btn btn-out" href="#open" data-i18n="st4">Read the integration docs</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── призыв ───────────────────────────────────────────────────── -->
+<section class="sec" id="open" style="padding-top:0">
+  <div class="wrap" style="text-align:center">
+    <h2 class="disp d" style="max-width:18ch;margin:0 auto" data-i18n="o1">Open a vault. It takes a minute and holds nothing until you put something in it.</h2>
+    <div class="acts" style="display:flex;gap:var(--spacing-16);justify-content:center;margin-top:var(--spacing-40)">
+      <a class="btn" href="#open" data-i18n="o2">Open a vault</a>
+      <a class="btn btn-out" href="#how" data-i18n="o3">How it works</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="fcols">
+      <div>
+        <div class="disp sub">Panel</div>
+        <p style="max-width:32ch;margin-top:var(--spacing-16)" data-i18n="fa">Custody and clearing for items bought inside games. Eleven studios, two published audits a year.</p>
+      </div>
+      <div>
+        <h4 class="eyebrow" data-i18n="fh1">Product</h4>
+        <ul><li data-i18n="fl1">Vaults</li><li data-i18n="fl2">Market</li><li data-i18n="fl3">Withdrawals</li></ul>
+      </div>
+      <div>
+        <h4 class="eyebrow" data-i18n="fh2">Studios</h4>
+        <ul><li data-i18n="fl4">Integration</li><li data-i18n="fl5">Royalties</li><li data-i18n="fl6">Closing a game</li></ul>
+      </div>
+      <div>
+        <h4 class="eyebrow" data-i18n="fh3">Trust</h4>
+        <ul><li data-i18n="fl7">Audits</li><li data-i18n="fl8">Reserves</li><li data-i18n="fl9">Write to us</li></ul>
+      </div>
+    </div>
+    <div class="flegal eyebrow">
+      <span>© 2026 Panel</span>
+      <span data-i18n="fn">Not investment advice · items are items</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ── RU/EN. Английский — исходный, русский — перевод под него ── */
+var RU = {
+  n1:'Как это работает', n2:'Комиссии', n3:'Студиям', ncta:'Открыть хранилище',
+  hk:'Хранение игровых предметов · с 2023 года',
+  h1:'Меч остаётся вашим, когда студия закрывается',
+  hp:'Panel держит предметы, купленные внутри игр, в хранилище, которым управляете вы: погасший сервер становится неудобством, а не потерей. Студия сохраняет свою экономику, вы — вещь, за которую заплатили.',
+  ha1:'Открыть хранилище', ha2:'Прочитать, как устроено',
+  mq1:'11 студий подключено ✦ 640 000 предметов на хранении ✦ вывод проходит за 40 секунд ✦ два аудита в год, оба опубликованы ✦',
+  mq2:'11 студий подключено ✦ 640 000 предметов на хранении ✦ вывод проходит за 40 секунд ✦ два аудита в год, оба опубликованы ✦',
+  w0:'Как это работает', w1:'Три стороны, один реестр, никаких сюрпризов',
+  c1t:'Студия выпускает', c1d:'Предметы чеканятся по правилам самой студии. Мы не создаём предметы и не можем изменить шанс выпадения — игра остаётся игрой.',
+  c2t:'Хранилище держит', c2d:'Ваши предметы лежат в хранилище, привязанном к вам, а не к аккаунту на сервере. Потерянный логин — обращение в поддержку; исчезнувшая студия — уже не ваша беда.',
+  c3t:'Рынок рассчитывает', c3d:'Сделки проходят за сорок секунд, и студия получает роялти в той же транзакции — единственная причина, по которой студии на всё это согласились.',
+  s0:'Когда игра закрывается',
+  s1:'В прошлом году погасло четыреста серверов. Предметы в одиннадцати из этих игр уцелели.',
+  s2:'Закрытая игра — это не взлом и не скандал, это вторник. Panel меняет только то, что остаётся после: подписанную запись о том, чем вы владели, хранилище, которое всё ещё открывается, и рынок, где найдётся тот, кому это до сих пор важно.',
+  s3:'Открыть хранилище', s4:'Смотреть комиссии',
+  f0:'Комиссии', f1:'Записаны все до одной',
+  f2a:'Хранение предмета в хранилище. Нам оно ничего не стоит, поэтому и вам ничего не стоит — и это не изменится тихо через год.',
+  f2b:'Бесплатно',
+  f3a:'Продажа на рынке. Берётся из сделки, а не с баланса, и делится со студией в той же транзакции.',
+  f4a:'Вывод на карту, включая долю платёжного провайдера, которую мы печатаем в чеке, а не прячем.',
+  f5a:'Перевод предмета в кошелёк, которым вы управляете сами. Нам бы хотелось, чтобы вы остались, но дверь не заперта.',
+  f5b:'Бесплатно',
+  st0:'Студиям', st1:'Экономика остаётся вашей. Нам достаются чеки.',
+  st2:'Panel не трогает шансы выпадения, эмиссию и цены — всё это остаётся в вашей сборке. Взамен вы получаете роялти с каждой перепродажи на весь срок жизни предмета и обещание игрокам, которое ничего не стоит держать.',
+  st3:'Написать нам', st4:'Документация по интеграции',
+  o1:'Откройте хранилище. Это займёт минуту, и до первого предмета оно пустое.',
+  o2:'Открыть хранилище', o3:'Как это работает',
+  fa:'Хранение и клиринг предметов, купленных внутри игр. Одиннадцать студий, два опубликованных аудита в год.',
+  fh1:'Продукт', fl1:'Хранилища', fl2:'Рынок', fl3:'Вывод',
+  fh2:'Студиям', fl4:'Интеграция', fl5:'Роялти', fl6:'Закрытие игры',
+  fh3:'Доверие', fl7:'Аудиты', fl8:'Резервы', fl9:'Написать нам',
+  fn:'Не инвестиционный совет · предметы это предметы'
+};
+var EN = {};
+document.querySelectorAll('[data-i18n]').forEach(function (el) { EN[el.dataset.i18n] = el.innerHTML; });
+function setLang(l) {
+  var dict = l === 'ru' ? RU : EN;
+  document.querySelectorAll('[data-i18n]').forEach(function (el) {
+    var v = dict[el.dataset.i18n];
+    if (v !== undefined) el.innerHTML = v;
+  });
+  document.documentElement.lang = l;
+  document.documentElement.dataset.lang = l;
+  document.querySelectorAll('.lang button').forEach(function (b) {
+    b.setAttribute('aria-pressed', b.dataset.set === l ? 'true' : 'false');
+  });
+}
+document.querySelectorAll('.lang button').forEach(function (b) {
+  b.addEventListener('click', function () { setLang(b.dataset.set); });
+});
+</script>
+</body>
+</html>

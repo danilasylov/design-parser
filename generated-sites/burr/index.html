@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>Burr — a two-person roastery that publishes every batch</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════════════════════════════
+   Дизайн-система Touchy Coffee — styles.refero.design/style/6da76890-6e04-452a-834d-ff019e232c2b
+   :root ниже вставлен ДОСЛОВНО со вкладки CSS Variables.
+   ══════════════════════════════════════════════════════════════════ */
+:root {
+  /* Colors */
+  --color-ink: #000000;
+  --color-sage: #788c8c;
+  --color-cream: #ffffff;
+  --color-terracotta: #9f4920;
+  --color-lavender: #a697c6;
+  --color-moss: #5b9133;
+  --color-sunshine: #fff78f;
+  --color-sky: #d0eaf4;
+
+  /* Typography — Font Families */
+  --font-apercu-mono: 'Apercu Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-touchy-script-custom: 'Touchy Script (custom)', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-apercu-mono-bold: 'Apercu Mono Bold', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Typography — Scale */
+  --text-subheading: 20px;
+  --leading-subheading: 1.2;
+  --text-heading-sm: 24px;
+  --leading-heading-sm: 1.2;
+  --text-display: 50px;
+  --leading-display: 1.2;
+
+  /* Typography — Weights */
+  --font-weight-regular: 400;
+  --font-weight-bold: 700;
+
+  /* Spacing */
+  --spacing-unit: 4px;
+  --spacing-20: 20px;
+  --spacing-40: 40px;
+  --spacing-60: 60px;
+  --spacing-80: 80px;
+  --spacing-100: 100px;
+  --spacing-140: 140px;
+  --spacing-160: 160px;
+
+  /* Layout */
+  --section-gap: 80px;
+  --card-padding: 20px;
+  --element-gap: 20px;
+
+  /* Border Radius */
+  --radius-2xl: 20px;
+  --radius-full: 100px;
+
+  /* Named Radii */
+  --radius-tags: 100px;
+  --radius-cards: 20px;
+  --radius-images: 20px;
+  --radius-inputs: 100px;
+  --radius-buttons: 100px;
+
+  /* Surfaces */
+  --surface-terracotta-band: #9f4920;
+  --surface-sage-band: #788c8c;
+  --surface-sky-band: #d0eaf4;
+  --surface-card-surface: #ffffff;
+}
+
+/* Подстановки шрифтов. Apercu Mono → IBM Plex Mono: из трёх замен DESIGN.md
+   (Space Mono, IBM Plex Mono, JetBrains Mono) у Space Mono кириллицы нет.
+   Скрипт логотипа — Caveat 700: Caveat Brush, Permanent Marker и Patrick Hand SC
+   кириллицы не имеют. Розовый #f5b5c8 описан в компонентах (звёзды, поп-ап),
+   но токена не имеет — заведён как --color-pink. */
+:root {
+  --font-mono: 'IBM Plex Mono', var(--font-apercu-mono);
+  --font-script: 'Caveat', var(--font-touchy-script-custom);
+  --color-pink: #f5b5c8;
+  --color-kraft: #c8a06a;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-font-smoothing: antialiased; }
+body {
+  margin: 0;
+  background: var(--surface-sage-band);
+  color: var(--color-ink);
+  font-family: var(--font-mono);
+  font-size: var(--text-subheading);
+  line-height: var(--leading-subheading);
+  font-weight: var(--font-weight-regular);
+}
+svg { display: block; }
+a { color: inherit; text-decoration: none; }
+h1, h2, h3, h4, p, ul { margin: 0; padding: 0; }
+ul { list-style: none; }
+
+.wrap { max-width: 1240px; margin: 0 auto; padding: 0 var(--spacing-40); }
+.band { padding: var(--spacing-80) 0; }
+.b-terra { background: var(--surface-terracotta-band); }
+.b-sage { background: var(--surface-sage-band); }
+.b-sky { background: var(--surface-sky-band); }
+.b-sun { background: var(--color-sunshine); }
+
+/* пилюли — обязательная форма системы */
+.pill {
+  display: inline-flex; align-items: center; gap: var(--spacing-20);
+  border: 1px solid var(--color-ink);
+  border-radius: var(--radius-buttons);
+  padding: 10px var(--spacing-20);
+  font-family: var(--font-mono);
+  font-size: var(--text-subheading);
+  line-height: 1.2;
+  background: transparent;
+  cursor: pointer;
+}
+.pill-ink { background: var(--color-ink); color: var(--color-cream); font-weight: var(--font-weight-bold); text-transform: uppercase; }
+.pill-ink:hover { background: var(--color-cream); color: var(--color-ink); }
+.pill-ghost:hover { background: var(--color-ink); color: var(--color-cream); }
+
+.mono-lg { font-size: var(--text-heading-sm); line-height: var(--leading-heading-sm); }
+.disp { font-size: var(--text-display); line-height: var(--leading-display); font-weight: var(--font-weight-bold); text-transform: uppercase; }
+.bold { font-weight: var(--font-weight-bold); }
+.up { text-transform: uppercase; }
+
+/* герой на терракоте */
+.hero { position: relative; padding: var(--spacing-40) 0 var(--spacing-80); }
+.hero .navrow { display: flex; justify-content: space-between; align-items: center; padding: 0 var(--spacing-40); }
+.hero .navrow .mid { display: flex; gap: var(--spacing-20); }
+.hero .mark { font-family: var(--font-script); font-size: 200px; line-height: .9; text-align: center; margin: var(--spacing-40) 0 0; }
+.hero .tag { text-align: center; margin-top: var(--spacing-20); }
+.hero .acts { display: flex; gap: var(--spacing-20); justify-content: center; margin-top: var(--spacing-40); }
+.lang { display: inline-flex; gap: 6px; align-items: center; }
+.lang button { font: inherit; border: none; background: none; padding: 0; cursor: pointer; color: rgba(0,0,0,.45); text-transform: uppercase; }
+.lang button[aria-pressed="true"] { color: var(--color-ink); }
+.lang span { color: rgba(0,0,0,.45); }
+
+/* карточки товара */
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-40); }
+.card {
+  background: var(--surface-card-surface);
+  border-radius: var(--radius-cards);
+  padding: var(--card-padding);
+}
+.card .shot { position: relative; border-radius: var(--radius-images); overflow: hidden; background: var(--color-sunshine); }
+.card .stamp {
+  position: absolute; left: 16px; top: 16px;
+  border-radius: var(--radius-tags);
+  padding: var(--spacing-20);
+  width: 116px; height: 116px;
+  display: flex; align-items: center; justify-content: center; text-align: center;
+  font-weight: var(--font-weight-bold); font-size: 15px; line-height: 1.1;
+  color: var(--color-cream); text-transform: uppercase;
+}
+.card .name { margin: var(--spacing-20) 0; }
+.card .row { display: flex; gap: 10px; }
+.card .row .pill { flex: 1; justify-content: space-between; }
+.card .pill + .pill { margin-top: 10px; }
+.stepper { display: flex; align-items: center; justify-content: space-between; width: 100%; }
+.stepper .div { width: 1px; height: 22px; background: var(--color-ink); }
+
+/* левая вертикальная навигация магазина */
+.shoprow { display: grid; grid-template-columns: 80px 1fr; gap: var(--spacing-20); }
+.vnav { display: flex; flex-direction: column; gap: var(--spacing-20); letter-spacing: .2em; font-weight: var(--font-weight-bold); }
+
+/* обжарка — солнечная полоса */
+.steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-40); margin-top: var(--spacing-60); }
+.steps .n { font-family: var(--font-script); font-size: 72px; line-height: .8; }
+.steps h3 { margin: var(--spacing-20) 0 10px; text-transform: uppercase; }
+
+/* отзывы */
+.rev { border-radius: var(--radius-cards); padding: var(--card-padding); }
+.rev.moss { background: var(--color-moss); }
+.rev.terra { background: var(--color-terracotta); color: var(--color-cream); }
+.rev.lav { background: var(--color-lavender); }
+.rev .stars { display: flex; gap: 6px; margin-bottom: var(--spacing-20); }
+.rev .who { font-weight: var(--font-weight-bold); text-decoration: underline; margin-bottom: 10px; }
+.rev p { line-height: 1.5; }
+
+/* бегущая строка */
+.marquee { background: var(--color-ink); color: var(--color-cream); overflow: hidden; padding: 12px 0; }
+.marquee .track { display: flex; gap: var(--spacing-40); white-space: nowrap; width: max-content; animation: run 34s linear infinite; }
+.marquee span { text-transform: uppercase; }
+@keyframes run { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+/* подписка */
+.sub { display: flex; gap: var(--spacing-20); align-items: center; margin-top: var(--spacing-40); }
+.sub .inp { background: var(--color-cream); border: 1px solid var(--color-ink); border-radius: var(--radius-inputs); padding: 10px var(--spacing-20); min-width: 320px; color: rgba(0,0,0,.5); }
+
+footer { background: var(--color-sage); padding: var(--spacing-60) 0 var(--spacing-40); }
+.fcols { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: var(--spacing-40); }
+.fcols h4 { text-transform: uppercase; font-weight: var(--font-weight-bold); margin-bottom: var(--spacing-20); }
+.fcols li { margin-bottom: 10px; }
+.flegal { display: flex; justify-content: space-between; margin-top: var(--spacing-60); border-top: 1px solid var(--color-ink); padding-top: var(--spacing-20); }
+</style>
+</head>
+<body>
+
+<!-- ── терракотовая полоса: герой ───────────────────────────────── -->
+<section class="b-terra hero">
+  <div class="navrow">
+    <a class="pill pill-ink" href="#top" data-i18n="nav1">Home</a>
+    <div class="mid">
+      <div class="pill pill-ghost lang"><button data-set="en" aria-pressed="true">EN</button><span>/</span><button data-set="ru" aria-pressed="false">RU</button></div>
+      <a class="pill pill-ink" href="#shop" data-i18n="nav2">Shop</a>
+    </div>
+  </div>
+  <div class="mark">burr</div>
+  <div class="tag up bold" data-i18n="tag">Two people, one drum, roasted in Vyborg on Tuesdays</div>
+  <div class="acts">
+    <a class="pill pill-ink" href="#shop" data-i18n="hb1">Buy this week's roast</a>
+    <a class="pill pill-ghost" href="#roast" data-i18n="hb2">Read the batch log</a>
+  </div>
+</section>
+
+<!-- ── шалфейная полоса: магазин ────────────────────────────────── -->
+<section class="b-sage band" id="shop">
+  <div class="wrap">
+    <div class="shoprow">
+      <div class="vnav up">
+        <span data-i18n="vn1">In</span><span data-i18n="vn2">Our</span><span data-i18n="vn3">Shop</span>
+      </div>
+      <div>
+        <div class="mono-lg bold up" style="margin-bottom:var(--spacing-40)" data-i18n="s0">Three bags, ground to order</div>
+        <div class="grid-3">
+          <div class="card">
+            <div class="shot">
+              <svg width="100%" height="260" viewBox="0 0 320 260" fill="none">
+                <rect width="320" height="260" fill="#fff78f"/>
+                <path d="M96 74 L224 74 L232 236 L88 236 Z" fill="#c8a06a"/>
+                <path d="M96 74 L110 56 L210 56 L224 74 Z" fill="#8f6f45"/>
+                <rect x="140" y="48" width="40" height="12" rx="6" fill="#000000"/>
+                <rect x="112" y="150" width="96" height="30" rx="15" fill="#000000"/>
+              </svg>
+              <div class="stamp" style="background:var(--color-terracotta)" data-i18n="st1">Yirga­cheffe washed</div>
+            </div>
+            <div class="name bold up" data-i18n="p1">Ethiopia · light</div>
+            <div class="pill pill-ghost" style="width:100%;justify-content:space-between"><span>250 g</span><span>1 450 ₽</span></div>
+            <div class="pill pill-ghost" style="width:100%">
+              <div class="stepper"><span>− 1 +</span><span class="div"></span><span class="bold up" data-i18n="add">Add</span></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="shot">
+              <svg width="100%" height="260" viewBox="0 0 320 260" fill="none">
+                <rect width="320" height="260" fill="#d0eaf4"/>
+                <path d="M96 74 L224 74 L232 236 L88 236 Z" fill="#c8a06a"/>
+                <path d="M96 74 L110 56 L210 56 L224 74 Z" fill="#8f6f45"/>
+                <rect x="140" y="48" width="40" height="12" rx="6" fill="#000000"/>
+                <rect x="112" y="150" width="96" height="30" rx="15" fill="#000000"/>
+              </svg>
+              <div class="stamp" style="background:var(--color-moss)" data-i18n="st2">Huila de­caf</div>
+            </div>
+            <div class="name bold up" data-i18n="p2">Colombia · medium</div>
+            <div class="pill pill-ghost" style="width:100%;justify-content:space-between"><span>250 g</span><span>1 280 ₽</span></div>
+            <div class="pill pill-ghost" style="width:100%">
+              <div class="stepper"><span>− 1 +</span><span class="div"></span><span class="bold up" data-i18n="add2">Add</span></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="shot">
+              <svg width="100%" height="260" viewBox="0 0 320 260" fill="none">
+                <rect width="320" height="260" fill="#a697c6"/>
+                <path d="M96 74 L224 74 L232 236 L88 236 Z" fill="#c8a06a"/>
+                <path d="M96 74 L110 56 L210 56 L224 74 Z" fill="#8f6f45"/>
+                <rect x="140" y="48" width="40" height="12" rx="6" fill="#000000"/>
+                <rect x="112" y="150" width="96" height="30" rx="15" fill="#000000"/>
+              </svg>
+              <div class="stamp" style="background:#000000" data-i18n="st3">Espresso no. 4</div>
+            </div>
+            <div class="name bold up" data-i18n="p3">Brazil + India · dark</div>
+            <div class="pill pill-ghost" style="width:100%;justify-content:space-between"><span>1 kg</span><span>3 900 ₽</span></div>
+            <div class="pill pill-ghost" style="width:100%">
+              <div class="stepper"><span>− 1 +</span><span class="div"></span><span class="bold up" data-i18n="add3">Add</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── солнечная полоса: как жарим ──────────────────────────────── -->
+<section class="b-sun band" id="roast">
+  <div class="wrap">
+    <div class="disp" style="max-width:20ch" data-i18n="r0">Every batch is written down</div>
+    <p class="mono-lg" style="max-width:56ch;margin-top:var(--spacing-20)" data-i18n="r1">Twelve kilos at a time on a 1978 drum roaster we rebuilt ourselves. The curve, the drop temperature and the person who stood at the machine go on the bag — and on the website, whether the batch went well or not.</p>
+    <div class="steps">
+      <div>
+        <div class="n">01</div>
+        <h3 class="bold" data-i18n="r2t">Green in</h3>
+        <p data-i18n="r2d">Bought a sack at a time from two importers we have met in person. Nothing sits longer than four months.</p>
+      </div>
+      <div>
+        <div class="n">02</div>
+        <h3 class="bold" data-i18n="r3t">Tuesday drum</h3>
+        <p data-i18n="r3d">Roasted the morning it ships. First crack, drop time and weight loss are logged by hand in the same notebook since 2021.</p>
+      </div>
+      <div>
+        <div class="n">03</div>
+        <h3 class="bold" data-i18n="r4t">Cupped Thursday</h3>
+        <p data-i18n="r4d">Every batch is tasted blind against the previous one. If it lost, it goes to the café downstairs and never to you.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── голубая полоса: отзывы ───────────────────────────────────── -->
+<section class="b-sky band">
+  <div class="wrap">
+    <div class="mono-lg bold up" style="margin-bottom:var(--spacing-40)" data-i18n="t0">What people write back</div>
+    <div class="grid-3">
+      <div class="rev moss">
+        <div class="stars">
+          <svg width="26" height="26" viewBox="0 0 26 26"><path d="M13 1l3.4 7.6L25 9.6l-6.4 5.6 1.9 8.4L13 19.4 5.5 23.6l1.9-8.4L1 9.6l8.6-1z" fill="#f5b5c8"/></svg>
+          <svg width="26" height="26" viewBox="0 0 26 26"><path d="M13 1l3.4 7.6L25 9.6l-6.4 5.6 1.9 8.4L13 19.4 5.5 23.6l1.9-8.4L1 9.6l8.6-1z" fill="#f5b5c8"/></svg>
+          <svg width="26" height="26" viewBox="0 0 26 26"><path d="M13 1l3.4 7.6L25 9.6l-6.4 5.6 1.9 8.4L13 19.4 5.5 23.6l1.9-8.4L1 9.6l8.6-1z" fill="#f5b5c8"/></svg>
+          <svg width="26" height="26" viewBox="0 0 26 26"><path d="M13 1l3.4 7.6L25 9.6l-6.4 5.6 1.9 8.4L13 19.4 5.5 23.6l1.9-8.4L1 9.6l8.6-1z" fill="#f5b5c8"/></svg>
+          <svg width="26" height="26" viewBox="0 0 26 26"><path d="M13 1l3.4 7.6L25 9.6l-6.4 5.6 1.9 8.4L13 19.4 5.5 23.6l1.9-8.4L1 9.6l8.6-1z" fill="#f5b5c8"/></svg>
+        </div>
+        <div class="who" data-i18n="rv1n">Nadya, Petrozavodsk</div>
+        <p data-i18n="rv1">The bag came with a note saying the batch ran ten seconds long and they were sorry about it. I could not taste it. I keep buying because of the note.</p>
+      </div>
+      <div class="rev terra">
+        <div class="stars">
+          <svg width="26" height="26" viewBox="0 0 26 26"><path d="M13 1l3.4 7.6L25 9.6l-6.4 5.6 1.9 8.4L13 19.4 5.5 23.6l1.9-8.4L1 9.6l8.6-1z" fill="#fff78f"/></svg>
+          <svg width="26" height="26" viewBox="0 0 26 26"><path d="M13 1l3.4 7.6L25 9.6l-6.4 5.6 1.9 8.4L13 19.4 5.5 23.6l1.9-8.4L1 9.6l8.6-1z" fill="#fff78f"/></svg>
+          <svg width="26" height="26" viewBox="0 0 26 26"><path d="M13 1l3.4 7.6L25 9.6l-6.4 5.6 1.9 8.4L13 19.4 5.5 23.6l1.9-8.4L1 9.6l8.6-1z" fill="#fff78f"/></svg>
+          <svg width="26" height="26" viewBox="0 0 26 26"><path d="M13 1l3.4 7.6L25 9.6l-6.4 5.6 1.9 8.4L13 19.4 5.5 23.6l1.9-8.4L1 9.6l8.6-1z" fill="#fff78f"/></svg>
+          <svg width="26" height="26" viewBox="0 0 26 26"><path d="M13 1l3.4 7.6L25 9.6l-6.4 5.6 1.9 8.4L13 19.4 5.5 23.6l1.9-8.4L1 9.6l8.6-1z" fill="#fff78f"/></svg>
+        </div>
+        <div class="who" data-i18n="rv2n">Artyom, Kazan</div>
+        <p data-i18n="rv2">Ordered the espresso for a bar of eleven seats. Third year, same recipe, and they warn us two weeks before a lot runs out.</p>
+      </div>
+      <div class="rev lav">
+        <div class="stars">
+          <svg width="26" height="26" viewBox="0 0 26 26"><path d="M13 1l3.4 7.6L25 9.6l-6.4 5.6 1.9 8.4L13 19.4 5.5 23.6l1.9-8.4L1 9.6l8.6-1z" fill="#000000"/></svg>
+          <svg width="26" height="26" viewBox="0 0 26 26"><path d="M13 1l3.4 7.6L25 9.6l-6.4 5.6 1.9 8.4L13 19.4 5.5 23.6l1.9-8.4L1 9.6l8.6-1z" fill="#000000"/></svg>
+          <svg width="26" height="26" viewBox="0 0 26 26"><path d="M13 1l3.4 7.6L25 9.6l-6.4 5.6 1.9 8.4L13 19.4 5.5 23.6l1.9-8.4L1 9.6l8.6-1z" fill="#000000"/></svg>
+          <svg width="26" height="26" viewBox="0 0 26 26"><path d="M13 1l3.4 7.6L25 9.6l-6.4 5.6 1.9 8.4L13 19.4 5.5 23.6l1.9-8.4L1 9.6l8.6-1z" fill="#000000"/></svg>
+          <svg width="26" height="26" viewBox="0 0 26 26"><path d="M13 1l3.4 7.6L25 9.6l-6.4 5.6 1.9 8.4L13 19.4 5.5 23.6l1.9-8.4L1 9.6l8.6-1z" fill="#000000"/></svg>
+        </div>
+        <div class="who" data-i18n="rv3n">Lena, Vyborg</div>
+        <p data-i18n="rv3">I live two streets away and still get it by post, because the post office box is warmer than the shop on a Tuesday morning.</p>
+      </div>
+    </div>
+    <div class="sub">
+      <div class="inp" data-i18n="subph">your@email</div>
+      <a class="pill pill-ink" href="#" data-i18n="subb">Send</a>
+      <span data-i18n="subn">One letter a month: what is roasting, what is gone.</span>
+    </div>
+  </div>
+</section>
+
+<!-- ── бегущая строка ───────────────────────────────────────────── -->
+<div class="marquee">
+  <div class="track">
+    <span data-i18n="mq1">Twelve kilos at a time ✦ roasted on Tuesday ✦ shipped on Wednesday ✦ drunk by Sunday ✦</span>
+    <span data-i18n="mq2">Twelve kilos at a time ✦ roasted on Tuesday ✦ shipped on Wednesday ✦ drunk by Sunday ✦</span>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="fcols">
+      <div>
+        <div class="mark" style="font-family:var(--font-script);font-size:64px;line-height:.9">burr</div>
+        <p style="max-width:30ch;margin-top:10px" data-i18n="fa">A two-person roastery above a shoe repair shop. Vyborg, since 2021.</p>
+      </div>
+      <div>
+        <h4 data-i18n="fh1">Shop</h4>
+        <ul><li data-i18n="fl1">This week</li><li data-i18n="fl2">Subscription</li><li data-i18n="fl3">Wholesale</li></ul>
+      </div>
+      <div>
+        <h4 data-i18n="fh2">Roastery</h4>
+        <ul><li data-i18n="fl4">Batch log</li><li data-i18n="fl5">Cupping notes</li><li data-i18n="fl6">Importers</li></ul>
+      </div>
+      <div>
+        <h4 data-i18n="fh3">Say hello</h4>
+        <ul><li data-i18n="fl7">Write to us</li><li data-i18n="fl8">Visit on Tuesday</li><li data-i18n="fl9">Post and returns</li></ul>
+      </div>
+    </div>
+    <div class="flegal">
+      <span>© 2026 Burr</span>
+      <span data-i18n="fn">Vyborg · ground to order, never before</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ── RU/EN. Английский — исходный, русский — перевод под него ── */
+var RU = {
+  nav1:'Главная', nav2:'Магазин',
+  tag:'Двое, один барабан, жарим в Выборге по вторникам',
+  hb1:'Купить обжарку недели', hb2:'Читать журнал партий',
+  vn1:'В', vn2:'нашем', vn3:'магазине',
+  s0:'Три пачки, мелем под заказ',
+  st1:'Иргачеффе мытая', p1:'Эфиопия · светлая',
+  st2:'Уила без кофеина', p2:'Колумбия · средняя',
+  st3:'Эспрессо № 4', p3:'Бразилия + Индия · тёмная',
+  add:'В корзину', add2:'В корзину', add3:'В корзину',
+  r0:'Каждая партия записана',
+  r1:'Двенадцать килограммов за раз на барабане 1978 года, который мы перебрали сами. Кривая, температура выгрузки и имя того, кто стоял у машины, идут на пачку — и на сайт, независимо от того, удалась партия или нет.',
+  r2t:'Зерно приходит', r2d:'Покупаем мешками у двух импортёров, с которыми знакомы лично. Ничего не лежит дольше четырёх месяцев.',
+  r3t:'Вторник, барабан', r3d:'Жарим утром того же дня, когда отправляем. Первый крек, время выгрузки и потерю веса пишем от руки в ту же тетрадь с 2021 года.',
+  r4t:'Каппинг в четверг', r4d:'Каждую партию пробуем вслепую против предыдущей. Проиграла — уходит в кофейню на первом этаже и никогда к вам.',
+  t0:'Что нам пишут в ответ',
+  rv1n:'Надя, Петрозаводск', rv1:'В пачке лежала записка, что партия передержана на десять секунд и им жаль. Я разницы не почувствовала. Продолжаю покупать из-за записки.',
+  rv2n:'Артём, Казань', rv2:'Заказал эспрессо для бара на одиннадцать мест. Третий год, тот же рецепт, и о конце лота предупреждают за две недели.',
+  rv3n:'Лена, Выборг', rv3:'Живу через две улицы и всё равно получаю почтой: во вторник утром на почте теплее, чем в самой обжарке.',
+  subph:'ваш@почта', subb:'Отправить', subn:'Одно письмо в месяц: что жарится и что закончилось.',
+  mq1:'Двенадцать килограммов за раз ✦ жарим во вторник ✦ отправляем в среду ✦ выпито к воскресенью ✦',
+  mq2:'Двенадцать килограммов за раз ✦ жарим во вторник ✦ отправляем в среду ✦ выпито к воскресенью ✦',
+  fa:'Обжарка на двоих над мастерской по ремонту обуви. Выборг, с 2021 года.',
+  fh1:'Магазин', fl1:'На этой неделе', fl2:'Подписка', fl3:'Опт',
+  fh2:'Обжарка', fl4:'Журнал партий', fl5:'Записи каппингов', fl6:'Импортёры',
+  fh3:'Написать', fl7:'Письмо нам', fl8:'Зайти во вторник', fl9:'Почта и возврат',
+  fn:'Выборг · мелем под заказ и никогда заранее'
+};
+var EN = {};
+document.querySelectorAll('[data-i18n]').forEach(function (el) { EN[el.dataset.i18n] = el.innerHTML; });
+function setLang(l) {
+  var dict = l === 'ru' ? RU : EN;
+  document.querySelectorAll('[data-i18n]').forEach(function (el) {
+    var v = dict[el.dataset.i18n];
+    if (v !== undefined) el.innerHTML = v;
+  });
+  document.documentElement.lang = l;
+  document.documentElement.dataset.lang = l;
+  document.querySelectorAll('.lang button').forEach(function (b) {
+    b.setAttribute('aria-pressed', b.dataset.set === l ? 'true' : 'false');
+  });
+}
+document.querySelectorAll('.lang button').forEach(function (b) {
+  b.addEventListener('click', function () { setLang(b.dataset.set); });
+});
+</script>
+</body>
+</html>

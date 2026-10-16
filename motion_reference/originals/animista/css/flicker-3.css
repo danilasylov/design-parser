@@ -1,0 +1,3 @@
+/* Original keyframes: Animista, Ana Travas. https://animista.net/play/attention/flicker/flicker-3 */
+.flicker-3{animation:flicker-3 2.5s linear 0s infinite normal both;}
+@keyframes flicker-3{0%,32.98%,34.02%,34.98%,35.92%,38.98%,39.82%,83.98%,84.92%,to{opacity:1}33%,34%,35%,35.9%,39%,39.8%,84%,84.9%{opacity:0}}

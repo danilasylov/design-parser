@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="ru" data-lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kernel Cup — турнир инженеров</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+/* ── Дизайн-система Uniswap Cup (styles.refero.design/style/fabb51a0) ────────────
+   «Esports broadcast on a wireframe court» — розовый маркер, ведущий по сетке белых
+   боксов и хайрлайнов. Плоская почти монохромная визуализация турнира: структура
+   сетки главная, с данными ничто не конкурирует.
+   · #f50db4 — маркер, а не малярный валик: только победные состояния, теги стадий
+     и вынос финала. Ни в тексте, ни в больших заливках, ни как primary-CTA
+   · #000 текст и боксы команд · #fff холст · #222 приглушённые метки
+   · #f2f2f2 — хайрлайны, разделители и ВСЕ линии-коннекторы (скелет страницы)
+   · #fef4ff — мягкая розовая подложка подсвеченных матчей
+   · моно (JetBrains Mono) — счёт, метки стадий (R16/QF/SF/F), вордмарк и VS;
+     системный sans (Inter) — имена команд и текст. Ни серифа, ни дисплейных
+   · тайпскейл ровно три ступени: 12 / 16 / 32px. −0.02em трекинг на моно от 32px
+   · радиусы 0px ВЕЗДЕ: теги, карточки, узлы, кнопки
+   · теней/градиентов/блюра нет — глубина только контрастом цвета
+   · компактно: шаг секций 24px, паддинг карточки 8px, зазор элементов 4–8px.
+     Больше нельзя — система диаграммная, а не просторная
+   · СЕТКА — ЭТО СТРАНИЦА: full-bleed, во всю ширину вьюпорта, симметричным деревом
+     от центрального финала; коннекторы 1px строго под прямым углом, без кривых */
+:root{
+  --pink:#f50db4; --ink:#000000; --off:#222222; --white:#ffffff;
+  --wire:#f2f2f2; --blush:#fef4ff;
+  --sans:'Inter',ui-sans-serif,system-ui,-apple-system,sans-serif;
+  --mono:'JetBrains Mono','IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  --s4:4px; --s8:8px; --s12:12px; --s16:16px; --s20:20px; --s24:24px; --s32:32px;
+  --row:22px; --mh:44px; --stub:32px;   /* геометрия сетки: узел = две строки по 22px */
+}
+*{box-sizing:border-box;margin:0;padding:0;border-radius:0}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{background:var(--white);color:var(--ink);font:400 16px/1.5 var(--sans);
+     -webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+::selection{background:var(--pink);color:var(--white)}
+:focus-visible{outline:1px solid var(--pink);outline-offset:2px}
+svg{display:block}
+.mono{font-family:var(--mono)}
+.cap{font-size:12px;line-height:1.33}
+.pad{padding:0 var(--s16)}
+
+/* теги: 0 радиуса, 8px паддинг, моно 12/500 */
+.tag{display:inline-block;font:500 12px/1.33 var(--mono);padding:var(--s4) var(--s8)}
+.tag.pink{background:var(--pink);color:var(--white)}
+.tag.wire{background:var(--wire);color:var(--ink);border:1px solid var(--wire)}
+.tag.line{background:var(--white);color:var(--off);border:1px solid var(--wire)}
+
+/* ── тонкая верхняя полоса: теги слева, вордмарк по центру, трансляция справа ── */
+header{border-bottom:1px solid var(--wire)}
+.bar{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:var(--s8);
+     padding:var(--s8) var(--s16)}
+.bar .l{display:flex;gap:var(--s4);align-items:center;flex-wrap:wrap}
+.bar .r{justify-self:end;display:flex;gap:var(--s8);align-items:center}
+/* вордмарк: сама типографика и есть знак */
+.wm{text-align:center;font-family:var(--mono);font-weight:500;font-size:12px;line-height:1.33;
+    letter-spacing:.18em}
+.wm b{display:block;font-weight:700;letter-spacing:.32em}
+.live{display:inline-flex;align-items:center;gap:var(--s4);font:500 12px var(--mono);color:var(--off)}
+.live i{width:7px;height:7px;background:var(--pink);display:block}
+.lngb{background:none;border:0;padding:0;cursor:pointer;font:500 12px var(--mono);color:var(--off)}
+:root[data-lang="ru"] .lngb b:first-child,:root[data-lang="en"] .lngb b:last-child{color:var(--pink)}
+.lngb b{font-weight:500}
+
+/* ── сетка = страница: full-bleed, без max-width ── */
+.court{padding:var(--s16) 0 var(--s24);border-bottom:1px solid var(--wire);position:relative}
+.bracket{display:flex;align-items:stretch;justify-content:space-between;gap:var(--s8);
+         padding:26px var(--s16) 0;min-height:calc(var(--mh)*8 + 84px)}
+/* метка стадии стоит ровно над своей колонкой — зеркально R16 QF SF · SF QF R16 */
+.rlbl{position:absolute;top:-26px;left:0}
+.side.r .rlbl{left:auto;right:0}
+.side{display:flex;align-items:stretch;gap:calc(var(--stub)*2);flex:1 1 0;min-width:0}
+.side.r{flex-direction:row-reverse}
+.round{position:relative;display:flex;flex-direction:column;justify-content:space-around;
+       flex:0 0 auto;min-width:0}
+
+/* узел матча: два ряда, чёрный бокс команды + бокс счёта */
+.m{position:relative;height:var(--mh);display:flex;flex-direction:column;gap:0;width:64px}
+.m .rw{height:var(--row);display:flex;align-items:center;gap:var(--s4)}
+.m .sq{width:var(--row);height:var(--row);background:var(--ink);color:var(--white);
+       display:grid;place-items:center;font:700 10px/1 var(--mono);flex:0 0 var(--row)}
+.m .sc{width:var(--row);height:var(--row);border:1px solid var(--wire);display:grid;place-items:center;
+       font:700 12px/1 var(--mono);background:var(--white);color:var(--ink);flex:0 0 var(--row)}
+.m .rw.win .sc{background:var(--pink);border-color:var(--pink);color:var(--white)}
+.m .seed{font:500 10px/1 var(--mono);color:var(--off)}
+.side.r .m .rw{flex-direction:row-reverse}
+.m.hi{background:var(--blush)}
+
+/* коннекторы: 1px, строго под прямым углом, на победном пути — розовые */
+.m::after{content:"";position:absolute;top:50%;left:100%;width:var(--stub);height:1px;
+          background:var(--wire)}
+.side.r .m::after{left:auto;right:100%}
+.m.won::after{background:var(--pink)}
+.round.step .m::before{content:"";position:absolute;top:50%;right:100%;width:var(--stub);height:1px;
+                       background:var(--wire)}
+.side.r .round.step .m::before{right:auto;left:100%}
+.round.step .m.fed::before{background:var(--pink)}
+/* от полуфинала линия победителя уходит к центральному кругу */
+.round.step:last-child .m::after{width:56px}
+/* вертикали: позиции берутся из space-around и заданы в процентах колонки */
+.v{position:absolute;right:calc(-1 * var(--stub));width:1px;background:var(--wire);
+   top:var(--a);bottom:calc(100% - var(--b))}
+.side.r .v{right:auto;left:calc(-1 * var(--stub))}
+.v.win{background:var(--pink)}
+
+/* ── центр: финал ── */
+.center{flex:0 0 auto;position:relative;display:flex;flex-direction:column;align-items:center;
+        justify-content:center;padding:0 var(--s24);min-width:0}
+.pitch{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:340px;height:340px;
+       z-index:0;pointer-events:none}
+.center .in{position:relative;z-index:1;text-align:center}
+.road{font-size:16px;line-height:1.5;color:var(--ink);margin-bottom:var(--s16)}
+.fmatch{display:flex;align-items:center;gap:var(--s16)}
+.fteam{text-align:center}
+.fteam .box{width:88px;height:88px;background:var(--ink);color:var(--white);display:grid;
+            place-items:center;margin:0 auto}
+.fteam .box svg{width:52px;height:52px}
+.fteam .nm{font-size:16px;font-weight:500;line-height:1.5;margin-top:var(--s4)}
+.fteam .sc{display:inline-block;background:var(--pink);color:var(--white);
+           font:700 16px/1 var(--mono);padding:var(--s4) var(--s8);margin-top:var(--s4)}
+.fteam .sc.q{background:var(--white);color:var(--ink);border:1px solid var(--wire)}
+.fteam .tg{display:block;margin-bottom:var(--s4)}
+.vs{text-align:center}
+.vs .big{font:700 48px/1 var(--mono);letter-spacing:-.02em;color:var(--pink)}
+.vs .fin{font:700 20px/1.33 var(--mono);letter-spacing:-.02em;background:var(--pink);
+         color:var(--white);padding:0 var(--s4);display:inline-block;margin-bottom:var(--s8)}
+.center .when{margin-top:var(--s16);font:500 12px/1.33 var(--mono)}
+.center .when u{text-decoration-color:var(--pink);text-underline-offset:2px}
+.center .when .d{background:var(--wire);padding:2px var(--s4)}
+
+/* ── компактные секции: шаг 24px, паддинг карточки 8px ── */
+section{padding:var(--s24) var(--s16);border-bottom:1px solid var(--wire)}
+.shead{display:flex;align-items:baseline;gap:var(--s12);flex-wrap:wrap;margin-bottom:var(--s12)}
+.shead h2{font:700 32px/1 var(--mono);letter-spacing:-.02em}
+.shead .r{margin-left:auto;font:500 12px/1.33 var(--mono);color:var(--off)}
+
+/* расписание — таблица на хайрлайнах */
+.tbl{border:1px solid var(--wire);border-bottom:0}
+.tr{display:grid;grid-template-columns:56px 1fr auto auto;gap:var(--s12);align-items:center;
+    padding:var(--s8);border-bottom:1px solid var(--wire)}
+.tr .st{font:500 12px/1.33 var(--mono)}
+.tr .mt{font-size:16px;font-weight:400}
+.tr .dt,.tr .tm{font:500 12px/1.33 var(--mono);color:var(--off)}
+.tr.done{color:var(--off)}
+.tr.now{background:var(--blush)}
+.tr.now .st{color:var(--pink)}
+
+/* команды — решётка боксов */
+.teams{display:grid;grid-template-columns:repeat(8,1fr);border:1px solid var(--wire);
+       border-right:0;border-bottom:0}
+.team{border-right:1px solid var(--wire);border-bottom:1px solid var(--wire);padding:var(--s8);
+      display:flex;align-items:center;gap:var(--s4)}
+.team .tn{font-size:12px;font-weight:500;line-height:1.33;white-space:nowrap;overflow:hidden;
+          text-overflow:ellipsis}
+.team .seed{margin-left:auto;font:500 10px/1 var(--mono);color:var(--off)}
+.team.q{background:var(--blush)}
+.team .sq{width:var(--row);height:var(--row);background:var(--ink);color:var(--white);
+          display:grid;place-items:center;font:700 10px/1 var(--mono);flex:0 0 var(--row)}
+
+/* призы */
+.prizes{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--wire);
+        border-right:0;border-bottom:0}
+.prize{border-right:1px solid var(--wire);border-bottom:1px solid var(--wire);padding:var(--s8)}
+.prize .pl{font:500 12px/1.33 var(--mono);color:var(--off)}
+.prize .pv{font:700 32px/1 var(--mono);letter-spacing:-.02em;margin-top:var(--s4)}
+.prize.first{background:var(--blush)}
+.prize.first .pl{color:var(--pink)}
+
+/* регистрация */
+.reg{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:var(--s16);align-items:end}
+.reg h2{font:700 32px/1 var(--mono);letter-spacing:-.02em;max-width:24ch}
+.reg p{font-size:16px;line-height:1.5;color:var(--off);max-width:52ch;margin-top:var(--s8)}
+.btns{display:flex;gap:var(--s8);flex-wrap:wrap}
+.btn{display:inline-block;background:var(--ink);color:var(--white);border:1px solid var(--ink);
+     padding:var(--s8) var(--s16);font:500 12px/1.33 var(--mono);cursor:pointer}
+.btn:hover{background:var(--off);border-color:var(--off)}
+.btn.ghost{background:var(--white);color:var(--ink);border-color:var(--wire)}
+.btn.ghost:hover{background:var(--wire)}
+
+footer{padding:var(--s8) var(--s16)}
+.foot{display:flex;gap:var(--s12);flex-wrap:wrap;font:500 12px/1.33 var(--mono);color:var(--off)}
+.foot span:last-child{margin-left:auto}
+
+/* сетка не сжимается — на узких экранах прокручивается внутри своей полосы,
+   страница по горизонтали не едет */
+.scroll{overflow-x:auto;overflow-y:hidden}
+.scroll>*{min-width:940px}
+@media (max-width:1180px){
+  .m{width:56px}
+  .center{padding:0 var(--s16)}
+  .pitch{width:260px;height:260px}
+}
+@media (max-width:900px){
+  .teams{grid-template-columns:repeat(4,1fr)}
+  .reg{grid-template-columns:1fr}
+  .shead h2,.reg h2,.prize .pv{font-size:24px}
+}
+@media (max-width:560px){
+  .teams{grid-template-columns:repeat(2,1fr)}
+  .prizes{grid-template-columns:1fr}
+  .tr{grid-template-columns:48px 1fr auto}
+  .tr .dt{display:none}
+  .bar .l .tag:nth-child(n+2){display:none}
+  .live span{display:none}   /* в шапке остаётся только розовая точка «в эфире» */
+}
+</style>
+</head>
+<body id="top">
+
+<header>
+  <div class="bar">
+    <div class="l">
+      <span class="tag wire" data-i18n="hd.group">ГРУППЫ</span>
+      <span class="tag line" data-i18n="hd.stage">R16 · ЗАВЕРШЁН</span>
+    </div>
+    <div class="wm">KERNEL<b>· CUP ·</b></div>
+    <div class="r">
+      <span class="live"><i></i><span data-i18n="hd.live">ТРАНСЛЯЦИЯ</span></span>
+      <button class="lngb" id="lng" aria-label="RU / EN"><b>RU</b> / <b>EN</b></button>
+    </div>
+  </div>
+</header>
+
+<!-- ══ сетка турнира: это и есть страница ══ -->
+<div class="court">
+  <div class="scroll">
+    <div>
+      <div class="bracket">
+        <!-- ── левая половина ── -->
+        <div class="side">
+          <div class="round">
+            <span class="tag pink rlbl">R16</span>
+            <div class="m"><div class="rw win"><span class="sq">A</span><span class="sc">2</span></div>
+                           <div class="rw"><span class="sq">V</span><span class="sc">0</span></div></div>
+            <div class="m"><div class="rw win"><span class="sq">Q</span><span class="sc">5</span></div>
+                           <div class="rw"><span class="sq">H</span><span class="sc">4</span></div></div>
+            <div class="m"><div class="rw"><span class="sq">K</span><span class="sc">1</span></div>
+                           <div class="rw win"><span class="sq">P</span><span class="sc">3</span></div></div>
+            <div class="m"><div class="rw"><span class="sq">R</span><span class="sc">0</span></div>
+                           <div class="rw win"><span class="sq">S</span><span class="sc">3</span></div></div>
+            <i class="v" style="--a:12.5%;--b:37.5%"></i>
+            <i class="v" style="--a:62.5%;--b:87.5%"></i>
+          </div>
+          <div class="round step">
+            <span class="tag pink rlbl">QF</span>
+            <div class="m fed"><div class="rw win"><span class="sq">A</span><span class="sc">3</span></div>
+                               <div class="rw"><span class="sq">Q</span><span class="sc">1</span></div></div>
+            <div class="m fed"><div class="rw"><span class="sq">P</span><span class="sc">2</span></div>
+                               <div class="rw win"><span class="sq">S</span><span class="sc">6</span></div></div>
+            <i class="v" style="--a:25%;--b:75%"></i>
+          </div>
+          <div class="round step">
+            <span class="tag pink rlbl">SF</span>
+            <div class="m hi fed won"><div class="rw win"><span class="sq">A</span><span class="sc">4</span></div>
+                                      <div class="rw"><span class="sq">S</span><span class="sc">2</span></div></div>
+          </div>
+        </div>
+
+        <!-- ── центр: финал ── -->
+        <div class="center">
+          <svg class="pitch" viewBox="0 0 340 340" aria-hidden="true">
+            <g fill="none" stroke="#f2f2f2" stroke-width="1">
+              <circle cx="170" cy="170" r="168"/><circle cx="170" cy="170" r="126"/>
+              <circle cx="170" cy="170" r="84"/><circle cx="170" cy="170" r="42"/>
+            </g>
+          </svg>
+          <span class="tag pink" data-i18n="st.f" style="margin-bottom:var(--s12)">Ф</span>
+          <div class="in">
+            <div class="road" data-i18n="road">Дорога к финалу</div>
+            <div class="fmatch">
+              <div class="fteam">
+                <span class="tag pink tg" data-i18n="f.seed1">СЕТКА A</span>
+                <span class="box"><svg viewBox="0 0 40 40" fill="none" stroke="#fff" stroke-width="2.2"
+                  aria-hidden="true"><path d="M8 30 20 10 32 30"/><path d="M13 24h14"/></svg></span>
+                <div class="nm">ATLAS</div>
+                <span class="sc q">#1</span>
+              </div>
+              <div class="vs">
+                <span class="fin" data-i18n="f.lbl">ФИНАЛ</span>
+                <div class="big">VS</div>
+              </div>
+              <div class="fteam">
+                <span class="tag pink tg" data-i18n="f.seed2">СЕТКА B</span>
+                <span class="box"><svg viewBox="0 0 40 40" fill="none" stroke="#fff" stroke-width="2.2"
+                  aria-hidden="true"><path d="M10 14h20M10 26h20"/><path d="M24 8 16 32"/></svg></span>
+                <div class="nm">NULLBYTE</div>
+                <span class="sc q">#2</span>
+              </div>
+            </div>
+            <div class="when">
+              <span class="d" data-i18n="when.d">16 ноября</span> <u data-i18n="when.t">19:00 МСК</u>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── правая половина ── -->
+        <div class="side r">
+          <div class="round">
+            <span class="tag pink rlbl">R16</span>
+            <div class="m"><div class="rw win"><span class="sq">N</span><span class="sc">4</span></div>
+                           <div class="rw"><span class="sq">D</span><span class="sc">3</span></div></div>
+            <div class="m"><div class="rw"><span class="sq">T</span><span class="sc">2</span></div>
+                           <div class="rw win"><span class="sq">O</span><span class="sc">6</span></div></div>
+            <div class="m"><div class="rw win"><span class="sq">W</span><span class="sc">7</span></div>
+                           <div class="rw"><span class="sq">Z</span><span class="sc">5</span></div></div>
+            <div class="m"><div class="rw"><span class="sq">M</span><span class="sc">0</span></div>
+                           <div class="rw win"><span class="sq">G</span><span class="sc">3</span></div></div>
+            <i class="v" style="--a:12.5%;--b:37.5%"></i>
+            <i class="v" style="--a:62.5%;--b:87.5%"></i>
+          </div>
+          <div class="round step">
+            <span class="tag pink rlbl">QF</span>
+            <div class="m fed"><div class="rw win"><span class="sq">N</span><span class="sc">3</span></div>
+                               <div class="rw"><span class="sq">O</span><span class="sc">2</span></div></div>
+            <div class="m fed"><div class="rw"><span class="sq">W</span><span class="sc">3</span></div>
+                               <div class="rw win"><span class="sq">G</span><span class="sc">4</span></div></div>
+            <i class="v" style="--a:25%;--b:75%"></i>
+          </div>
+          <div class="round step">
+            <span class="tag pink rlbl">SF</span>
+            <div class="m hi fed won"><div class="rw win"><span class="sq">N</span><span class="sc">6</span></div>
+                                      <div class="rw"><span class="sq">G</span><span class="sc">2</span></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ расписание ══ -->
+<section id="schedule">
+  <div class="shead">
+    <h2 data-i18n="sc.h">РАСПИСАНИЕ</h2>
+    <span class="r" data-i18n="sc.r">48 часов · 2 дня</span>
+  </div>
+  <div class="tbl">
+    <div class="tr done"><span class="st">R16</span><span class="mt" data-i18n="sc.1">Групповой этап</span><span class="dt">14.11</span><span class="tm">10:00</span></div>
+    <div class="tr done"><span class="st">QF</span><span class="mt" data-i18n="sc.2">Четвертьфиналы</span><span class="dt">15.11</span><span class="tm">12:00</span></div>
+    <div class="tr now"><span class="st">SF</span><span class="mt" data-i18n="sc.3">Полуфиналы — идут сейчас</span><span class="dt">15.11</span><span class="tm">18:00</span></div>
+    <div class="tr"><span class="st">F</span><span class="mt" data-i18n="sc.4">Гранд-финал</span><span class="dt">16.11</span><span class="tm">19:00</span></div>
+    <div class="tr"><span class="st" data-i18n="sc.5s">НАГР</span><span class="mt" data-i18n="sc.5">Церемония награждения</span><span class="dt">16.11</span><span class="tm">21:00</span></div>
+  </div>
+</section>
+
+<!-- ══ команды ══ -->
+<section id="teams">
+  <div class="shead">
+    <h2 data-i18n="tm.h">КОМАНДЫ</h2>
+    <span class="r" data-i18n="tm.r">16 в сетке · из 128 заявок</span>
+  </div>
+  <div class="teams">
+    <div class="team q"><span class="sq">A</span><span class="tn">ATLAS</span><span class="seed">#1</span></div>
+    <div class="team q"><span class="sq">N</span><span class="tn">NULLBYTE</span><span class="seed">#2</span></div>
+    <div class="team"><span class="sq">S</span><span class="tn">SIGMA</span><span class="seed">#3</span></div>
+    <div class="team"><span class="sq">G</span><span class="tn">GRAPH</span><span class="seed">#4</span></div>
+    <div class="team"><span class="sq">Q</span><span class="tn">QUBIT</span><span class="seed">#5</span></div>
+    <div class="team"><span class="sq">O</span><span class="tn">VOID</span><span class="seed">#6</span></div>
+    <div class="team"><span class="sq">W</span><span class="tn">WARP</span><span class="seed">#7</span></div>
+    <div class="team"><span class="sq">P</span><span class="tn">PATCH</span><span class="seed">#8</span></div>
+    <div class="team"><span class="sq">V</span><span class="tn">VECTOR</span><span class="seed">#9</span></div>
+    <div class="team"><span class="sq">H</span><span class="tn">HALT</span><span class="seed">#10</span></div>
+    <div class="team"><span class="sq">K</span><span class="tn">KERNEL</span><span class="seed">#11</span></div>
+    <div class="team"><span class="sq">R</span><span class="tn">RAFT</span><span class="seed">#12</span></div>
+    <div class="team"><span class="sq">T</span><span class="tn">TENSOR</span><span class="seed">#13</span></div>
+    <div class="team"><span class="sq">D</span><span class="tn">DAEMON</span><span class="seed">#14</span></div>
+    <div class="team"><span class="sq">Z</span><span class="tn">ZETA</span><span class="seed">#15</span></div>
+    <div class="team"><span class="sq">M</span><span class="tn">MONAD</span><span class="seed">#16</span></div>
+  </div>
+</section>
+
+<!-- ══ призы ══ -->
+<section id="prizes">
+  <div class="shead">
+    <h2 data-i18n="pz.h">ПРИЗОВОЙ ФОНД</h2>
+    <span class="r" data-i18n="pz.r">всего $250K</span>
+  </div>
+  <div class="prizes">
+    <div class="prize first"><div class="pl" data-i18n="pz.1">1 место</div><div class="pv">$150K</div></div>
+    <div class="prize"><div class="pl" data-i18n="pz.2">2 место</div><div class="pv">$70K</div></div>
+    <div class="prize"><div class="pl" data-i18n="pz.3">3 место</div><div class="pv">$30K</div></div>
+  </div>
+</section>
+
+<!-- ══ регистрация ══ -->
+<section id="reg">
+  <div class="reg">
+    <div>
+      <h2 data-i18n="rg.h">СОБЕРИ КОМАНДУ, ЗАЙМИ МЕСТО В СЕТКЕ</h2>
+      <p data-i18n="rg.p">128 заявок, 16 мест в сетке, 48 часов и один зачёт. Регистрация на следующий
+        сезон Kernel Cup открыта до 1 октября.</p>
+    </div>
+    <div class="btns">
+      <a class="btn" href="#reg" data-i18n="rg.b1">Заявить команду</a>
+      <a class="btn ghost" href="#schedule" data-i18n="rg.b2">Смотреть трансляцию</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="foot">
+    <span>© <span id="yr"></span> KERNEL CUP</span>
+    <span data-i18n="ft.mid">турнир инженеров · онлайн</span>
+    <span data-i18n="ft.note">дизайн-упражнение, не настоящий турнир</span>
+  </div>
+</footer>
+
+<script>
+const I18N = {
+  "hd.group":{ru:"ГРУППЫ",en:"GROUP STAGE"},
+  "hd.stage":{ru:"R16 · ЗАВЕРШЁН",en:"R16 · CLOSED"},
+  "hd.live":{ru:"ТРАНСЛЯЦИЯ",en:"LIVESTREAM"},
+  "st.f":{ru:"Ф",en:"F"},
+  "road":{ru:"Дорога к финалу",en:"Road to final"},
+  "f.seed1":{ru:"СЕТКА A",en:"BRACKET A"},
+  "f.seed2":{ru:"СЕТКА B",en:"BRACKET B"},
+  "f.lbl":{ru:"ФИНАЛ",en:"FINAL"},
+  "when.d":{ru:"16 ноября",en:"November 16"},
+  "when.t":{ru:"19:00 МСК",en:"19:00 CET"},
+  "sc.h":{ru:"РАСПИСАНИЕ",en:"SCHEDULE"},
+  "sc.r":{ru:"48 часов · 2 дня",en:"48 hours · 2 days"},
+  "sc.1":{ru:"Групповой этап",en:"Group stage"},
+  "sc.2":{ru:"Четвертьфиналы",en:"Quarterfinals"},
+  "sc.3":{ru:"Полуфиналы — идут сейчас",en:"Semifinals — live now"},
+  "sc.4":{ru:"Гранд-финал",en:"Grand final"},
+  "sc.5s":{ru:"НАГР",en:"AWD"},
+  "sc.5":{ru:"Церемония награждения",en:"Awards ceremony"},
+  "tm.h":{ru:"КОМАНДЫ",en:"TEAMS"},
+  "tm.r":{ru:"16 в сетке · из 128 заявок",en:"16 in the bracket · from 128 entries"},
+  "pz.h":{ru:"ПРИЗОВОЙ ФОНД",en:"PRIZE POOL"},
+  "pz.r":{ru:"всего $250K",en:"$250K total"},
+  "pz.1":{ru:"1 место",en:"1st place"},
+  "pz.2":{ru:"2 место",en:"2nd place"},
+  "pz.3":{ru:"3 место",en:"3rd place"},
+  "rg.h":{ru:"СОБЕРИ КОМАНДУ, ЗАЙМИ МЕСТО В СЕТКЕ",en:"BUILD A TEAM, CLAIM A SLOT"},
+  "rg.p":{ru:"128 заявок, 16 мест в сетке, 48 часов и один зачёт. Регистрация на следующий сезон Kernel Cup открыта до 1 октября.",en:"128 entries, 16 slots in the bracket, 48 hours and one scoreboard. Registration for the next Kernel Cup season is open until October 1."},
+  "rg.b1":{ru:"Заявить команду",en:"Enter your team"},
+  "rg.b2":{ru:"Смотреть трансляцию",en:"Watch the stream"},
+  "ft.mid":{ru:"турнир инженеров · онлайн",en:"a tournament for engineers · online"},
+  "ft.note":{ru:"дизайн-упражнение, не настоящий турнир",en:"a design exercise, not a real tournament"}
+};
+function apply(l){
+  const r = document.documentElement;
+  r.lang = l; r.setAttribute('data-lang', l);
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const e = I18N[el.getAttribute('data-i18n')];
+    if(e && e[l] != null) el.innerHTML = e[l];
+  });
+  try{ localStorage.setItem('kc_lang', l); }catch(e){}
+}
+(function(){
+  let l; try{ l = localStorage.getItem('kc_lang'); }catch(e){}
+  if(l !== 'ru' && l !== 'en') l = (navigator.language||'ru').toLowerCase().indexOf('en')===0 ? 'en' : 'ru';
+  apply(l);
+})();
+document.getElementById('lng').addEventListener('click',()=>{
+  apply(document.documentElement.getAttribute('data-lang') === 'ru' ? 'en' : 'ru');
+});
+document.getElementById('yr').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>

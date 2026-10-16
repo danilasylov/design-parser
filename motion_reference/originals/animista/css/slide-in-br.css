@@ -1,0 +1,3 @@
+/* Original keyframes: Animista, Ana Travas. https://animista.net/play/entrances/slide-in/slide-in-br */
+.slide-in-br{animation:slide-in-br 0.5s cubic-bezier(.25,.46,.45,.94) 0s 1 normal both;}
+@keyframes slide-in-br{0%{-webkit-transform:translateY(1000px) translateX(1000px);transform:translateY(1000px) translateX(1000px);opacity:0}to{-webkit-transform:translateY(0) translateX(0);transform:translateY(0) translateX(0);opacity:1}}

@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dispatch — a weekly letter about one street</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+/* ───────── ДИЗАЙН-СИСТЕМА FIDÈLE EDITIONS — tokens.css ДОСЛОВНО ───────── */
+:root {
+  /* Colors */
+  --color-fidle-blue: #1664eb;
+  --color-lighter-press-blue: #4f89ec;
+  --color-link-blue: #006ce5;
+  --color-paper-white: #f8f7ef;
+  --color-card-cream: #e2e2df;
+  --color-pure-white: #ffffff;
+  --color-press-black: #121212;
+
+  /* Typography — Font Families */
+  /* BaselGrotesk/GTStandard → Inter, OTMagister (серифный дисплей) → Lora.
+     Замены из DESIGN.md; кириллица есть у обеих. */
+  --font-baselgrotesk: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-otmagister: 'Lora', Georgia, 'Times New Roman', serif;
+
+  /* Typography — Scale */
+  --text-caption: 14px;
+  --leading-caption: 1.5;
+  --tracking-caption: 0.88px;
+  --text-body-sm: 16px;
+  --leading-body-sm: 1.5;
+  --tracking-body-sm: 0.69px;
+  --text-body: 20px;
+  --leading-body: 1.3;
+  --tracking-body: 0.5px;
+  --text-subheading: 22px;
+  --leading-subheading: 1.3;
+  --tracking-subheading: 0.55px;
+  --text-heading-sm: 26px;
+  --leading-heading-sm: 1.2;
+  --tracking-heading-sm: 0.65px;
+  --text-heading: 32px;
+  --leading-heading: 1;
+  --tracking-heading: -0.64px;
+  --text-heading-lg: 37px;
+  --leading-heading-lg: 0.96;
+  --tracking-heading-lg: -0.74px;
+  --text-display: 62px;
+  --leading-display: 0.92;
+  --tracking-display: -3px;
+
+  /* Typography — Weights */
+  --font-weight-regular: 400;
+  --font-weight-bold: 700;
+
+  /* Spacing */
+  --spacing-unit: 4px;
+  --spacing-4: 4px;
+  --spacing-8: 8px;
+  --spacing-12: 12px;
+  --spacing-16: 16px;
+  --spacing-24: 24px;
+  --spacing-28: 28px;
+  --spacing-48: 48px;
+  --spacing-96: 96px;
+  --spacing-156: 156px;
+
+  /* Layout */
+  --section-gap: 64px;
+  --card-padding: 16px;
+  --element-gap: 5px;
+
+  /* Border Radius */
+  --radius-md: 4px;
+
+  /* Named Radii */
+  --radius-tags: 0px;
+  --radius-cards: 4px;
+  --radius-images: 0px;
+  --radius-buttons: 4px;
+
+  /* Surfaces */
+  --surface-paper-stock: #f8f7ef;
+  --surface-card-cream: #e2e2df;
+  --surface-pure-white: #ffffff;
+  --surface-fidle-blue: #1664eb;
+}
+
+/* ───────── База ───────── */
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+/* Канва всегда тёплая кремовая — белый фоном не бывает (см. Don'ts) */
+body{
+  margin:0;background:var(--surface-paper-stock);color:var(--color-fidle-blue);
+  font-family:var(--font-baselgrotesk);font-size:var(--text-body-sm);line-height:var(--leading-body-sm);
+  letter-spacing:var(--tracking-body-sm);-webkit-font-smoothing:antialiased;
+}
+a{color:inherit;text-decoration:none}
+h1,h2,h3,p,ul{margin:0}
+ul{list-style:none;padding:0}
+.wrap{padding:0 var(--spacing-12)}
+.serif{font-family:var(--font-otmagister);letter-spacing:-.01em}
+/* Широкий трекинг мелкого кегля — половина редакционного голоса */
+.lbl{font-size:var(--text-caption);line-height:var(--leading-caption);letter-spacing:var(--tracking-caption)}
+
+/* Единственная первичная кнопка системы — синяя обводка, не заливка */
+.act{
+  display:inline-block;border:1px solid var(--color-fidle-blue);border-radius:var(--radius-buttons);
+  padding:10px 18px;font-size:var(--text-body-sm);letter-spacing:var(--tracking-body-sm);
+  background:transparent;color:var(--color-fidle-blue);cursor:pointer;font-family:inherit;transition:background .15s,color .15s;
+}
+.act:hover{background:var(--color-fidle-blue);color:var(--color-paper-white)}
+
+/* ───────── Шапка ───────── */
+header{background:var(--surface-paper-stock);position:sticky;top:0;z-index:30}
+.nav{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:14px var(--spacing-12)}
+.nav-left{display:flex;gap:var(--spacing-16)}
+.nav-right{display:flex;gap:var(--spacing-16);justify-content:flex-end;align-items:center}
+.wordmark{font-size:var(--text-heading-sm);line-height:1;font-weight:var(--font-weight-bold);letter-spacing:-.02em;text-align:center}
+.wordmark em{font-family:var(--font-otmagister);font-style:normal;font-weight:var(--font-weight-regular)}
+.lang button{
+  font-family:inherit;font-size:var(--text-caption);letter-spacing:var(--tracking-caption);
+  background:transparent;border:0;color:var(--color-lighter-press-blue);cursor:pointer;padding:2px 4px;
+}
+.lang button[aria-pressed="true"]{color:var(--color-fidle-blue);font-weight:var(--font-weight-bold);text-decoration:underline;text-underline-offset:3px}
+
+/* Синяя полоса-анонс — второй по узнаваемости элемент после звёздочки */
+.ann{background:var(--surface-fidle-blue);color:var(--color-paper-white);text-align:center;padding:7px 12px}
+.ann span{margin:0 10px}
+
+/* ───────── Заявление во всю ширину ───────── */
+.statement{
+  padding:var(--spacing-28) var(--spacing-12) var(--spacing-16);
+  font-size:var(--text-heading-lg);line-height:var(--leading-heading-lg);letter-spacing:var(--tracking-heading-lg);
+  font-weight:var(--font-weight-bold);
+}
+.statement em{font-family:var(--font-otmagister);font-style:normal;font-weight:var(--font-weight-regular)}
+.whats{
+  padding:0 var(--spacing-12) var(--spacing-24);
+  font-size:var(--text-display);line-height:var(--leading-display);letter-spacing:var(--tracking-display);
+  font-weight:var(--font-weight-bold);
+}
+.whats em{font-family:var(--font-otmagister);font-style:normal;font-weight:var(--font-weight-regular);letter-spacing:-.02em}
+
+/* ───────── Сетка выпусков: кремовые плитки без карточной обводки ───────── */
+.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;padding:0 var(--spacing-12)}
+.item{background:var(--surface-card-cream);padding:var(--spacing-24) var(--spacing-16) var(--spacing-16)}
+.item .cover{position:relative;aspect-ratio:5/7;background:var(--color-pure-white);border:1px solid var(--color-pure-white);overflow:hidden;border-radius:var(--radius-images)}
+/* Обложки ризографом: плоские фигуры в одну краску, наложение даёт третий тон */
+.cover i{position:absolute;display:block;background:var(--color-fidle-blue)}
+.cover .b2{background:var(--color-lighter-press-blue)}
+.cover .txt{position:absolute;left:10%;right:10%;bottom:8%;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--color-fidle-blue);z-index:3}
+.cover .num{position:absolute;left:10%;top:7%;font-family:var(--font-otmagister);font-size:26px;line-height:1;color:var(--color-fidle-blue);z-index:3}
+.meta{display:flex;justify-content:space-between;gap:10px;margin-top:var(--spacing-12)}
+.meta b{font-weight:var(--font-weight-regular);font-size:var(--text-caption);letter-spacing:var(--tracking-caption)}
+.meta b span{display:block;color:var(--color-lighter-press-blue)}
+.rule{height:1px;background:var(--color-fidle-blue);margin:var(--spacing-48) var(--spacing-12)}
+
+/* ───────── Полоса во всю ширину вместо фотополосы ───────── */
+.strip{background:var(--surface-fidle-blue);color:var(--color-paper-white);padding:var(--spacing-96) var(--spacing-12);position:relative;overflow:hidden}
+.strip h2{font-size:var(--text-display);line-height:var(--leading-display);letter-spacing:var(--tracking-display);font-weight:var(--font-weight-bold);max-width:900px}
+.strip h2 em{font-family:var(--font-otmagister);font-style:normal;font-weight:var(--font-weight-regular)}
+.strip p{margin-top:var(--spacing-24);max-width:520px;font-size:var(--text-body);line-height:var(--leading-body);letter-spacing:var(--tracking-body)}
+/* Гигантская звёздочка — фирменный знак системы */
+.aster{position:absolute;right:60px;top:50%;transform:translateY(-52%);font-size:360px;line-height:1;color:var(--color-lighter-press-blue);font-family:var(--font-baselgrotesk);user-select:none}
+.strip .act{border-color:var(--color-paper-white);color:var(--color-paper-white);margin-top:var(--spacing-28)}
+.strip .act:hover{background:var(--color-paper-white);color:var(--color-fidle-blue)}
+
+/* ───────── Как это делается ───────── */
+.how{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--spacing-48);padding:var(--spacing-96) var(--spacing-12) var(--spacing-48)}
+.how h3{font-size:var(--text-heading-sm);line-height:var(--leading-heading-sm);letter-spacing:var(--tracking-heading-sm);font-weight:var(--font-weight-bold);margin:var(--spacing-12) 0}
+.how p{font-size:var(--text-body-sm);line-height:var(--leading-body-sm);letter-spacing:var(--tracking-body-sm);color:var(--color-link-blue)}
+.how .n{font-family:var(--font-otmagister);font-size:var(--text-heading);line-height:1}
+
+/* ───────── Журнал ───────── */
+.journal{padding:0 var(--spacing-12) var(--spacing-96)}
+.journal h2{font-size:var(--text-heading-lg);line-height:var(--leading-heading-lg);letter-spacing:var(--tracking-heading-lg);font-weight:var(--font-weight-bold);margin-bottom:var(--spacing-24)}
+.journal h2 em{font-family:var(--font-otmagister);font-style:normal;font-weight:var(--font-weight-regular)}
+.post{display:grid;grid-template-columns:120px 1fr 200px;gap:var(--spacing-24);padding:var(--spacing-16) 0;border-top:1px solid var(--color-fidle-blue);align-items:baseline}
+.post:last-child{border-bottom:1px solid var(--color-fidle-blue)}
+.post .t{font-size:var(--text-subheading);line-height:var(--leading-subheading);letter-spacing:var(--tracking-subheading)}
+.post .a{color:var(--color-lighter-press-blue);text-align:right}
+.post:hover .t{text-decoration:underline;text-underline-offset:4px}
+
+/* ───────── Подписка ───────── */
+.sub{background:var(--surface-card-cream);padding:var(--spacing-96) var(--spacing-12);display:grid;grid-template-columns:1.2fr 1fr;gap:var(--spacing-48);align-items:center}
+.sub h2{font-size:var(--text-heading);line-height:var(--leading-heading);letter-spacing:var(--tracking-heading);font-weight:var(--font-weight-bold);max-width:520px}
+.sub h2 em{font-family:var(--font-otmagister);font-style:normal;font-weight:var(--font-weight-regular)}
+.sub .plans{display:flex;flex-direction:column;gap:1px;background:var(--color-fidle-blue);border:1px solid var(--color-fidle-blue)}
+.plan{background:var(--surface-card-cream);padding:var(--spacing-16);display:flex;justify-content:space-between;align-items:baseline;gap:var(--spacing-16)}
+.plan b{font-weight:var(--font-weight-bold)}
+.plan span{color:var(--color-link-blue)}
+.sub form{display:flex;gap:var(--spacing-8);margin-top:var(--spacing-16)}
+.sub input{
+  flex:1;background:var(--surface-paper-stock);border:1px solid var(--color-fidle-blue);border-radius:var(--radius-md);
+  padding:10px 14px;font-family:inherit;font-size:var(--text-body-sm);letter-spacing:var(--tracking-body-sm);
+  color:var(--color-fidle-blue);outline:none;
+}
+.sub input::placeholder{color:var(--color-lighter-press-blue)}
+
+/* ───────── Подвал ───────── */
+footer{padding:var(--spacing-48) var(--spacing-12) var(--spacing-28);border-top:1px solid var(--color-fidle-blue)}
+.foot{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:var(--spacing-24)}
+.foot h4{font-size:var(--text-caption);letter-spacing:var(--tracking-caption);font-weight:var(--font-weight-bold);margin:0 0 var(--spacing-12)}
+.foot li{margin-bottom:6px;font-size:var(--text-caption);letter-spacing:var(--tracking-caption);color:var(--color-link-blue)}
+.foot li a:hover{text-decoration:underline;text-underline-offset:3px}
+.foot .big{font-size:var(--text-heading);line-height:var(--leading-heading);letter-spacing:var(--tracking-heading);font-weight:var(--font-weight-bold)}
+.foot .big em{font-family:var(--font-otmagister);font-style:normal;font-weight:var(--font-weight-regular)}
+.foot-legal{display:flex;justify-content:space-between;margin-top:var(--spacing-48);color:var(--color-lighter-press-blue)}
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="nav">
+    <div class="nav-left lbl">
+      <a href="#issues" data-i18n="nav1">Issues</a>
+      <a href="#about" data-i18n="nav2">About</a>
+      <a href="#journal" data-i18n="nav3">Journal</a>
+    </div>
+    <a class="wordmark" href="#top">Dispatch<em>&nbsp;Press</em></a>
+    <div class="nav-right lbl">
+      <div class="lang">
+        <button data-set="en" aria-pressed="true">English</button>
+        <button data-set="ru" aria-pressed="false">Русский</button>
+      </div>
+      <a href="#subscribe" data-i18n="nav4">Subscribe</a>
+    </div>
+  </nav>
+</header>
+
+<div class="ann lbl">
+  <span>✳</span><span data-i18n="ann">Issue 63 goes to the post on Thursday · free postage over €60</span><span>✳</span>
+</div>
+
+<main id="top">
+
+  <div class="statement">
+    <span data-i18n="st1">Dispatch is a small press</span>
+    <em data-i18n="st2">that prints one street at a time,</em>
+    <span data-i18n="st3">on a risograph in Ghent.</span>
+  </div>
+
+  <div class="whats">
+    <span data-i18n="wh1">What's on:</span> <em data-i18n="wh2">Latest</em>
+  </div>
+
+  <section class="grid" id="issues">
+    <article class="item">
+      <div class="cover">
+        <i class="b1" style="left:14%;top:26%;width:52%;height:52%;border-radius:50%"></i>
+        <i class="b2" style="left:38%;top:40%;width:46%;height:22%"></i>
+        <span class="num">63</span>
+        <span class="txt" data-i18n="cv1">Lange Steenstraat</span>
+      </div>
+      <div class="meta">
+        <b><span data-i18n="i1a">Issue 63</span><span data-i18n="i1b">Ghent, 1,400 m</span></b>
+        <b>€9,00</b>
+      </div>
+    </article>
+    <article class="item">
+      <div class="cover">
+        <i class="b1" style="left:10%;top:18%;width:80%;height:8%"></i>
+        <i class="b1" style="left:10%;top:34%;width:80%;height:8%"></i>
+        <i class="b2" style="left:10%;top:50%;width:80%;height:24%"></i>
+        <span class="num">62</span>
+        <span class="txt" data-i18n="cv2">Rue du Chantier</span>
+      </div>
+      <div class="meta">
+        <b><span data-i18n="i2a">Issue 62</span><span data-i18n="i2b">Brussels, 620 m</span></b>
+        <b>€9,00</b>
+      </div>
+    </article>
+    <article class="item">
+      <div class="cover">
+        <i class="b2" style="left:0;top:30%;width:100%;height:40%"></i>
+        <i class="b1" style="left:26%;top:12%;width:26%;height:76%;border-radius:50% 50% 0 0"></i>
+        <span class="num">61</span>
+        <span class="txt" data-i18n="cv3">Skolgatan</span>
+      </div>
+      <div class="meta">
+        <b><span data-i18n="i3a">Issue 61</span><span data-i18n="i3b">Malmö, 900 m</span></b>
+        <b>€9,00</b>
+      </div>
+    </article>
+    <article class="item">
+      <div class="cover">
+        <i class="b1" style="left:16%;top:16%;width:68%;height:68%"></i>
+        <i class="b2" style="left:32%;top:32%;width:68%;height:36%;border-radius:50%"></i>
+        <span class="num">60</span>
+        <span class="txt" data-i18n="cv4">Ulica Piwna</span>
+      </div>
+      <div class="meta">
+        <b><span data-i18n="i4a">Issue 60</span><span data-i18n="i4b">Warsaw, 480 m</span></b>
+        <b>€9,00</b>
+      </div>
+    </article>
+    <article class="item">
+      <div class="cover">
+        <i class="b1" style="left:12%;top:60%;width:76%;height:6%"></i>
+        <i class="b1" style="left:12%;top:70%;width:52%;height:6%"></i>
+        <i class="b2" style="left:12%;top:20%;width:34%;height:34%;border-radius:50%"></i>
+        <span class="num">59</span>
+        <span class="txt" data-i18n="cv5">Kalvarijų gatvė</span>
+      </div>
+      <div class="meta">
+        <b><span data-i18n="i5a">Issue 59</span><span data-i18n="i5b">Vilnius, 2,100 m</span></b>
+        <b>€9,00</b>
+      </div>
+    </article>
+  </section>
+
+  <div class="rule"></div>
+
+  <section class="strip" id="about">
+    <span class="aster">✳</span>
+    <h2>
+      <span data-i18n="sp1">Sixteen pages,</span>
+      <em data-i18n="sp2">one street,</em>
+      <span data-i18n="sp3">two inks, every Thursday.</span>
+    </h2>
+    <p data-i18n="sp4">We walk it end to end, knock on the doors that open, count what is actually there, and print the result on the machine in the back room. Nothing is written from a desk, and nothing is written twice.</p>
+    <a class="act" href="#subscribe" data-i18n="sp5">Read a sample issue</a>
+  </section>
+
+  <section class="how">
+    <div>
+      <div class="n">01</div>
+      <h3 data-i18n="h1t">Monday, on foot</h3>
+      <p data-i18n="h1d">One reporter, one street, both pavements. We count the shutters that never open, the trees, the benches, and the names still painted above the doors.</p>
+    </div>
+    <div>
+      <div class="n">02</div>
+      <h3 data-i18n="h2t">Wednesday, on the drum</h3>
+      <p data-i18n="h2d">Two passes of ink — blue first, then the second pass slightly out of register, which is what makes a risograph look like a risograph and not like a laser printer.</p>
+    </div>
+    <div>
+      <div class="n">03</div>
+      <h3 data-i18n="h3t">Thursday, in the post</h3>
+      <p data-i18n="h3d">Four hundred copies, folded by hand at the long table, in the post by five. What is left goes to eleven shops and nowhere else.</p>
+    </div>
+  </section>
+
+  <section class="journal" id="journal">
+    <h2><span data-i18n="j1">From the</span> <em data-i18n="j2">journal</em></h2>
+    <a class="post" href="#">
+      <span class="lbl">04 · 03 · 26</span>
+      <span class="t" data-i18n="p1">The street that was measured twice, forty years apart</span>
+      <span class="a lbl" data-i18n="p1a">Lieve Vermeulen</span>
+    </a>
+    <a class="post" href="#">
+      <span class="lbl">26 · 02 · 26</span>
+      <span class="t" data-i18n="p2">Why we stopped putting photographs in the issues</span>
+      <span class="a lbl" data-i18n="p2a">Anton Ruys</span>
+    </a>
+    <a class="post" href="#">
+      <span class="lbl">19 · 02 · 26</span>
+      <span class="t" data-i18n="p3">A drum, a stencil and eleven hundred impressions an hour</span>
+      <span class="a lbl" data-i18n="p3a">Lieve Vermeulen</span>
+    </a>
+    <a class="post" href="#">
+      <span class="lbl">11 · 02 · 26</span>
+      <span class="t" data-i18n="p4">Letters from readers who live on the streets we printed</span>
+      <span class="a lbl" data-i18n="p4a">The editors</span>
+    </a>
+  </section>
+
+  <section class="sub" id="subscribe">
+    <div>
+      <h2><span data-i18n="s1">Fifty-two streets a year,</span> <em data-i18n="s2">posted to your door.</em></h2>
+      <form onsubmit="return false">
+        <input type="email" placeholder="you@mail.com" aria-label="Email">
+        <button class="act" type="submit" data-i18n="s3">Subscribe</button>
+      </form>
+    </div>
+    <div class="plans">
+      <div class="plan"><b data-i18n="pl1">Quarter · 13 issues</b><span>€108,00</span></div>
+      <div class="plan"><b data-i18n="pl2">Year · 52 issues</b><span>€396,00</span></div>
+      <div class="plan"><b data-i18n="pl3">Single issue</b><span>€9,00</span></div>
+      <div class="plan"><b data-i18n="pl4">Back catalogue, 2019–25</b><span data-i18n="pl4v">on request</span></div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="foot">
+    <div>
+      <div class="big">Dispatch<em>&nbsp;Press</em></div>
+      <p class="lbl" style="margin-top:12px;max-width:320px" data-i18n="fabout">A two-person press on Lange Steenstraat, printing one street a week since 2019.</p>
+    </div>
+    <div>
+      <h4 data-i18n="fh1">Issues</h4>
+      <ul>
+        <li><a href="#issues" data-i18n="fl1">Latest</a></li>
+        <li><a href="#" data-i18n="fl2">Back catalogue</a></li>
+        <li><a href="#" data-i18n="fl3">Cities index</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 data-i18n="fh2">Press</h4>
+      <ul>
+        <li><a href="#about" data-i18n="fl4">How it is made</a></li>
+        <li><a href="#journal" data-i18n="fl5">Journal</a></li>
+        <li><a href="#" data-i18n="fl6">Stockists</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 data-i18n="fh3">Contact</h4>
+      <ul>
+        <li><a href="#" data-i18n="fl7">Suggest a street</a></li>
+        <li><a href="#" data-i18n="fl8">Postage & returns</a></li>
+        <li><a href="#" data-i18n="fl9">Write to us</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-legal lbl">
+    <span>© 2026 Dispatch Press</span>
+    <span data-i18n="fnote">Ghent · printed in two inks</span>
+  </div>
+</footer>
+
+<script>
+/* ── RU/EN. Английский — исходный, русский — перевод под него ── */
+var RU = {
+  nav1:'Выпуски', nav2:'О нас', nav3:'Журнал', nav4:'Подписка',
+  ann:'Выпуск 63 уходит на почту в четверг · пересылка бесплатно от €60',
+  st1:'Dispatch — маленькое издательство,', st2:'которое печатает по одной улице за раз,', st3:'на ризографе в Генте.',
+  wh1:'Что сейчас:', wh2:'Последнее',
+  cv1:'Ланге Стенстрат', cv2:'Рю дю Шантье', cv3:'Скулгатан', cv4:'Улица Пивна', cv5:'Кальварию',
+  i1a:'Выпуск 63', i1b:'Гент, 1400 м',
+  i2a:'Выпуск 62', i2b:'Брюссель, 620 м',
+  i3a:'Выпуск 61', i3b:'Мальмё, 900 м',
+  i4a:'Выпуск 60', i4b:'Варшава, 480 м',
+  i5a:'Выпуск 59', i5b:'Вильнюс, 2100 м',
+  sp1:'Шестнадцать страниц,', sp2:'одна улица,', sp3:'две краски, каждый четверг.',
+  sp4:'Мы проходим её из конца в конец, стучим в те двери, которые открывают, считаем то, что там на самом деле есть, и печатаем результат на машине в задней комнате. Ничего не написано из-за стола, и ничего не написано дважды.',
+  sp5:'Прочитать пробный выпуск',
+  h1t:'Понедельник, пешком', h1d:'Один репортёр, одна улица, оба тротуара. Считаем ставни, которые больше не открывают, деревья, скамейки и имена, ещё написанные над дверьми.',
+  h2t:'Среда, на барабане', h2d:'Два прогона краски — сначала синий, потом второй чуть мимо приводки: именно из-за этого ризограф выглядит ризографом, а не лазерным принтером.',
+  h3t:'Четверг, на почте', h3d:'Четыреста экземпляров, сфальцованных руками за длинным столом, на почте к пяти. Остаток уходит в одиннадцать лавок и больше никуда.',
+  j1:'Из', j2:'журнала',
+  p1:'Улица, которую обмерили дважды с разницей в сорок лет', p1a:'Лив Вермёлен',
+  p2:'Почему мы перестали ставить в выпуски фотографии', p2a:'Антон Рёйс',
+  p3:'Барабан, трафарет и тысяча сто оттисков в час', p3a:'Лив Вермёлен',
+  p4:'Письма читателей, которые живут на напечатанных нами улицах', p4a:'Редакция',
+  s1:'Пятьдесят две улицы в год,', s2:'почтой до вашей двери.', s3:'Подписаться',
+  pl1:'Квартал · 13 выпусков', pl2:'Год · 52 выпуска', pl3:'Один выпуск',
+  pl4:'Архив 2019–25', pl4v:'по запросу',
+  fabout:'Издательство на двоих на Ланге Стенстрат: по одной улице в неделю с 2019 года.',
+  fh1:'Выпуски', fl1:'Последние', fl2:'Архив', fl3:'Указатель городов',
+  fh2:'Издательство', fl4:'Как это делается', fl5:'Журнал', fl6:'Где купить',
+  fh3:'Связь', fl7:'Предложить улицу', fl8:'Пересылка и возврат', fl9:'Написать нам',
+  fnote:'Гент · печать в две краски'
+};
+var EN = {};
+document.querySelectorAll('[data-i18n]').forEach(function (el) { EN[el.dataset.i18n] = el.innerHTML; });
+
+function setLang(l) {
+  var dict = l === 'ru' ? RU : EN;
+  document.querySelectorAll('[data-i18n]').forEach(function (el) {
+    var v = dict[el.dataset.i18n];
+    if (v !== undefined) el.innerHTML = v;
+  });
+  document.documentElement.lang = l;
+  document.documentElement.dataset.lang = l;
+  document.querySelectorAll('.lang button').forEach(function (b) {
+    b.setAttribute('aria-pressed', b.dataset.set === l ? 'true' : 'false');
+  });
+}
+document.querySelectorAll('.lang button').forEach(function (b) {
+  b.addEventListener('click', function () { setLang(b.dataset.set); });
+});
+</script>
+</body>
+</html>

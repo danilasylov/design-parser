@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>Foundry — two hundred people remember the same factory</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Commissioner:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ─────────────────────────────────────────────────────────────
+   Дизайн-система: AREA 17 (refero 143d553e) — tokens.css дословно
+   ───────────────────────────────────────────────────────────── */
+:root {
+  /* Colors */
+  --color-pure-white: #ffffff;
+  --color-graphite: #1a1a1a;
+  --color-true-black: #000000;
+  --color-hairline: #e6e6e6;
+  --color-fog: #f2f2f2;
+  --color-cream-stone: #f2ede9;
+  --color-muted: #949494;
+  --color-dim: #757575;
+  --color-disabled: #cccccc;
+  --color-electric-yellow: #fdf313;
+
+  /* Typography — Font Families */
+  /* Suisse Intl → Commissioner: гротеск с кириллицей, веса 400/500 */
+  --font-suisse-intl: 'Commissioner', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* Typography — Scale */
+  --text-caption: 16px;
+  --leading-caption: 1.5;
+  --tracking-caption: 0.06px;
+  --text-subheading: 20px;
+  --leading-subheading: 1.4;
+  --tracking-subheading: -0.28px;
+  --text-heading-sm: 32px;
+  --leading-heading-sm: 1.15;
+  --tracking-heading-sm: -0.42px;
+  --text-heading: 42px;
+  --leading-heading: 1.15;
+  --tracking-heading: -0.59px;
+  --text-display: 55px;
+  --leading-display: 1.1;
+  --tracking-display: -0.82px;
+
+  /* Typography — Weights */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+
+  /* Spacing */
+  --spacing-unit: 8px;
+  --spacing-8: 8px;
+  --spacing-16: 16px;
+  --spacing-24: 24px;
+  --spacing-32: 32px;
+  --spacing-48: 48px;
+  --spacing-64: 64px;
+  --spacing-80: 80px;
+  --spacing-128: 128px;
+  --spacing-192: 192px;
+
+  /* Layout */
+  --page-max-width: 1440px;
+  --card-padding: 24px;
+
+  /* Border Radius */
+  --radius-md: 4px;
+  --radius-lg: 8px;
+  --radius-full: 9999px;
+  --radius-nav: 4px;
+  --radius-cards: 8px;
+  --radius-pills: 9999px;
+  --radius-inputs: 8px;
+  --radius-buttons: 8px;
+
+  /* Surfaces */
+  --surface-canvas: #ffffff;
+  --surface-fog-surface: #f2f2f2;
+  --surface-cream-surface: #f2ede9;
+  --surface-yellow-accent: #fdf313;
+  --surface-graphite: #1a1a1a;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--surface-canvas);
+  color: var(--color-graphite);
+  font-family: var(--font-suisse-intl);
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+  font-weight: var(--font-weight-regular);
+  -webkit-font-smoothing: antialiased;
+  padding-bottom: 48px;   /* под нижнюю жёлтую полосу */
+}
+a { color: inherit; text-decoration: none; }
+h1, h2, h3, h4, p, ul, ol, figure, blockquote { margin: 0; }
+ul { list-style: none; padding: 0; }
+
+.wrap { max-width: var(--page-max-width); margin: 0 auto; padding: 0 var(--spacing-48); }
+section { padding: var(--spacing-128) 0; }
+
+/* ── Навигация ── */
+.nav .wrap { height: 84px; display: flex; align-items: center; }
+.logo { font-size: 42px; line-height: 1; font-weight: var(--font-weight-medium); letter-spacing: -0.04em; color: var(--color-true-black); }
+.nav-links { margin-left: auto; display: flex; gap: var(--spacing-32); align-items: center; }
+.nav-links a { font-weight: var(--font-weight-medium); }
+.nav-links a:hover { color: var(--color-muted); }
+.switch { display: inline-flex; border: 1px solid var(--color-graphite); border-radius: var(--radius-nav); overflow: hidden; }
+.switch button { background: transparent; border: 0; font-family: inherit; font-size: 14px; padding: 5px 8px; cursor: pointer; color: var(--color-graphite); }
+.switch button[aria-pressed="true"] { background: var(--color-graphite); color: var(--color-pure-white); }
+
+/* ── Хиро ── */
+.hero { padding: var(--spacing-80) 0 var(--spacing-128); }
+h1 { font-size: var(--text-display); line-height: var(--leading-display); letter-spacing: -0.015em; font-weight: var(--font-weight-regular); max-width: 900px; }
+.hero .meta { margin-top: var(--spacing-48); display: flex; gap: var(--spacing-64); font-size: var(--text-caption); }
+.hero .meta b { display: block; font-weight: var(--font-weight-medium); }
+.hero .meta span { color: var(--color-dim); }
+
+/* ── Полноширинный блок-цитата (кинематографическая пунктуация без фото) ── */
+.bleed { background: var(--surface-graphite); color: var(--color-pure-white); padding: var(--spacing-128) 0; }
+.bleed blockquote { font-size: var(--text-heading); line-height: var(--leading-heading); letter-spacing: var(--tracking-heading); max-width: 1000px; }
+.bleed .attr { margin-top: var(--spacing-32); color: var(--color-disabled); }
+.bleed .attr b { color: var(--color-pure-white); font-weight: var(--font-weight-medium); }
+.bleed .track { margin-top: var(--spacing-48); display: flex; align-items: center; gap: var(--spacing-16); color: var(--color-muted); font-size: 14px; }
+.bleed .track svg { display: block; }
+
+/* ── Секции ── */
+h2 { font-size: var(--text-heading); line-height: var(--leading-heading); letter-spacing: var(--tracking-heading); font-weight: var(--font-weight-regular); max-width: 900px; }
+h3 { font-size: var(--text-subheading); line-height: var(--leading-subheading); letter-spacing: var(--tracking-subheading); font-weight: var(--font-weight-medium); }
+.kicker { font-size: 14px; font-weight: var(--font-weight-medium); color: var(--color-dim); margin-bottom: var(--spacing-24); }
+p.body { max-width: 720px; }
+.dim { color: var(--color-dim); }
+
+/* ── Выпуски ── */
+.issues { margin-top: var(--spacing-64); }
+.issue { display: grid; grid-template-columns: 110px 1fr 300px 160px; gap: var(--spacing-32); padding: var(--spacing-32) 0; border-top: 1px solid var(--color-hairline); align-items: start; }
+.issue:last-child { border-bottom: 1px solid var(--color-hairline); }
+.issue .no { font-weight: var(--font-weight-medium); }
+.issue .ttl { font-size: var(--text-heading-sm); line-height: var(--leading-heading-sm); letter-spacing: var(--tracking-heading-sm); }
+.issue .abt { margin-top: var(--spacing-8); color: var(--color-dim); }
+.issue .facts { color: var(--color-dim); }
+.issue .status { text-align: right; }
+.pill { display: inline-block; border-radius: var(--radius-pills); background: var(--surface-fog-surface); padding: 4px 14px; font-weight: var(--font-weight-medium); font-size: 14px; }
+
+/* ── Карточки ── */
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-24); }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-64); }
+.card { background: var(--surface-fog-surface); border-radius: var(--radius-cards); padding: var(--spacing-24); }
+.card.cream { background: var(--surface-cream-surface); }
+.card p { margin-top: var(--spacing-16); color: var(--color-dim); }
+
+/* ── Архив ── */
+table { width: 100%; border-collapse: collapse; }
+thead th { text-align: left; font-weight: var(--font-weight-medium); font-size: 14px; color: var(--color-dim); padding-bottom: var(--spacing-16); border-bottom: 1px solid var(--color-hairline); }
+tbody td { padding: var(--spacing-24) var(--spacing-24) var(--spacing-24) 0; border-bottom: 1px solid var(--color-hairline); vertical-align: top; }
+tbody td.name { font-weight: var(--font-weight-medium); width: 260px; }
+tbody td.role { color: var(--color-dim); }
+tbody td.min { width: 120px; font-variant-numeric: tabular-nums; }
+tbody td.st { width: 200px; }
+
+/* ── Метод ── */
+.method { display: grid; grid-template-columns: 64px 1fr; gap: var(--spacing-32); padding: var(--spacing-32) 0; border-top: 1px solid var(--color-hairline); }
+.method:last-child { border-bottom: 1px solid var(--color-hairline); }
+.method .n { font-weight: var(--font-weight-medium); }
+.method p { max-width: 780px; margin-top: var(--spacing-8); color: var(--color-dim); }
+
+/* ── Кнопки ── */
+.btn { display: inline-flex; align-items: center; gap: 10px; border-radius: var(--radius-buttons); padding: 16px 24px; font-family: inherit; font-size: var(--text-caption); font-weight: var(--font-weight-medium); cursor: pointer; }
+.btn-outline { background: transparent; border: 1px solid var(--color-graphite); color: var(--color-graphite); }
+.btn-outline:hover { background: var(--color-graphite); color: var(--color-pure-white); }
+.btn-solid { background: var(--surface-fog-surface); border: 0; color: var(--color-graphite); }
+
+/* ── Подвал ── */
+footer { padding: var(--spacing-128) 0 var(--spacing-80); border-top: 1px solid var(--color-hairline); }
+.foot { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: var(--spacing-48); }
+footer h4 { font-size: 14px; font-weight: var(--font-weight-medium); color: var(--color-dim); margin-bottom: var(--spacing-16); }
+footer li { padding: 5px 0; font-weight: var(--font-weight-medium); }
+footer li a:hover { color: var(--color-muted); }
+.foot-note { max-width: 380px; color: var(--color-dim); margin-top: var(--spacing-24); }
+.foot-bottom { margin-top: var(--spacing-80); display: flex; color: var(--color-muted); font-size: 14px; }
+.foot-bottom .right { margin-left: auto; display: flex; gap: var(--spacing-24); }
+
+/* ── Нижняя жёлтая полоса — единственный хроматический элемент ── */
+.announce {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;
+  background: var(--surface-yellow-accent); color: var(--color-graphite);
+  padding: 12px var(--spacing-48); font-size: var(--text-caption);
+}
+.announce a { font-weight: var(--font-weight-medium); }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap">
+    <a class="logo" href="#">F/</a>
+    <div class="nav-links">
+      <a href="#issues" data-i18n="n1">Issues</a>
+      <a href="#archive" data-i18n="n2">Archive</a>
+      <a href="#method" data-i18n="n3">Method</a>
+      <a href="#" data-i18n="n4">Subscribe</a>
+      <a href="#" data-i18n="n5">Contact</a>
+      <span class="switch">
+        <button type="button" data-set="en" aria-pressed="true">EN</button>
+        <button type="button" data-set="ru" aria-pressed="false">RU</button>
+      </span>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <h1 data-i18n="h1">Two hundred people remember the same factory, and no two of them describe the same building.</h1>
+    <div class="meta">
+      <div><b>207</b><span data-i18n="m1">interviews recorded since 2021</span></div>
+      <div><b>412 <span data-i18n="m2h">hours</span></b><span data-i18n="m2">of audio, transcribed line by line</span></div>
+      <div><b>4</b><span data-i18n="m3">issues published, one every quarter</span></div>
+      <div><b>1931–2009</b><span data-i18n="m4">the years the plant was running</span></div>
+    </div>
+  </div>
+</header>
+
+<div class="bleed">
+  <div class="wrap">
+    <blockquote data-i18n="q1">“The furnace was never off. Not on New Year, not when my father died. You learned to speak in the two seconds between the hammer and the next hammer, and forty years later I still talk in that rhythm — my wife says I pause like a machine.”</blockquote>
+    <div class="attr"><b>Виктор Панин</b> · <span data-i18n="q1a">forge shop, hammer operator, 1968–2004</span> · <span data-i18n="q1b">interview 041, recorded 12 March 2023, 2 h 51 min</span></div>
+    <div class="track">
+      <svg width="520" height="28" viewBox="0 0 520 28" fill="none" aria-hidden="true">
+        <g stroke="#949494" stroke-width="2">
+          <path d="M2 14v6M10 14v-8M18 14v11M26 14v-4M34 14v9M42 14v-12M50 14v5M58 14v-7M66 14v13M74 14v-3M82 14v8M90 14v-11M98 14v4M106 14v-9M114 14v12M122 14v-5M130 14v7M138 14v-13M146 14v3M154 14v-8M162 14v10M170 14v-4M178 14v6M186 14v-11M194 14v9M202 14v-6M210 14v12M218 14v-3M226 14v7M234 14v-9M242 14v4M250 14v-12M258 14v8M266 14v-5M274 14v11M282 14v-7M290 14v3M298 14v-10M306 14v6M314 14v-4M322 14v13M330 14v-8M338 14v5M346 14v-11M354 14v9M362 14v-3M370 14v7M378 14v-12M386 14v4M394 14v-6M402 14v10M410 14v-9M418 14v5M426 14v-3M434 14v11M442 14v-7M450 14v8M458 14v-4M466 14v6M474 14v-10M482 14v3M490 14v-5M498 14v9M506 14v-6M514 14v4"/>
+        </g>
+      </svg>
+      <span data-i18n="q1c">01:14:22 / 02:51:08</span>
+    </div>
+  </div>
+</div>
+
+<section id="issues">
+  <div class="wrap">
+    <div class="kicker" data-i18n="k1">Published</div>
+    <h2 data-i18n="s1">Every issue takes one question and asks it of forty people.</h2>
+    <div class="issues">
+      <div class="issue">
+        <div class="no">№ 01</div>
+        <div>
+          <div class="ttl" data-i18n="i1t">The first day</div>
+          <div class="abt" data-i18n="i1a">What they were told the job was, what it turned out to be, and who showed them where to stand.</div>
+        </div>
+        <div class="facts" data-i18n="i1f">44 interviews · 96 pages · a foldout map of shop no. 3 as it was in 1974</div>
+        <div class="status"><span class="pill" data-i18n="i1s">Sold out</span></div>
+      </div>
+      <div class="issue">
+        <div class="no">№ 02</div>
+        <div>
+          <div class="ttl" data-i18n="i2t">Noise</div>
+          <div class="abt" data-i18n="i2a">Hearing loss, hand signals, the private languages that grew where speech could not.</div>
+        </div>
+        <div class="facts" data-i18n="i2f">39 interviews · 112 pages · an insert of the shop's hand alphabet, drawn from memory by six people</div>
+        <div class="status"><span class="pill" data-i18n="i2s">In print</span></div>
+      </div>
+      <div class="issue">
+        <div class="no">№ 03</div>
+        <div>
+          <div class="ttl" data-i18n="i3t">Nineteen ninety-two</div>
+          <div class="abt" data-i18n="i3a">The year wages were paid in sheet metal, and what people did with it.</div>
+        </div>
+        <div class="facts" data-i18n="i3f">51 interviews · 128 pages · photographs of eleven objects made from that metal, still in kitchens</div>
+        <div class="status"><span class="pill" data-i18n="i3s">In print</span></div>
+      </div>
+      <div class="issue">
+        <div class="no">№ 04</div>
+        <div>
+          <div class="ttl" data-i18n="i4t">The last shift</div>
+          <div class="abt" data-i18n="i4a">Closing, and the four months when the guards kept coming to a plant that had stopped paying them.</div>
+        </div>
+        <div class="facts" data-i18n="i4f">37 interviews · 104 pages · the shutdown log, reproduced in full</div>
+        <div class="status"><span class="pill" data-i18n="i4s">In print</span></div>
+      </div>
+      <div class="issue">
+        <div class="no">№ 05</div>
+        <div>
+          <div class="ttl" data-i18n="i5t">The night shift</div>
+          <div class="abt" data-i18n="i5a">Sleep, marriages, the canteen at three in the morning, and who was awake with you in the next building.</div>
+        </div>
+        <div class="facts" data-i18n="i5f">36 interviews recorded, 4 still to transcribe · ships in November</div>
+        <div class="status"><span class="pill" data-i18n="i5s">Open</span></div>
+      </div>
+    </div>
+    <div style="margin-top:var(--spacing-48);display:flex;gap:var(--spacing-16)">
+      <a class="btn btn-outline" href="#" data-i18n="b1">Subscribe — 4 issues a year</a>
+      <a class="btn btn-solid" href="#archive" data-i18n="b2">Read the archive</a>
+    </div>
+  </div>
+</section>
+
+<section id="archive" style="padding-top:0">
+  <div class="wrap">
+    <div class="kicker" data-i18n="k2">Archive</div>
+    <h2 data-i18n="s2">Everyone we recorded is listed, including the ones we cannot publish yet.</h2>
+    <p class="body dim" style="margin-top:var(--spacing-24)" data-i18n="s2p">Each entry links to the transcript, the audio, and the consent form that says what may be quoted and when. Nine people asked for an embargo until after their death; those entries carry the year the embargo was signed and nothing else.</p>
+    <table style="margin-top:var(--spacing-64)">
+      <thead>
+        <tr><th data-i18n="t1">Name</th><th data-i18n="t2">Shop, role, years</th><th data-i18n="t3">Audio</th><th data-i18n="t4">State</th><th data-i18n="t5">Appears in</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="name">Виктор Панин</td><td class="role" data-i18n="r1">Forge, hammer operator, 1968–2004</td><td class="min">2 h 51</td><td class="st" data-i18n="st1">Verified by the speaker</td><td class="dim">№ 01, 02, 04</td></tr>
+        <tr><td class="name">Нина Абрамова</td><td class="role" data-i18n="r2">Canteen, cook, 1979–1998</td><td class="min">1 h 34</td><td class="st" data-i18n="st2">Verified by the speaker</td><td class="dim">№ 01, 03</td></tr>
+        <tr><td class="name">Юрий Салимов</td><td class="role" data-i18n="r3">Rolling mill, foreman, 1985–2009</td><td class="min">4 h 12</td><td class="st" data-i18n="st3">Transcribed, awaiting reading</td><td class="dim">№ 04</td></tr>
+        <tr><td class="name">Тамара Легостаева</td><td class="role" data-i18n="r4">Laboratory, chemist, 1971–2001</td><td class="min">3 h 06</td><td class="st" data-i18n="st4">Verified by the speaker</td><td class="dim">№ 02, 03</td></tr>
+        <tr><td class="name">—</td><td class="role" data-i18n="r5">Security, senior guard, 1990–2009</td><td class="min">2 h 20</td><td class="st" data-i18n="st5">Embargoed, signed 2022</td><td class="dim">—</td></tr>
+        <tr><td class="name">Аркадий Ким</td><td class="role" data-i18n="r6">Design bureau, engineer, 1966–1994</td><td class="min">5 h 48</td><td class="st" data-i18n="st6">Verified, with corrections</td><td class="dim">№ 01, 03, 05</td></tr>
+        <tr><td class="name">Лидия Бортник</td><td class="role" data-i18n="r7">Night dispatcher, 1981–2000</td><td class="min">1 h 58</td><td class="st" data-i18n="st7">Recorded, not yet transcribed</td><td class="dim">№ 05</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="method" style="padding-top:0">
+  <div class="wrap">
+    <div class="grid-2" style="align-items:start">
+      <div>
+        <div class="kicker" data-i18n="k3">Method</div>
+        <h2 style="font-size:var(--text-heading-sm);letter-spacing:var(--tracking-heading-sm)" data-i18n="s3">How the interviews are made, and what we refuse to do</h2>
+        <p class="body dim" style="margin-top:var(--spacing-24)" data-i18n="s3p">The rules were written after the first eleven interviews, when we realised how much a question can put into a person's mouth. They are published because a reader is entitled to know how a sentence in an issue came to exist.</p>
+      </div>
+      <div>
+        <div class="method"><span class="n">01</span><div><h3 data-i18n="me1h">The chronology first, the feelings later</h3><p data-i18n="me1p">The first session only establishes dates, shops, and names — nothing is asked about meaning. People remember far more precisely once the calendar is on the table.</p></div></div>
+        <div class="method"><span class="n">02</span><div><h3 data-i18n="me2h">No leading nouns</h3><p data-i18n="me2p">We do not say the words «tragedy», «collapse», or «golden years». If a person uses one, we ask what they mean by it and keep their definition.</p></div></div>
+        <div class="method"><span class="n">03</span><div><h3 data-i18n="me3h">The transcript goes back</h3><p data-i18n="me3p">Every speaker reads their own transcript and may strike anything, without explaining why. Fourteen people have removed passages; three removed the whole interview.</p></div></div>
+        <div class="method"><span class="n">04</span><div><h3 data-i18n="me4h">Silence is printed</h3><p data-i18n="me4p">Pauses over four seconds appear in the text as a bracketed count. Where a person cried or refused to continue, the page says so instead of tidying it away.</p></div></div>
+        <div class="method"><span class="n">05</span><div><h3 data-i18n="me5h">Nothing is composited</h3><p data-i18n="me5p">A quotation belongs to one person, one recording, one date. We never merge two answers into a smoother sentence, even when it would read better.</p></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="grid-3">
+      <div class="card cream">
+        <h3 data-i18n="c1h">Read one issue first</h3>
+        <p data-i18n="c1p">Number 03 goes out on its own for 900 ₽ with postage. Most people who subscribe do it after that one, which is why we suggest it rather than the first.</p>
+      </div>
+      <div class="card">
+        <h3 data-i18n="c2h">The recordings are open</h3>
+        <p data-i18n="c2p">Audio and transcripts are free to read on the site and free to quote with attribution. The paper issue is what pays for the next forty interviews.</p>
+      </div>
+      <div class="card">
+        <h3 data-i18n="c3h">If you worked there</h3>
+        <p data-i18n="c3p">We record in your kitchen, not in a studio, and it takes two visits. Write to us and someone will call within a week — there are eleven people on the waiting list, and we are working through it.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <a class="logo" href="#" style="font-size:32px">F/</a>
+        <p class="foot-note" data-i18n="ft1">Foundry is a quarterly of oral history made by four people in a two-room office above a tyre shop, three hundred metres from the gate the plant used for its night shift.</p>
+      </div>
+      <div>
+        <h4 data-i18n="fh1">Issues</h4>
+        <ul><li><a href="#" data-i18n="fl1">№ 01 The first day</a></li><li><a href="#" data-i18n="fl2">№ 02 Noise</a></li><li><a href="#" data-i18n="fl3">№ 03 Nineteen ninety-two</a></li><li><a href="#" data-i18n="fl4">№ 04 The last shift</a></li></ul>
+      </div>
+      <div>
+        <h4 data-i18n="fh2">Archive</h4>
+        <ul><li><a href="#" data-i18n="fl5">All 207 interviews</a></li><li><a href="#" data-i18n="fl6">Consent form</a></li><li><a href="#" data-i18n="fl7">Citation rules</a></li><li><a href="#" data-i18n="fl8">Embargoed entries</a></li></ul>
+      </div>
+      <div>
+        <h4 data-i18n="fh3">Contact</h4>
+        <ul><li><a href="#">hello@foundry.press</a></li><li><a href="#" data-i18n="fl9">Be interviewed</a></li><li><a href="#" data-i18n="fl10">Bookshops</a></li><li><a href="#" data-i18n="fl11">Press</a></li></ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span data-i18n="fb0">© 2026 Foundry. Quotations are the property of the people who spoke them.</span>
+      <span class="right"><a href="#" data-i18n="fb1">Privacy</a><a href="#" data-i18n="fb2">Terms</a></span>
+    </div>
+  </div>
+</footer>
+
+<div class="announce">
+  <span data-i18n="an1">Issue № 05, the night shift, ships in November —</span>
+  <a href="#" data-i18n="an2">subscribe before the print run is fixed →</a>
+</div>
+
+<script>
+/* ── RU/EN. Английский — исходный, русский — перевод под него ── */
+var RU = {
+  n1:'Выпуски', n2:'Архив', n3:'Метод', n4:'Подписка', n5:'Контакты',
+  h1:'Двести человек помнят один и тот же завод, и ни один не описывает то же самое здание.',
+  m1:'записанных интервью с 2021 года',
+  m2h:'часов', m2:'звука, расшифрованного построчно',
+  m3:'вышедших выпуска, по одному в квартал',
+  m4:'годы, когда завод работал',
+  q1:'«Печь не выключали никогда. Ни на Новый год, ни когда умер отец. Ты учился говорить в те две секунды между ударом и следующим ударом — и через сорок лет я всё ещё так говорю; жена говорит, что я делаю паузы как станок».',
+  q1a:'кузнечный цех, молотобоец, 1968–2004',
+  q1b:'интервью 041, записано 12 марта 2023, 2 ч 51 мин',
+  q1c:'01:14:22 / 02:51:08',
+  k1:'Вышло',
+  s1:'Каждый выпуск берёт один вопрос и задаёт его сорока людям.',
+  i1t:'Первый день', i1a:'Что им сказали про работу, чем она оказалась и кто показал, где стоять.',
+  i1f:'44 интервью · 96 страниц · вкладка с планом третьего цеха, каким он был в 1974-м', i1s:'Распродан',
+  i2t:'Шум', i2a:'Потеря слуха, знаки руками и частные языки, выросшие там, где речь не проходила.',
+  i2f:'39 интервью · 112 страниц · вкладыш с цеховой азбукой жестов, восстановленной по памяти шестью людьми', i2s:'В продаже',
+  i3t:'Девяносто второй', i3a:'Год, когда зарплату выдавали листовым металлом, и что люди с ним делали.',
+  i3f:'51 интервью · 128 страниц · снимки одиннадцати предметов из того металла, до сих пор стоящих на кухнях', i3s:'В продаже',
+  i4t:'Последняя смена', i4a:'Закрытие и четыре месяца, когда охрана продолжала выходить на завод, переставший ей платить.',
+  i4f:'37 интервью · 104 страницы · журнал остановки, воспроизведённый целиком', i4s:'В продаже',
+  i5t:'Ночная смена', i5a:'Сон, браки, столовая в три часа ночи и тот, кто не спал вместе с тобой в соседнем корпусе.',
+  i5f:'36 интервью записано, 4 ещё расшифровать · выходит в ноябре', i5s:'Открыт',
+  b1:'Подписка — четыре выпуска в год', b2:'Читать архив',
+  k2:'Архив',
+  s2:'Перечислены все, кого мы записали, включая тех, кого пока нельзя публиковать.',
+  s2p:'Каждая запись ведёт к расшифровке, звуку и согласию, где сказано, что можно цитировать и с какого года. Девять человек попросили эмбарго до своей смерти; у таких записей стоит только год подписания согласия и больше ничего.',
+  t1:'Имя', t2:'Цех, должность, годы', t3:'Звук', t4:'Состояние', t5:'Вошло в',
+  r1:'Кузнечный, молотобоец, 1968–2004',
+  r2:'Столовая, повар, 1979–1998',
+  r3:'Прокатный, мастер, 1985–2009',
+  r4:'Лаборатория, химик, 1971–2001',
+  r5:'Охрана, старший смены, 1990–2009',
+  r6:'Конструкторское бюро, инженер, 1966–1994',
+  r7:'Ночной диспетчер, 1981–2000',
+  st1:'Заверено говорящим', st2:'Заверено говорящим', st3:'Расшифровано, ждёт вычитки',
+  st4:'Заверено говорящим', st5:'Эмбарго, подписано в 2022', st6:'Заверено, с правками', st7:'Записано, не расшифровано',
+  k3:'Метод',
+  s3:'Как делаются интервью и чего мы не делаем',
+  s3p:'Правила написали после первых одиннадцати разговоров, когда стало видно, сколько вопрос способен вложить человеку в рот. Мы их публикуем, потому что читатель вправе знать, как фраза в выпуске появилась на свет.',
+  me1h:'Сначала хронология, чувства потом',
+  me1p:'Первая встреча только устанавливает даты, цеха и имена — о смысле не спрашивают вовсе. Когда календарь лежит на столе, человек вспоминает куда точнее.',
+  me2h:'Никаких подсказанных слов',
+  me2p:'Мы не произносим «трагедия», «развал» и «золотые годы». Если слово произносит собеседник, спрашиваем, что он под ним понимает, и оставляем его определение.',
+  me3h:'Расшифровка возвращается',
+  me3p:'Каждый читает собственную расшифровку и вправе вычеркнуть что угодно, не объясняя причины. Четырнадцать человек убрали куски, трое — интервью целиком.',
+  me4h:'Молчание печатается',
+  me4p:'Паузы дольше четырёх секунд стоят в тексте как счёт в скобках. Там, где человек плакал или отказывался продолжать, страница так и говорит, а не приглаживает.',
+  me5h:'Ничего не склеивается',
+  me5p:'Цитата принадлежит одному человеку, одной записи, одной дате. Мы никогда не сводим два ответа в более гладкую фразу, даже когда так читалось бы лучше.',
+  c1h:'Начните с одного выпуска',
+  c1p:'Третий продаётся отдельно за 900 ₽ с доставкой. Большинство подписывается после него — поэтому мы советуем именно его, а не первый.',
+  c2h:'Записи открыты',
+  c2p:'Звук и расшифровки бесплатны на сайте и свободны для цитирования со ссылкой. Бумажный выпуск — это то, что оплачивает следующие сорок интервью.',
+  c3h:'Если вы там работали',
+  c3p:'Мы записываем у вас на кухне, а не в студии, и это два визита. Напишите — вам позвонят в течение недели: в очереди одиннадцать человек, и мы её разбираем.',
+  ft1:'Foundry — ежеквартальник устной истории, который делают четыре человека в двухкомнатной конторе над шиномонтажом, в трёхстах метрах от проходной, которой завод пользовался в ночную смену.',
+  fh1:'Выпуски', fl1:'№ 01 Первый день', fl2:'№ 02 Шум', fl3:'№ 03 Девяносто второй', fl4:'№ 04 Последняя смена',
+  fh2:'Архив', fl5:'Все 207 интервью', fl6:'Форма согласия', fl7:'Правила цитирования', fl8:'Записи под эмбарго',
+  fh3:'Контакты', fl9:'Дать интервью', fl10:'Магазины', fl11:'Пресса',
+  fb0:'© 2026 Foundry. Цитаты принадлежат тем, кто их произнёс.', fb1:'Приватность', fb2:'Условия',
+  an1:'Выпуск № 05, ночная смена, выходит в ноябре —',
+  an2:'подпишитесь, пока не зафиксирован тираж →'
+};
+var EN = {};
+document.querySelectorAll('[data-i18n]').forEach(function (el) { EN[el.dataset.i18n] = el.innerHTML; });
+
+function setLang(l) {
+  var dict = l === 'ru' ? RU : EN;
+  document.querySelectorAll('[data-i18n]').forEach(function (el) {
+    var v = dict[el.dataset.i18n];
+    if (v !== undefined) el.innerHTML = v;
+  });
+  document.documentElement.lang = l;
+  document.documentElement.dataset.lang = l;
+  document.querySelectorAll('.switch button').forEach(function (b) {
+    b.setAttribute('aria-pressed', b.dataset.set === l ? 'true' : 'false');
+  });
+}
+document.querySelectorAll('.switch button').forEach(function (b) {
+  b.addEventListener('click', function () { setLang(b.dataset.set); });
+});
+</script>
+</body>
+</html>

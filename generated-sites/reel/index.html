@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>Reel — forty-seven short animations, three nights</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;700&family=Nunito+Sans:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ─────────────────────────────────────────────────────────────
+   Дизайн-система: Earlydog (refero 707a1648) — tokens.css дословно
+   ───────────────────────────────────────────────────────────── */
+:root {
+  /* Colors */
+  --color-cream-paper: #fff9f0;
+  --color-midnight-ink: #000609;
+  --color-signal-blue: #0a65db;
+  --color-ember-red: #ee4623;
+  --color-saffron-yellow: #ffd23f;
+  --color-blush-pink: #f4c6c6;
+
+  /* Typography — Font Families */
+  /* degular-display → Jost 700 (геометрический, кириллица); usual → Nunito Sans */
+  --font-degular-display: 'Jost', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-usual: 'Nunito Sans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* Typography — Scale */
+  --text-caption: 16px;
+  --leading-caption: 1.78;
+  --text-body: 18px;
+  --leading-body: 1.82;
+  --text-subheading: 22px;
+  --leading-subheading: 1.82;
+  --text-heading-sm: 52px;
+  --leading-heading-sm: 1.23;
+  --tracking-heading-sm: 0.47px;
+  --text-heading: 80px;
+  --leading-heading: 1.1;
+  --tracking-heading: 1.04px;
+  --text-display: 116px;
+  --leading-display: 1.03;
+  --tracking-display: 2.2px;
+
+  /* Typography — Weights */
+  --font-weight-regular: 400;
+  --font-weight-bold: 700;
+
+  /* Spacing */
+  --spacing-16: 16px;
+  --spacing-20: 20px;
+  --spacing-24: 24px;
+  --spacing-32: 32px;
+  --spacing-40: 40px;
+  --spacing-44: 44px;
+  --spacing-48: 48px;
+  --spacing-96: 96px;
+  --spacing-104: 104px;
+  --spacing-120: 120px;
+  --spacing-128: 128px;
+
+  /* Layout */
+  --page-max-width: 1200px;
+  --section-gap: 96px;
+  --card-padding: 32px;
+
+  /* Border Radius */
+  --radius-full: 9999px;
+  --radius-cards: 0px;
+  --radius-buttons: 9999px;
+  --radius-illustrations: 0px;
+
+  /* Surfaces */
+  --surface-cream-canvas: #fff9f0;
+  --surface-signal-blue-panel: #0a65db;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--surface-cream-canvas);
+  color: var(--color-midnight-ink);
+  font-family: var(--font-usual);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  font-weight: var(--font-weight-regular);
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; text-decoration: none; }
+h1, h2, h3, h4, p, ul, ol, figure { margin: 0; }
+ul { list-style: none; padding: 0; }
+
+.rail { position: fixed; left: 44px; top: 44px; z-index: 20; }
+.rail .burger { display: block; width: 34px; }
+.rail .burger i { display: block; height: 4px; background: var(--color-midnight-ink); margin-bottom: 6px; }
+.rail .mark { margin-top: var(--spacing-24); font-family: var(--font-usual); font-weight: var(--font-weight-bold); font-size: var(--text-caption); letter-spacing: 0.12em; writing-mode: vertical-rl; transform: rotate(180deg); }
+.topright { position: absolute; top: 44px; right: 48px; display: flex; align-items: center; gap: var(--spacing-24); z-index: 20; }
+.ghost { font-weight: var(--font-weight-bold); font-size: var(--text-caption); }
+.ghost b { color: var(--color-signal-blue); }
+
+.wrap { max-width: var(--page-max-width); margin: 0 auto; padding: 0 var(--spacing-48); }
+section { padding: var(--spacing-96) 0; }
+
+h1 { font-family: var(--font-degular-display); font-size: var(--text-heading); line-height: var(--leading-heading); letter-spacing: var(--tracking-heading); font-weight: var(--font-weight-bold); }
+h1 .blue { color: var(--color-signal-blue); display: block; }
+h2 { font-family: var(--font-degular-display); font-size: var(--text-heading-sm); line-height: var(--leading-heading-sm); letter-spacing: var(--tracking-heading-sm); font-weight: var(--font-weight-bold); }
+h3 { font-family: var(--font-degular-display); font-size: var(--text-subheading); line-height: 1.3; font-weight: var(--font-weight-bold); }
+p.body { font-size: var(--text-body); line-height: var(--leading-body); max-width: 480px; }
+.cap { font-size: var(--text-caption); line-height: var(--leading-caption); }
+
+.btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  border: 1px solid var(--color-midnight-ink); border-radius: var(--radius-buttons);
+  background: var(--color-cream-paper); color: var(--color-midnight-ink);
+  font-family: var(--font-usual); font-weight: var(--font-weight-bold); font-size: var(--text-caption);
+  padding: 14px 30px; cursor: pointer;
+}
+.btn:hover { background: var(--color-midnight-ink); color: var(--color-cream-paper); }
+.switch { display: inline-flex; border: 1px solid var(--color-midnight-ink); border-radius: var(--radius-full); overflow: hidden; }
+.switch button { background: transparent; border: 0; font-family: var(--font-usual); font-weight: var(--font-weight-bold); font-size: 14px; padding: 6px 12px; cursor: pointer; color: var(--color-midnight-ink); }
+.switch button[aria-pressed="true"] { background: var(--color-midnight-ink); color: var(--color-cream-paper); }
+
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-104); align-items: center; }
+.illo { width: 100%; max-width: 520px; }
+.illo svg { display: block; width: 100%; height: auto; }
+
+.hero { padding: 160px 0 var(--spacing-96); }
+.hero p.body { margin-top: var(--spacing-32); }
+.hero .actions { margin-top: var(--spacing-40); display: flex; gap: var(--spacing-16); }
+
+/* ── Программа ── */
+.prog { border-top: 1px solid var(--color-midnight-ink); }
+.prog .row { display: grid; grid-template-columns: 120px 1fr 190px 120px; gap: var(--spacing-24); padding: var(--spacing-24) 0; border-bottom: 1px solid var(--color-midnight-ink); align-items: baseline; }
+.prog .t { font-weight: var(--font-weight-bold); font-size: var(--text-caption); }
+.prog .name { font-family: var(--font-degular-display); font-weight: var(--font-weight-bold); font-size: var(--text-subheading); }
+.prog .desc { font-size: var(--text-caption); line-height: 1.6; margin-top: 2px; }
+.prog .meta { font-size: var(--text-caption); }
+.prog .age { font-size: var(--text-caption); font-weight: var(--font-weight-bold); text-align: right; }
+
+/* ── Синяя панель ── */
+.blue-panel { background: var(--surface-signal-blue-panel); color: var(--color-cream-paper); padding: var(--spacing-96) 0; }
+.blue-panel h2 { color: var(--color-cream-paper); }
+.blue-panel .btn { border-color: var(--color-cream-paper); background: var(--surface-signal-blue-panel); color: var(--color-cream-paper); }
+.blue-panel .btn:hover { background: var(--color-cream-paper); color: var(--surface-signal-blue-panel); }
+.figures { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--spacing-40); margin-top: var(--spacing-48); }
+.figures .n { font-family: var(--font-degular-display); font-size: var(--text-heading-sm); line-height: 1.1; letter-spacing: var(--tracking-heading-sm); font-weight: var(--font-weight-bold); }
+.figures p { font-size: var(--text-caption); line-height: 1.6; margin-top: var(--spacing-16); }
+
+/* ── Отбор ── */
+.jury { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-48); }
+.jury .who { display: flex; gap: var(--spacing-16); align-items: flex-start; }
+.jury .who svg { flex: none; }
+.jury .who b { font-family: var(--font-degular-display); font-size: var(--text-subheading); font-weight: var(--font-weight-bold); display: block; line-height: 1.3; }
+.jury .who span { font-size: var(--text-caption); line-height: 1.6; }
+
+/* ── Билеты ── */
+.tickets { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-32); }
+.ticket { border: 1px solid var(--color-midnight-ink); padding: var(--card-padding); display: flex; flex-direction: column; }
+.ticket .price { font-family: var(--font-degular-display); font-size: var(--text-heading-sm); line-height: 1.1; font-weight: var(--font-weight-bold); margin: var(--spacing-16) 0 var(--spacing-24); }
+.ticket ul { flex: 1; }
+.ticket li { font-size: var(--text-caption); line-height: 1.6; padding: 6px 0; border-top: 1px solid var(--color-midnight-ink); }
+.ticket .btn { margin-top: var(--spacing-24); justify-content: center; }
+
+/* ── Практика ── */
+.facts { display: grid; grid-template-columns: 1fr; gap: var(--spacing-24); }
+.facts div { border-top: 1px solid var(--color-midnight-ink); padding-top: var(--spacing-16); }
+.facts b { font-family: var(--font-degular-display); font-size: var(--text-subheading); font-weight: var(--font-weight-bold); display: block; }
+.facts span { font-size: var(--text-caption); line-height: 1.6; }
+
+/* ── Подвал ── */
+footer { padding: var(--spacing-96) 0 var(--spacing-48); border-top: 1px solid var(--color-midnight-ink); }
+.foot { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: var(--spacing-40); }
+footer h4 { font-family: var(--font-usual); font-weight: var(--font-weight-bold); font-size: var(--text-caption); margin-bottom: var(--spacing-16); }
+footer li { padding: 4px 0; font-size: var(--text-caption); }
+.foot-note { font-size: var(--text-caption); line-height: 1.7; max-width: 360px; margin-top: var(--spacing-16); }
+.foot-bottom { margin-top: var(--spacing-48); display: flex; font-size: var(--text-caption); }
+.foot-bottom .right { margin-left: auto; display: flex; gap: var(--spacing-24); }
+</style>
+</head>
+<body>
+
+<div class="rail">
+  <a class="burger" href="#"><i></i><i></i></a>
+  <div class="mark">REEL · 2026</div>
+</div>
+<div class="topright">
+  <a class="ghost" href="#tickets"><span data-i18n="tr1">Buy a pass</span> <b>▶</b></a>
+  <span class="switch">
+    <button type="button" data-set="en" aria-pressed="true">EN</button>
+    <button type="button" data-set="ru" aria-pressed="false">RU</button>
+  </span>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="two">
+      <div>
+        <h1><span data-i18n="h1a">Forty-seven films.</span><span class="blue" data-i18n="h1b">Three nights.</span></h1>
+        <p class="body" data-i18n="h2">A festival of short animation in one hall, with no parallel programme: everyone in the city watches the same film at the same minute, and argues about it afterwards in the same corridor.</p>
+        <div class="actions">
+          <a class="btn" href="#tickets" data-i18n="h3">Buy a three-night pass</a>
+          <a class="btn" href="#programme" data-i18n="h4">See the programme</a>
+        </div>
+      </div>
+      <div class="illo">
+        <svg viewBox="0 0 520 520" aria-hidden="true">
+          <rect x="0" y="0" width="520" height="520" fill="#fff9f0"/>
+          <!-- starburst -->
+          <g stroke="#000609" stroke-width="1">
+            <path d="M86 86 L0 0M86 86 L86 0M86 86 L172 0M86 86 L172 86M86 86 L172 172M86 86 L86 172M86 86 L0 172M86 86 L0 86M86 86 L44 0M86 86 L128 0M86 86 L172 44M86 86 L172 128M86 86 L128 172M86 86 L44 172M86 86 L0 128M86 86 L0 44"/>
+          </g>
+          <!-- circle -->
+          <circle cx="260" cy="86" r="84" fill="#ee4623"/>
+          <!-- checkerboard 4x4 -->
+          <g fill="#000609">
+            <rect x="346" y="0" width="43" height="43"/><rect x="432" y="0" width="43" height="43"/>
+            <rect x="389" y="43" width="43" height="43"/><rect x="475" y="43" width="43" height="43"/>
+            <rect x="346" y="86" width="43" height="43"/><rect x="432" y="86" width="43" height="43"/>
+            <rect x="389" y="129" width="43" height="43"/><rect x="475" y="129" width="43" height="43"/>
+          </g>
+          <!-- blue square with eye -->
+          <rect x="0" y="172" width="172" height="172" fill="#0a65db"/>
+          <ellipse cx="86" cy="258" rx="54" ry="34" fill="#fff9f0"/>
+          <circle cx="86" cy="258" r="26" fill="#ee4623"/>
+          <circle cx="86" cy="258" r="12" fill="#000609"/>
+          <!-- semicircle -->
+          <path d="M176 258 A84 84 0 0 1 344 258 Z" fill="#ffd23f"/>
+          <!-- film strip -->
+          <rect x="348" y="172" width="172" height="172" fill="#000609"/>
+          <g fill="#fff9f0">
+            <rect x="360" y="184" width="18" height="18"/><rect x="360" y="216" width="18" height="18"/><rect x="360" y="248" width="18" height="18"/><rect x="360" y="280" width="18" height="18"/><rect x="360" y="312" width="18" height="18"/>
+            <rect x="490" y="184" width="18" height="18"/><rect x="490" y="216" width="18" height="18"/><rect x="490" y="248" width="18" height="18"/><rect x="490" y="280" width="18" height="18"/><rect x="490" y="312" width="18" height="18"/>
+            <rect x="390" y="196" width="88" height="124"/>
+          </g>
+          <circle cx="434" cy="258" r="30" fill="#f4c6c6"/>
+          <!-- bottom row triangles -->
+          <path d="M0 348 L86 348 L0 434 Z" fill="#ee4623"/>
+          <path d="M86 348 L172 348 L172 434 Z" fill="#ffd23f"/>
+          <path d="M176 348 L262 348 L176 434 Z" fill="#0a65db"/>
+          <path d="M262 348 L348 348 L348 434 Z" fill="#f4c6c6"/>
+          <path d="M352 348 L520 348 L520 434 Z" fill="#000609"/>
+          <!-- bottom band -->
+          <rect x="0" y="438" width="172" height="82" fill="#ffd23f"/>
+          <g stroke="#000609" stroke-width="1">
+            <path d="M262 479 L176 438M262 479 L219 438M262 479 L262 438M262 479 L305 438M262 479 L348 438M262 479 L348 479M262 479 L348 520M262 479 L305 520M262 479 L262 520M262 479 L219 520M262 479 L176 520M262 479 L176 479"/>
+          </g>
+          <rect x="352" y="438" width="168" height="82" fill="#0a65db"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section id="programme">
+  <div class="wrap">
+    <div class="two" style="align-items:start">
+      <div class="illo">
+        <svg viewBox="0 0 520 400" aria-hidden="true">
+          <rect x="0" y="0" width="520" height="400" fill="#fff9f0"/>
+          <rect x="0" y="0" width="160" height="200" fill="#0a65db"/>
+          <circle cx="240" cy="100" r="70" fill="#ffd23f"/>
+          <path d="M330 30 L430 30 L430 170 Z" fill="#ee4623"/>
+          <g fill="#000609"><rect x="440" y="30" width="35" height="35"/><rect x="475" y="65" width="35" height="35"/><rect x="440" y="100" width="35" height="35"/><rect x="475" y="135" width="35" height="35"/></g>
+          <rect x="0" y="210" width="240" height="190" fill="#f4c6c6"/>
+          <circle cx="120" cy="305" r="60" fill="#000609"/>
+          <circle cx="120" cy="305" r="24" fill="#fff9f0"/>
+          <g stroke="#000609" stroke-width="1">
+            <path d="M370 305 L260 210M370 305 L315 210M370 305 L370 210M370 305 L425 210M370 305 L480 210M370 305 L480 305M370 305 L480 400M370 305 L425 400M370 305 L370 400M370 305 L315 400M370 305 L260 400M370 305 L260 305"/>
+          </g>
+        </svg>
+      </div>
+      <div>
+        <h2 data-i18n="p1">Four programmes, and nothing runs twice.</h2>
+        <p class="body" style="margin-top:var(--spacing-24)" data-i18n="p2">Films are grouped by what they do to a room, not by country or technique. Each block is under ninety minutes, because that is how long an audience can watch drawings without going quiet in the wrong way.</p>
+        <a class="btn" style="margin-top:var(--spacing-32)" href="#" data-i18n="p3">Full film list, 47 titles</a>
+      </div>
+    </div>
+
+    <div class="prog" style="margin-top:var(--spacing-96)">
+      <div class="row">
+        <div class="t">FRI 19:00</div>
+        <div><div class="name" data-i18n="b1n">Loud room</div><div class="desc" data-i18n="b1d">Twelve films that were made to be watched with strangers. Opens with a 90-second Estonian piece that has broken two projectors.</div></div>
+        <div class="meta" data-i18n="b1m">12 films · 84 min · opening night</div>
+        <div class="age">16+</div>
+      </div>
+      <div class="row">
+        <div class="t">SAT 15:00</div>
+        <div><div class="name" data-i18n="b2n">Drawn by hand, on paper</div><div class="desc" data-i18n="b2d">Pencil, cut-out, sand, paint on glass. Four of the directors are in the hall and will answer questions afterwards for as long as anyone stays.</div></div>
+        <div class="meta" data-i18n="b2m">11 films · 78 min · Q&amp;A after</div>
+        <div class="age">12+</div>
+      </div>
+      <div class="row">
+        <div class="t">SAT 19:00</div>
+        <div><div class="name" data-i18n="b3n">Debuts</div><div class="desc" data-i18n="b3d">Graduation films from nine schools, chosen without knowing which school made which. Two of them will be uncomfortable and we kept them anyway.</div></div>
+        <div class="meta" data-i18n="b3m">13 films · 88 min · jury attends</div>
+        <div class="age">16+</div>
+      </div>
+      <div class="row">
+        <div class="t">SUN 12:00</div>
+        <div><div class="name" data-i18n="b4n">For people under ten</div><div class="desc" data-i18n="b4d">The lights stay half on, the sound is turned down four decibels, and nobody will tell your child to sit still.</div></div>
+        <div class="meta" data-i18n="b4m">11 films · 52 min · relaxed screening</div>
+        <div class="age">0+</div>
+      </div>
+      <div class="row">
+        <div class="t">SUN 19:00</div>
+        <div><div class="name" data-i18n="b5n">Closing and the prize</div><div class="desc" data-i18n="b5d">The audience votes on paper with a pencil, the counting happens on stage, and the winning film is screened again immediately.</div></div>
+        <div class="meta" data-i18n="b5m">all winners · 70 min · counted live</div>
+        <div class="age">12+</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="blue-panel">
+  <div class="wrap">
+    <h2 data-i18n="f0">Six hundred and forty-one films were submitted. Forty-seven are showing.</h2>
+    <div class="figures">
+      <div><div class="n">641</div><p data-i18n="f1">submissions from 34 countries, every one watched in full</p></div>
+      <div><div class="n">47</div><p data-i18n="f2">films selected, of which 19 are first films</p></div>
+      <div><div class="n">1</div><p data-i18n="f3">hall, 312 seats, no parallel programme at any hour</p></div>
+      <div><div class="n">₽0</div><p data-i18n="f4">submission fee — a fee decides who can apply, and we would rather not decide that</p></div>
+    </div>
+    <a class="btn" style="margin-top:var(--spacing-48)" href="#" data-i18n="f5">How selection worked, in detail</a>
+  </div>
+</div>
+
+<section>
+  <div class="wrap">
+    <h2 data-i18n="j0">Who chose, and what they argued about</h2>
+    <p class="body" style="margin-top:var(--spacing-24)" data-i18n="j0p">Five people watched all 641 submissions between January and April. Every film that got two yes votes went to the long list; every rejection is written down and available to the director who asks.</p>
+    <div class="jury" style="margin-top:var(--spacing-48)">
+      <div class="who">
+        <svg width="44" height="44" viewBox="0 0 44 44" aria-hidden="true"><rect width="44" height="44" fill="#ee4623"/><circle cx="22" cy="22" r="11" fill="#fff9f0"/></svg>
+        <div><b>Марина Одинец</b><span data-i18n="j1">Animator, twenty-two years of cut-out. Argued for keeping the two films that made people leave.</span></div>
+      </div>
+      <div class="who">
+        <svg width="44" height="44" viewBox="0 0 44 44" aria-hidden="true"><rect width="44" height="44" fill="#0a65db"/><path d="M0 44 L44 44 L44 0 Z" fill="#fff9f0"/></svg>
+        <div><b>Дмитрий Шеин</b><span data-i18n="j2">Sound designer. Rejected four films for their soundtracks alone and wrote a page about each.</span></div>
+      </div>
+      <div class="who">
+        <svg width="44" height="44" viewBox="0 0 44 44" aria-hidden="true"><rect width="44" height="44" fill="#ffd23f"/><path d="M0 22 A22 22 0 0 1 44 22 Z" fill="#000609"/></svg>
+        <div><b>Aino Kärki</b><span data-i18n="j3">Programmer from Tampere. Insisted that the children's block be selected by the same standard as the rest.</span></div>
+      </div>
+      <div class="who">
+        <svg width="44" height="44" viewBox="0 0 44 44" aria-hidden="true"><rect width="44" height="44" fill="#f4c6c6"/><rect x="0" y="0" width="22" height="22" fill="#000609"/><rect x="22" y="22" width="22" height="22" fill="#000609"/></svg>
+        <div><b>Тимур Гареев</b><span data-i18n="j4">Runs a two-person studio. The only one who watched everything twice, on a laptop, on the train.</span></div>
+      </div>
+      <div class="who">
+        <svg width="44" height="44" viewBox="0 0 44 44" aria-hidden="true"><rect width="44" height="44" fill="#000609"/><circle cx="22" cy="22" r="14" fill="#ffd23f"/><circle cx="22" cy="22" r="6" fill="#000609"/></svg>
+        <div><b>Лена Бах</b><span data-i18n="j5">Teaches at the school that sent nine submissions; recused herself from all nine.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="tickets" style="padding-top:0">
+  <div class="wrap">
+    <h2 data-i18n="t0">Three ways in</h2>
+    <p class="body" style="margin-top:var(--spacing-24)" data-i18n="t0p">A pass is cheaper than three separate blocks and does not expire if you sleep through Saturday morning. Doors open forty minutes before each screening and the corridor is where the festival actually happens.</p>
+    <div class="tickets" style="margin-top:var(--spacing-48)">
+      <div class="ticket">
+        <h3 data-i18n="tk1h">One block</h3>
+        <div class="price">600 ₽</div>
+        <ul>
+          <li data-i18n="tk1a">Any single programme</li>
+          <li data-i18n="tk1b">Seat chosen at the door</li>
+          <li data-i18n="tk1c">Children's block is 300 ₽</li>
+        </ul>
+        <a class="btn" href="#" data-i18n="tk1c2">Choose a block</a>
+      </div>
+      <div class="ticket">
+        <h3 data-i18n="tk2h">Three nights</h3>
+        <div class="price">1 900 ₽</div>
+        <ul>
+          <li data-i18n="tk2a">All five programmes</li>
+          <li data-i18n="tk2b">Reserved seat, same one all festival</li>
+          <li data-i18n="tk2c">Entry to the two director talks</li>
+          <li data-i18n="tk2d">The printed programme, 32 pages</li>
+        </ul>
+        <a class="btn" href="#" data-i18n="tk2c2">Buy a pass</a>
+      </div>
+      <div class="ticket">
+        <h3 data-i18n="tk3h">Students and directors</h3>
+        <div class="price">700 ₽</div>
+        <ul>
+          <li data-i18n="tk3a">Everything in the three-night pass</li>
+          <li data-i18n="tk3b">Any student card, any country</li>
+          <li data-i18n="tk3c">Free if you submitted a film this year</li>
+          <li data-i18n="tk3d">Sixty seats held until the day before</li>
+        </ul>
+        <a class="btn" href="#" data-i18n="tk3c2">Claim a seat</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="two" style="align-items:start">
+      <div>
+        <h2 data-i18n="v0">The hall, and how to find it</h2>
+        <div class="facts" style="margin-top:var(--spacing-48)">
+          <div><b data-i18n="v1b">House of Culture, Zavodskaya 4</b><span data-i18n="v1">Built 1957, 312 seats, a balcony that squeaks and which we have decided to leave alone.</span></div>
+          <div><b data-i18n="v2b">Projection</b><span data-i18n="v2">DCP and 16 mm. Three films this year are on film and will be threaded in front of you.</span></div>
+          <div><b data-i18n="v3b">Getting there</b><span data-i18n="v3">Tram 4 to Zavodskaya, then two minutes. Parking behind the building is free after 18:00.</span></div>
+          <div><b data-i18n="v4b">Access</b><span data-i18n="v4">Step-free entrance from the yard side, four wheelchair spaces, subtitles on every non-silent film.</span></div>
+          <div><b data-i18n="v5b">The corridor</b><span data-i18n="v5">Tea, no alcohol, and one long table where the directors sit after their block whether or not anybody comes.</span></div>
+          <div><b data-i18n="v6b">If it sells out</b><span data-i18n="v6">Twenty standing places go on sale an hour before each screening, for 300 ₽, cash at the door.</span></div>
+        </div>
+      </div>
+      <div class="illo">
+        <svg viewBox="0 0 520 420" aria-hidden="true">
+          <rect width="520" height="420" fill="#fff9f0"/>
+          <rect x="0" y="0" width="520" height="60" fill="#000609"/>
+          <g fill="#fff9f0"><rect x="20" y="20" width="20" height="20"/><rect x="70" y="20" width="20" height="20"/><rect x="120" y="20" width="20" height="20"/><rect x="170" y="20" width="20" height="20"/><rect x="220" y="20" width="20" height="20"/><rect x="270" y="20" width="20" height="20"/><rect x="320" y="20" width="20" height="20"/><rect x="370" y="20" width="20" height="20"/><rect x="420" y="20" width="20" height="20"/><rect x="470" y="20" width="20" height="20"/></g>
+          <rect x="60" y="90" width="400" height="150" fill="#0a65db"/>
+          <circle cx="260" cy="165" r="52" fill="#ffd23f"/>
+          <path d="M240 140 L292 165 L240 190 Z" fill="#000609"/>
+          <g fill="#f4c6c6">
+            <rect x="40" y="280" width="60" height="30"/><rect x="110" y="280" width="60" height="30"/><rect x="180" y="280" width="60" height="30"/><rect x="250" y="280" width="60" height="30"/><rect x="320" y="280" width="60" height="30"/><rect x="390" y="280" width="60" height="30"/>
+          </g>
+          <g fill="#ee4623">
+            <rect x="40" y="325" width="60" height="30"/><rect x="110" y="325" width="60" height="30"/><rect x="180" y="325" width="60" height="30"/><rect x="250" y="325" width="60" height="30"/><rect x="320" y="325" width="60" height="30"/><rect x="390" y="325" width="60" height="30"/>
+          </g>
+          <g fill="#000609">
+            <rect x="40" y="370" width="60" height="30"/><rect x="110" y="370" width="60" height="30"/><rect x="180" y="370" width="60" height="30"/><rect x="250" y="370" width="60" height="30"/><rect x="320" y="370" width="60" height="30"/><rect x="390" y="370" width="60" height="30"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <h3 style="font-size:var(--text-subheading)">REEL · 2026</h3>
+        <p class="foot-note" data-i18n="ft1">A festival of short animation held once a year in a House of Culture that was built for something else. Run by six people, four of whom take the week off work for it.</p>
+      </div>
+      <div>
+        <h4 data-i18n="fh1">Festival</h4>
+        <ul><li><a href="#programme" data-i18n="fl1">Programme</a></li><li><a href="#tickets" data-i18n="fl2">Tickets</a></li><li><a href="#" data-i18n="fl3">Film list</a></li><li><a href="#" data-i18n="fl4">Selection notes</a></li></ul>
+      </div>
+      <div>
+        <h4 data-i18n="fh2">Submit</h4>
+        <ul><li><a href="#" data-i18n="fl5">Rules for 2027</a></li><li><a href="#" data-i18n="fl6">Technical requirements</a></li><li><a href="#" data-i18n="fl7">Why we do not charge</a></li><li><a href="#" data-i18n="fl8">Ask for a rejection note</a></li></ul>
+      </div>
+      <div>
+        <h4 data-i18n="fh3">Contact</h4>
+        <ul><li><a href="#">hall@reel.fest</a></li><li><a href="#" data-i18n="fl9">Press accreditation</a></li><li><a href="#" data-i18n="fl10">Volunteers</a></li><li><a href="#" data-i18n="fl11">Partners</a></li></ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span data-i18n="fb0">© 2026 Reel. Films belong to their directors; the corridor belongs to everyone.</span>
+      <span class="right"><a href="#" data-i18n="fb1">Terms</a><a href="#" data-i18n="fb2">Privacy</a></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ── RU/EN. Английский — исходный, русский — перевод под него ── */
+var RU = {
+  tr1:'Купить абонемент',
+  h1a:'Сорок семь фильмов.', h1b:'Три вечера.',
+  h2:'Фестиваль короткой анимации в одном зале и без параллельной программы: весь город смотрит один и тот же фильм в одну и ту же минуту, а потом спорит о нём в одном и том же коридоре.',
+  h3:'Абонемент на три вечера', h4:'Смотреть программу',
+  p1:'Четыре программы, и ничего не повторяется дважды.',
+  p2:'Фильмы собраны по тому, что они делают с залом, а не по стране и не по технике. Каждый блок короче девяноста минут — столько зал способен смотреть рисунки, не затихая не в ту сторону.',
+  p3:'Полный список, 47 названий',
+  b1n:'Громкий зал', b1d:'Двенадцать фильмов, сделанных для того, чтобы смотреть их с незнакомыми людьми. Открывает эстонская полуторминутная работа, уже сломавшая два проектора.',
+  b1m:'12 фильмов · 84 мин · открытие',
+  b2n:'Нарисовано руками, на бумаге', b2d:'Карандаш, перекладка, песок, живопись по стеклу. Четверо режиссёров в зале и отвечают на вопросы столько, сколько люди готовы оставаться.',
+  b2m:'11 фильмов · 78 мин · разговор после',
+  b3n:'Дебюты', b3d:'Дипломные работы девяти школ, отобранные вслепую — без имени школы. Два фильма неудобные, и мы всё равно их оставили.',
+  b3m:'13 фильмов · 88 мин · жюри в зале',
+  b4n:'Для тех, кому нет десяти', b4d:'Свет притушен наполовину, звук тише на четыре децибела, и никто не скажет вашему ребёнку сидеть смирно.',
+  b4m:'11 фильмов · 52 мин · щадящий сеанс',
+  b5n:'Закрытие и приз', b5d:'Зал голосует карандашом на бумаге, голоса считают на сцене, и фильм-победитель показывают тут же ещё раз.',
+  b5m:'все победители · 70 мин · подсчёт при зале',
+  f0:'Прислали шестьсот сорок один фильм. Показываем сорок семь.',
+  f1:'заявок из 34 стран, каждая просмотрена целиком',
+  f2:'фильмов отобрано, из них 19 — первые работы',
+  f3:'зал, 312 мест, ни одной параллельной программы',
+  f4:'взнос за подачу: платный взнос решает, кто может подать, а мы предпочли этого не решать',
+  f5:'Как шёл отбор, подробно',
+  j0:'Кто выбирал и о чём спорил',
+  j0p:'Пятеро смотрели все 641 заявку с января по апрель. Фильм с двумя голосами «да» шёл в лонг-лист; каждый отказ записан и доступен режиссёру, который спросит.',
+  j1:'Аниматор, двадцать два года перекладки. Настояла на двух фильмах, с которых уходили.',
+  j2:'Звукорежиссёр. Отклонил четыре фильма только за звук и написал по странице на каждый.',
+  j3:'Программный директор из Тампере. Требовала, чтобы детский блок отбирали по той же мерке, что и остальные.',
+  j4:'Держит студию на двоих. Единственный, кто пересмотрел всё дважды — с ноутбука, в поезде.',
+  j5:'Преподаёт в школе, приславшей девять заявок; от всех девяти самоотвелась.',
+  t0:'Три способа попасть',
+  t0p:'Абонемент дешевле трёх отдельных блоков и не сгорает, если вы проспали субботнее утро. Двери открываются за сорок минут до сеанса, а фестиваль на самом деле происходит в коридоре.',
+  tk1h:'Один блок', tk1a:'Любая одна программа', tk1b:'Место выбирают на входе', tk1c:'Детский блок — 300 ₽', tk1c2:'Выбрать блок',
+  tk2h:'Три вечера', tk2a:'Все пять программ', tk2b:'Закреплённое место, одно на весь фестиваль',
+  tk2c:'Вход на оба разговора с режиссёрами', tk2d:'Печатная программка, 32 страницы', tk2c2:'Купить абонемент',
+  tk3h:'Студентам и режиссёрам', tk3a:'Всё, что в абонементе на три вечера', tk3b:'Любой студенческий, любая страна',
+  tk3c:'Бесплатно, если вы подавали фильм в этом году', tk3d:'Шестьдесят мест держим до кануна', tk3c2:'Забрать место',
+  v0:'Зал и как его найти',
+  v1b:'ДК, Заводская, 4', v1:'Построен в 1957-м, 312 мест, скрипучий балкон, который мы решили не трогать.',
+  v2b:'Проекция', v2:'DCP и 16 мм. Три фильма в этом году — на плёнке, и её зарядят при вас.',
+  v3b:'Как добраться', v3:'Трамвай 4 до «Заводской», дальше две минуты. Парковка за зданием бесплатна после 18:00.',
+  v4b:'Доступность', v4:'Вход без ступеней со двора, четыре места для колясок, субтитры на каждом незвуковом фильме.',
+  v5b:'Коридор', v5:'Чай, никакого алкоголя и один длинный стол, за который режиссёры садятся после своего блока — придёт кто-нибудь или нет.',
+  v6b:'Если всё раскупят', v6:'За час до сеанса в продажу идут двадцать стоячих мест по 300 ₽, наличными на входе.',
+  ft1:'Фестиваль короткой анимации, который раз в год проходит в Доме культуры, построенном совсем для другого. Его делают шесть человек, четверо из них берут на эту неделю отпуск.',
+  fh1:'Фестиваль', fl1:'Программа', fl2:'Билеты', fl3:'Список фильмов', fl4:'Записки отбора',
+  fh2:'Подать фильм', fl5:'Правила на 2027', fl6:'Технические требования', fl7:'Почему без взноса', fl8:'Запросить отказ с объяснением',
+  fh3:'Контакты', fl9:'Аккредитация прессы', fl10:'Волонтёрам', fl11:'Партнёрам',
+  fb0:'© 2026 Reel. Фильмы принадлежат режиссёрам, коридор — всем.', fb1:'Условия', fb2:'Приватность'
+};
+var EN = {};
+document.querySelectorAll('[data-i18n]').forEach(function (el) { EN[el.dataset.i18n] = el.innerHTML; });
+
+function setLang(l) {
+  var dict = l === 'ru' ? RU : EN;
+  document.querySelectorAll('[data-i18n]').forEach(function (el) {
+    var v = dict[el.dataset.i18n];
+    if (v !== undefined) el.innerHTML = v;
+  });
+  document.documentElement.lang = l;
+  document.documentElement.dataset.lang = l;
+  document.querySelectorAll('.switch button').forEach(function (b) {
+    b.setAttribute('aria-pressed', b.dataset.set === l ? 'true' : 'false');
+  });
+}
+document.querySelectorAll('.switch button').forEach(function (b) {
+  b.addEventListener('click', function () { setLang(b.dataset.set); });
+});
+</script>
+</body>
+</html>

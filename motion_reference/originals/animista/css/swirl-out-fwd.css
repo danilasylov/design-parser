@@ -1,0 +1,3 @@
+/* Original keyframes: Animista, Ana Travas. https://animista.net/play/exits/swirl-out/swirl-out-fwd */
+.swirl-out-fwd{animation:swirl-out-fwd 0.65s ease-in 0s 1 normal both;}
+@keyframes swirl-out-fwd{0%{-webkit-transform:rotate(0) scale(1);transform:rotate(0) scale(1);opacity:1}to{-webkit-transform:rotate(540deg) scale(5);transform:rotate(540deg) scale(5);opacity:0}}

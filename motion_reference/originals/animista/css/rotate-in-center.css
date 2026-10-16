@@ -1,0 +1,3 @@
+/* Original keyframes: Animista, Ana Travas. https://animista.net/play/entrances/rotate-in/rotate-in-center */
+.rotate-in-center{animation:rotate-in-center 0.6s cubic-bezier(.25,.46,.45,.94) 0s 1 normal both;}
+@keyframes rotate-in-center{0%{-webkit-transform:rotate(-360deg);transform:rotate(-360deg);opacity:0}to{-webkit-transform:rotate(0);transform:rotate(0);opacity:1}}

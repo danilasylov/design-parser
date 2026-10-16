@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>Counter — type design portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500&family=Montserrat:wght@400;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+/* ─────────────────────────────────────────────────────────────
+   Дизайн-система: Regisgrumberg (refero 1a2ca4fb) — tokens.css дословно
+   ───────────────────────────────────────────────────────────── */
+:root {
+  /* Colors */
+  --color-obsidian: #000000;
+  --color-pure-white: #ffffff;
+  --color-concrete: #c4c4c4;
+  --color-charcoal: #363636;
+
+  /* Typography — Font Families */
+  --font-monospace: 'monospace', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-anton: 'Anton', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-montserrat: 'Montserrat', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-times: 'Times', Times, serif;
+
+  /* Typography — Scale */
+  --text-caption: 11px;
+  --leading-caption: 1.2;
+  --text-body-lg: 18px;
+  --leading-body-lg: 2.78;
+  --text-subheading: 24px;
+  --leading-subheading: 1.2;
+  --text-heading-sm: 30px;
+  --leading-heading-sm: 1.2;
+  --text-heading: 36px;
+  --leading-heading: 1.2;
+  --text-heading-lg: 48px;
+  --leading-heading-lg: 1.2;
+  --text-display: 90px;
+  --leading-display: 1;
+  --text-display-xl: 150px;
+  --leading-display-xl: 1;
+
+  /* Typography — Weights */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+
+  /* Spacing */
+  --spacing-unit: 6px;
+  --spacing-12: 12px;
+  --spacing-23: 23px;
+  --spacing-42: 42px;
+  --spacing-54: 54px;
+  --spacing-108: 108px;
+
+  /* Layout */
+  --section-gap: 54px;
+  --card-padding: 23px;
+  --element-gap: 23px;
+
+  /* Border Radius */
+  --radius-sm: 2px;
+  --radius-tags: 2px;
+  --radius-cards: 2px;
+  --radius-inputs: 2px;
+  --radius-buttons: 2px;
+  --radius-default: 2px;
+
+  /* Surfaces */
+  --surface-obsidian-canvas: #000000;
+  --surface-charcoal-panel: #363636;
+  --surface-pure-white-mark: #ffffff;
+}
+
+/* Мои подстановки: Anton не знает кириллицы (проверено по subset'ам Google Fonts),
+   поэтому дисплей — Oswald 500, первая замена из DESIGN.md, с кириллицей.
+   Системный monospace заменён на JetBrains Mono (тоже из списка замен). */
+:root {
+  --font-anton: 'Oswald', ui-sans-serif, system-ui, sans-serif;
+  --font-monospace: 'JetBrains Mono', ui-monospace, monospace;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--surface-obsidian-canvas);
+  color: var(--color-pure-white);
+  font-family: var(--font-montserrat);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--text-body-lg); line-height: var(--leading-body-lg);
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, p, ul, li { margin: 0; padding: 0; list-style: none; font-weight: var(--font-weight-regular); }
+a { color: inherit; text-decoration: none; }
+.mono { font-family: var(--font-monospace); font-size: 13px; line-height: 1.2; color: var(--color-concrete); }
+.disp { font-family: var(--font-anton); font-weight: var(--font-weight-medium); line-height: var(--leading-display); text-transform: uppercase; }
+.wrap { max-width: 1240px; margin: 0 auto; padding: 0 var(--spacing-42); }
+.rule { height: 1px; background: var(--color-concrete); }
+
+/* ── Навигация: строка + волосяная линия под ней ───────────────────── */
+.nav { display: flex; align-items: center; justify-content: space-between; padding: var(--spacing-23) var(--spacing-42); }
+.nav .links { display: flex; gap: var(--spacing-42); }
+.nav a, .nav button {
+  font-family: var(--font-montserrat); font-weight: var(--font-weight-semibold);
+  font-size: 14px; line-height: 1.2; color: var(--color-pure-white);
+  background: none; border: 0; padding: 0 0 4px; cursor: pointer;
+}
+.nav a.on, .nav button[aria-pressed="true"] { border-bottom: 2px solid var(--color-pure-white); }
+.switch { display: flex; gap: var(--spacing-12); }
+.switch button { color: var(--color-concrete); }
+.switch button[aria-pressed="true"] { color: var(--color-pure-white); }
+
+/* ── Орбитальная композиция ────────────────────────────────────────── */
+.orbit { height: 860px; display: grid; place-items: center; position: relative; }
+.rings { position: relative; width: 660px; height: 660px; }
+.ring { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); }
+.ring > span { position: absolute; inset: 0; transform-origin: 50% 50%; }
+.ring > span > i { position: absolute; left: 50%; top: 0; transform: translateX(-50%); font-style: normal; display: block; }
+#r1 { width: 660px; height: 660px; font-family: var(--font-anton); font-weight: 500; font-size: 74px; line-height: 1; }
+#r2 { width: 430px; height: 430px; font-family: var(--font-anton); font-weight: 500; font-size: 42px; line-height: 1; }
+#r3 { width: 268px; height: 268px; font-family: var(--font-montserrat); font-weight: 600; font-size: 18px; line-height: 1; letter-spacing: 1px; }
+.enter {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  width: 82px; height: 82px; border-radius: 50%;
+  background: var(--surface-pure-white-mark); color: var(--color-obsidian);
+  display: grid; place-items: center;
+  font-family: var(--font-monospace); font-size: 13px; line-height: 1;
+}
+
+/* ── Секции ────────────────────────────────────────────────────────── */
+section { padding-top: var(--spacing-108); }
+h2.disp { font-size: var(--text-display); margin-bottom: var(--spacing-23); }
+.lead { max-width: 680px; }
+
+/* образцы */
+.spec { border-top: 1px solid var(--color-concrete); padding: var(--spacing-42) 0; }
+.spec:last-of-type { border-bottom: 1px solid var(--color-concrete); }
+.spec .top { display: flex; align-items: baseline; justify-content: space-between; gap: var(--spacing-42); }
+.spec h3 { font-family: var(--font-anton); font-weight: 500; font-size: var(--text-heading-lg); line-height: 1.2; text-transform: uppercase; }
+.spec p { max-width: 680px; margin-top: var(--spacing-12); }
+.line { font-family: var(--font-anton); font-weight: 500; font-size: var(--text-display); line-height: 1; margin-top: var(--spacing-23); white-space: nowrap; }
+.w1 { letter-spacing: -2px; }
+.w2 { letter-spacing: 12px; }
+.w3 { letter-spacing: 2px; }
+.w4 { letter-spacing: -4px; }
+
+/* индекс */
+.idx li { display: grid; grid-template-columns: 120px 1fr 220px 110px; gap: var(--spacing-23); align-items: baseline; padding: var(--spacing-23) 0; border-top: 1px solid var(--color-concrete); }
+.idx li:last-child { border-bottom: 1px solid var(--color-concrete); }
+.idx .t { font-family: var(--font-montserrat); font-weight: var(--font-weight-semibold); font-size: var(--text-subheading); line-height: 1.2; }
+
+/* панель на «угольной» поверхности — единственная ступень от чёрного */
+.panel { background: var(--surface-charcoal-panel); padding: var(--spacing-54); margin-top: var(--spacing-54); border-radius: var(--radius-cards); }
+.panel h3 { font-family: var(--font-anton); font-weight: 500; font-size: var(--text-heading); line-height: 1.2; text-transform: uppercase; }
+.acts { display: flex; gap: var(--spacing-23); margin-top: var(--spacing-23); }
+.btn-ghost, .btn-fill {
+  font-family: var(--font-montserrat); font-weight: var(--font-weight-semibold); font-size: 14px; line-height: 1.2;
+  padding: var(--spacing-12) var(--spacing-23); border-radius: var(--radius-buttons); cursor: pointer;
+}
+.btn-ghost { background: transparent; border: 1px solid var(--color-pure-white); color: var(--color-pure-white); }
+.btn-fill { background: var(--surface-pure-white-mark); border: 1px solid var(--color-pure-white); color: var(--color-obsidian); }
+
+footer { margin-top: var(--spacing-108); padding: var(--spacing-23) 0 var(--spacing-54); }
+footer .row { display: flex; justify-content: space-between; padding-top: var(--spacing-23); }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <span class="mono" style="color:var(--color-pure-white)">V.O. — 2019/2026</span>
+  <span class="links">
+    <a href="#specimens" class="on" data-i18n="n1">Specimens</a>
+    <a href="#process" data-i18n="n2">Process</a>
+    <a href="#index" data-i18n="n3">Index</a>
+    <a href="#contact" data-i18n="n4">Contact</a>
+    <span class="switch"><button data-set="en" aria-pressed="true">EN</button><button data-set="ru" aria-pressed="false">RU</button></span>
+  </span>
+</nav>
+<div class="rule"></div>
+
+<header class="orbit">
+  <div class="rings">
+    <div class="ring" id="r1" data-en="TYPE THAT HOLDS ITS FORM · " data-ru="ШРИФТ, КОТОРЫЙ ДЕРЖИТ ФОРМУ · "></div>
+    <div class="ring" id="r2" data-en="PORTFOLIO · TYPE DESIGN · " data-ru="ПОРТФОЛИО · ШРИФТОВОЙ ДИЗАЙН · "></div>
+    <div class="ring" id="r3" data-en="VERA OSTROVSKAYA · " data-ru="ВЕРА ОСТРОВСКАЯ · "></div>
+    <a class="enter" href="#specimens" data-i18n="e1">ENTER</a>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <section id="specimens">
+    <h2 class="disp" data-i18n="s1">Specimens.</h2>
+    <p class="lead" data-i18n="s1p">Four families, drawn between 2019 and 2026. Every one of them ships Cyrillic and Latin in the same file, because a face that gets the Cyrillic later is a face that got it wrong.</p>
+
+    <article class="spec" style="margin-top:var(--spacing-54)">
+      <div class="top">
+        <h3>Ostrov Grotesk</h3>
+        <span class="mono">2026 · LAT/CYR/GRK · 9 WEIGHTS · VARIABLE</span>
+      </div>
+      <p data-i18n="f1p">A newspaper grotesque with the contrast pulled out of it. Drawn for a broadsheet that prints at 8pt on paper thin enough to read the next page through, so the counters are open past the point of comfort.</p>
+      <div class="line w1">Аа Бб Вв Гг Дд Aa Bb Cc</div>
+    </article>
+
+    <article class="spec">
+      <div class="top">
+        <h3>Kegel Display</h3>
+        <span class="mono">2024 · LAT/CYR · 3 WEIGHTS</span>
+      </div>
+      <p data-i18n="f2p">Condensed, cut for posters at two metres and nothing smaller. The terminals are flat because a rounded terminal at that size turns into a smudge by the third print run.</p>
+      <div class="line w2">Кк Мм Нн Оо Aa Gg</div>
+    </article>
+
+    <article class="spec">
+      <div class="top">
+        <h3>Priyom Mono</h3>
+        <span class="mono">2022 · LAT/CYR · 5 WEIGHTS · 600 UPM</span>
+      </div>
+      <p data-i18n="f3p">A monospace for reading code out loud. The zero has a dot, not a slash, and the Cyrillic Эз and З were redrawn eleven times before an engineer stopped confusing them at eleven at night.</p>
+      <div class="line w3">Ээ Зз 0O 1lI Шш Aa</div>
+    </article>
+
+    <article class="spec">
+      <div class="top">
+        <h3>Ligatura Text</h3>
+        <span class="mono">2019 · LAT/CYR · 4 WEIGHTS · ITALIC</span>
+      </div>
+      <p data-i18n="f4p">A book face with a real italic — drawn, not slanted. Commissioned for a publisher of translated poetry, where a line break falls in a different place in every language and the type has to survive all of them.</p>
+      <div class="line w4">Фф Цц Чч Ъъ Ыы Aa Ff</div>
+    </article>
+  </section>
+
+  <section id="process">
+    <h2 class="disp" data-i18n="s2">Process.</h2>
+    <p class="lead" data-i18n="s2p1">I start on paper at one size, usually 24 point, and I do not move to the screen until the four control letters — н, о, H, O — sit on the same baseline without arguing. Everything else in a family is a consequence of those four.</p>
+    <p class="lead" style="margin-top:var(--spacing-23)" data-i18n="s2p2">Cyrillic is drawn in the same pass as Latin, never bolted on afterwards. That decision is the whole difference between a family that reads in Russian and a family that merely contains Russian letters.</p>
+    <p class="lead" style="margin-top:var(--spacing-23)" data-i18n="s2p3">Proofing is printed. A face approved on a monitor is a face approved at one size, one weight and one contrast, and it will find you out on the first print run.</p>
+  </section>
+
+  <section id="index">
+    <h2 class="disp" data-i18n="s3">Index.</h2>
+    <ul class="idx" style="margin-top:var(--spacing-42)">
+      <li>
+        <span class="mono">2026</span>
+        <span class="t" data-i18n="i1">Ostrov Grotesk for a Baltic broadsheet</span>
+        <span class="mono" data-i18n="i1t">TYPEFACE · COMMISSION</span>
+        <span class="mono">→</span>
+      </li>
+      <li>
+        <span class="mono">2025</span>
+        <span class="t" data-i18n="i2">Wayfinding alphabet, Riga central market</span>
+        <span class="mono" data-i18n="i2t">LETTERING · SIGNAGE</span>
+        <span class="mono">→</span>
+      </li>
+      <li>
+        <span class="mono">2024</span>
+        <span class="t" data-i18n="i3">Kegel Display and the poster series that paid for it</span>
+        <span class="mono" data-i18n="i3t">TYPEFACE · SELF</span>
+        <span class="mono">→</span>
+      </li>
+      <li>
+        <span class="mono">2023</span>
+        <span class="t" data-i18n="i4">Cyrillic extension of a foundry's Latin-only family</span>
+        <span class="mono" data-i18n="i4t">EXTENSION · NDA</span>
+        <span class="mono">→</span>
+      </li>
+      <li>
+        <span class="mono">2022</span>
+        <span class="t" data-i18n="i5">Priyom Mono, drawn for a code review tool</span>
+        <span class="mono" data-i18n="i5t">TYPEFACE · COMMISSION</span>
+        <span class="mono">→</span>
+      </li>
+      <li>
+        <span class="mono">2021</span>
+        <span class="t" data-i18n="i6">Teaching: type drawing, twelve evenings</span>
+        <span class="mono" data-i18n="i6t">COURSE · ONGOING</span>
+        <span class="mono">→</span>
+      </li>
+    </ul>
+  </section>
+
+  <section id="contact">
+    <div class="panel">
+      <h3 data-i18n="c1">Commissions open from November.</h3>
+      <p class="lead" style="margin-top:var(--spacing-12)" data-i18n="c2">Custom families, Cyrillic extensions and lettering. One project at a time, three to nine months, priced by the weight count and not by the hour.</p>
+      <div class="acts">
+        <button class="btn-fill" data-i18n="c3">Write to me</button>
+        <button class="btn-ghost" data-i18n="c4">Download the specimen PDF</button>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="rule"></div>
+    <div class="row mono">
+      <span data-i18n="fo1">VERA OSTROVSKAYA · RIGA</span>
+      <span>hello@counter.type</span>
+      <span data-i18n="fo2">SET IN OSWALD, MONTSERRAT AND JETBRAINS MONO</span>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+/* ── Кольца: каждый глиф — отдельный слой, повёрнутый на свою долю круга ── */
+function drawRing(el, text) {
+  var step = 360 / text.length, out = '';
+  for (var i = 0; i < text.length; i++) {
+    out += '<span style="transform:rotate(' + (i * step).toFixed(2) + 'deg)"><i>' +
+           (text[i] === ' ' ? '&nbsp;' : text[i]) + '</i></span>';
+  }
+  el.innerHTML = out;
+}
+function drawRings(l) {
+  ['r1', 'r2', 'r3'].forEach(function (id) {
+    var el = document.getElementById(id);
+    drawRing(el, l === 'ru' ? el.dataset.ru : el.dataset.en);
+  });
+}
+
+/* ── RU/EN. Английский — исходный, русский — перевод под него ── */
+var RU = {
+  n1:'Образцы', n2:'Процесс', n3:'Указатель', n4:'Связь', e1:'ВОЙТИ',
+  s1:'Образцы.',
+  s1p:'Четыре семейства, нарисованные с 2019 по 2026 год. В каждом кириллица и латиница лежат в одном файле, потому что шрифт, которому кириллицу дорисовали потом, — это шрифт, который сделали неправильно.',
+  f1p:'Газетный гротеск, из которого вынули контраст. Рисовался для полосы, которая печатается восьмым кеглем на бумаге, сквозь которую видно следующую страницу, — поэтому внутрибуквенные просветы открыты сильнее, чем удобно.',
+  f2p:'Узкий, резался под плакат в два метра и ни на что меньше. Концы штрихов плоские: скруглённый конец на таком размере к третьему тиражу превращается в кляксу.',
+  f3p:'Моноширинный, чтобы код можно было читать вслух. Ноль с точкой, а не с косой чертой, а Э и З перерисовывались одиннадцать раз, пока инженер не перестал их путать в одиннадцать вечера.',
+  f4p:'Книжный шрифт с настоящим курсивом — нарисованным, а не наклонённым. Заказан издательством переводной поэзии, где перенос строки в каждом языке падает в своё место и шрифт обязан пережить их все.',
+  s2:'Процесс.',
+  s2p1:'Я начинаю на бумаге в одном кегле, обычно в 24 пунктах, и не перехожу на экран, пока четыре контрольные буквы — н, о, H, O — не встанут на одну линию шрифта без спора. Всё остальное в семействе — следствие этих четырёх.',
+  s2p2:'Кириллица рисуется тем же заходом, что и латиница, и никогда не приделывается после. В этом решении вся разница между семейством, которое читается по-русски, и семейством, в котором просто есть русские буквы.',
+  s2p3:'Пробы печатаются. Шрифт, утверждённый на мониторе, — это шрифт, утверждённый в одном кегле, одном начертании и одном контрасте, и он вас выдаст на первом же тираже.',
+  s3:'Указатель.',
+  i1:'Ostrov Grotesk для балтийской газеты', i1t:'ШРИФТ · ЗАКАЗ',
+  i2:'Азбука навигации, Рижский центральный рынок', i2t:'ЛЕТТЕРИНГ · НАВИГАЦИЯ',
+  i3:'Kegel Display и плакаты, которые его оплатили', i3t:'ШРИФТ · СВОЁ',
+  i4:'Кириллизация латинского семейства чужой словолитни', i4t:'РАСШИРЕНИЕ · NDA',
+  i5:'Priyom Mono, нарисованный для инструмента ревью кода', i5t:'ШРИФТ · ЗАКАЗ',
+  i6:'Преподавание: рисование шрифта, двенадцать вечеров', i6t:'КУРС · ИДЁТ',
+  c1:'Заказы открыты с ноября.',
+  c2:'Акцидентные семейства, кириллизация и леттеринг. По одному проекту за раз, от трёх до девяти месяцев, цена считается по числу начертаний, а не по часам.',
+  c3:'Написать мне', c4:'Скачать образцы PDF',
+  fo1:'ВЕРА ОСТРОВСКАЯ · РИГА',
+  fo2:'НАБРАНО OSWALD, MONTSERRAT И JETBRAINS MONO'
+};
+var EN = {};
+document.querySelectorAll('[data-i18n]').forEach(function (el) { EN[el.dataset.i18n] = el.innerHTML; });
+
+function setLang(l) {
+  var dict = l === 'ru' ? RU : EN;
+  document.querySelectorAll('[data-i18n]').forEach(function (el) {
+    var v = dict[el.dataset.i18n];
+    if (v !== undefined) el.innerHTML = v;
+  });
+  drawRings(l);
+  document.documentElement.lang = l;
+  document.documentElement.dataset.lang = l;
+  document.querySelectorAll('.switch button').forEach(function (b) {
+    b.setAttribute('aria-pressed', b.dataset.set === l ? 'true' : 'false');
+  });
+}
+document.querySelectorAll('.switch button').forEach(function (b) {
+  b.addEventListener('click', function () { setLang(b.dataset.set); });
+});
+drawRings('en');
+</script>
+</body>
+</html>

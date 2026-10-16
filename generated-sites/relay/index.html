@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Relay — typed webhooks &amp; queues</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400&display=swap" rel="stylesheet">
+<style>
+/* ── Дизайн-система Foundry / basement.studio (styles.refero.design/style/896f0ea9) ──
+   canvas #121212 · весь UI-хром — JetBrains Mono 400 UPPERCASE, tracking .04em
+   #ff4d00 ТОЛЬКО обводка в 1px и текст, никогда заливка · радиусы 2.8px / 8px, больше нельзя
+   глубина = инверсия цвета + хайрлайны #e2e8f0, теней нет · фикс-сайдбар слева, контент не центрируется
+   Inter — только для длинного текста, никогда для лейблов и кнопок */
+:root{
+  --ember:#ff4d00; --black:#121212; --chalk:#e2e8f0; --bone:#efefef; --soot:#3a3a3a; --ash:#747474;
+  --mono:'JetBrains Mono','IBM Plex Mono',ui-monospace,monospace;
+  --sans:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --r-sm:2.8px; --r-lg:8px; --side:220px; --max:1440px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{background:var(--black);color:var(--bone);font:400 14px/1.29 var(--mono);letter-spacing:-.02em;
+     -webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+::selection{background:var(--ember);color:var(--black)}
+:focus-visible{outline:1px solid var(--ember);outline-offset:2px}
+p.copy{font-family:var(--sans);font-size:16px;line-height:1.5;letter-spacing:normal;color:var(--bone)}
+p.copy.mut{color:var(--ash)}
+.lbl{font:400 12px/1.4 var(--mono);letter-spacing:.04em;text-transform:uppercase}
+.ash{color:var(--ash)}
+.ember{color:var(--ember)}
+
+/* ── тикер: full-bleed, 1px хайрлайн снизу ── */
+.ticker{border-bottom:1px solid var(--chalk);overflow:hidden;padding:9px 0;background:var(--black);
+        position:fixed;top:0;left:0;right:0;z-index:80}
+.ticker .row{display:flex;gap:32px;white-space:nowrap;animation:slide 40s linear infinite}
+.ticker span{font:400 12px var(--mono);letter-spacing:.04em;text-transform:uppercase}
+@keyframes slide{to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){.ticker .row{animation:none}}
+
+/* ── фиксированный сайдбар слева ── */
+.side{position:fixed;top:34px;bottom:0;left:0;width:var(--side);border-right:1px solid var(--soot);
+      padding:20px 12px;display:flex;flex-direction:column;gap:24px;overflow-y:auto;background:var(--black);z-index:70}
+.logo{font:700 26px/0.95 var(--mono);letter-spacing:.01em;color:var(--ember);text-transform:uppercase}
+.logo span{display:block}
+.side .grp{display:flex;flex-direction:column;gap:4px}
+.side .grp .h{font:400 12px var(--mono);letter-spacing:.04em;text-transform:uppercase;color:var(--ash);padding:8px 6px}
+.tag{display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--bone);color:var(--black);
+     border-radius:var(--r-sm);padding:10px;font:400 12px var(--mono);letter-spacing:.04em;text-transform:uppercase}
+.tag:hover{background:var(--ember);color:var(--black)}
+.tag b{font-weight:400;opacity:.6}
+.tag.q{background:transparent;color:var(--bone);border:1px solid var(--soot)}
+.tag.q:hover{border-color:var(--bone);background:transparent}
+.side .foot{margin-top:auto;display:flex;flex-direction:column;gap:6px;font:400 12px/1.5 var(--mono);
+            letter-spacing:.04em;text-transform:uppercase;color:var(--ash)}
+.side .foot a:hover{color:var(--bone)}
+.lng{background:none;border:1px solid var(--soot);border-radius:var(--r-sm);color:var(--ash);
+     font:400 12px var(--mono);letter-spacing:.04em;padding:8px 10px;cursor:pointer;text-align:left}
+.lng:hover{border-color:var(--bone)}
+:root[data-lang="en"] .lng [data-l="en"],:root[data-lang="ru"] .lng [data-l="ru"]{color:var(--bone)}
+
+/* ── контент: не центрируем, тянем вправо ── */
+main{margin-left:var(--side);padding-top:34px;max-width:var(--max)}
+.pad{padding:24px}
+.band{border-top:1px solid var(--chalk)}
+/* metadata strip — «хром» полосы */
+.meta{display:flex;align-items:center;gap:20px;padding:12px 24px;border-bottom:1px solid var(--soot);flex-wrap:wrap}
+.meta .nm{font:400 12px var(--mono);letter-spacing:.04em;text-transform:uppercase}
+.meta .st{margin-left:auto;display:flex;gap:20px;color:var(--ash);font:400 12px var(--mono);letter-spacing:.04em;text-transform:uppercase}
+.meta .btns{display:flex;gap:8px}
+.btn{display:inline-flex;align-items:center;gap:6px;border-radius:var(--r-sm);padding:10px 15px;
+     font:400 12px var(--mono);letter-spacing:.04em;text-transform:uppercase;border:1px solid;background:transparent;cursor:pointer}
+.btn.o{border-color:var(--ember);color:var(--ember)}
+.btn.o:hover{background:rgba(255,77,0,.08)}
+.btn.g{border-color:var(--bone);color:var(--bone)}
+.btn.g:hover{background:rgba(239,239,239,.08)}
+
+/* ── хиро: типографический «специмен» ── */
+.hero{padding:80px 24px 64px}
+.hero .spec{font:700 clamp(40px,9vw,132px)/0.95 var(--mono);letter-spacing:.01em;text-transform:uppercase;
+            word-break:break-word}
+.hero .spec .o{color:var(--ember)}
+.hero .note{margin-top:40px;display:grid;grid-template-columns:minmax(0,52ch) auto;gap:32px;align-items:end;
+            border-top:1px solid var(--soot);padding-top:20px}
+.hero .acts{display:flex;gap:8px;flex-wrap:wrap}
+
+/* ── L-скобки и мелкие маркеры ── */
+.bracket{display:inline-block;width:10px;height:10px;border-left:1px solid var(--ember);border-bottom:1px solid var(--ember);margin-right:8px;vertical-align:2px}
+
+/* ── полоса-специмен ── */
+.spec-band{padding:60px 24px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,520px);gap:48px;align-items:center}
+.spec-band .big{font:700 clamp(40px,7vw,96px)/0.95 var(--mono);letter-spacing:.01em;text-transform:uppercase}
+.spec-band .big small{display:block;font:400 12px var(--mono);letter-spacing:.04em;color:var(--ash);margin-top:16px}
+.spec-band p.copy{max-width:52ch}
+
+/* ── код ── */
+.code{border:1px solid var(--soot);border-radius:var(--r-lg);overflow:hidden}
+.code .h{display:flex;gap:16px;padding:10px 15px;border-bottom:1px solid var(--soot);
+         font:400 12px var(--mono);letter-spacing:.04em;text-transform:uppercase;color:var(--ash)}
+.code .h .on{color:var(--bone)}
+.code pre{padding:15px;font:400 13px/1.6 var(--mono);letter-spacing:-.02em;overflow-x:auto}
+.k{color:var(--ember)}.s{color:#8fb8a8}.c{color:var(--ash)}.n{color:var(--chalk)}
+
+/* ── таблица потока ── */
+.tblwrap{overflow-x:auto}                 /* широкая таблица скроллится внутри себя */
+.tbl{width:100%;border-collapse:collapse;font:400 12px var(--mono);letter-spacing:.04em}
+.tbl th{text-align:left;padding:10px 15px;border-bottom:1px solid var(--soot);color:var(--ash);text-transform:uppercase}
+.tbl td{padding:12px 15px;border-bottom:1px solid var(--soot);white-space:nowrap}
+.tbl td.ok{color:var(--bone)}
+.tbl td.rt{color:var(--ember)}
+.tbl tr:hover td{background:#1a1a1a}
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--soot)}
+.stat-row div{padding:24px;border-right:1px solid var(--soot)}
+.stat-row div:last-child{border-right:0}
+.stat-row .v{font:700 40px/1 var(--mono);letter-spacing:.01em}
+.stat-row .k{font:400 12px var(--mono);letter-spacing:.04em;text-transform:uppercase;color:var(--ash);margin-top:10px}
+
+/* ── инверсная полоса (глубина через инверсию, не через тень) ── */
+.inv{background:var(--bone);color:var(--black)}
+.inv .lbl,.inv .ash{color:#5a5a5a}
+.inv .big{font:700 clamp(36px,6vw,84px)/0.95 var(--mono);letter-spacing:.01em;text-transform:uppercase}
+.inv p.copy{color:#2a2a2a}
+.inv .btn.g{border-color:var(--black);color:var(--black)}
+.inv .btn.g:hover{background:rgba(18,18,18,.08)}
+
+/* ── прайс ── */
+.plans{display:grid;grid-template-columns:repeat(3,1fr)}
+.plan{border-right:1px solid var(--soot);padding:24px;display:flex;flex-direction:column;gap:16px}
+.plan:last-child{border-right:0}
+.plan .p{font:700 40px/1 var(--mono);letter-spacing:.01em}
+.plan ul{list-style:none;display:flex;flex-direction:column;gap:8px;font:400 12px/1.5 var(--mono);letter-spacing:.04em;text-transform:uppercase;color:var(--ash)}
+.plan .btn{margin-top:auto;justify-content:center}
+
+/* ── низ страницы ── */
+.end{padding:64px 24px;border-top:1px solid var(--chalk);display:flex;justify-content:space-between;
+     gap:24px;flex-wrap:wrap;align-items:flex-end}
+.end .big{font:700 clamp(32px,5vw,64px)/0.95 var(--mono);letter-spacing:.01em;text-transform:uppercase}
+
+@media (max-width:1000px){
+  :root{--side:0px}
+  .side{position:static;width:auto;border-right:0;border-bottom:1px solid var(--soot);
+        flex-direction:row;flex-wrap:wrap;align-items:center;gap:12px;padding:12px;margin-top:34px}
+  .side .grp{flex-direction:row;flex-wrap:wrap}
+  .side .grp .h{display:none}
+  .side .foot{margin:0;flex-direction:row;flex-wrap:wrap;gap:12px}
+  main{margin-left:0;padding-top:0}
+  .spec-band{grid-template-columns:1fr;gap:32px}
+  .hero .note{grid-template-columns:1fr;align-items:start}
+  .stat-row{grid-template-columns:repeat(2,minmax(0,1fr))}   /* minmax(0,…), иначе цифры не дают колонке сжаться */
+  .stat-row div{border-bottom:1px solid var(--soot);padding:20px}
+  .stat-row .v{font-size:28px}
+  .plans{grid-template-columns:1fr}
+  .plan{border-right:0;border-bottom:1px solid var(--soot)}
+  .tbl .hide{display:none}
+}
+</style>
+</head>
+<body id="top">
+
+<div class="ticker">
+  <div class="row">
+    <span data-i18n="tick">▲ 41.2M events delivered this week ▲ p99 dispatch 240ms ▲ 12 regions ▲ replay any event for 30 days ▲ typed payloads or it does not ship ▲ 41.2M events delivered this week ▲ p99 dispatch 240ms ▲ 12 regions</span>
+    <span data-i18n="tick2">▲ 41.2M events delivered this week ▲ p99 dispatch 240ms ▲ 12 regions ▲ replay any event for 30 days ▲ typed payloads or it does not ship ▲ 41.2M events delivered this week ▲ p99 dispatch 240ms ▲ 12 regions</span>
+  </div>
+</div>
+
+<aside class="side">
+  <a class="logo" href="#top"><span>RELAY</span><span>WEBHOOKS</span></a>
+  <div class="grp">
+    <div class="h" data-i18n="side.h1">Platform</div>
+    <a class="tag" href="#events"><span data-i18n="side.events">Typed events</span><b>01</b></a>
+    <a class="tag" href="#delivery"><span data-i18n="side.delivery">Delivery</span><b>02</b></a>
+    <a class="tag" href="#queues"><span data-i18n="side.queues">Queues</span><b>03</b></a>
+    <a class="tag" href="#replay"><span data-i18n="side.replay">Replay</span><b>04</b></a>
+  </div>
+  <div class="grp">
+    <div class="h" data-i18n="side.h2">Reference</div>
+    <a class="tag q" href="#stream" data-i18n="side.stream">Live stream</a>
+    <a class="tag q" href="#sdk" data-i18n="side.sdk">SDK</a>
+    <a class="tag q" href="#pricing" data-i18n="side.pricing">Pricing</a>
+  </div>
+  <div class="foot">
+    <button class="lng" id="lng" aria-label="RU / EN"><span data-l="ru">RU</span> / <span data-l="en">EN</span></button>
+    <a href="#" data-i18n="side.docs">Docs</a>
+    <a href="#" data-i18n="side.status">Status · all systems go</a>
+    <a href="#" data-i18n="side.github">GitHub</a>
+    <span data-i18n="side.copy">© 2026 Relay</span>
+  </div>
+</aside>
+
+<main>
+  <!-- хиро-специмен: сигнатура события вместо шрифта -->
+  <div class="hero">
+    <div class="lbl ash"><span class="bracket"></span><span data-i18n="hero.lbl">Webhook infrastructure / typed by default</span></div>
+    <div class="spec" style="margin-top:24px">EVENT<span class="o">.</span><br>DELIVERED<span class="o">()</span></div>
+    <div class="note">
+      <p class="copy mut" data-i18n="hero.copy">Relay takes the part of your product nobody wants to own — outbound webhooks, retries, ordering, dead letters — and gives it a schema, a dashboard and a replay button. Your handler stays a single function.</p>
+      <div class="acts">
+        <a class="btn o" href="#sdk" data-i18n="hero.cta1">Read the docs</a>
+        <a class="btn g" href="#pricing" data-i18n="hero.cta2">Start free</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- полоса 01 -->
+  <div class="band" id="events">
+    <div class="meta">
+      <span class="nm">01 / <span data-i18n="side.events">TYPED EVENTS</span></span>
+      <span class="st"><span data-i18n="meta.e1">Schema-first</span><span class="hide" data-i18n="meta.e2">Versioned</span></span>
+      <span class="btns"><a class="btn o" href="#sdk" data-i18n="btn.docs">Docs</a><a class="btn g" href="#stream" data-i18n="btn.explore">Explore</a></span>
+    </div>
+    <div class="spec-band">
+      <div>
+        <div class="big">SCHEMA<br>FIRST<small data-i18n="spec.1s">Every event ships with a versioned type. Breaking changes are impossible by accident.</small></div>
+      </div>
+      <div class="code">
+        <div class="h"><span class="on">events.ts</span><span>webhook.d.ts</span><span>relay.json</span></div>
+<pre><span class="c">// generated from your schema registry</span>
+<span class="k">export type</span> <span class="n">InvoicePaid</span> = {
+  <span class="n">type</span>: <span class="s">"invoice.paid"</span>
+  <span class="n">version</span>: <span class="s">"2026-03-01"</span>
+  <span class="n">data</span>: {
+    <span class="n">invoice_id</span>: <span class="k">string</span>
+    <span class="n">amount_cents</span>: <span class="k">number</span>
+    <span class="n">currency</span>: <span class="s">"eur"</span> | <span class="s">"gbp"</span> | <span class="s">"usd"</span>
+    <span class="n">paid_at</span>: <span class="k">string</span>
+  }
+}
+
+<span class="c">// consumers get the same type, no drift</span>
+<span class="k">relay</span>.<span class="n">on</span>&lt;<span class="n">InvoicePaid</span>&gt;(<span class="s">"invoice.paid"</span>, <span class="k">async</span> (e) =&gt; {
+  <span class="k">await</span> <span class="n">ledger</span>.<span class="n">settle</span>(e.<span class="n">data</span>.<span class="n">invoice_id</span>)
+})</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- полоса 02 — инверсия вместо тени -->
+  <div class="band inv" id="delivery">
+    <div class="meta" style="border-bottom-color:#c9c9c9">
+      <span class="nm">02 / <span data-i18n="side.delivery">DELIVERY</span></span>
+      <span class="st" style="color:#5a5a5a"><span data-i18n="meta.d1">At-least-once</span><span class="hide" data-i18n="meta.d2">Ordered per key</span></span>
+      <span class="btns"><a class="btn o" href="#" data-i18n="btn.docs2">Docs</a><a class="btn g" href="#stream" data-i18n="btn.explore2">Explore</a></span>
+    </div>
+    <div class="spec-band">
+      <div>
+        <div class="big">RETRY<br>UNTIL<br>IT LANDS</div>
+        <p class="copy" style="margin-top:24px" data-i18n="spec.2p">Exponential backoff up to 24 hours, ordering preserved per partition key, and a dead-letter queue you can drain from the dashboard. Endpoints that stay down get paused instead of hammered.</p>
+      </div>
+      <div>
+        <div class="tblwrap"><table class="tbl" style="color:#2a2a2a">
+          <thead><tr style="border-color:#c9c9c9"><th style="color:#5a5a5a" data-i18n="tb.attempt">Attempt</th><th style="color:#5a5a5a" data-i18n="tb.wait">Wait</th><th style="color:#5a5a5a" class="hide" data-i18n="tb.code">Code</th><th style="color:#5a5a5a" data-i18n="tb.result">Result</th></tr></thead>
+          <tbody>
+            <tr style="border-color:#c9c9c9"><td>1</td><td>0s</td><td class="hide">503</td><td data-i18n="tb.r1">failed</td></tr>
+            <tr><td>2</td><td>5s</td><td class="hide">503</td><td data-i18n="tb.r2">failed</td></tr>
+            <tr><td>3</td><td>25s</td><td class="hide">500</td><td data-i18n="tb.r3">failed</td></tr>
+            <tr><td>4</td><td>2m 05s</td><td class="hide">200</td><td class="ember" data-i18n="tb.r4">delivered</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- полоса 03 -->
+  <div class="band" id="queues">
+    <div class="meta">
+      <span class="nm">03 / <span data-i18n="side.queues">QUEUES</span></span>
+      <span class="st"><span data-i18n="meta.q1">12 regions</span><span class="hide" data-i18n="meta.q2">No broker to run</span></span>
+      <span class="btns"><a class="btn o" href="#" data-i18n="btn.docs3">Docs</a><a class="btn g" href="#pricing" data-i18n="btn.explore3">Explore</a></span>
+    </div>
+    <div class="stat-row">
+      <div><div class="v">41.2M</div><div class="k" data-i18n="st.1">Events this week</div></div>
+      <div><div class="v">240<span style="font-size:20px">ms</span></div><div class="k" data-i18n="st.2">p99 dispatch</div></div>
+      <div><div class="v">99.99%</div><div class="k" data-i18n="st.3">Delivery success</div></div>
+      <div><div class="v">30<span style="font-size:20px">d</span></div><div class="k" data-i18n="st.4">Replay window</div></div>
+    </div>
+  </div>
+
+  <!-- живой поток -->
+  <div class="band" id="stream">
+    <div class="meta">
+      <span class="nm">04 / <span data-i18n="side.stream">LIVE STREAM</span></span>
+      <span class="st"><span data-i18n="meta.s1">Last 60 seconds</span></span>
+      <span class="btns"><a class="btn g" href="#" data-i18n="btn.open">Open dashboard</a></span>
+    </div>
+    <div class="tblwrap"><table class="tbl">
+      <thead><tr>
+        <th data-i18n="tb.time">Time</th><th data-i18n="tb.event">Event</th>
+        <th class="hide" data-i18n="tb.endpoint">Endpoint</th><th data-i18n="tb.att">Att.</th><th data-i18n="tb.status">Status</th>
+      </tr></thead>
+      <tbody>
+        <tr><td class="ash">14:22:07.412</td><td>invoice.paid</td><td class="hide ash">acme-prod / eu-west</td><td>1</td><td class="ok" data-i18n="tb.d1">delivered · 182ms</td></tr>
+        <tr><td class="ash">14:22:07.406</td><td>user.created</td><td class="hide ash">acme-prod / eu-west</td><td>1</td><td class="ok" data-i18n="tb.d2">delivered · 96ms</td></tr>
+        <tr><td class="ash">14:22:06.981</td><td>shipment.updated</td><td class="hide ash">logistics / us-east</td><td>3</td><td class="rt" data-i18n="tb.d3">retrying · backoff 25s</td></tr>
+        <tr><td class="ash">14:22:06.774</td><td>invoice.paid</td><td class="hide ash">billing-sync / eu-west</td><td>1</td><td class="ok" data-i18n="tb.d4">delivered · 211ms</td></tr>
+        <tr><td class="ash">14:22:05.203</td><td>refund.issued</td><td class="hide ash">acme-prod / eu-west</td><td>1</td><td class="ok" data-i18n="tb.d5">delivered · 140ms</td></tr>
+        <tr><td class="ash">14:22:04.640</td><td>subscription.paused</td><td class="hide ash">crm-bridge / ap-south</td><td>2</td><td class="ok" data-i18n="tb.d6">delivered · 402ms</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <!-- SDK -->
+  <div class="band" id="sdk">
+    <div class="meta">
+      <span class="nm">05 / <span data-i18n="side.sdk">SDK</span></span>
+      <span class="st"><span data-i18n="meta.k1">TypeScript · Go · Python · Rust</span></span>
+      <span class="btns"><a class="btn o" href="#" data-i18n="btn.docs4">Docs</a></span>
+    </div>
+    <div class="spec-band">
+      <div class="code">
+        <div class="h"><span class="on">send.ts</span><span>replay.sh</span></div>
+<pre><span class="c">// publish — Relay handles the rest</span>
+<span class="k">await</span> <span class="n">relay</span>.<span class="n">publish</span>({
+  <span class="n">type</span>: <span class="s">"invoice.paid"</span>,
+  <span class="n">key</span>: <span class="n">customer</span>.<span class="n">id</span>,          <span class="c">// ordering key</span>
+  <span class="n">data</span>: { <span class="n">invoice_id</span>, <span class="n">amount_cents</span>, <span class="n">currency</span>, <span class="n">paid_at</span> }
+})
+
+<span class="c">// replay anything from the last 30 days</span>
+<span class="k">$</span> relay replay --type invoice.paid \
+    --since 2026-07-01 --endpoint billing-sync</pre>
+      </div>
+      <div>
+        <div class="big">FOUR<br>LINES</div>
+        <p class="copy mut" style="margin-top:24px" data-i18n="spec.3p">No broker to run, no cron to babysit, no retry table in your own database. Point Relay at an endpoint, publish a typed event, and read the delivery log when someone asks what happened.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- цены -->
+  <div class="band" id="pricing">
+    <div class="meta">
+      <span class="nm">06 / <span data-i18n="side.pricing">PRICING</span></span>
+      <span class="st"><span data-i18n="meta.p1">Per event, no seats</span></span>
+    </div>
+    <div class="plans">
+      <div class="plan">
+        <span class="lbl ash" data-i18n="pl.1n">Free</span>
+        <div class="p">$0</div>
+        <ul>
+          <li data-i18n="pl.1a">100k events / month</li>
+          <li data-i18n="pl.1b">3 endpoints</li>
+          <li data-i18n="pl.1c">7-day replay</li>
+        </ul>
+        <a class="btn g" href="#" data-i18n="pl.cta1">Start free</a>
+      </div>
+      <div class="plan">
+        <span class="lbl ember" data-i18n="pl.2n">Team</span>
+        <div class="p">$90</div>
+        <ul>
+          <li data-i18n="pl.2a">5M events / month</li>
+          <li data-i18n="pl.2b">Unlimited endpoints</li>
+          <li data-i18n="pl.2c">30-day replay</li>
+        </ul>
+        <a class="btn o" href="#" data-i18n="pl.cta2">Start trial</a>
+      </div>
+      <div class="plan">
+        <span class="lbl ash" data-i18n="pl.3n">Scale</span>
+        <div class="p" data-i18n="pl.3p">Talk</div>
+        <ul>
+          <li data-i18n="pl.3a">Dedicated regions</li>
+          <li data-i18n="pl.3b">Private link, own keys</li>
+          <li data-i18n="pl.3c">99.99% SLA</li>
+        </ul>
+        <a class="btn g" href="#" data-i18n="pl.cta3">Contact us</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="end">
+    <div class="big">SHIP<br>THE <span class="ember">HOOK</span>,<br>NOT THE PLUMBING</div>
+    <div class="acts" style="display:flex;gap:8px;flex-wrap:wrap">
+      <a class="btn o" href="#" data-i18n="end.cta1">Read the docs</a>
+      <a class="btn g" href="#" data-i18n="end.cta2">Start free</a>
+    </div>
+  </div>
+</main>
+
+<script>
+const I18N = {
+  "tick":{en:"▲ 41.2M events delivered this week ▲ p99 dispatch 240ms ▲ 12 regions ▲ replay any event for 30 days ▲ typed payloads or it does not ship ▲ 41.2M events delivered this week ▲ p99 dispatch 240ms ▲ 12 regions",ru:"▲ 41,2 млн событий доставлено за неделю ▲ p99 отправки 240 мс ▲ 12 регионов ▲ повтор любого события 30 дней ▲ типизированные payload или не едет ▲ 41,2 млн событий за неделю ▲ p99 240 мс ▲ 12 регионов"},
+  "tick2":{en:"▲ 41.2M events delivered this week ▲ p99 dispatch 240ms ▲ 12 regions ▲ replay any event for 30 days ▲ typed payloads or it does not ship ▲ 41.2M events delivered this week ▲ p99 dispatch 240ms ▲ 12 regions",ru:"▲ 41,2 млн событий доставлено за неделю ▲ p99 отправки 240 мс ▲ 12 регионов ▲ повтор любого события 30 дней ▲ типизированные payload или не едет ▲ 41,2 млн событий за неделю ▲ p99 240 мс ▲ 12 регионов"},
+  "side.h1":{en:"Platform",ru:"Платформа"},
+  "side.h2":{en:"Reference",ru:"Справочник"},
+  "side.events":{en:"Typed events",ru:"Типизированные события"},
+  "side.delivery":{en:"Delivery",ru:"Доставка"},
+  "side.queues":{en:"Queues",ru:"Очереди"},
+  "side.replay":{en:"Replay",ru:"Повтор"},
+  "side.stream":{en:"Live stream",ru:"Живой поток"},
+  "side.sdk":{en:"SDK",ru:"SDK"},
+  "side.pricing":{en:"Pricing",ru:"Тарифы"},
+  "side.docs":{en:"Docs",ru:"Документация"},
+  "side.status":{en:"Status · all systems go",ru:"Статус · всё работает"},
+  "side.github":{en:"GitHub",ru:"GitHub"},
+  "side.copy":{en:"© 2026 Relay",ru:"© 2026 Relay"},
+  "hero.lbl":{en:"Webhook infrastructure / typed by default",ru:"Инфраструктура вебхуков / типизирована по умолчанию"},
+  "hero.copy":{en:"Relay takes the part of your product nobody wants to own — outbound webhooks, retries, ordering, dead letters — and gives it a schema, a dashboard and a replay button. Your handler stays a single function.",ru:"Relay забирает ту часть продукта, которую никто не хочет вести: исходящие вебхуки, ретраи, порядок, мёртвые письма — и выдаёт им схему, дашборд и кнопку повтора. Ваш обработчик остаётся одной функцией."},
+  "hero.cta1":{en:"Read the docs",ru:"Документация"},
+  "hero.cta2":{en:"Start free",ru:"Начать бесплатно"},
+  "meta.e1":{en:"Schema-first",ru:"Сначала схема"},
+  "meta.e2":{en:"Versioned",ru:"Версионируется"},
+  "meta.d1":{en:"At-least-once",ru:"Минимум один раз"},
+  "meta.d2":{en:"Ordered per key",ru:"Порядок по ключу"},
+  "meta.q1":{en:"12 regions",ru:"12 регионов"},
+  "meta.q2":{en:"No broker to run",ru:"Брокер не нужен"},
+  "meta.s1":{en:"Last 60 seconds",ru:"Последние 60 секунд"},
+  "meta.k1":{en:"TypeScript · Go · Python · Rust",ru:"TypeScript · Go · Python · Rust"},
+  "meta.p1":{en:"Per event, no seats",ru:"За события, без мест"},
+  "btn.docs":{en:"Docs",ru:"Доки"},"btn.docs2":{en:"Docs",ru:"Доки"},"btn.docs3":{en:"Docs",ru:"Доки"},"btn.docs4":{en:"Docs",ru:"Доки"},
+  "btn.explore":{en:"Explore",ru:"Смотреть"},"btn.explore2":{en:"Explore",ru:"Смотреть"},"btn.explore3":{en:"Explore",ru:"Смотреть"},
+  "btn.open":{en:"Open dashboard",ru:"Открыть дашборд"},
+  "spec.1s":{en:"Every event ships with a versioned type. Breaking changes are impossible by accident.",ru:"Каждое событие едет с версионированным типом. Сломать контракт случайно нельзя."},
+  "spec.2p":{en:"Exponential backoff up to 24 hours, ordering preserved per partition key, and a dead-letter queue you can drain from the dashboard. Endpoints that stay down get paused instead of hammered.",ru:"Экспоненциальный backoff до 24 часов, порядок сохраняется в пределах ключа, мёртвая очередь разбирается прямо из дашборда. Эндпоинт, который лежит, ставится на паузу, а не долбится."},
+  "spec.3p":{en:"No broker to run, no cron to babysit, no retry table in your own database. Point Relay at an endpoint, publish a typed event, and read the delivery log when someone asks what happened.",ru:"Не нужно держать брокер, нянчить крон и хранить таблицу ретраев в своей базе. Наведите Relay на эндпоинт, опубликуйте типизированное событие и откройте журнал доставки, когда спросят, что случилось."},
+  "tb.attempt":{en:"Attempt",ru:"Попытка"},
+  "tb.wait":{en:"Wait",ru:"Пауза"},
+  "tb.code":{en:"Code",ru:"Код"},
+  "tb.result":{en:"Result",ru:"Итог"},
+  "tb.r1":{en:"failed",ru:"неудача"},"tb.r2":{en:"failed",ru:"неудача"},"tb.r3":{en:"failed",ru:"неудача"},
+  "tb.r4":{en:"delivered",ru:"доставлено"},
+  "tb.time":{en:"Time",ru:"Время"},
+  "tb.event":{en:"Event",ru:"Событие"},
+  "tb.endpoint":{en:"Endpoint",ru:"Эндпоинт"},
+  "tb.att":{en:"Att.",ru:"Поп."},
+  "tb.status":{en:"Status",ru:"Статус"},
+  "tb.d1":{en:"delivered · 182ms",ru:"доставлено · 182 мс"},
+  "tb.d2":{en:"delivered · 96ms",ru:"доставлено · 96 мс"},
+  "tb.d3":{en:"retrying · backoff 25s",ru:"повтор · пауза 25 с"},
+  "tb.d4":{en:"delivered · 211ms",ru:"доставлено · 211 мс"},
+  "tb.d5":{en:"delivered · 140ms",ru:"доставлено · 140 мс"},
+  "tb.d6":{en:"delivered · 402ms",ru:"доставлено · 402 мс"},
+  "st.1":{en:"Events this week",ru:"События за неделю"},
+  "st.2":{en:"p99 dispatch",ru:"p99 отправки"},
+  "st.3":{en:"Delivery success",ru:"Успешных доставок"},
+  "st.4":{en:"Replay window",ru:"Окно повтора"},
+  "pl.1n":{en:"Free",ru:"Бесплатно"},
+  "pl.1a":{en:"100k events / month",ru:"100 тыс. событий / месяц"},
+  "pl.1b":{en:"3 endpoints",ru:"3 эндпоинта"},
+  "pl.1c":{en:"7-day replay",ru:"Повтор за 7 дней"},
+  "pl.cta1":{en:"Start free",ru:"Начать бесплатно"},
+  "pl.2n":{en:"Team",ru:"Команда"},
+  "pl.2a":{en:"5M events / month",ru:"5 млн событий / месяц"},
+  "pl.2b":{en:"Unlimited endpoints",ru:"Эндпоинты без лимита"},
+  "pl.2c":{en:"30-day replay",ru:"Повтор за 30 дней"},
+  "pl.cta2":{en:"Start trial",ru:"Пробный период"},
+  "pl.3n":{en:"Scale",ru:"Масштаб"},
+  "pl.3p":{en:"Talk",ru:"Обсудим"},
+  "pl.3a":{en:"Dedicated regions",ru:"Выделенные регионы"},
+  "pl.3b":{en:"Private link, own keys",ru:"Приватный линк, свои ключи"},
+  "pl.3c":{en:"99.99% SLA",ru:"SLA 99,99%"},
+  "pl.cta3":{en:"Contact us",ru:"Связаться"},
+  "end.cta1":{en:"Read the docs",ru:"Документация"},
+  "end.cta2":{en:"Start free",ru:"Начать бесплатно"}
+};
+function apply(l){
+  const r=document.documentElement;
+  r.lang=l; r.setAttribute('data-lang',l);
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const e=I18N[el.getAttribute('data-i18n')];
+    if(e && e[l]!=null) el.innerHTML=e[l];
+  });
+  try{localStorage.setItem('relay_lang',l);}catch(e){}
+}
+(function(){
+  let l; try{l=localStorage.getItem('relay_lang');}catch(e){}
+  if(!l) l=(navigator.language||'en').toLowerCase().startsWith('ru')?'ru':'en';
+  apply(l);
+  document.getElementById('lng').addEventListener('click',()=>{
+    apply(document.documentElement.getAttribute('data-lang')==='ru'?'en':'ru');
+  });
+})();
+</script>
+</body>
+</html>

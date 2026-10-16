@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>Threshold — lactate testing for runners</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400&family=Roboto+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+/* ─────────────────────────────────────────────────────────────
+   Дизайн-система: Integrated Biosciences (refero 80099f79) — tokens.css дословно
+   ───────────────────────────────────────────────────────────── */
+:root {
+  /* Colors */
+  --color-bioluminescent-lime: #cef79e;
+  --color-abyssal-ink: #222f30;
+  --color-bone-white: #f7f7f5;
+  --color-paper: #ffffff;
+  --color-graphite: #4d5757;
+  --color-lichen: #c9cbbe;
+  --color-tissue: #e7e8e1;
+  --color-frost: #eeeeee;
+  --color-void: #000000;
+
+  /* Typography — Font Families */
+  --font-aspekta: 'Aspekta', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-roboto-mono: 'Roboto Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Typography — Scale */
+  --text-caption: 13px;
+  --leading-caption: 1.23;
+  --tracking-caption: -0.26px;
+  --text-body: 18px;
+  --leading-body: 1.3;
+  --tracking-body: -0.018px;
+  --text-body-lg: 22px;
+  --leading-body-lg: 1.3;
+  --tracking-body-lg: -0.13px;
+  --text-subheading: 24px;
+  --leading-subheading: 1.2;
+  --tracking-subheading: -0.14px;
+  --text-heading-sm: 36px;
+  --leading-heading-sm: 1.2;
+  --tracking-heading-sm: -0.22px;
+  --text-heading-lg: 58px;
+  --leading-heading-lg: 1.1;
+  --tracking-heading-lg: -0.7px;
+  --text-display: 75px;
+  --leading-display: 1.1;
+  --tracking-display: -1.5px;
+  --text-display-lg: 89px;
+  --leading-display-lg: 1.1;
+  --tracking-display-lg: -1.78px;
+  --text-display-xl: 111px;
+  --leading-display-xl: 1;
+  --tracking-display-xl: -2.22px;
+  --text-hero: 158px;
+  --leading-hero: 1;
+  --tracking-hero: -4.74px;
+
+  /* Typography — Weights */
+  --font-weight-regular: 400;
+
+  /* Spacing */
+  --spacing-unit: 4px;
+  --spacing-4: 4px;
+  --spacing-8: 8px;
+  --spacing-12: 12px;
+  --spacing-16: 16px;
+  --spacing-20: 20px;
+  --spacing-24: 24px;
+  --spacing-40: 40px;
+  --spacing-44: 44px;
+  --spacing-48: 48px;
+  --spacing-52: 52px;
+  --spacing-60: 60px;
+  --spacing-88: 88px;
+  --spacing-100: 100px;
+  --spacing-160: 160px;
+
+  /* Layout */
+  --page-max-width: 1200px;
+  --card-padding: 40px;
+
+  /* Border Radius */
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-2xl: 16px;
+  --radius-2xl-2: 20px;
+  --radius-3xl: 40px;
+
+  /* Named Radii */
+  --radius-nav: 12px;
+  --radius-tags: 9999px;
+  --radius-buttons: 8px;
+  --radius-largecards: 40px;
+
+  /* Surfaces */
+  --surface-page-canvas-light: #f7f7f5;
+  --surface-page-canvas-dark: #222f30;
+  --surface-card-surface-light: #ffffff;
+  --surface-card-surface-warm-alternate: #e7e8e1;
+  --surface-footer-ground: #000000;
+}
+
+/* Мои подстановки: Aspekta закрыт лицензией — DESIGN.md предлагает Inter Tight 400,
+   и он знает кириллицу. Roboto Mono взят как есть. Секции gap 80–120px и радиус
+   карточек 16–20px в токенах записаны диапазоном — фиксирую конкретные значения. */
+:root {
+  --font-aspekta: 'Inter Tight', ui-sans-serif, system-ui, sans-serif;
+  --section-gap: 100px;
+  --radius-cards: 20px;
+  --surface-accent-fill: #cef79e;   /* в токенах опечатка #cef79 — беру полный hex */
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--surface-page-canvas-light);
+  color: var(--color-abyssal-ink);
+  font-family: var(--font-aspekta);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--text-body); line-height: var(--leading-body); letter-spacing: var(--tracking-body);
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, p, figure { margin: 0; font-weight: var(--font-weight-regular); }
+a { color: inherit; text-decoration: none; }
+.mono { font-family: var(--font-roboto-mono); font-size: var(--text-caption); line-height: var(--leading-caption); letter-spacing: var(--tracking-caption); text-transform: uppercase; }
+/* колонка контента: 1200px текста + 40px поля с каждой стороны — по DESIGN.md
+   («content constrained to the 1200px column»), ею же выровнен и герой */
+.wrap { max-width: calc(var(--page-max-width) + 80px); margin: 0 auto; padding: 0 var(--spacing-40); }
+.nav, .hero .head, .hero .bottom { max-width: calc(var(--page-max-width) + 80px); margin-left: auto; margin-right: auto; width: 100%; }
+.num { font-variant-numeric: tabular-nums; }
+
+/* ── Герой: скруглённый блок с полем бумаги по краям, как на скриншоте ── */
+.hero {
+  position: relative; overflow: hidden;
+  margin: var(--spacing-8); border-radius: var(--radius-2xl);
+  min-height: 730px; display: flex; flex-direction: column;
+  background:
+    radial-gradient(70% 55% at 18% 34%, #3f6350 0%, rgba(34,47,48,0) 62%),
+    radial-gradient(55% 45% at 78% 14%, #9c8b63 0%, rgba(34,47,48,0) 58%),
+    radial-gradient(85% 65% at 62% 92%, #6d8f74 0%, rgba(34,47,48,0) 60%),
+    linear-gradient(118deg, #1a2523 0%, #26332f 44%, #55503c 100%);
+}
+/* «лезвия» — мягкие полосы света, которыми в системе живут научные рендеры */
+.hero .blade { position: absolute; border-radius: 50%; filter: blur(46px); opacity: .55; pointer-events: none; }
+.hero .b1 { left: -8%; top: 12%; width: 88%; height: 190px; transform: rotate(-13deg); background: linear-gradient(90deg, rgba(201,203,190,.0), rgba(206,247,158,.35), rgba(155,138,99,.55)); }
+.hero .b2 { left: 4%; bottom: 8%; width: 104%; height: 150px; transform: rotate(-9deg); background: linear-gradient(90deg, rgba(155,138,99,.5), rgba(247,247,245,.28), rgba(34,47,48,0)); }
+.hero .b3 { right: -20%; top: 34%; width: 70%; height: 330px; transform: rotate(16deg); background: linear-gradient(90deg, rgba(34,47,48,0), rgba(61,99,80,.6)); }
+.hero > * { position: relative; }
+
+.nav { display: flex; align-items: center; justify-content: space-between; padding: var(--spacing-24) var(--spacing-40); }
+.logo { display: flex; align-items: center; gap: var(--spacing-12); color: var(--color-paper); font-size: var(--text-subheading); letter-spacing: var(--tracking-subheading); }
+.navpills { display: flex; align-items: center; gap: var(--spacing-8); background: rgba(247,247,245,.14); border-radius: var(--radius-nav); padding: var(--spacing-4); }
+.navpills a, .navpills button {
+  font-family: var(--font-roboto-mono); font-size: var(--text-caption); letter-spacing: var(--tracking-caption); text-transform: uppercase;
+  color: var(--color-paper); background: transparent; border: 0; border-radius: var(--radius-nav);
+  padding: var(--spacing-8) var(--spacing-16); cursor: pointer;
+}
+.navpills .fill { background: var(--color-abyssal-ink); color: var(--color-paper); }
+.switch { display: flex; align-items: center; }
+.switch button[aria-pressed="true"] { background: var(--color-bioluminescent-lime); color: var(--color-abyssal-ink); }
+
+.hero .head { padding: var(--spacing-60) var(--spacing-40) 0; }
+.hero h1 { color: var(--color-paper); font-size: var(--text-display-xl); line-height: var(--leading-display-xl); letter-spacing: var(--tracking-display-xl); }
+.hero .bottom { margin-top: auto; display: flex; align-items: flex-end; justify-content: space-between; gap: var(--spacing-40); padding: var(--spacing-40); }
+.hero .bottom p { color: var(--color-paper); max-width: 480px; }
+.acts { display: flex; align-items: center; gap: var(--spacing-8); }
+.ghost {
+  font-family: var(--font-roboto-mono); font-size: var(--text-caption); letter-spacing: var(--tracking-caption); text-transform: uppercase;
+  border: 1px solid var(--color-graphite); border-radius: var(--radius-buttons);
+  padding: var(--spacing-12) var(--spacing-20); color: var(--color-paper); background: rgba(34,47,48,.55); cursor: pointer;
+}
+.arrow { width: 40px; height: 40px; border: 0; border-radius: var(--radius-buttons); background: var(--surface-accent-fill); color: var(--color-abyssal-ink); font-size: 18px; cursor: pointer; }
+
+/* ── Тёмные полосы ─────────────────────────────────────────────────── */
+.dark { background: var(--surface-page-canvas-dark); color: var(--color-paper); padding: var(--section-gap) 0; }
+.dark + .dark { padding-top: 0; }
+.counter { display: inline-block; font-family: var(--font-roboto-mono); font-size: var(--text-caption); letter-spacing: var(--tracking-caption); color: var(--color-graphite); border: 1px solid var(--color-graphite); border-radius: var(--radius-tags); padding: var(--spacing-8) var(--spacing-16); }
+.subhead { margin-top: var(--spacing-40); font-size: var(--text-heading-sm); line-height: var(--leading-heading-sm); letter-spacing: var(--tracking-heading-sm); color: var(--color-graphite); max-width: 640px; }
+.subhead b { color: var(--color-paper); font-weight: 400; }
+
+.steps { margin-top: var(--spacing-60); }
+.step { display: grid; grid-template-columns: 120px 1fr 340px; gap: var(--spacing-40); padding: var(--spacing-40) 0; border-top: 1px solid var(--color-graphite); align-items: start; }
+.step:last-child { border-bottom: 1px solid var(--color-graphite); }
+.step .idx { font-family: var(--font-roboto-mono); font-size: var(--text-caption); letter-spacing: var(--tracking-caption); color: var(--color-lichen); }
+.step h3 { font-size: var(--text-subheading); line-height: var(--leading-subheading); letter-spacing: var(--tracking-subheading); }
+/* На тёмном система разрешает только Paper или Graphite; графит уходит в нечитаемое,
+   поэтому текст шагов — Paper (его роль в токенах и есть «body text on dark surfaces»). */
+.step p { color: var(--color-paper); }
+.dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--surface-accent-fill); margin-right: var(--spacing-8); vertical-align: 2px; }
+.tag { font-family: var(--font-roboto-mono); font-size: var(--text-caption); letter-spacing: var(--tracking-caption); text-transform: uppercase; color: var(--color-lichen); }
+
+/* ── Кривая лактата ────────────────────────────────────────────────── */
+.plotwrap { margin-top: var(--spacing-60); border: 1px solid var(--color-graphite); border-radius: var(--radius-2xl); padding: var(--spacing-40); }
+.plotwrap svg { display: block; width: 100%; height: auto; }
+.plothead { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: var(--spacing-24); }
+
+/* ── Светлая полоса: карточки ──────────────────────────────────────── */
+.light { background: var(--surface-page-canvas-light); padding: var(--section-gap) 0; }
+.card { background: var(--surface-card-surface-light); border-radius: var(--radius-largecards); padding: var(--card-padding); display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-40); align-items: center; }
+.card + .card { margin-top: var(--spacing-24); }
+.shot { border-radius: var(--radius-2xl); min-height: 280px; }
+.s1 { background: radial-gradient(70% 60% at 30% 30%, #45705a 0%, rgba(34,47,48,0) 65%), radial-gradient(60% 50% at 80% 70%, #8f7f5c 0%, rgba(34,47,48,0) 60%), #1c2726; }
+.s2 { background: radial-gradient(60% 70% at 70% 25%, #3c5f52 0%, rgba(34,47,48,0) 60%), radial-gradient(70% 60% at 25% 80%, #7d8f6a 0%, rgba(34,47,48,0) 62%), #1c2726; }
+.card h3 { margin-top: var(--spacing-16); font-size: var(--text-heading-sm); line-height: var(--leading-heading-sm); letter-spacing: var(--tracking-heading-sm); }
+.card p { margin-top: var(--spacing-16); color: var(--color-graphite); }
+.card .meta { display: flex; gap: var(--spacing-24); }
+.card .meta span { color: var(--color-lichen); }
+.card .read { display: inline-block; margin-top: var(--spacing-24); border-bottom: 1px solid var(--color-abyssal-ink); padding-bottom: 2px; }
+
+/* ── Таблица зон ───────────────────────────────────────────────────── */
+.zones { margin-top: var(--spacing-60); }
+.zrow { display: grid; grid-template-columns: 90px 1.4fr 1fr 1fr 1fr; gap: var(--spacing-24); padding: var(--spacing-24) 0; border-top: 1px solid var(--color-lichen); align-items: baseline; }
+.zrow:last-child { border-bottom: 1px solid var(--color-lichen); }
+.zrow .h { color: var(--color-graphite); }
+.zrow.hd span { color: var(--color-graphite); }
+
+/* ── Подвал ────────────────────────────────────────────────────────── */
+footer { background: var(--surface-footer-ground); color: var(--color-paper); padding: var(--spacing-100) 0 var(--spacing-60); }
+.fgrid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: var(--spacing-40); }
+.fgrid h4 { color: var(--color-graphite); margin-bottom: var(--spacing-16); }
+.fgrid a { display: block; font-family: var(--font-roboto-mono); font-size: var(--text-caption); letter-spacing: var(--tracking-caption); line-height: 2.1; }
+.fgrid a:hover { color: var(--color-bioluminescent-lime); }
+.fbot { margin-top: var(--spacing-60); padding-top: var(--spacing-24); border-top: 1px solid var(--color-graphite); display: flex; justify-content: space-between; color: var(--color-graphite); }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <span class="blade b1"></span><span class="blade b2"></span><span class="blade b3"></span>
+
+  <nav class="nav">
+    <span class="logo">
+      <svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><path d="M2 18c6-1 8-11 14-11 4 0 8 2 8 2" fill="none" stroke="#f7f7f5" stroke-width="2"/><circle cx="19" cy="9" r="3" fill="#cef79e"/></svg>
+      Threshold
+    </span>
+    <span class="navpills">
+      <a href="#protocol" data-i18n="n1">Protocol</a>
+      <a href="#curve" data-i18n="n2">The curve</a>
+      <a href="#zones" data-i18n="n3">Zones</a>
+      <span class="switch"><button data-set="en" aria-pressed="true">EN</button><button data-set="ru" aria-pressed="false">RU</button></span>
+      <a href="#book" class="fill" data-i18n="n4">Book a test</a>
+    </span>
+  </nav>
+
+  <div class="head">
+    <h1 data-i18n="h1">Your zones,<br>measured.</h1>
+  </div>
+
+  <div class="bottom">
+    <p data-i18n="h2">Forty minutes on the treadmill, six drops of blood, one curve. The number your watch has been estimating for two years, finally taken from you.</p>
+    <div class="acts">
+      <a class="ghost" href="#protocol" data-i18n="h3">See the protocol</a>
+      <a class="arrow" href="#protocol" style="display:grid;place-items:center" aria-label="protocol">→</a>
+    </div>
+  </div>
+</header>
+
+<section class="dark" id="protocol">
+  <div class="wrap">
+    <span class="counter">01 / 03</span>
+    <h2 class="subhead" data-i18n="s1"><b>A watch estimates.</b> It takes heart rate, age and a model built on someone else's blood, and calls the result your threshold. We take yours.</h2>
+
+    <div class="steps">
+      <div class="step">
+        <span class="idx">STEP 01</span>
+        <div>
+          <h3 data-i18n="p1h">A ramp, not a race</h3>
+          <p style="margin-top:12px" data-i18n="p1p">The belt starts at an easy pace and climbs by 0.5 km/h every three minutes. You stop when talking stops, usually somewhere in the eighth stage.</p>
+        </div>
+        <span class="tag"><span class="dot"></span><span data-i18n="p1t">40 minutes · treadmill</span></span>
+      </div>
+      <div class="step">
+        <span class="idx">STEP 02</span>
+        <div>
+          <h3 data-i18n="p2h">Six drops from a fingertip</h3>
+          <p style="margin-top:12px" data-i18n="p2p">At the end of each stage we take 0.3 µl of blood and read the lactate on the bench analyser. Six points is what a curve needs; four is a guess drawn through noise.</p>
+        </div>
+        <span class="tag"><span class="dot"></span><span data-i18n="p2t">Lactate · mmol/l</span></span>
+      </div>
+      <div class="step">
+        <span class="idx">STEP 03</span>
+        <div>
+          <h3 data-i18n="p3h">The bend, found by fitting</h3>
+          <p style="margin-top:12px" data-i18n="p3p">Two thresholds come out of the fit: the aerobic one, where lactate first lifts off baseline, and the second, where clearance stops keeping up. Between them lives every easy run you will ever do.</p>
+        </div>
+        <span class="tag"><span class="dot"></span><span data-i18n="p3t">LT1 &amp; LT2</span></span>
+      </div>
+      <div class="step">
+        <span class="idx">STEP 04</span>
+        <div>
+          <h3 data-i18n="p4h">Zones on paper, in your watch by evening</h3>
+          <p style="margin-top:12px" data-i18n="p4p">You leave with five zones in pace and heart rate, a printed curve, and the same file exported for Garmin, Coros and Wahoo. Re-test after twelve weeks; the curve moves right when the training works.</p>
+        </div>
+        <span class="tag"><span class="dot"></span><span data-i18n="p4t">Same day</span></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="dark" id="curve">
+  <div class="wrap">
+    <div class="plotwrap">
+      <div class="plothead">
+        <span class="mono" style="color:var(--color-lichen)" data-i18n="cv1">Lactate, mmol/l — one athlete, twelve weeks apart</span>
+        <span class="mono" style="color:var(--color-graphite)">TEST 04 · 11.08.2026</span>
+      </div>
+      <svg viewBox="0 0 1080 340" role="img" aria-label="Lactate curve">
+        <g stroke="#4d5757" stroke-width="1">
+          <line x1="60" y1="20" x2="60" y2="290"/>
+          <line x1="60" y1="290" x2="1060" y2="290"/>
+          <line x1="60" y1="230" x2="1060" y2="230"/>
+          <line x1="60" y1="160" x2="1060" y2="160"/>
+          <line x1="60" y1="90" x2="1060" y2="90"/>
+        </g>
+        <!-- прошлый тест: приглушённая линия -->
+        <path d="M60 272 L200 268 L340 258 L480 238 L620 196 L760 128 L900 56 L980 28"
+              fill="none" stroke="#4d5757" stroke-width="2" stroke-dasharray="5 5"/>
+        <!-- текущий тест -->
+        <path d="M60 276 L200 274 L340 268 L480 256 L620 226 L760 166 L900 84 L1000 34"
+              fill="none" stroke="#f7f7f5" stroke-width="2"/>
+        <!-- единственная зелёная точка — порог -->
+        <g>
+          <line x1="665" y1="20" x2="665" y2="290" stroke="#cef79e" stroke-width="1" stroke-dasharray="3 4"/>
+          <circle cx="665" cy="207" r="6" fill="#cef79e"/>
+        </g>
+        <g fill="#c9cbbe" font-family="Roboto Mono, monospace" font-size="13">
+          <text x="16" y="295">0</text><text x="16" y="234">2</text><text x="16" y="164">4</text><text x="16" y="94">6</text>
+          <text x="60" y="318">10.0</text><text x="330" y="318">12.5</text><text x="600" y="318">15.0</text><text x="870" y="318">17.5</text>
+        </g>
+        <text x="677" y="40" fill="#cef79e" font-family="Roboto Mono, monospace" font-size="13">LT2 · 15.6 KM/H</text>
+      </svg>
+      <div class="plothead" style="margin: 24px 0 0">
+        <span class="mono" style="color:var(--color-graphite)" data-i18n="cv2">Dashed — the same runner in May</span>
+        <span class="mono" style="color:var(--color-graphite)" data-i18n="cv3">Speed, km/h</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="light">
+  <div class="wrap">
+    <div class="card">
+      <div class="shot s1"></div>
+      <div>
+        <div class="meta">
+          <span class="tag" style="color:var(--color-graphite)"><span class="dot"></span><span data-i18n="a1t">Bench notes</span></span>
+          <span class="mono">04.08.2026</span>
+        </div>
+        <h3 data-i18n="a1h">Why we stopped trusting the 20-minute test</h3>
+        <p data-i18n="a1p">A field test measures how well you pace a field test. Two runners with the same average power over twenty minutes came back with thresholds eleven watts apart on the bench — and the one who felt slower had the higher number.</p>
+        <a class="read mono" href="#book" data-i18n="a1r">Read the note</a>
+      </div>
+    </div>
+    <div class="card">
+      <div class="shot s2"></div>
+      <div>
+        <div class="meta">
+          <span class="tag" style="color:var(--color-graphite)"><span class="dot"></span><span data-i18n="a2t">Method</span></span>
+          <span class="mono">19.07.2026</span>
+        </div>
+        <h3 data-i18n="a2h">Six samples, and why not four</h3>
+        <p data-i18n="a2p">The bend is where the curve changes shape, so it needs points on both sides of it. Four samples put the fit at the mercy of one bad drop; six survive a smudged strip and a cold fingertip.</p>
+        <a class="read mono" href="#book" data-i18n="a2r">Read the note</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="light" style="padding-top:0" id="zones">
+  <div class="wrap">
+    <span class="counter" style="color:var(--color-graphite);border-color:var(--color-lichen)">02 / 03</span>
+    <h2 class="subhead" style="color:var(--color-abyssal-ink)" data-i18n="s2">What comes back on paper. Five zones, in the pace you actually run and the heart rate you actually see.</h2>
+
+    <div class="zones">
+      <div class="zrow hd mono"><span>ZONE</span><span data-i18n="z0a">Purpose</span><span data-i18n="z0b">Pace</span><span data-i18n="z0c">Heart rate</span><span data-i18n="z0d">Lactate</span></div>
+      <div class="zrow">
+        <span class="mono">Z1</span><span data-i18n="z1">Recovery, conversational</span>
+        <span class="num mono">6:05—5:32</span><span class="num mono">112—131</span><span class="num mono">&lt; 1.2</span>
+      </div>
+      <div class="zrow">
+        <span class="mono">Z2</span><span data-i18n="z2">The long run, everything below LT1</span>
+        <span class="num mono">5:31—4:48</span><span class="num mono">132—152</span><span class="num mono">1.2—1.8</span>
+      </div>
+      <div class="zrow">
+        <span class="mono">Z3</span><span data-i18n="z3">The grey zone, used on purpose or not at all</span>
+        <span class="num mono">4:47—4:16</span><span class="num mono">153—165</span><span class="num mono">1.8—2.9</span>
+      </div>
+      <div class="zrow">
+        <span class="mono">Z4</span><span data-i18n="z4">Threshold work, around LT2</span>
+        <span class="num mono">4:15—3:52</span><span class="num mono">166—176</span><span class="num mono">2.9—4.4</span>
+      </div>
+      <div class="zrow">
+        <span class="mono">Z5</span><span data-i18n="z5">Intervals, above what clearance can hold</span>
+        <span class="num mono">3:51—3:24</span><span class="num mono">177—189</span><span class="num mono">&gt; 4.4</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="dark" id="book" style="padding-bottom:var(--section-gap)">
+  <div class="wrap">
+    <span class="counter">03 / 03</span>
+    <h2 class="subhead" data-i18n="s3"><b>The bench is in Malmö,</b> two rooms and one treadmill. Tuesday through Saturday, one athlete at a time, ninety minutes booked for a forty-minute test because nobody should be hurried off a belt.</h2>
+    <div class="acts" style="margin-top:40px">
+      <a class="ghost" href="#book" data-i18n="s4">Book a slot — 2 400 SEK</a>
+      <a class="arrow" href="#book" style="display:grid;place-items:center" aria-label="book">→</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="fgrid">
+      <div>
+        <span class="logo" style="font-size:var(--text-subheading)">
+          <svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><path d="M2 18c6-1 8-11 14-11 4 0 8 2 8 2" fill="none" stroke="#f7f7f5" stroke-width="2"/><circle cx="19" cy="9" r="3" fill="#cef79e"/></svg>
+          Threshold
+        </span>
+        <p class="mono" style="margin-top:16px;color:var(--color-graphite);text-transform:none" data-i18n="f0">Bergsgatan 14, Malmö · analyser calibrated every morning at 07:40</p>
+      </div>
+      <div>
+        <h4 class="mono" data-i18n="fh1">Testing</h4>
+        <a href="#protocol" data-i18n="fl1">The protocol</a>
+        <a href="#curve" data-i18n="fl2">The curve</a>
+        <a href="#zones" data-i18n="fl3">Zones</a>
+      </div>
+      <div>
+        <h4 class="mono" data-i18n="fh2">Notes</h4>
+        <a href="#" data-i18n="fl4">Bench notes</a>
+        <a href="#" data-i18n="fl5">Method</a>
+        <a href="#" data-i18n="fl6">Re-testing</a>
+      </div>
+      <div>
+        <h4 class="mono" data-i18n="fh3">Contact</h4>
+        <a href="#book">bench@threshold.run</a>
+        <a href="#book" data-i18n="fl7">Tue—Sat, 07:00—15:00</a>
+      </div>
+    </div>
+    <div class="fbot mono">
+      <span data-i18n="f1">Not a medical service · we do not diagnose</span>
+      <span data-i18n="f2">Lactate read on a Biosen C-line</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ── RU/EN. Английский — исходный, русский — перевод под него ── */
+var RU = {
+  n1:'Протокол', n2:'Кривая', n3:'Зоны', n4:'Записаться',
+  h1:'Ваши зоны,<br>измеренные.',
+  h2:'Сорок минут на дорожке, шесть капель крови, одна кривая. Число, которое часы два года вам предсказывали, наконец взято у вас.',
+  h3:'Посмотреть протокол',
+  s1:'<b>Часы предсказывают.</b> Они берут пульс, возраст и модель, построенную на чужой крови, и называют результат вашим порогом. Мы берём ваш.',
+  p1h:'Ступенчатый тест, а не гонка',
+  p1p:'Лента стартует на лёгком темпе и прибавляет 0,5 км/ч каждые три минуты. Вы останавливаетесь, когда заканчивается разговор, — обычно где-то на восьмой ступени.',
+  p1t:'40 минут · дорожка',
+  p2h:'Шесть капель из пальца',
+  p2p:'В конце каждой ступени берём 0,3 мкл крови и читаем лактат на стационарном анализаторе. Шесть точек — минимум для кривой; четыре — линия, проведённая через шум.',
+  p2t:'Лактат · ммоль/л',
+  p3h:'Излом, найденный подгонкой',
+  p3p:'Из подгонки выходят два порога: аэробный, где лактат впервые отрывается от базовой линии, и второй, где утилизация перестаёт успевать. Между ними живёт каждый ваш лёгкий кросс.',
+  p3t:'ПАНО и АэП',
+  p4h:'Зоны на бумаге, к вечеру — в часах',
+  p4p:'Вы уходите с пятью зонами в темпе и пульсе, напечатанной кривой и тем же файлом на экспорт в Garmin, Coros и Wahoo. Повторный тест через двенадцать недель: кривая уезжает вправо, когда тренировки работают.',
+  p4t:'В тот же день',
+  cv1:'Лактат, ммоль/л — один спортсмен с разницей в двенадцать недель',
+  cv2:'Пунктир — тот же бегун в мае', cv3:'Скорость, км/ч',
+  a1t:'Записки с лаборатории',
+  a1h:'Почему мы перестали верить двадцатиминутному тесту',
+  a1p:'Полевой тест меряет, насколько ровно вы раскладываетесь в полевом тесте. Два бегуна с одинаковой средней мощностью за двадцать минут разошлись на одиннадцать ватт на анализаторе — и выше оказался тот, кому было тяжелее.',
+  a1r:'Читать заметку',
+  a2t:'Методика',
+  a2h:'Шесть проб, и почему не четыре',
+  a2p:'Излом — это место, где кривая меняет форму, значит точки нужны по обе стороны от него. Четыре пробы отдают подгонку на милость одной плохой капли; шесть переживают смазанную полоску и холодный палец.',
+  a2r:'Читать заметку',
+  s2:'Что уезжает с вами на бумаге. Пять зон — в темпе, которым вы правда бежите, и пульсе, который вы правда видите.',
+  z0a:'Назначение', z0b:'Темп', z0c:'Пульс', z0d:'Лактат',
+  z1:'Восстановление, можно разговаривать',
+  z2:'Длинный кросс, всё, что ниже АэП',
+  z3:'Серая зона — либо осознанно, либо никогда',
+  z4:'Работа на пороге, вокруг ПАНО',
+  z5:'Интервалы, выше того, что утилизация держит',
+  s3:'<b>Лаборатория в Мальмё,</b> две комнаты и одна дорожка. Со вторника по субботу, по одному спортсмену за раз, девяносто минут на сорокаминутный тест — потому что никого нельзя торопить сойти с ленты.',
+  s4:'Записаться — 2 400 SEK',
+  f0:'Бергсгатан, 14, Мальмё · анализатор калибруется каждое утро в 07:40',
+  fh1:'Тестирование', fl1:'Протокол', fl2:'Кривая', fl3:'Зоны',
+  fh2:'Заметки', fl4:'Записки с лаборатории', fl5:'Методика', fl6:'Повторный тест',
+  fh3:'Связь', fl7:'Вт—Сб, 07:00—15:00',
+  f1:'Не медицинская услуга · мы не ставим диагнозов',
+  f2:'Лактат читается на Biosen C-line'
+};
+var EN = {};
+document.querySelectorAll('[data-i18n]').forEach(function (el) { EN[el.dataset.i18n] = el.innerHTML; });
+
+function setLang(l) {
+  var dict = l === 'ru' ? RU : EN;
+  document.querySelectorAll('[data-i18n]').forEach(function (el) {
+    var v = dict[el.dataset.i18n];
+    if (v !== undefined) el.innerHTML = v;
+  });
+  document.documentElement.lang = l;
+  document.documentElement.dataset.lang = l;
+  document.querySelectorAll('.switch button').forEach(function (b) {
+    b.setAttribute('aria-pressed', b.dataset.set === l ? 'true' : 'false');
+  });
+}
+document.querySelectorAll('.switch button').forEach(function (b) {
+  b.addEventListener('click', function () { setLang(b.dataset.set); });
+});
+</script>
+</body>
+</html>

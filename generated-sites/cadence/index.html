@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cadence — Scheduled jobs API you can actually debug</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ─── Токены дизайн-системы Fingerprint — вставлены дословно ──────────── */
+:root {
+  /* Colors */
+  --color-cream-paper: #fafaf8;
+  --color-card-white: #ffffff;
+  --color-pebble-gray: #f0f0ef;
+  --color-linen-border: #e4e5e1;
+  --color-ash: #d9d9d9;
+  --color-ink: #141415;
+  --color-graphite: #2e2e2c;
+  --color-carbon: #454542;
+  --color-slate: #6e6f6c;
+  --color-stone: #8c8c89;
+  --color-fog: #b7b7b4;
+  --color-signal-orange: #f35b22;
+  --color-ember: #ff5e24;
+  --color-apricot: #f77c55;
+  --color-burnt-orange: #be400f;
+  --color-persimmon: #d14200;
+  --color-peach-blush: #ffcab5;
+  --color-teal-token: #88d2c3;
+  --color-sky-token: #8bc5f3;
+  --color-orchid-token: #c678dd;
+  --color-forest: #165424;
+  --color-success-green: #62b06d;
+  --color-coral-alert: #f67976;
+  --color-rose-blush: #f9aea9;
+
+  /* Typography — Font Families */
+  --font-inter: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-jetbrains-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Typography — Scale */
+  --text-eyebrow: 11px;
+  --leading-eyebrow: 1.45;
+  --tracking-eyebrow: 0.88px;
+  --text-heading-sm: 30px;
+  --leading-heading-sm: 1.17;
+  --tracking-heading-sm: -0.6px;
+  --text-heading: 36px;
+  --leading-heading: 1.15;
+  --tracking-heading: -0.72px;
+  --text-display: 48px;
+  --leading-display: 1.15;
+  --tracking-display: -2.98px;
+
+  /* Typography — Weights */
+  --font-weight-light: 300;
+  --font-weight-regular: 400;
+  --font-weight-w470: 470;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Spacing */
+  --spacing-unit: 4px;
+  --spacing-4: 4px;
+  --spacing-8: 8px;
+  --spacing-12: 12px;
+  --spacing-16: 16px;
+  --spacing-20: 20px;
+  --spacing-24: 24px;
+  --spacing-28: 28px;
+  --spacing-32: 32px;
+  --spacing-48: 48px;
+  --spacing-56: 56px;
+  --spacing-72: 72px;
+  --spacing-96: 96px;
+
+  /* Layout */
+  --page-max-width: 1200px;
+  --section-gap: 72px;
+  --card-padding: 24px;
+  --element-gap: 8px;
+
+  /* Border Radius */
+  --radius-md: 4px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-2xl: 16px;
+
+  /* Named Radii */
+  --radius-nav: 4px;
+  --radius-cards: 12px;
+  --radius-badges: 4px;
+  --radius-buttons: 4px;
+  --radius-code-panels: 12px;
+  --radius-large-blocks: 16px;
+
+  /* Shadows */
+  --shadow-subtle: rgba(24, 25, 22, 0.06) 0px 1px 2px 0px;
+  --shadow-subtle-2: rgba(24, 25, 22, 0.02) 0px 2px 1px 0px, rgba(24, 25, 22, 0.1) 0px -1px 0px 0px inset;
+  --shadow-subtle-3: rgb(255, 255, 255) 0px 1px 0px 0px inset;
+  --shadow-subtle-4: rgba(228, 229, 225, 0.3) 0px 1px 0px 0px inset, rgba(110, 111, 109, 0.1) 0px -1px 0px 0px inset;
+  --shadow-subtle-5: rgba(255, 255, 255, 0.2) 0px 1px 0px 0px inset, rgba(24, 25, 22, 0.06) 0px 1px 2px 0px, rgba(24, 25, 22, 0.1) 0px -1px 0px 0px inset;
+  --shadow-subtle-6: rgba(255, 255, 255, 0.04) 0px 1px 0px 0px inset, rgba(0, 0, 0, 0.2) 0px -1px 0px 0px inset;
+
+  /* Surfaces */
+  --surface-cream-canvas: #fafaf8;
+  --surface-card-white: #ffffff;
+  --surface-pebble-band: #f0f0ef;
+  --surface-terminal-dark: #141415;
+  --surface-graphite-panel: #2e2e2c;
+}
+
+/* Своё: пунктуация в код-панелях — в токенах её нет, значение из описания
+   компонента Terminal Code Panel в DESIGN.md (#abb2bf). */
+:root { --code-punct: #abb2bf; }
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: var(--font-inter);
+  /* Calt/liga выключены — «инженерный» рисунок Inter, требование системы */
+  font-feature-settings: "calt" 0, "liga" 0;
+  font-size: 16px;
+  line-height: 1.5;
+  letter-spacing: 0.016px;
+  color: var(--color-ink);
+  background: var(--surface-cream-canvas);
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap { max-width: var(--page-max-width); margin: 0 auto; padding: 0 var(--spacing-32); }
+section { padding: var(--spacing-72) 0; }
+
+/* Каркас-«миллиметровка»: вертикальные волосяные линии по краям колонки —
+   на референсе они держат сетку страницы. Цвет — единственный структурный. */
+.ruled { position: relative; }
+.ruled::before, .ruled::after {
+  content: ""; position: absolute; top: 0; bottom: 0; width: 1px;
+  background: var(--color-linen-border); pointer-events: none;
+}
+/* линии стоят по краю max-width, снаружи текстовой колонки — внутрь не заезжают */
+.ruled::before { left: calc(50% - var(--page-max-width) / 2); }
+.ruled::after  { left: calc(50% + var(--page-max-width) / 2); }
+
+/* ─── Типографика ─────────────────────────────────────────────────────── */
+.eyebrow {
+  font-family: var(--font-jetbrains-mono);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--text-eyebrow);
+  line-height: var(--leading-eyebrow);
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--color-signal-orange);
+}
+.eyebrow--muted { color: var(--color-slate); }
+.eyebrow--stone { color: var(--color-stone); }
+.display {
+  font-size: var(--text-display);
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-display);
+  font-weight: var(--font-weight-semibold);
+}
+.heading {
+  font-size: var(--text-heading);
+  line-height: var(--leading-heading);
+  letter-spacing: var(--tracking-heading);
+  font-weight: var(--font-weight-semibold);
+}
+.heading-sm {
+  font-size: var(--text-heading-sm);
+  line-height: var(--leading-heading-sm);
+  letter-spacing: var(--tracking-heading-sm);
+  font-weight: var(--font-weight-semibold);
+}
+/* Инлайн-подсветка: ровно одно слово в заголовке, тем же кеглем и весом */
+.hl { color: var(--color-signal-orange); }
+.lede { font-size: 16px; line-height: 1.5; color: var(--color-slate); }
+.body-sm { font-size: 14px; line-height: 1.6; letter-spacing: 0.14px; color: var(--color-slate); }
+.mono { font-family: var(--font-jetbrains-mono); }
+
+/* ─── Кнопки: залитая ровно одна, остальные — гост ────────────────────── */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  font-family: var(--font-inter);
+  font-size: 14px; font-weight: var(--font-weight-medium); letter-spacing: 0.14px;
+  padding: 12px var(--spacing-24);
+  border-radius: var(--radius-buttons);
+  text-decoration: none; cursor: pointer; border: 1px solid transparent;
+  transition: background-color .15s linear, border-color .15s linear;
+}
+.btn--primary {
+  background: var(--color-signal-orange); color: var(--color-card-white);
+  box-shadow: var(--shadow-subtle-5);
+}
+.btn--primary:hover { background: var(--color-ember); }
+.btn--ghost {
+  background: transparent; color: var(--color-ink);
+  border-color: var(--color-ash);
+}
+.btn--ghost:hover { border-color: var(--color-slate); }
+.btn--sm { padding: 8px var(--spacing-16); }
+
+/* ─── Навигация ───────────────────────────────────────────────────────── */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; height: 64px; z-index: 50;
+  background: rgba(250, 250, 248, 0.85);
+  backdrop-filter: blur(12px);
+  box-shadow: var(--shadow-subtle-2);
+}
+.nav__inner {
+  max-width: var(--page-max-width); margin: 0 auto; height: 100%;
+  padding: 0 var(--spacing-32);
+  display: flex; align-items: center; gap: var(--spacing-32);
+}
+.brand { display: inline-flex; align-items: center; gap: var(--spacing-8); text-decoration: none; color: var(--color-ink); }
+.brand svg { width: 20px; height: 20px; color: var(--color-signal-orange); }
+.brand span { font-size: 16px; font-weight: var(--font-weight-semibold); letter-spacing: -0.2px; }
+.nav__links { display: flex; gap: var(--spacing-24); list-style: none; }
+.nav__links a { font-size: 14px; font-weight: var(--font-weight-medium); color: var(--color-ink); text-decoration: none; }
+.nav__links a:hover { color: var(--color-signal-orange); }
+.nav__right { margin-left: auto; display: flex; align-items: center; gap: var(--spacing-8); }
+.lang { display: inline-flex; border: 1px solid var(--color-ash); border-radius: var(--radius-badges); overflow: hidden; }
+.lang button {
+  font-family: var(--font-jetbrains-mono); font-size: 11px; letter-spacing: var(--tracking-eyebrow);
+  padding: 6px 10px; border: none; background: transparent; color: var(--color-slate); cursor: pointer;
+}
+.lang button[aria-pressed="true"] { background: var(--color-ink); color: var(--color-card-white); }
+.spacer { height: 64px; }
+
+/* ─── Герой ───────────────────────────────────────────────────────────── */
+.hero { text-align: center; padding: var(--spacing-96) 0 var(--spacing-48); }
+.hero .display { max-width: 21ch; margin: var(--spacing-16) auto var(--spacing-20); }
+.hero .lede { max-width: 62ch; margin: 0 auto; }
+.hero__actions { display: flex; justify-content: center; gap: var(--spacing-12); margin-top: var(--spacing-32); }
+.hero__note {
+  font-family: var(--font-jetbrains-mono); font-size: 12px; color: var(--color-stone);
+  margin-top: var(--spacing-16);
+}
+
+/* ─── Код-панель: подпись системы ─────────────────────────────────────── */
+.term {
+  background: var(--surface-terminal-dark);
+  border-radius: var(--radius-code-panels);
+  overflow: hidden;
+}
+.term__bar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: var(--spacing-12) var(--spacing-24);
+  border-bottom: 1px solid var(--color-graphite);
+}
+.term__tabs { display: flex; gap: var(--spacing-16); }
+.term__tab {
+  font-family: var(--font-jetbrains-mono); font-size: var(--text-eyebrow);
+  font-weight: var(--font-weight-medium); letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase; color: var(--code-punct);
+}
+.term__tab.is-on { color: var(--color-signal-orange); }
+.term__body {
+  padding: var(--spacing-24);
+  font-family: var(--font-jetbrains-mono); font-size: 13px; line-height: 1.57;
+  color: var(--code-punct);
+  overflow-x: auto;
+}
+.term__body pre { font: inherit; }
+.k { color: var(--color-sky-token); }     /* ключи, булевы */
+.s { color: var(--color-teal-token); }    /* строки */
+.w { color: var(--color-orchid-token); }  /* ключевые слова, числа */
+.c { color: var(--color-stone); }         /* комментарии */
+.term__split { display: grid; grid-template-columns: 1fr 1fr; }
+.term__split > div + div { border-left: 1px solid var(--color-graphite); }
+
+/* ─── Полоса доверия ──────────────────────────────────────────────────── */
+.trust { background: var(--surface-card-white); border-top: 1px solid var(--color-linen-border); border-bottom: 1px solid var(--color-linen-border); padding: var(--spacing-32) 0; }
+.trust__row { display: flex; justify-content: space-between; align-items: center; margin-top: var(--spacing-20); }
+.trust__row span { font-size: 16px; font-weight: var(--font-weight-semibold); color: var(--color-fog); letter-spacing: -0.2px; }
+.trust .eyebrow { text-align: center; display: block; }
+
+/* ─── Статистика: числа прямо на канве, без карточек ──────────────────── */
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-72); }
+.stat__num {
+  font-size: var(--text-heading); line-height: var(--leading-heading);
+  letter-spacing: var(--tracking-heading); font-weight: var(--font-weight-semibold);
+  color: var(--color-signal-orange);
+}
+.stat p { font-size: 14px; line-height: 1.5; color: var(--color-slate); margin-top: var(--spacing-8); }
+
+/* ─── Карточки ────────────────────────────────────────────────────────── */
+.sec-head { max-width: 62ch; margin-bottom: var(--spacing-48); }
+.sec-head .heading { margin: var(--spacing-12) 0; }
+.cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-20); }
+.card {
+  background: var(--surface-card-white);
+  border: 1px solid var(--color-linen-border);
+  border-radius: var(--radius-cards);
+  padding: var(--card-padding);
+  box-shadow: var(--shadow-subtle-4);
+}
+.card svg { width: 20px; height: 20px; color: var(--color-signal-orange); display: block; margin-bottom: var(--spacing-16); }
+.card h3 { font-size: 16px; font-weight: var(--font-weight-semibold); margin-bottom: var(--spacing-8); letter-spacing: -0.16px; }
+.card p { font-size: 14px; line-height: 1.6; color: var(--color-slate); }
+
+/* ─── Две колонки: проза + тёмная панель ──────────────────────────────── */
+.split { display: grid; grid-template-columns: 1fr 1.15fr; gap: var(--spacing-56); align-items: center; }
+.split .heading-sm { margin: var(--spacing-12) 0 var(--spacing-16); }
+.checks { list-style: none; margin-top: var(--spacing-24); display: flex; flex-direction: column; gap: var(--spacing-12); }
+.checks li { display: flex; gap: var(--spacing-12); font-size: 14px; line-height: 1.6; color: var(--color-carbon); }
+.checks svg { width: 16px; height: 16px; flex: none; margin-top: 3px; color: var(--color-signal-orange); }
+
+/* Таблица прогонов внутри тёмной панели */
+.runs { width: 100%; border-collapse: collapse; font-family: var(--font-jetbrains-mono); font-size: 12px; }
+.runs th {
+  text-align: left; font-weight: var(--font-weight-medium); font-size: var(--text-eyebrow);
+  letter-spacing: var(--tracking-eyebrow); text-transform: uppercase; color: var(--color-stone);
+  padding-bottom: var(--spacing-12); border-bottom: 1px solid var(--color-graphite);
+}
+.runs td { padding: 10px 0; border-bottom: 1px solid var(--color-graphite); color: var(--code-punct); }
+.runs tr:last-child td { border-bottom: none; }
+.runs .ok { color: var(--color-success-green); }
+.runs .re { color: var(--color-signal-orange); }
+.runs .id { color: var(--color-teal-token); letter-spacing: -0.8px; }
+
+/* ─── Аккордеон ───────────────────────────────────────────────────────── */
+.acc { display: flex; flex-direction: column; gap: 1px; }
+.acc details {
+  background: var(--surface-card-white);
+  border: 1px solid var(--color-linen-border);
+  border-radius: var(--radius-badges);
+  padding: var(--spacing-16) var(--spacing-20);
+}
+.acc summary {
+  list-style: none; cursor: pointer; display: flex; align-items: center; gap: var(--spacing-12);
+  font-size: 16px; font-weight: var(--font-weight-semibold); letter-spacing: -0.16px;
+}
+.acc summary::-webkit-details-marker { display: none; }
+.acc summary svg { width: 16px; height: 16px; flex: none; color: var(--color-signal-orange); }
+.acc summary::after { content: "+"; margin-left: auto; color: var(--color-stone); font-weight: var(--font-weight-regular); }
+.acc details[open] summary::after { content: "–"; }
+.acc details p { font-size: 14px; line-height: 1.6; color: var(--color-carbon); margin-top: var(--spacing-12); padding-left: 28px; }
+
+/* ─── Полоса-галька и финал ───────────────────────────────────────────── */
+.band { background: var(--surface-pebble-band); border-top: 1px solid var(--color-linen-border); border-bottom: 1px solid var(--color-linen-border); }
+.final { text-align: center; }
+.final .heading { margin: var(--spacing-12) 0 var(--spacing-16); }
+.final .lede { max-width: 56ch; margin: 0 auto; }
+.final__actions { display: flex; justify-content: center; gap: var(--spacing-12); margin-top: var(--spacing-32); }
+
+/* ─── Подвал ──────────────────────────────────────────────────────────── */
+.footer { border-top: 1px solid var(--color-linen-border); padding: var(--spacing-48) 0 var(--spacing-32); }
+.footer__grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: var(--spacing-48); }
+.footer__grid h4 { margin-bottom: var(--spacing-16); }
+.footer__grid ul { list-style: none; display: flex; flex-direction: column; gap: var(--spacing-8); }
+.footer__grid a { font-size: 14px; color: var(--color-slate); text-decoration: none; }
+.footer__grid a:hover { color: var(--color-ink); }
+.footer__note { font-size: 14px; line-height: 1.6; color: var(--color-slate); margin-top: var(--spacing-12); max-width: 34ch; }
+.footer__bottom {
+  margin-top: var(--spacing-48); padding-top: var(--spacing-20);
+  border-top: 1px solid var(--color-linen-border);
+  display: flex; justify-content: space-between;
+  font-family: var(--font-jetbrains-mono); font-size: 12px; color: var(--color-stone);
+}
+</style>
+</head>
+<body>
+
+<!-- ─── Навигация ─────────────────────────────────────────────────────── -->
+<header class="nav">
+  <div class="nav__inner">
+    <a class="brand" href="#top">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/>
+      </svg>
+      <span>Cadence</span>
+    </a>
+    <ul class="nav__links">
+      <li><a href="#product" data-i18n="nav.product">Product</a></li>
+      <li><a href="#runs" data-i18n="nav.runs">Runs</a></li>
+      <li><a href="#cases" data-i18n="nav.cases">Use cases</a></li>
+      <li><a href="#docs" data-i18n="nav.docs">Docs</a></li>
+    </ul>
+    <div class="nav__right">
+      <div class="lang">
+        <button type="button" data-set="en" aria-pressed="true">EN</button>
+        <button type="button" data-set="ru" aria-pressed="false">RU</button>
+      </div>
+      <a class="btn btn--ghost btn--sm" href="#docs" data-i18n="nav.login">Log in</a>
+      <a class="btn btn--primary btn--sm" href="#final" data-i18n="nav.cta">Start free</a>
+    </div>
+  </div>
+</header>
+<div class="spacer"></div>
+
+<!-- ─── Герой ─────────────────────────────────────────────────────────── -->
+<div class="ruled" id="top">
+  <section class="hero">
+    <div class="wrap">
+      <span class="eyebrow" data-i18n="hero.eyebrow">Scheduled jobs API</span>
+      <h1 class="display">
+        <span data-i18n="hero.t1">Cron you can actually</span>
+        <span class="hl" data-i18n="hero.t2">debug</span>
+      </h1>
+      <p class="lede" data-i18n="hero.lede">Define schedules in code, run them in any region, and keep a full execution record for every tick — retries, payloads and exit codes included.</p>
+      <div class="hero__actions">
+        <a class="btn btn--primary" href="#final" data-i18n="hero.cta1">Start free</a>
+        <a class="btn btn--ghost" href="#docs" data-i18n="hero.cta2">Read the docs</a>
+      </div>
+      <p class="hero__note mono" data-i18n="hero.note">npm i @cadence/sdk · no card required</p>
+    </div>
+  </section>
+
+  <!-- Код-панель: тёмная полоса ломает светлую сетку -->
+  <section style="padding-top:0">
+    <div class="wrap">
+      <div class="term">
+        <div class="term__bar">
+          <div class="term__tabs">
+            <span class="term__tab is-on" data-i18n="term.tab1">schedule.ts</span>
+            <span class="term__tab" data-i18n="term.tab2">response.json</span>
+          </div>
+          <span class="term__tab" data-i18n="term.hint">I'm a developer</span>
+        </div>
+        <div class="term__split">
+          <div class="term__body">
+<pre><span class="w">import</span> { cadence } <span class="w">from</span> <span class="s">"@cadence/sdk"</span>;
+
+<span class="c" data-i18n="term.comment">// every weekday, 09:00 in Tbilisi</span>
+<span class="w">await</span> cadence.<span class="k">schedule</span>({
+  <span class="k">name</span>:     <span class="s">"digest.daily"</span>,
+  <span class="k">cron</span>:     <span class="s">"0 9 * * 1-5"</span>,
+  <span class="k">timezone</span>: <span class="s">"Asia/Tbilisi"</span>,
+  <span class="k">retries</span>:  { <span class="k">max</span>: <span class="w">4</span>, <span class="k">backoff</span>: <span class="s">"exponential"</span> },
+  <span class="k">payload</span>:  { <span class="k">segment</span>: <span class="s">"active"</span> },
+  <span class="k">onFail</span>:   <span class="s">"alert:oncall"</span>
+});</pre>
+          </div>
+          <div class="term__body">
+<pre>{
+  <span class="k">"id"</span>:          <span class="s">"job_8Kq2Vx"</span>,
+  <span class="k">"status"</span>:      <span class="s">"scheduled"</span>,
+  <span class="k">"next_run"</span>:    <span class="s">"2026-08-07T05:00:00Z"</span>,
+  <span class="k">"dispatch_ms"</span>: <span class="w">38</span>,
+  <span class="k">"region"</span>:      <span class="s">"eu-central"</span>,
+  <span class="k">"drift_ms"</span>:    <span class="w">0</span>,
+  <span class="k">"replayable"</span>:  <span class="w">true</span>
+}</pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ─── Полоса доверия ────────────────────────────────────────────────── -->
+<div class="trust">
+  <div class="wrap">
+    <span class="eyebrow eyebrow--stone" data-i18n="trust.label">Trusted by 4,000+ engineering teams</span>
+    <div class="trust__row">
+      <span>Basalt</span><span>Northwind</span><span>Kestrel</span>
+      <span>Halyard</span><span>Pont</span><span>Ferrous</span><span>Lumen</span>
+    </div>
+  </div>
+</div>
+
+<!-- ─── Статистика ────────────────────────────────────────────────────── -->
+<div class="ruled">
+  <section>
+    <div class="wrap stats">
+      <div class="stat">
+        <div class="stat__num">4.2B</div>
+        <p data-i18n="stat.1">Runs dispatched in the last twelve months, across nine regions.</p>
+      </div>
+      <div class="stat">
+        <div class="stat__num">99.99%</div>
+        <p data-i18n="stat.2">Of scheduled ticks fire within one second of their target time.</p>
+      </div>
+      <div class="stat">
+        <div class="stat__num">38ms</div>
+        <p data-i18n="stat.3">Median dispatch latency, measured from tick to first byte at your endpoint.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Карточки ────────────────────────────────────────────────────── -->
+  <section id="product" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow" data-i18n="feat.eyebrow">What you get</span>
+        <h2 class="heading">
+          <span data-i18n="feat.t1">A scheduler that keeps its</span>
+          <span class="hl" data-i18n="feat.t2">receipts</span>
+        </h2>
+        <p class="lede" data-i18n="feat.lede">Every guarantee below is observable from the API — not a promise in a status page.</p>
+      </div>
+      <div class="cards">
+        <div class="card">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/>
+          </svg>
+          <h3 data-i18n="feat.1.t">Deterministic retries</h3>
+          <p data-i18n="feat.1.d">Backoff is computed from the first attempt, not from when your worker woke up. The same failure always produces the same retry schedule.</p>
+        </div>
+        <div class="card">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18a14 14 0 0 1 0-18"/>
+          </svg>
+          <h3 data-i18n="feat.2.t">Timezone-correct schedules</h3>
+          <p data-i18n="feat.2.d">Schedules are stored with their zone, not converted to UTC. Daylight saving shifts move the job — they do not silently skip or double-fire it.</p>
+        </div>
+        <div class="card">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M4 4v6h6"/><path d="M20 20v-6h-6"/><path d="M4 10a8 8 0 0 1 14-3M20 14a8 8 0 0 1-14 3"/>
+          </svg>
+          <h3 data-i18n="feat.3.t">Replay any run</h3>
+          <p data-i18n="feat.3.d">Every execution keeps its exact payload for ninety days. Replay it against staging, or against the same endpoint, with one call.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ─── Проза + тёмная панель прогонов ────────────────────────────────── -->
+<div class="band">
+  <section id="runs">
+    <div class="wrap split">
+      <div>
+        <span class="eyebrow" data-i18n="runs.eyebrow">The run log</span>
+        <h2 class="heading-sm">
+          <span data-i18n="runs.t1">Not “it failed”. What</span>
+          <span class="hl" data-i18n="runs.t2">failed</span>
+        </h2>
+        <p class="body-sm" data-i18n="runs.lede">Every tick is a row you can open: the payload it carried, the status your endpoint returned, how long it took, and which attempt finally stuck.</p>
+        <ul class="checks">
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 12l6 6L20 6"/></svg>
+            <span data-i18n="runs.c1">Request and response bodies stored verbatim for ninety days</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 12l6 6L20 6"/></svg>
+            <span data-i18n="runs.c2">Drift measured per tick, not averaged over the hour</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 12l6 6L20 6"/></svg>
+            <span data-i18n="runs.c3">Alerts fire on the attempt that failed, not on the last one</span>
+          </li>
+        </ul>
+      </div>
+      <div class="term">
+        <div class="term__bar">
+          <div class="term__tabs"><span class="term__tab is-on" data-i18n="runs.tab">digest.daily — last runs</span></div>
+          <span class="term__tab">EU-CENTRAL</span>
+        </div>
+        <div class="term__body">
+          <table class="runs">
+            <thead>
+              <tr>
+                <th data-i18n="runs.h1">Run</th>
+                <th data-i18n="runs.h2">Started</th>
+                <th data-i18n="runs.h3">Took</th>
+                <th data-i18n="runs.h4">Try</th>
+                <th data-i18n="runs.h5">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td class="id">r_9Qm4Zt</td><td>09:00:00</td><td>412ms</td><td>1</td><td class="ok">200 OK</td></tr>
+              <tr><td class="id">r_9Qm3Yh</td><td>09:00:00</td><td>1.9s</td><td>3</td><td class="re">retried</td></tr>
+              <tr><td class="id">r_9Qm2Xc</td><td>09:00:00</td><td>388ms</td><td>1</td><td class="ok">200 OK</td></tr>
+              <tr><td class="id">r_9Qm1Wd</td><td>09:00:01</td><td>402ms</td><td>1</td><td class="ok">200 OK</td></tr>
+              <tr><td class="id">r_9Qm0Vb</td><td>09:00:00</td><td>377ms</td><td>1</td><td class="ok">200 OK</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ─── Аккордеон ─────────────────────────────────────────────────────── -->
+<div class="ruled">
+  <section id="cases">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow" data-i18n="cases.eyebrow">Use cases</span>
+        <h2 class="heading">
+          <span data-i18n="cases.t1">Things teams stop writing</span>
+          <span class="hl" data-i18n="cases.t2">twice</span>
+        </h2>
+      </div>
+      <div class="acc">
+        <details open>
+          <summary>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+            <span data-i18n="cases.1.t">Digests, invoices and end-of-day reports</span>
+          </summary>
+          <p data-i18n="cases.1.d">The classic nightly job, except the finance team can see which invoices went out at 02:00 and which one returned a 500 — without opening your logs.</p>
+        </details>
+        <details>
+          <summary>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3v18M5 8l7-5 7 5"/></svg>
+            <span data-i18n="cases.2.t">Data pulls from suppliers who wake up late</span>
+          </summary>
+          <p data-i18n="cases.2.d">Set a window instead of a minute. Cadence keeps trying inside it with the backoff you defined, and stops the moment one attempt succeeds.</p>
+        </details>
+        <details>
+          <summary>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg>
+            <span data-i18n="cases.3.t">Trials, dunning and anything with a deadline</span>
+          </summary>
+          <p data-i18n="cases.3.d">One-shot schedules created from your own code, cancellable by the same key. No sweeper job scanning a table every five minutes.</p>
+        </details>
+        <details>
+          <summary>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 17l6-6 4 4 6-8"/></svg>
+            <span data-i18n="cases.4.t">Cache warming and index rebuilds</span>
+          </summary>
+          <p data-i18n="cases.4.d">Fan out one tick into a thousand jobs with a concurrency ceiling, and see the whole fan-out as a single run in the log.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ─── Финал ─────────────────────────────────────────────────────────── -->
+<div class="band">
+  <section class="final" id="final">
+    <div class="wrap">
+      <span class="eyebrow" data-i18n="final.eyebrow">Get started</span>
+      <h2 class="heading">
+        <span data-i18n="final.t1">Your first schedule in about four</span>
+        <span class="hl" data-i18n="final.t2">minutes</span>
+      </h2>
+      <p class="lede" data-i18n="final.lede">Free while you run fewer than ten thousand ticks a month. No card, no sales call, and the run log is on from the first tick.</p>
+      <div class="final__actions">
+        <a class="btn btn--primary" href="#final" data-i18n="final.cta1">Start free</a>
+        <a class="btn btn--ghost" href="#docs" data-i18n="final.cta2">Talk to an engineer</a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ─── Подвал ────────────────────────────────────────────────────────── -->
+<footer class="footer" id="docs">
+  <div class="wrap">
+    <div class="footer__grid">
+      <div>
+        <a class="brand" href="#top">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/>
+          </svg>
+          <span>Cadence</span>
+        </a>
+        <p class="footer__note" data-i18n="footer.note">Scheduled jobs with an execution record. Built in Tbilisi, run from nine regions.</p>
+      </div>
+      <div>
+        <h4 class="eyebrow eyebrow--muted" data-i18n="footer.c1">Product</h4>
+        <ul>
+          <li><a href="#product" data-i18n="footer.c1.1">Schedules</a></li>
+          <li><a href="#runs" data-i18n="footer.c1.2">Run log</a></li>
+          <li><a href="#product" data-i18n="footer.c1.3">Regions</a></li>
+          <li><a href="#final" data-i18n="footer.c1.4">Pricing</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="eyebrow eyebrow--muted" data-i18n="footer.c2">Developers</h4>
+        <ul>
+          <li><a href="#docs" data-i18n="footer.c2.1">Documentation</a></li>
+          <li><a href="#docs" data-i18n="footer.c2.2">SDK reference</a></li>
+          <li><a href="#docs" data-i18n="footer.c2.3">Changelog</a></li>
+          <li><a href="#docs" data-i18n="footer.c2.4">Status</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="eyebrow eyebrow--muted" data-i18n="footer.c3">Company</h4>
+        <ul>
+          <li><a href="#docs" data-i18n="footer.c3.1">About</a></li>
+          <li><a href="#docs" data-i18n="footer.c3.2">Security</a></li>
+          <li><a href="#docs" data-i18n="footer.c3.3">Careers</a></li>
+          <li><a href="#docs" data-i18n="footer.c3.4">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span data-i18n="footer.copy">© 2026 Cadence Systems</span>
+      <span data-i18n="footer.legal">Terms · Privacy · DPA</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* Английский — исходный; русский — перевод. Дефолт EN, без автодетекта. */
+var I18N = {
+  ru: {
+    "nav.product": "Продукт",
+    "nav.runs": "Прогоны",
+    "nav.cases": "Сценарии",
+    "nav.docs": "Документация",
+    "nav.login": "Войти",
+    "nav.cta": "Начать",
+
+    "hero.eyebrow": "API планировщика задач",
+    "hero.t1": "Крон, который наконец можно",
+    "hero.t2": "отладить",
+    "hero.lede": "Опишите расписания в коде, запускайте их в любом регионе и держите полную запись выполнения по каждому тику — с ретраями, полезной нагрузкой и кодами возврата.",
+    "hero.cta1": "Начать бесплатно",
+    "hero.cta2": "Открыть документацию",
+    "hero.note": "npm i @cadence/sdk · без карты",
+
+    "term.tab1": "schedule.ts",
+    "term.tab2": "response.json",
+    "term.hint": "Я разработчик",
+    "term.comment": "// каждый будний день, 09:00 в Тбилиси",
+
+    "trust.label": "Нам доверяют больше 4 000 инженерных команд",
+
+    "stat.1": "Прогонов отправлено за последние двенадцать месяцев в девяти регионах.",
+    "stat.2": "Тиков срабатывают в пределах секунды от назначенного времени.",
+    "stat.3": "Медианная задержка отправки — от тика до первого байта на вашем эндпоинте.",
+
+    "feat.eyebrow": "Что внутри",
+    "feat.t1": "Планировщик, который хранит",
+    "feat.t2": "чеки",
+    "feat.lede": "Каждую гарантию ниже видно через API — это не обещание на странице статуса.",
+    "feat.1.t": "Детерминированные ретраи",
+    "feat.1.d": "Backoff считается от первой попытки, а не от момента, когда проснулся воркер. Одна и та же ошибка всегда даёт одно и то же расписание повторов.",
+    "feat.2.t": "Расписания с правильным поясом",
+    "feat.2.d": "Расписание хранится вместе со своей зоной, а не переводится в UTC. Перевод часов сдвигает задачу, а не пропускает её молча и не запускает дважды.",
+    "feat.3.t": "Повтор любого прогона",
+    "feat.3.d": "Каждое выполнение хранит свою полезную нагрузку девяносто дней. Повторите его на стенде или на том же эндпоинте одним вызовом.",
+
+    "runs.eyebrow": "Журнал прогонов",
+    "runs.t1": "Не «упало». А что именно",
+    "runs.t2": "упало",
+    "runs.lede": "Каждый тик — строка, которую можно раскрыть: какую нагрузку он нёс, что вернул ваш эндпоинт, сколько это заняло и на какой попытке наконец сошлось.",
+    "runs.c1": "Тела запроса и ответа хранятся дословно девяносто дней",
+    "runs.c2": "Дрейф меряется по каждому тику, а не усредняется за час",
+    "runs.c3": "Алерты срабатывают на упавшей попытке, а не на последней",
+    "runs.tab": "digest.daily — последние прогоны",
+    "runs.h1": "Прогон",
+    "runs.h2": "Старт",
+    "runs.h3": "Длит.",
+    "runs.h4": "Поп.",
+    "runs.h5": "Статус",
+
+    "cases.eyebrow": "Сценарии",
+    "cases.t1": "То, что командам больше не нужно писать",
+    "cases.t2": "дважды",
+    "cases.1.t": "Дайджесты, счета и отчёты на конец дня",
+    "cases.1.d": "Классическая ночная задача — только финансы сами видят, какие счета ушли в 02:00, а какой вернул 500, и для этого не надо открывать ваши логи.",
+    "cases.2.t": "Выгрузки от поставщиков, которые просыпаются поздно",
+    "cases.2.d": "Задайте окно вместо минуты. Cadence продолжает попытки внутри него с вашим backoff и останавливается, как только одна прошла.",
+    "cases.3.t": "Триалы, напоминания об оплате и всё со сроком",
+    "cases.3.d": "Одноразовые расписания, созданные из вашего же кода и отменяемые по тому же ключу. Без подметающей задачи, которая раз в пять минут сканирует таблицу.",
+    "cases.4.t": "Прогрев кэша и пересборка индексов",
+    "cases.4.d": "Разверните один тик в тысячу задач с потолком параллельности и смотрите на весь веер как на один прогон в журнале.",
+
+    "final.eyebrow": "Начать",
+    "final.t1": "Первое расписание — примерно за четыре",
+    "final.t2": "минуты",
+    "final.lede": "Бесплатно, пока у вас меньше десяти тысяч тиков в месяц. Без карты, без звонка менеджера, и журнал прогонов работает с первого тика.",
+    "final.cta1": "Начать бесплатно",
+    "final.cta2": "Поговорить с инженером",
+
+    "footer.note": "Планировщик задач с записью выполнения. Собран в Тбилиси, работает из девяти регионов.",
+    "footer.c1": "Продукт",
+    "footer.c1.1": "Расписания",
+    "footer.c1.2": "Журнал прогонов",
+    "footer.c1.3": "Регионы",
+    "footer.c1.4": "Тарифы",
+    "footer.c2": "Разработчикам",
+    "footer.c2.1": "Документация",
+    "footer.c2.2": "Справочник SDK",
+    "footer.c2.3": "Changelog",
+    "footer.c2.4": "Статус",
+    "footer.c3": "Компания",
+    "footer.c3.1": "О нас",
+    "footer.c3.2": "Безопасность",
+    "footer.c3.3": "Вакансии",
+    "footer.c3.4": "Контакты",
+    "footer.copy": "© 2026 Cadence Systems",
+    "footer.legal": "Условия · Приватность · DPA"
+  }
+};
+
+(function () {
+  var nodes = document.querySelectorAll('[data-i18n]');
+  var EN = {};
+  nodes.forEach(function (n) { EN[n.getAttribute('data-i18n')] = n.textContent; });
+
+  function apply(lang) {
+    nodes.forEach(function (n) {
+      var k = n.getAttribute('data-i18n');
+      var v = lang === 'ru' ? I18N.ru[k] : EN[k];
+      if (v) n.textContent = v;
+    });
+    document.documentElement.lang = lang;
+    document.documentElement.setAttribute('data-lang', lang);
+    document.querySelectorAll('.lang [data-set]').forEach(function (b) {
+      b.setAttribute('aria-pressed', String(b.getAttribute('data-set') === lang));
+    });
+  }
+
+  document.querySelectorAll('.lang [data-set]').forEach(function (b) {
+    b.addEventListener('click', function () { apply(b.getAttribute('data-set')); });
+  });
+})();
+</script>
+</body>
+</html>

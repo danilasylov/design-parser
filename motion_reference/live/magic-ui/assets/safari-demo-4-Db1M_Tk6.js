@@ -1,0 +1,1 @@
+import{j as i}from"./index-WM7-nNXq.js";import{S as r}from"./safari-CjqhO3DW.js";function e(){return i.jsx("div",{className:"w-[1203px]",children:i.jsx(r,{url:"magicui.design",mode:"simple"})})}export{e as default};

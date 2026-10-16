@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gait — Neighborhood dog walks, unhurried</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --color-page-cream: #f9f4f2;
+  --color-pure-white: #ffffff;
+  --color-charcoal-ink: #2d2c2b;
+  --color-graphite: #44423f;
+  --color-slate: #4b4c4d;
+  --color-stone: #63605d;
+  --color-driftwood: #c6c1b9;
+  --color-linen: #e2ded9;
+  --color-ash: #d0d0d0;
+  --color-soft-black: #000000;
+  --color-brand-orange: #f47d31;
+  --color-mindful-blue: #0061ef;
+  --color-sunbeam-yellow: #ffce00;
+  --color-deep-indigo: #3b197f;
+  --color-twilight-violet: #281466;
+  --color-plum: #5f2b89;
+  --color-mauve: #8144a8;
+  --color-celeste: #00a4ff;
+
+  --font-headspace-apercu: 'Onest', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  --text-caption: 12px; --leading-caption: 1.5; --tracking-caption: -0.12px;
+  --text-body-sm: 14px; --leading-body-sm: 1.5; --tracking-body-sm: -0.14px;
+  --text-body: 16px; --leading-body: 1.5; --tracking-body: -0.16px;
+  --text-subheading: 20px; --leading-subheading: 1.33; --tracking-subheading: -0.5px;
+  --text-heading-sm: 24px; --leading-heading-sm: 1.33; --tracking-heading-sm: -0.6px;
+  --text-heading: 32px; --leading-heading: 1.3; --tracking-heading: -0.8px;
+  --text-heading-lg: 40px; --leading-heading-lg: 1.29; --tracking-heading-lg: -1px;
+  --text-display: 52px; --leading-display: 1.13; --tracking-display: -1.56px;
+  --text-display-lg: 72px; --leading-display-lg: 1.1; --tracking-display-lg: -2.16px;
+
+  --font-weight-regular: 400; --font-weight-medium: 500; --font-weight-bold: 700;
+
+  --spacing-4:4px; --spacing-8:8px; --spacing-12:12px; --spacing-16:16px; --spacing-20:20px;
+  --spacing-24:24px; --spacing-32:32px; --spacing-40:40px; --spacing-48:48px; --spacing-56:56px;
+  --spacing-60:60px; --spacing-64:64px; --spacing-80:80px; --spacing-84:84px; --spacing-96:96px; --spacing-100:100px;
+
+  --page-max-width: 1200px;
+  --section-gap: 64px;
+  --card-padding: 40px;
+  --element-gap: 12px;
+
+  --radius-cards: 16px; --radius-pills: 800px; --radius-small: 8px;
+  --radius-inputs: 8px; --radius-buttons: 800px; --radius-featured: 28px;
+
+  --shadow-subtle: rgba(65, 61, 69, 0.2) 0px 2px 0px 0px;
+
+  --surface-page-cream: #f9f4f2;
+  --surface-pure-white: #ffffff;
+  --surface-sunbeam-yellow: #ffce00;
+  --surface-blush: #ffa1cc;
+  --surface-celeste: #00a4ff;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-headspace-apercu);
+  background: var(--surface-page-cream);
+  color: var(--color-charcoal-ink);
+  -webkit-font-smoothing: antialiased;
+}
+img, svg { display: block; max-width: 100%; }
+a { text-decoration: none; color: inherit; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+.wrap { max-width: var(--page-max-width); margin: 0 auto; padding: 0 24px; }
+
+/* ---------- Announcement ---------- */
+.announce {
+  background: var(--color-sunbeam-yellow);
+  color: var(--color-charcoal-ink);
+  text-align: center;
+  font-size: 14px;
+  padding: 14px 20px;
+}
+.announce a { text-decoration: underline; font-weight: var(--font-weight-medium); }
+
+/* ---------- Nav ---------- */
+nav {
+  background: var(--surface-pure-white);
+  border-bottom: 1px solid var(--color-linen);
+  height: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+}
+.logo { display: flex; align-items: center; gap: 8px; font-size: 20px; font-weight: var(--font-weight-bold); }
+.logo .dot { width: 12px; height: 12px; border-radius: 50%; background: var(--color-brand-orange); }
+.navlinks { display: flex; gap: 28px; }
+.navlinks a { font-size: 16px; font-weight: var(--font-weight-medium); color: var(--color-charcoal-ink); }
+.right-nav { display: flex; align-items: center; gap: 20px; }
+.textlink { font-size: 15px; color: var(--color-charcoal-ink); }
+.pill { display: inline-flex; align-items: center; justify-content: center; border-radius: var(--radius-pills); font-weight: 700; white-space: nowrap; }
+.pill-blue { background: var(--color-mindful-blue); color: #fff; padding: 12px 24px; font-size: 16px; }
+.pill-dark { background: var(--color-charcoal-ink); color: #fff; padding: 14px 28px; font-size: 16px; box-shadow: var(--shadow-subtle); }
+.lang-toggle { display: inline-flex; border: 1px solid var(--color-linen); border-radius: var(--radius-pills); overflow: hidden; }
+.lang-toggle button { padding: 6px 14px; font-size: 13px; font-weight: 700; color: var(--color-charcoal-ink); }
+.lang-toggle button.active { background: var(--color-mindful-blue); color: #fff; }
+
+/* ---------- Hero ---------- */
+.hero { padding: 72px 0 48px; text-align: center; }
+.hero h1 {
+  font-size: var(--text-display-lg); line-height: var(--leading-display-lg);
+  letter-spacing: var(--tracking-display-lg); font-weight: 700; max-width: 780px; margin: 0 auto 20px;
+}
+.hero-checks { display: flex; justify-content: center; gap: 28px; flex-wrap: wrap; font-size: 15px; color: var(--color-graphite); margin-bottom: 48px; }
+.hero-checks span { display: flex; align-items: center; gap: 6px; }
+
+.hero-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.hero-card {
+  background: var(--surface-pure-white); border-radius: var(--radius-featured);
+  padding: 48px; text-align: center;
+}
+.hero-card h3 { font-size: 32px; font-weight: 700; letter-spacing: -0.8px; margin-bottom: 24px; }
+.hero-illustration { height: 160px; border-radius: 16px; margin-top: 32px; position: relative; overflow: hidden; }
+.illus-1 { background: linear-gradient(135deg, #ffce00, #ffa1cc); }
+.illus-2 { background: linear-gradient(135deg, #00a4ff, #3b197f); }
+.paw { position: absolute; border-radius: 50%; background: rgba(0,0,0,0.08); }
+
+/* ---------- Category grid ---------- */
+.section { padding: var(--section-gap) 0; }
+.section-title { font-size: var(--text-heading-lg); font-weight: 700; letter-spacing: var(--tracking-heading-lg); text-align: center; margin-bottom: 40px; }
+.cat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.cat-card {
+  background: var(--surface-pure-white); border: 1px solid var(--color-linen); border-radius: var(--radius-cards);
+  padding: 22px 24px; display: flex; align-items: center; justify-content: space-between;
+}
+.cat-card .lbl { font-size: 16px; font-weight: var(--font-weight-medium); }
+.cat-icon { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+.cat-card .chev { color: var(--color-graphite); }
+
+/* ---------- Content feature card ---------- */
+.content-card {
+  border-radius: var(--radius-featured); padding: 56px; display: flex; align-items: center; gap: 48px;
+}
+.content-card.yellow { background: var(--color-sunbeam-yellow); }
+.content-card.blue { background: var(--color-celeste); }
+.chat-mock { background: #fff; border-radius: 16px; padding: 16px 20px; box-shadow: 0 4px 18px rgba(0,0,0,0.08); max-width: 260px; }
+.chat-mock .avatar { width: 24px; height: 24px; border-radius: 50%; background: var(--color-plum); display: inline-block; margin-right: 8px; vertical-align: middle; }
+.chat-mock .name { font-weight: 700; font-size: 14px; }
+.chat-mock .msg { font-size: 14px; color: var(--color-graphite); margin-top: 6px; }
+.content-card h3 { font-size: 40px; font-weight: 700; letter-spacing: -1.2px; flex: 1; }
+
+/* ---------- Filter pills for walkers ---------- */
+.filter-row { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+.filter-pill { padding: 10px 20px; border-radius: var(--radius-pills); font-size: 14px; font-weight: var(--font-weight-medium); border: 1px solid var(--color-linen); }
+.filter-pill.active { background: var(--color-charcoal-ink); color: #fff; border-color: var(--color-charcoal-ink); }
+
+.walker-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.walker-card { background: #fff; border: 1px solid var(--color-linen); border-radius: var(--radius-cards); padding: 24px; }
+.walker-avatar { width: 56px; height: 56px; border-radius: 50%; margin-bottom: 16px; }
+.walker-card h4 { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+.walker-card p { font-size: 14px; color: var(--color-graphite); }
+
+/* ---------- Footer ---------- */
+footer { background: var(--color-page-cream); padding: 64px 0 32px; }
+.footer-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; margin-bottom: 40px; }
+.footer-grid h5 { font-size: 16px; font-weight: 700; margin-bottom: 14px; }
+.footer-grid a { display: block; font-size: 14px; color: var(--color-stone); margin-bottom: 10px; }
+.footer-bottom { border-top: 1px solid var(--color-linen); padding-top: 24px; font-size: 13px; color: var(--color-stone); text-align: center; }
+
+[data-i18n] {}
+html[data-lang="en"] [lang-el="ru"] { display: none; }
+html[data-lang="ru"] [lang-el="en"] { display: none; }
+</style>
+</head>
+<body>
+
+<div class="announce">
+  <span lang-el="en">First walk is on us — new neighborhoods only</span>
+  <span lang-el="ru">Первая прогулка — за наш счёт (только для новых районов)</span>
+</div>
+
+<nav>
+  <div class="logo"><span class="dot"></span> gait</div>
+  <div class="navlinks">
+    <a href="#walks" lang-el="en">For Dogs</a><a href="#walks" lang-el="ru">Собакам</a>
+    <a href="#walkers" lang-el="en">For Walkers</a><a href="#walkers" lang-el="ru">Выгульщикам</a>
+    <a href="#plans" lang-el="en">Plans</a><a href="#plans" lang-el="ru">Тарифы</a>
+    <a href="#about" lang-el="en">About</a><a href="#about" lang-el="ru">О нас</a>
+  </div>
+  <div class="right-nav">
+    <a href="#" class="textlink" lang-el="en">Log in</a><a href="#" class="textlink" lang-el="ru">Войти</a>
+    <a href="#plans" class="pill pill-blue"><span lang-el="en">Try for free</span><span lang-el="ru">Попробовать</span></a>
+    <div class="lang-toggle">
+      <button data-set-lang="en" class="active">EN</button>
+      <button data-set-lang="ru">RU</button>
+    </div>
+  </div>
+</nav>
+
+<section class="hero wrap">
+  <h1><span lang-el="en">Calmer walks, all with Gait</span><span lang-el="ru">Спокойные прогулки — с Gait</span></h1>
+  <div class="hero-checks">
+    <span>✓ <span lang-el="en">Same neighborhood walker every time</span><span lang-el="ru">Один и тот же выгульщик из вашего района</span></span>
+    <span>✓ <span lang-el="en">Photo + note after every walk</span><span lang-el="ru">Фото и заметка после каждой прогулки</span></span>
+    <span>✓ <span lang-el="en">4,000+ dogs walked weekly</span><span lang-el="ru">4000+ собак гуляют с нами каждую неделю</span></span>
+  </div>
+  <div class="hero-cards">
+    <div class="hero-card">
+      <h3><span lang-el="en">Unhurried daily walks near you</span><span lang-el="ru">Неспешные ежедневные прогулки рядом с домом</span></h3>
+      <a href="#plans" class="pill pill-dark"><span lang-el="en">Try for $0</span><span lang-el="ru">Попробовать за $0</span></a>
+      <div class="hero-illustration illus-1"><div class="paw" style="width:60px;height:60px;top:20px;left:30px;"></div><div class="paw" style="width:40px;height:40px;top:80px;left:180px;"></div></div>
+    </div>
+    <div class="hero-card">
+      <h3><span lang-el="en">Reactive & senior dog specialists</span><span lang-el="ru">Специалисты по реактивным и пожилым собакам</span></h3>
+      <a href="#walkers" class="pill pill-dark"><span lang-el="en">Check availability</span><span lang-el="ru">Проверить доступность</span></a>
+      <div class="hero-illustration illus-2"><div class="paw" style="width:50px;height:50px;top:30px;left:60px;background:rgba(255,255,255,0.15);"></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section wrap" id="walks">
+  <h2 class="section-title"><span lang-el="en">What kind of walk are you looking for?</span><span lang-el="ru">Какая прогулка вам нужна?</span></h2>
+  <div class="cat-grid">
+    <div class="cat-card"><span class="lbl" lang-el="en">Puppy socialization</span><span class="lbl" lang-el="ru">Социализация щенка</span><span class="cat-icon" style="background:#fff3cc;">⚡</span></div>
+    <div class="cat-card"><span class="lbl" lang-el="en">Senior & slow walks</span><span class="lbl" lang-el="ru">Пожилым — неспешно</span><span class="cat-icon" style="background:#e6ddff;">🌙</span></div>
+    <div class="cat-card"><span class="lbl" lang-el="en">High-energy runs</span><span class="lbl" lang-el="ru">Активный бег</span><span class="cat-icon" style="background:#d6f3e0;">🌀</span></div>
+    <div class="cat-card"><span class="lbl" lang-el="en">Reactive dog handling</span><span class="lbl" lang-el="ru">Работа с реактивностью</span><span class="cat-icon" style="background:#ffe0ec;">🙂</span></div>
+    <div class="cat-card"><span class="lbl" lang-el="en">Multi-dog households</span><span class="lbl" lang-el="ru">Несколько собак в доме</span><span class="cat-icon" style="background:#ffe4d1;">●</span></div>
+    <div class="cat-card"><span class="lbl" lang-el="en">Overnight & boarding</span><span class="lbl" lang-el="ru">Передержка на ночь</span><span class="cat-icon" style="background:#d9edff;">💬</span></div>
+  </div>
+</section>
+
+<section class="section wrap">
+  <div class="content-card yellow" style="margin-bottom:24px;">
+    <div class="chat-mock">
+      <span class="avatar"></span><span class="name">Mara</span>
+      <div class="msg" lang-el="en">"Riley did great today — full loop of the park, no pulling."</div>
+      <div class="msg" lang-el="ru">«Райли молодец сегодня — прошли весь парк без рывков поводка».</div>
+    </div>
+    <h3><span lang-el="en">A note after every single walk</span><span lang-el="ru">Заметка после каждой прогулки, без исключений</span></h3>
+  </div>
+  <div class="content-card blue">
+    <div class="chat-mock">
+      <span class="avatar" style="background:var(--color-mindful-blue);"></span><span class="name">Gait</span>
+      <div class="msg" lang-el="en">"Nova's route: 2.1km, 34 min, tail up the whole way."</div>
+      <div class="msg" lang-el="ru">«Маршрут Новы: 2,1 км, 34 мин, хвост поднят всю дорогу».</div>
+    </div>
+    <h3><span lang-el="en">GPS route, shared live with you</span><span lang-el="ru">GPS-маршрут в реальном времени, доступен вам</span></h3>
+  </div>
+</section>
+
+<section class="section wrap" id="walkers">
+  <h2 class="section-title"><span lang-el="en">Meet a few of our neighborhood walkers</span><span lang-el="ru">Знакомьтесь: наши выгульщики по соседству</span></h2>
+  <div class="filter-row">
+    <div class="filter-pill active"><span lang-el="en">All walkers</span><span lang-el="ru">Все</span></div>
+    <div class="filter-pill"><span lang-el="en">Certified trainers</span><span lang-el="ru">Сертифицированные</span></div>
+    <div class="filter-pill"><span lang-el="en">5+ years experience</span><span lang-el="ru">Опыт 5+ лет</span></div>
+  </div>
+  <div class="walker-grid">
+    <div class="walker-card">
+      <div class="walker-avatar" style="background:linear-gradient(135deg,#ffce00,#f47d31);"></div>
+      <h4>Mara T.</h4>
+      <p><span lang-el="en">4 years walking · Reactive dog specialist</span><span lang-el="ru">4 года выгула · Специалист по реактивным собакам</span></p>
+    </div>
+    <div class="walker-card">
+      <div class="walker-avatar" style="background:linear-gradient(135deg,#00a4ff,#3b197f);"></div>
+      <h4>Devon K.</h4>
+      <p><span lang-el="en">6 years walking · Puppy socialization</span><span lang-el="ru">6 лет выгула · Социализация щенков</span></p>
+    </div>
+    <div class="walker-card">
+      <div class="walker-avatar" style="background:linear-gradient(135deg,#ffa1cc,#8144a8);"></div>
+      <h4>Priya S.</h4>
+      <p><span lang-el="en">3 years walking · Senior & slow walks</span><span lang-el="ru">3 года выгула · Прогулки для пожилых собак</span></p>
+    </div>
+  </div>
+</section>
+
+<section class="section wrap" id="plans">
+  <h2 class="section-title"><span lang-el="en">Simple plans, cancel anytime</span><span lang-el="ru">Простые тарифы, отмена в любой момент</span></h2>
+  <div class="cat-grid">
+    <div class="cat-card" style="flex-direction:column;align-items:flex-start;gap:12px;">
+      <span class="lbl" style="font-size:20px;font-weight:700;" lang-el="en">Drop-in</span><span class="lbl" style="font-size:20px;font-weight:700;" lang-el="ru">Разовая</span>
+      <span style="font-size:28px;font-weight:700;">$22<span style="font-size:14px;color:var(--color-graphite);">/<span lang-el="en">walk</span><span lang-el="ru">прогулку</span></span></span>
+    </div>
+    <div class="cat-card" style="flex-direction:column;align-items:flex-start;gap:12px;background:var(--color-charcoal-ink);color:#fff;">
+      <span class="lbl" style="font-size:20px;font-weight:700;" lang-el="en">Weekday</span><span class="lbl" style="font-size:20px;font-weight:700;" lang-el="ru">Будни</span>
+      <span style="font-size:28px;font-weight:700;">$79<span style="font-size:14px;opacity:0.7;">/<span lang-el="en">week</span><span lang-el="ru">неделю</span></span></span>
+    </div>
+    <div class="cat-card" style="flex-direction:column;align-items:flex-start;gap:12px;">
+      <span class="lbl" style="font-size:20px;font-weight:700;" lang-el="en">Everyday</span><span class="lbl" style="font-size:20px;font-weight:700;" lang-el="ru">Каждый день</span>
+      <span style="font-size:28px;font-weight:700;">$109<span style="font-size:14px;color:var(--color-graphite);">/<span lang-el="en">week</span><span lang-el="ru">неделю</span></span></span>
+    </div>
+  </div>
+</section>
+
+<footer id="about">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <h5><span lang-el="en">Gait</span><span lang-el="ru">Gait</span></h5>
+        <a href="#" lang-el="en">About us</a><a href="#" lang-el="ru">О нас</a>
+        <a href="#" lang-el="en">Careers</a><a href="#" lang-el="ru">Вакансии</a>
+      </div>
+      <div>
+        <h5><span lang-el="en">For dogs</span><span lang-el="ru">Собакам</span></h5>
+        <a href="#walks" lang-el="en">Plans</a><a href="#walks" lang-el="ru">Тарифы</a>
+        <a href="#" lang-el="en">Neighborhoods</a><a href="#" lang-el="ru">Районы</a>
+      </div>
+      <div>
+        <h5><span lang-el="en">For walkers</span><span lang-el="ru">Выгульщикам</span></h5>
+        <a href="#walkers" lang-el="en">Apply</a><a href="#walkers" lang-el="ru">Откликнуться</a>
+        <a href="#" lang-el="en">Requirements</a><a href="#" lang-el="ru">Требования</a>
+      </div>
+      <div>
+        <h5><span lang-el="en">Support</span><span lang-el="ru">Поддержка</span></h5>
+        <a href="#" lang-el="en">Help center</a><a href="#" lang-el="ru">Центр помощи</a>
+        <a href="#" lang-el="en">Contact</a><a href="#" lang-el="ru">Контакты</a>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2026 Gait. <span lang-el="en">All rights reserved.</span><span lang-el="ru">Все права защищены.</span></div>
+  </div>
+</footer>
+
+<script>
+document.querySelectorAll('[data-set-lang]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const lang = btn.getAttribute('data-set-lang');
+    document.documentElement.setAttribute('lang', lang);
+    document.documentElement.setAttribute('data-lang', lang);
+    document.querySelectorAll('[data-set-lang]').forEach(b => b.classList.toggle('active', b === btn));
+  });
+});
+</script>
+</body>
+</html>

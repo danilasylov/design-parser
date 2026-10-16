@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>Endow — a foundation whose treasury is a public address</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Prata&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+<style>
+/* ─────────────────────────────────────────────────────────────
+   Дизайн-система: Hyper Foundation (refero 369ac603) — tokens.css дословно
+   ───────────────────────────────────────────────────────────── */
+:root {
+  /* Colors */
+  --color-forest-depths: #072724;
+  --color-midnight-tide: #0f3933;
+  --color-shadow-teal: #23524c;
+  --color-charcoal-hairline: #2c2e33;
+  --color-abyss-green: #122d28;
+  --color-deep-lagoon: #1c3f38;
+  --color-mist-gray: #b0c5c1;
+  --color-pure-light: #ffffff;
+  --color-mint-glow: #97fcd7;
+  --color-teal-pulse: #33998c;
+
+  /* Typography — Font Families */
+  /* Teodor → Prata (серифный дисплей, вес 400, кириллица); Inter — как в системе */
+  --font-teodor: 'Prata', Georgia, 'Times New Roman', serif;
+  --font-inter: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* Typography — Scale */
+  --text-caption: 12px;
+  --leading-caption: 1.5;
+  --text-body-sm: 16px;
+  --leading-body-sm: 1.5;
+  --text-body: 20px;
+  --leading-body: 1.3;
+  --text-subheading: 24px;
+  --leading-subheading: 1.5;
+  --text-heading-sm: 28px;
+  --leading-heading-sm: 1.3;
+  --text-heading: 35px;
+  --leading-heading: 1;
+  --text-heading-lg: 55px;
+  --leading-heading-lg: 1;
+  --text-display: 90px;
+  --leading-display: 0.75;
+
+  /* Typography — Weights */
+  --font-weight-light: 300;
+  --font-weight-regular: 400;
+
+  /* Spacing */
+  --spacing-6: 6px;
+  --spacing-8: 8px;
+  --spacing-14: 14px;
+  --spacing-20: 20px;
+  --spacing-24: 24px;
+  --spacing-30: 30px;
+  --spacing-32: 32px;
+  --spacing-40: 40px;
+  --spacing-50: 50px;
+  --spacing-90: 90px;
+  --spacing-100: 100px;
+  --spacing-113: 113px;
+  --spacing-160: 160px;
+
+  /* Layout */
+  --page-max-width: 1200px;
+  --card-padding: 24px;
+
+  /* Border Radius */
+  --radius-xl: 12px;
+  --radius-3xl: 37px;
+  --radius-full: 60px;
+  --radius-tags: 60px;
+  --radius-cards: 12px;
+  --radius-buttons: 60px;
+  --radius-largepills: 37px;
+
+  /* Shadows */
+  --shadow-lg: rgba(151, 252, 215, 0.4) 0px 0px 20px 5px;
+
+  /* Surfaces */
+  --surface-forest-depths: #072724;
+  --surface-abyss-deep-lagoon: #122d28;
+  --surface-shadow-teal: #23524c;
+  --surface-mint-glow: #97fcd7;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--surface-forest-depths);
+  color: var(--color-mist-gray);
+  font-family: var(--font-inter);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  font-weight: var(--font-weight-light);
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; text-decoration: none; }
+h1, h2, h3, h4, p, ul, ol, figure { margin: 0; }
+ul { list-style: none; padding: 0; }
+
+.wrap { max-width: var(--page-max-width); margin: 0 auto; padding: 0 var(--spacing-24); }
+section { padding: var(--spacing-100) 0; }
+
+h1 { font-family: var(--font-teodor); font-size: var(--text-display); line-height: var(--leading-display); font-weight: var(--font-weight-regular); color: var(--color-pure-light); }
+h2 { font-family: var(--font-teodor); font-size: var(--text-heading-lg); line-height: var(--leading-heading-lg); font-weight: var(--font-weight-regular); color: var(--color-pure-light); }
+h3 { font-family: var(--font-inter); font-size: var(--text-subheading); line-height: 1.25; font-weight: var(--font-weight-regular); color: var(--color-pure-light); }
+p.body { font-size: var(--text-body); line-height: var(--leading-body); color: var(--color-mist-gray); font-weight: var(--font-weight-light); }
+.mint { color: var(--color-mint-glow); }
+
+/* ── Навигация: белая плавающая пилюля, как на скриншоте ── */
+.nav { position: sticky; top: 0; z-index: 40; padding: var(--spacing-20) 0 var(--spacing-24);
+  background: linear-gradient(to bottom, #072724 0%, #072724 62%, rgba(7,39,36,0.85) 82%, rgba(7,39,36,0) 100%); }
+.nav .bar {
+  max-width: 900px; margin: 0 auto;
+  background: var(--color-pure-light); border-radius: var(--radius-full);
+  display: flex; align-items: center; gap: var(--spacing-24);
+  padding: 8px 8px 8px 24px;
+}
+.nav .logo { display: flex; align-items: center; gap: 10px; color: var(--color-forest-depths); font-size: 19px; font-weight: var(--font-weight-regular); }
+.nav .logo i { font-style: italic; }
+.nav .links { margin-left: auto; display: flex; gap: var(--spacing-24); }
+.nav .links a { color: var(--color-forest-depths); font-size: var(--text-body-sm); font-weight: var(--font-weight-light); }
+.nav-pill { background: var(--color-mint-glow); color: var(--color-midnight-tide); border-radius: var(--radius-buttons); padding: 9px 20px; font-size: 14px; }
+.switch { display: inline-flex; border: 1px solid rgba(7,39,36,0.25); border-radius: var(--radius-full); overflow: hidden; }
+.switch button { background: transparent; border: 0; font-family: inherit; font-size: 12px; padding: 6px 9px; cursor: pointer; color: var(--color-forest-depths); }
+.switch button[aria-pressed="true"] { background: var(--color-forest-depths); color: var(--color-pure-light); }
+
+.btn { display: inline-flex; align-items: center; gap: 8px; border-radius: var(--radius-buttons); padding: 14px 28px; font-family: inherit; font-size: var(--text-body-sm); font-weight: var(--font-weight-regular); cursor: pointer; }
+.btn-mint { background: var(--color-mint-glow); color: var(--color-midnight-tide); border: 1px solid var(--color-mint-glow); }
+.btn-ghost { background: transparent; border: 1px solid var(--color-mint-glow); color: var(--color-mint-glow); }
+
+/* ── Хиро с органическими пятнами ── */
+.hero { position: relative; overflow: hidden; padding: var(--spacing-113) 0 var(--spacing-160); text-align: center; }
+.blobs { position: absolute; inset: -10% -5%; z-index: 0; }
+.blobs svg { width: 100%; height: 100%; display: block; }
+.hero .wrap { position: relative; z-index: 1; }
+.mark { display: block; margin: 0 auto var(--spacing-40); }
+.hero p.body { max-width: 560px; margin: var(--spacing-32) auto 0; }
+.hero .actions { margin-top: var(--spacing-40); display: flex; gap: var(--spacing-14); justify-content: center; }
+.hero .addr { margin-top: var(--spacing-40); font-size: 14px; color: var(--color-teal-pulse); }
+.hero .addr span { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+
+/* ── Числа ── */
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--spacing-24); }
+.stat { border-top: 1px solid var(--color-shadow-teal); padding-top: var(--spacing-24); }
+.stat .n { font-family: var(--font-teodor); font-size: var(--text-heading); line-height: 1; color: var(--color-pure-light); }
+.stat p { margin-top: var(--spacing-14); font-size: 14px; }
+
+/* ── Карточки ── */
+.card { background: var(--surface-shadow-teal); border: 1px solid var(--color-midnight-tide); border-radius: var(--radius-cards); padding: var(--card-padding); }
+.card.glow { box-shadow: var(--shadow-lg); }
+.card p { margin-top: var(--spacing-14); font-size: 15px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-24); }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-50); }
+
+.tag { display: inline-flex; align-items: center; gap: 6px; border-radius: var(--radius-tags); border: 1px solid var(--color-mint-glow); color: var(--color-mint-glow); padding: 6px 14px; font-size: 13px; }
+.tag.filled { background: var(--surface-shadow-teal); }
+.tag.quiet { border-color: var(--color-shadow-teal); color: var(--color-mist-gray); }
+
+/* ── Таблица грантов ── */
+table { width: 100%; border-collapse: collapse; font-size: 15px; }
+thead th { text-align: left; font-weight: var(--font-weight-regular); font-size: 13px; color: var(--color-teal-pulse); padding-bottom: var(--spacing-14); border-bottom: 1px solid var(--color-shadow-teal); }
+tbody td { padding: var(--spacing-20) var(--spacing-20) var(--spacing-20) 0; border-bottom: 1px solid rgba(35,82,76,0.5); vertical-align: top; }
+tbody td.who { color: var(--color-pure-light); width: 260px; }
+tbody td.sum { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--color-pure-light); white-space: nowrap; }
+tbody td.tx { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--color-teal-pulse); white-space: nowrap; }
+
+/* ── Правила ── */
+.rules li { display: grid; grid-template-columns: 60px 1fr; gap: var(--spacing-24); padding: var(--spacing-24) 0; border-top: 1px solid var(--color-shadow-teal); }
+.rules li .n { font-family: var(--font-teodor); font-size: var(--text-subheading); color: var(--color-mint-glow); }
+.rules li b { display: block; color: var(--color-pure-light); font-weight: var(--font-weight-regular); font-size: var(--text-body-sm); margin-bottom: 6px; }
+.rules li span { font-size: 15px; }
+
+/* ── Финальный блок ── */
+.final { text-align: center; }
+.final p.body { max-width: 620px; margin: var(--spacing-24) auto 0; }
+.final .actions { margin-top: var(--spacing-40); display: flex; gap: var(--spacing-14); justify-content: center; }
+
+/* ── Подвал ── */
+footer { padding: var(--spacing-90) 0 var(--spacing-40); border-top: 1px solid var(--color-shadow-teal); }
+.foot { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: var(--spacing-40); }
+footer h4 { font-size: 13px; color: var(--color-teal-pulse); font-weight: var(--font-weight-regular); margin-bottom: var(--spacing-14); }
+footer li { padding: 5px 0; font-size: 15px; }
+footer li a:hover { color: var(--color-mint-glow); }
+.foot-note { margin-top: var(--spacing-20); font-size: 14px; max-width: 340px; }
+.foot-bottom { margin-top: var(--spacing-50); padding-top: var(--spacing-20); border-top: 1px solid rgba(35,82,76,0.5); display: flex; font-size: 13px; color: var(--color-teal-pulse); }
+.foot-bottom .right { margin-left: auto; display: flex; gap: var(--spacing-24); }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap">
+    <div class="bar">
+      <a class="logo" href="#">
+        <svg width="26" height="16" viewBox="0 0 26 16" fill="#072724" aria-hidden="true">
+          <path d="M8 8c0-4-3-7-5-7S0 4 0 8s1 7 3 7 5-3 5-7Zm10 0c0-4 3-7 5-7s3 3 3 7-1 7-3 7-5-3-5-7Z"/>
+          <rect x="7" y="6.5" width="12" height="3" rx="1.5"/>
+        </svg>
+        Endow<i>fund</i>
+      </a>
+      <div class="links">
+        <a href="#grants" data-i18n="n1">Grants</a>
+        <a href="#rules" data-i18n="n2">Rules</a>
+        <a href="#treasury" data-i18n="n3">Treasury</a>
+        <a href="#" data-i18n="n4">Apply</a>
+      </div>
+      <a class="nav-pill" href="#treasury" data-i18n="n5">Open the ledger</a>
+      <span class="switch">
+        <button type="button" data-set="en" aria-pressed="true">EN</button>
+        <button type="button" data-set="ru" aria-pressed="false">RU</button>
+      </span>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="blobs" aria-hidden="true">
+    <svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <radialGradient id="b1" cx="50%" cy="50%"><stop offset="0" stop-color="#1c3f38"/><stop offset="1" stop-color="#072724" stop-opacity="0"/></radialGradient>
+        <radialGradient id="b2" cx="50%" cy="50%"><stop offset="0" stop-color="#23524c"/><stop offset="1" stop-color="#072724" stop-opacity="0"/></radialGradient>
+        <radialGradient id="b3" cx="50%" cy="50%"><stop offset="0" stop-color="#33998c"/><stop offset="1" stop-color="#072724" stop-opacity="0"/></radialGradient>
+        <radialGradient id="b4" cx="50%" cy="50%"><stop offset="0" stop-color="#122d28"/><stop offset="1" stop-color="#072724" stop-opacity="0"/></radialGradient>
+      </defs>
+      <rect width="1600" height="900" fill="#072724"/>
+      <ellipse cx="300" cy="180" rx="520" ry="360" fill="url(#b4)"/>
+      <ellipse cx="1250" cy="240" rx="480" ry="380" fill="url(#b1)"/>
+      <ellipse cx="820" cy="760" rx="700" ry="330" fill="url(#b2)" opacity="0.75"/>
+      <ellipse cx="180" cy="820" rx="380" ry="240" fill="url(#b3)" opacity="0.55"/>
+      <ellipse cx="1480" cy="880" rx="320" ry="200" fill="url(#b3)" opacity="0.35"/>
+    </svg>
+  </div>
+  <div class="wrap">
+    <svg class="mark" width="64" height="40" viewBox="0 0 26 16" fill="#97fcd7" aria-hidden="true">
+      <path d="M8 8c0-4-3-7-5-7S0 4 0 8s1 7 3 7 5-3 5-7Zm10 0c0-4 3-7 5-7s3 3 3 7-1 7-3 7-5-3-5-7Z"/>
+      <rect x="7" y="6.5" width="12" height="3" rx="1.5"/>
+    </svg>
+    <h1><span data-i18n="h1a">A foundation whose</span><br><span data-i18n="h1b">bank statement is public</span></h1>
+    <p class="body" data-i18n="h2">Endow funds open-source infrastructure from one on-chain treasury. Every grant, every tranche, every unspent remainder returning — visible at the same address, in the same block everyone else sees.</p>
+    <div class="actions">
+      <a class="btn btn-mint" href="#treasury" data-i18n="h3">Open the ledger</a>
+      <a class="btn btn-ghost" href="#" data-i18n="h4">Apply for a grant</a>
+    </div>
+    <div class="addr" data-i18n-skip><span>0x7d41…a9c2</span> · <span data-i18n="h5">treasury, 5-of-9 multisig, no admin key</span></div>
+  </div>
+</header>
+
+<section id="treasury" style="padding-top:var(--spacing-50)">
+  <div class="wrap">
+    <div class="stats">
+      <div class="stat"><div class="n">$18.4M</div><p data-i18n="s1">in the treasury right now, of which $4.1M is already committed to signed milestones</p></div>
+      <div class="stat"><div class="n">61</div><p data-i18n="s2">grants paid since 2023, across 19 countries and 7 of them anonymous by request</p></div>
+      <div class="stat"><div class="n">$2.06M</div><p data-i18n="s3">returned unspent by recipients, which is the number we are proudest of</p></div>
+      <div class="stat"><div class="n">14 <span style="font-size:20px" data-i18n="s4u">days</span></div><p data-i18n="s4">median time from a complete application to a signed decision, published either way</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="grants" style="padding-top:0">
+  <div class="wrap">
+    <h2 style="max-width:760px" data-i18n="g0">Every grant is a row, and every row is a transaction you can open.</h2>
+    <p class="body" style="max-width:680px;margin-top:var(--spacing-24)" data-i18n="g0p">Money leaves in tranches tied to milestones written by the applicant, not by us. A missed milestone stops the next tranche automatically — there is no discretionary override, because we removed the key that would have allowed one.</p>
+    <table style="margin-top:var(--spacing-50)">
+      <thead>
+        <tr><th data-i18n="t1">Recipient</th><th data-i18n="t2">What it pays for</th><th data-i18n="t3">Amount</th><th data-i18n="t4">Tranche</th><th data-i18n="t5">Transaction</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="who">libsyncrypt</td><td data-i18n="r1">Third-party audit of the key-rotation rewrite, plus two months of maintainer time</td><td class="sum">$180 000</td><td><span class="tag">2 / 3</span></td><td class="tx">0x3f8a…22e1</td></tr>
+        <tr><td class="who">Мосты для узлов</td><td data-i18n="r2">Running four public RPC nodes in regions where commercial providers do not sell</td><td class="sum">$96 000</td><td><span class="tag">4 / 4</span></td><td class="tx">0xa1c7…9b04</td></tr>
+        <tr><td class="who">anon-42</td><td data-i18n="r3">Formal verification of a settlement contract; recipient chose to stay anonymous, which is allowed</td><td class="sum">$240 000</td><td><span class="tag">1 / 3</span></td><td class="tx">0x77bd…4e30</td></tr>
+        <tr><td class="who">Sparse Merkle Group</td><td data-i18n="r4">A reference implementation and a paper, both released before the final tranche</td><td class="sum">$310 000</td><td><span class="tag quiet" data-i18n="r4t">returned</span></td><td class="tx">0x0e52…1f77</td></tr>
+        <tr><td class="who">docs.chain.dev</td><td data-i18n="r5">Translation of core documentation into six languages, paid per accepted page</td><td class="sum">$54 000</td><td><span class="tag">3 / 6</span></td><td class="tx">0xbb90…c518</td></tr>
+        <tr><td class="who">Elena Vashkevich</td><td data-i18n="r6">Twelve months of full-time maintenance on a library nobody funds and everybody imports</td><td class="sum">$132 000</td><td><span class="tag">6 / 12</span></td><td class="tx">0x2d16…8a45</td></tr>
+      </tbody>
+    </table>
+    <div style="margin-top:var(--spacing-40);display:flex;gap:var(--spacing-14)">
+      <a class="btn btn-ghost" href="#" data-i18n="g1">All 61 grants</a>
+      <a class="btn btn-ghost" href="#" data-i18n="g2">The 14 we declined this quarter, with reasons</a>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="grid-3">
+      <div class="card glow">
+        <span class="tag filled" data-i18n="c0t">No admin key</span>
+        <h3 style="margin-top:var(--spacing-20)" data-i18n="c1h">Nobody can move the money alone</h3>
+        <p data-i18n="c1p">Five of nine signers, published names, published addresses. Two of the nine have never worked on the project and were chosen precisely for that. A signer who stops answering is replaced by a vote, and the vote is a transaction too.</p>
+      </div>
+      <div class="card">
+        <span class="tag quiet" data-i18n="c2t">Milestones</span>
+        <h3 style="margin-top:var(--spacing-20)" data-i18n="c2h">Written by the person doing the work</h3>
+        <p data-i18n="c2p">Applicants define what «done» means for each tranche. We can argue about it before signing, and we do; after signing, the definition is fixed and neither side can quietly move it.</p>
+      </div>
+      <div class="card">
+        <span class="tag quiet" data-i18n="c3t">Returns</span>
+        <h3 style="margin-top:var(--spacing-20)" data-i18n="c3h">Coming back with money is a good outcome</h3>
+        <p data-i18n="c3p">Two million dollars have been returned unspent by people whose work turned out cheaper or smaller than planned. Returning is recorded as a completed grant, not a failed one, and it counts in your favour next time.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="rules" style="padding-top:0">
+  <div class="wrap">
+    <div class="grid-2" style="align-items:start">
+      <div>
+        <h2 data-i18n="rl0">Six rules, and the ones that hurt us are still there.</h2>
+        <p class="body" style="margin-top:var(--spacing-24)" data-i18n="rl0p">They were written in the first year, when the treasury was small enough that a bad decision would have ended it. They have not been edited since, and every proposed edit is in the repository along with why it was rejected.</p>
+        <a class="btn btn-ghost" style="margin-top:var(--spacing-32)" href="#" data-i18n="rl0b">Read the charter</a>
+      </div>
+      <ul class="rules">
+        <li><span class="n">01</span><div><b data-i18n="u1b">Publish the refusals</b><span data-i18n="u1">Every declined application is published with the reason, unless the applicant asks otherwise. Fourteen this quarter; three were declined because we did not understand the work, and it says so.</span></div></li>
+        <li><span class="n">02</span><div><b data-i18n="u2b">No grants to signers</b><span data-i18n="u2">Nobody who holds a key can receive money, and neither can a company they own. This has cost us two good projects and the rule stays.</span></div></li>
+        <li><span class="n">03</span><div><b data-i18n="u3b">Anonymity is allowed</b><span data-i18n="u3">A recipient may stay anonymous to the public, though not to the signers. Seven grants are held this way; the work is judged the same and the transactions are just as visible.</span></div></li>
+        <li><span class="n">04</span><div><b data-i18n="u4b">The treasury holds no token of ours</b><span data-i18n="u4">Stablecoins and one blue-chip asset, rebalanced quarterly by a published rule. A foundation that funds itself with its own token funds itself with a rumour.</span></div></li>
+        <li><span class="n">05</span><div><b data-i18n="u5b">Grant sizes are capped at 5 %</b><span data-i18n="u5">No single grant exceeds five per cent of the treasury at the time of signing, whoever asks and however good it sounds in the room.</span></div></li>
+        <li><span class="n">06</span><div><b data-i18n="u6b">Sunset by default</b><span data-i18n="u6">If the treasury falls below a year of committed obligations, the foundation stops accepting applications and finishes what it owes. Ending on time is part of the design.</span></div></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="final" style="padding-top:0">
+  <div class="wrap">
+    <h2 style="max-width:820px;margin:0 auto" data-i18n="f0">If you maintain something that everybody imports and nobody pays for, write to us.</h2>
+    <p class="body" data-i18n="f0p">Applications are a page long. We answer within fourteen days, we say no more often than yes, and either way you will get the reason in writing rather than silence.</p>
+    <div class="actions">
+      <a class="btn btn-mint" href="#" data-i18n="f1">Apply for a grant</a>
+      <a class="btn btn-ghost" href="#" data-i18n="f2">Read a funded application</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <a class="logo" href="#" style="display:flex;align-items:center;gap:10px;color:var(--color-pure-light);font-size:19px">
+          <svg width="24" height="15" viewBox="0 0 26 16" fill="#97fcd7" aria-hidden="true"><path d="M8 8c0-4-3-7-5-7S0 4 0 8s1 7 3 7 5-3 5-7Zm10 0c0-4 3-7 5-7s3 3 3 7-1 7-3 7-5-3-5-7Z"/><rect x="7" y="6.5" width="12" height="3" rx="1.5"/></svg>
+          Endow<i>fund</i>
+        </a>
+        <p class="foot-note" data-i18n="ft1">A foundation with nine signers, one address, and a charter that has not been edited since 2023.</p>
+      </div>
+      <div>
+        <h4 data-i18n="fh1">Treasury</h4>
+        <ul><li><a href="#" data-i18n="fl1">Live balance</a></li><li><a href="#" data-i18n="fl2">Rebalancing rule</a></li><li><a href="#" data-i18n="fl3">Signers</a></li><li><a href="#" data-i18n="fl4">Quarterly report</a></li></ul>
+      </div>
+      <div>
+        <h4 data-i18n="fh2">Grants</h4>
+        <ul><li><a href="#" data-i18n="fl5">All 61</a></li><li><a href="#" data-i18n="fl6">Declined, with reasons</a></li><li><a href="#" data-i18n="fl7">Returned funds</a></li><li><a href="#" data-i18n="fl8">How to apply</a></li></ul>
+      </div>
+      <div>
+        <h4 data-i18n="fh3">Contact</h4>
+        <ul><li><a href="#">apply@endow.fund</a></li><li><a href="#" data-i18n="fl9">Charter</a></li><li><a href="#" data-i18n="fl10">Repository</a></li><li><a href="#" data-i18n="fl11">Security</a></li></ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span data-i18n="fb0">© 2026 Endow. The treasury address has not changed since the first grant.</span>
+      <span class="right"><a href="#" data-i18n="fb1">Terms</a><a href="#" data-i18n="fb2">Privacy</a></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ── RU/EN. Английский — исходный, русский — перевод под него ── */
+var RU = {
+  n1:'Гранты', n2:'Правила', n3:'Казначейство', n4:'Заявка', n5:'Открыть реестр',
+  h1a:'Фонд, у которого', h1b:'выписка со счёта публична',
+  h2:'Endow финансирует открытую инфраструктуру из одного ончейн-казначейства. Каждый грант, каждый транш и каждый возврат неизрасходованного видны по одному и тому же адресу и в том же блоке, что и всем остальным.',
+  h3:'Открыть реестр', h4:'Подать заявку',
+  h5:'казначейство, мультиподпись 5 из 9, административного ключа нет',
+  s1:'в казначействе сейчас, из них $4,1 млн уже закреплены за подписанными вехами',
+  s2:'грантов выплачено с 2023 года в 19 странах, семь из них — анонимным получателям',
+  s3:'вернули получатели как неизрасходованное — и этой цифрой мы гордимся больше всего',
+  s4u:'дней', s4:'медиана от полной заявки до подписанного решения, которое публикуется в любом случае',
+  g0:'Каждый грант — строка, и каждую строку можно открыть транзакцией.',
+  g0p:'Деньги уходят траншами, привязанными к вехам, которые пишет заявитель, а не мы. Пропущенная веха автоматически останавливает следующий транш: обойти это некому, потому что ключ, который позволял бы, мы убрали.',
+  t1:'Получатель', t2:'На что', t3:'Сумма', t4:'Транш', t5:'Транзакция',
+  r1:'Внешний аудит переписанной ротации ключей и два месяца работы мейнтейнера',
+  r2:'Четыре публичных RPC-узла в регионах, где коммерческие провайдеры не продают',
+  r3:'Формальная верификация расчётного контракта; получатель решил остаться анонимным — это разрешено',
+  r4:'Эталонная реализация и статья, обе выпущены до последнего транша', r4t:'возврат',
+  r5:'Перевод основной документации на шесть языков, оплата за принятую страницу',
+  r6:'Двенадцать месяцев работы над библиотекой, которую никто не финансирует и все импортируют',
+  g1:'Все 61 грант', g2:'14 отказов этого квартала — с причинами',
+  c0t:'Административного ключа нет',
+  c1h:'В одиночку деньги не сдвинет никто',
+  c1p:'Пять подписей из девяти, имена и адреса опубликованы. Двое из девяти никогда не работали над проектом — их выбрали именно поэтому. Подписанта, переставшего отвечать, меняют голосованием, и голосование — тоже транзакция.',
+  c2t:'Вехи', c2h:'Их пишет тот, кто делает работу',
+  c2p:'Заявитель сам определяет, что значит «готово» для каждого транша. До подписания об этом можно спорить — и мы спорим; после подписания определение зафиксировано, и тихо сдвинуть его не может ни одна сторона.',
+  c3t:'Возвраты', c3h:'Вернуться с деньгами — хороший исход',
+  c3p:'Два миллиона долларов вернули люди, у которых работа оказалась дешевле или меньше запланированной. Возврат записывается как завершённый грант, а не как провал, и учитывается в вашу пользу в следующий раз.',
+  rl0:'Шесть правил, и те из них, что бьют по нам, тоже на месте.',
+  rl0p:'Их написали в первый год, когда казначейство было настолько маленьким, что одно плохое решение его бы закончило. С тех пор их не редактировали, а каждая предложенная правка лежит в репозитории вместе с объяснением, почему её отклонили.',
+  rl0b:'Читать устав',
+  u1b:'Публиковать отказы', u1:'Каждая отклонённая заявка публикуется с причиной, если заявитель не попросил об обратном. В этом квартале четырнадцать; три отклонены потому, что мы не поняли работу, — так и написано.',
+  u2b:'Подписантам гранты не выдаются', u2:'Никто из держателей ключа не может получить деньги, и компания, которой он владеет, тоже. Это уже стоило нам двух хороших проектов, и правило остаётся.',
+  u3b:'Анонимность разрешена', u3:'Получатель может остаться анонимным для публики, но не для подписантов. Так держатся семь грантов: работу оценивают так же, а транзакции видны ровно так же.',
+  u4b:'В казначействе нет нашего токена', u4:'Стейблкоины и один голубой фишка-актив, ребалансировка раз в квартал по опубликованному правилу. Фонд, который финансирует себя собственным токеном, финансирует себя слухом.',
+  u5b:'Потолок гранта — 5 %', u5:'Ни один грант не превышает пяти процентов казначейства на момент подписания, кто бы ни просил и как бы хорошо это ни звучало в комнате.',
+  u6b:'Завершение по умолчанию', u6:'Если казначейства остаётся меньше, чем на год принятых обязательств, фонд перестаёт принимать заявки и доводит до конца то, что должен. Закончиться вовремя — часть конструкции.',
+  f0:'Если вы поддерживаете то, что все импортируют и никто не оплачивает, — напишите нам.',
+  f0p:'Заявка занимает одну страницу. Мы отвечаем в течение четырнадцати дней, говорим «нет» чаще, чем «да», и в любом случае вы получите причину письменно, а не тишину.',
+  f1:'Подать заявку', f2:'Прочитать профинансированную заявку',
+  ft1:'Фонд с девятью подписантами, одним адресом и уставом, который не редактировали с 2023 года.',
+  fh1:'Казначейство', fl1:'Баланс в реальном времени', fl2:'Правило ребалансировки', fl3:'Подписанты', fl4:'Квартальный отчёт',
+  fh2:'Гранты', fl5:'Все 61', fl6:'Отказы с причинами', fl7:'Возвраты', fl8:'Как подать',
+  fh3:'Контакты', fl9:'Устав', fl10:'Репозиторий', fl11:'Безопасность',
+  fb0:'© 2026 Endow. Адрес казначейства не менялся с первого гранта.',
+  fb1:'Условия', fb2:'Приватность'
+};
+var EN = {};
+document.querySelectorAll('[data-i18n]').forEach(function (el) { EN[el.dataset.i18n] = el.innerHTML; });
+
+function setLang(l) {
+  var dict = l === 'ru' ? RU : EN;
+  document.querySelectorAll('[data-i18n]').forEach(function (el) {
+    var v = dict[el.dataset.i18n];
+    if (v !== undefined) el.innerHTML = v;
+  });
+  document.documentElement.lang = l;
+  document.documentElement.dataset.lang = l;
+  document.querySelectorAll('.switch button').forEach(function (b) {
+    b.setAttribute('aria-pressed', b.dataset.set === l ? 'true' : 'false');
+  });
+}
+document.querySelectorAll('.switch button').forEach(function (b) {
+  b.addEventListener('click', function () { setLang(b.dataset.set); });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,3 @@
+/* Original keyframes: Animista, Ana Travas. https://animista.net/play/basic/rotate/rotate-hor-center */
+.rotate-hor-center{animation:rotate-hor-center 0.5s cubic-bezier(.455,.03,.515,.955) 0s 1 normal both;}
+@keyframes rotate-hor-center{0%{-webkit-transform:rotateX(0);transform:rotateX(0)}to{-webkit-transform:rotateX(-360deg);transform:rotateX(-360deg)}}

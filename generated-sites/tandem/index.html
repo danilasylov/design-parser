@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tandem — two people, one bicycle, no talking</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+/* ───────── ДИЗАЙН-СИСТЕМА PLAYDATE — tokens.css ДОСЛОВНО ───────── */
+:root {
+  /* Colors */
+  --color-sunbeam-yellow: #ffc500;
+  --color-electric-violet: #7700ff;
+  --gradient-electric-violet: linear-gradient(180deg, rgb(148, 0, 255), rgb(92, 0, 255));
+  --color-carbon: #312f27;
+  --color-paper-white: #ffffff;
+  --color-slate-gray: #788086;
+  --color-fog: #efefef;
+  --color-sand: #e9e4d9;
+  --color-ash: #b1afa7;
+
+  /* Typography — Font Families */
+  /* Roobert → Manrope (замена из DESIGN.md; кириллица есть) */
+  --font-roobert: 'Manrope', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* Typography — Scale */
+  --text-caption: 19px;
+  --leading-caption: 25px;
+  --tracking-caption: -0.13px;
+  --text-body-sm: 21px;
+  --leading-body-sm: 27px;
+  --tracking-body-sm: -0.15px;
+  --text-subheading: 24px;
+  --leading-subheading: 29px;
+  --tracking-subheading: -0.17px;
+  --text-heading-sm: 29px;
+  --leading-heading-sm: 35px;
+  --tracking-heading-sm: -0.2px;
+  --text-heading: 34px;
+  --leading-heading: 41px;
+  --tracking-heading: -0.24px;
+  --text-heading-lg: 40px;
+  --leading-heading-lg: 44px;
+  --tracking-heading-lg: -0.28px;
+  --text-display: 51px;
+  --leading-display: 56px;
+  --tracking-display: -0.36px;
+  --text-display-lg: 57px;
+  --leading-display-lg: 63px;
+  --tracking-display-lg: -0.4px;
+  --text-hero: 68px;
+  --leading-hero: 68px;
+  --tracking-hero: -0.48px;
+
+  /* Typography — Weights */
+  --font-weight-regular: 400;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+
+  /* Spacing */
+  --spacing-unit: 4px;
+  --spacing-12: 12px;
+  --spacing-20: 20px;
+  --spacing-24: 24px;
+  --spacing-28: 28px;
+  --spacing-40: 40px;
+  --spacing-60: 60px;
+  --spacing-100: 100px;
+  --spacing-120: 120px;
+  --spacing-232: 232px;
+
+  /* Layout */
+  --page-max-width: 1200px;
+  --section-gap: 60px;
+  --card-padding: 24px;
+
+  /* Border Radius */
+  --radius-sm: 2.85px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+  --radius-2xl: 21.945px;
+  --radius-3xl: 28.5px;
+  --radius-3xl-2: 34.2px;
+  --radius-full: 152.19px;
+
+  /* Named Radii */
+  --radius-tags: 28.5px;
+  --radius-cards: 2.85px;
+  --radius-inputs: 6px;
+  --radius-buttons: 28.5px;
+  --radius-navbuttons: 22px;
+  --radius-herobuttons: 34.2px;
+
+  /* Surfaces */
+  --surface-slate-gray-hero-canvas: #788086;
+  --surface-sunbeam-yellow-band: #ffc500;
+  --surface-paper-white-card: #ffffff;
+  --surface-sand-callout: #e9e4d9;
+  --surface-fog-alternate: #efefef;
+}
+
+/* ───────── База ───────── */
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--surface-paper-white-card);color:var(--color-carbon);
+  font-family:var(--font-roobert);font-size:var(--text-body-sm);line-height:var(--leading-body-sm);
+  letter-spacing:var(--tracking-body-sm);-webkit-font-smoothing:antialiased;
+}
+a{color:inherit;text-decoration:none}
+h1,h2,h3,p,ul{margin:0}
+ul{list-style:none;padding:0}
+.wrap{max-width:var(--page-max-width);margin:0 auto;padding:0 var(--spacing-24)}
+
+/* Полосы во всю ширину, каждая меняет палитру — ритм печатного каталога */
+.band{padding:var(--spacing-100) 0}
+.band-gray{background:var(--surface-slate-gray-hero-canvas);color:var(--color-paper-white)}
+.band-yellow{background:var(--surface-sunbeam-yellow-band)}
+.band-white{background:var(--surface-paper-white-card)}
+.band-fog{background:var(--surface-fog-alternate)}
+.band-sand{background:var(--surface-sand-callout)}
+
+/* Кнопки: фиолетовая пилюля с мягкой тенью — единственный акцент системы */
+.btn{
+  display:inline-flex;align-items:center;gap:10px;font-family:inherit;font-weight:var(--font-weight-bold);
+  font-size:var(--text-caption);line-height:1;letter-spacing:var(--tracking-caption);
+  padding:16px 26px;border-radius:var(--radius-buttons);border:0;cursor:pointer;
+  background:var(--gradient-electric-violet);color:var(--color-paper-white);
+  box-shadow:0 8px 20px rgba(119,0,255,.28);transition:transform .14s,box-shadow .14s;
+}
+.btn:hover{transform:translateY(-2px);box-shadow:0 12px 26px rgba(119,0,255,.34)}
+.btn-lg{font-size:var(--text-subheading);padding:20px 34px;border-radius:var(--radius-herobuttons)}
+.btn-ghost{background:transparent;color:var(--color-carbon);box-shadow:none;border:2px solid var(--color-carbon)}
+.btn-ghost:hover{box-shadow:none}
+
+/* ───────── Шапка ───────── */
+header{position:sticky;top:0;z-index:40;background:var(--surface-slate-gray-hero-canvas)}
+.nav{display:flex;align-items:center;gap:var(--spacing-24);height:72px;max-width:var(--page-max-width);margin:0 auto;padding:0 var(--spacing-24)}
+/* Подпись бренда — крупная строчная, в подсолнечно-жёлтом */
+.wordmark{font-size:var(--text-heading);line-height:1;font-weight:var(--font-weight-extrabold);letter-spacing:-.03em;color:var(--color-sunbeam-yellow);text-transform:lowercase}
+.nav-links{display:flex;gap:var(--spacing-24);margin-left:auto;color:var(--color-paper-white);font-size:var(--text-caption);font-weight:var(--font-weight-bold)}
+.nav-links a{opacity:.9}
+.nav-links a:hover{opacity:1}
+.btn-nav{padding:11px 20px;border-radius:var(--radius-navbuttons);font-size:17px}
+.lang{display:flex;gap:2px;background:rgba(255,255,255,.16);border-radius:var(--radius-navbuttons);padding:3px}
+.lang button{
+  font-family:inherit;font-size:15px;font-weight:var(--font-weight-bold);background:transparent;border:0;
+  color:var(--color-paper-white);opacity:.7;padding:6px 12px;border-radius:var(--radius-navbuttons);cursor:pointer;
+}
+.lang button[aria-pressed="true"]{background:var(--color-paper-white);color:var(--color-carbon);opacity:1}
+
+/* ───────── Герой: экран игры как «устройство» на сером холсте ───────── */
+.hero{background:var(--surface-slate-gray-hero-canvas);color:var(--color-paper-white);text-align:center;padding:var(--spacing-60) 0 var(--spacing-100);position:relative;overflow:hidden}
+/* Музейный свет: одно мягкое пятно за предметом */
+.hero::before{content:"";position:absolute;left:50%;top:120px;width:1100px;height:620px;transform:translateX(-50%);
+  background:radial-gradient(closest-side, rgba(255,255,255,.22), rgba(255,255,255,0));pointer-events:none}
+.cart{position:relative;width:660px;margin:0 auto;background:var(--color-sunbeam-yellow);border-radius:var(--radius-2xl);padding:26px 26px 34px;box-shadow:0 40px 80px rgba(24,22,18,.28)}
+.screen{background:var(--color-carbon);border-radius:var(--radius-md);overflow:hidden;line-height:0}
+.screen canvas{width:100%;height:auto;display:block;image-rendering:pixelated}
+.cart-row{display:flex;align-items:center;justify-content:space-between;margin-top:20px}
+.dpad{width:56px;height:56px;position:relative}
+.dpad i{position:absolute;background:rgba(49,47,39,.22);border-radius:3px}
+.dpad i:first-child{left:19px;top:0;width:18px;height:56px}
+.dpad i:last-child{left:0;top:19px;width:56px;height:18px}
+.keys{display:flex;gap:12px}
+.keys b{width:44px;height:44px;border-radius:50%;background:rgba(49,47,39,.18);display:flex;align-items:center;justify-content:center;font-size:17px;color:var(--color-carbon)}
+.crank{position:absolute;right:-28px;top:96px;width:28px;height:120px;background:var(--color-ash);border-radius:0 var(--radius-md) var(--radius-md) 0}
+.hero h1{margin-top:var(--spacing-60);font-size:var(--text-hero);line-height:var(--leading-hero);letter-spacing:var(--tracking-hero);font-weight:var(--font-weight-extrabold);max-width:900px;margin-left:auto;margin-right:auto}
+.hero h1 em{font-style:normal;color:var(--color-ash)}
+.hero-cta{display:flex;gap:var(--spacing-20);justify-content:center;margin-top:var(--spacing-40);align-items:center}
+.hero .price{color:var(--color-paper-white);opacity:.8;font-size:var(--text-caption)}
+
+/* ───────── Заголовки полос ───────── */
+.band h2{font-size:var(--text-display);line-height:var(--leading-display);letter-spacing:var(--tracking-display);font-weight:var(--font-weight-extrabold);max-width:860px}
+.band .lede{margin-top:var(--spacing-24);font-size:var(--text-subheading);line-height:var(--leading-subheading);max-width:620px}
+
+/* Три колонки на жёлтом */
+.trio{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--spacing-40);margin-top:var(--spacing-60)}
+.trio h3{font-size:var(--text-heading-sm);line-height:var(--leading-heading-sm);letter-spacing:var(--tracking-heading-sm);font-weight:var(--font-weight-extrabold);margin-bottom:12px}
+.trio p{font-size:var(--text-caption);line-height:var(--leading-caption)}
+
+/* Главы игры — белые карточки почти без скругления (2.85px) */
+.chapters{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--spacing-20);margin-top:var(--spacing-60)}
+.chap{background:var(--surface-paper-white-card);border-radius:var(--radius-cards);padding:var(--card-padding);min-height:190px;display:flex;flex-direction:column}
+.chap .n{font-size:17px;font-weight:var(--font-weight-bold);color:var(--color-slate-gray)}
+.chap h3{margin-top:auto;font-size:var(--text-subheading);line-height:var(--leading-subheading);letter-spacing:var(--tracking-subheading);font-weight:var(--font-weight-extrabold)}
+.chap p{margin-top:8px;font-size:17px;line-height:24px;color:var(--color-slate-gray)}
+.tag{display:inline-block;align-self:flex-start;background:var(--color-sunbeam-yellow);border-radius:var(--radius-tags);font-size:15px;font-weight:var(--font-weight-bold);padding:5px 13px;margin-bottom:14px}
+
+/* Отзывы на песочной полосе */
+.quotes{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--spacing-24);margin-top:var(--spacing-60)}
+.quote{background:var(--surface-paper-white-card);border-radius:var(--radius-cards);padding:var(--spacing-28)}
+.quote p{font-size:var(--text-caption);line-height:var(--leading-caption)}
+.quote cite{display:block;margin-top:16px;font-style:normal;font-weight:var(--font-weight-bold);font-size:17px;color:var(--color-slate-gray)}
+
+/* Как играть: раскладка клавиш */
+.how{display:grid;grid-template-columns:1fr 1fr;gap:var(--spacing-60);align-items:center;margin-top:var(--spacing-60)}
+.kbd{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.key{background:var(--surface-paper-white-card);border-radius:var(--radius-md);padding:18px 0;text-align:center;font-weight:var(--font-weight-bold);font-size:17px;color:var(--color-slate-gray)}
+.key.on{background:var(--color-electric-violet);color:var(--color-paper-white)}
+.key.on2{background:var(--color-sunbeam-yellow);color:var(--color-carbon)}
+.legend{display:flex;gap:var(--spacing-24);margin-top:var(--spacing-24);font-size:17px}
+.legend span{display:flex;align-items:center;gap:8px}
+.legend i{width:14px;height:14px;border-radius:4px;display:inline-block}
+.how ul li{display:flex;gap:12px;padding:14px 0;border-bottom:1px solid var(--color-ash);font-size:var(--text-caption);line-height:var(--leading-caption)}
+.how ul li b{color:var(--color-slate-gray);min-width:34px;font-weight:var(--font-weight-bold)}
+
+/* Финальная фиолетовая полоса */
+.buy{background:var(--gradient-electric-violet);color:var(--color-paper-white);text-align:center;padding:var(--spacing-120) 0}
+.buy h2{font-size:var(--text-display-lg);line-height:var(--leading-display-lg);letter-spacing:var(--tracking-display-lg);font-weight:var(--font-weight-extrabold);margin:0 auto;max-width:760px}
+.buy p{margin:var(--spacing-24) auto 0;max-width:520px;opacity:.86}
+.btn-white{background:var(--color-paper-white);color:var(--color-electric-violet);box-shadow:0 10px 24px rgba(24,22,18,.24)}
+.buy .btn{margin-top:var(--spacing-40)}
+
+/* Подвал */
+footer{background:var(--color-carbon);color:var(--color-paper-white);padding:var(--spacing-60) 0 var(--spacing-40)}
+.foot{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:var(--spacing-40)}
+.foot .about{opacity:.7;font-size:17px;line-height:25px;max-width:300px;margin-top:14px}
+.foot h4{font-size:15px;font-weight:var(--font-weight-bold);text-transform:uppercase;letter-spacing:.06em;opacity:.55;margin:0 0 14px}
+.foot li{margin-bottom:9px;font-size:17px;opacity:.85}
+.foot li a:hover{opacity:1;color:var(--color-sunbeam-yellow)}
+.foot-legal{display:flex;justify-content:space-between;margin-top:var(--spacing-40);padding-top:20px;border-top:1px solid rgba(255,255,255,.15);opacity:.55;font-size:15px}
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="nav">
+    <a class="wordmark" href="#top">tandem</a>
+    <div class="nav-links">
+      <a href="#game" data-i18n="nav1">The game</a>
+      <a href="#seasons" data-i18n="nav2">Seasons</a>
+      <a href="#play" data-i18n="nav3">How to play</a>
+      <a href="#press" data-i18n="nav4">Press</a>
+    </div>
+    <div class="lang">
+      <button data-set="en" aria-pressed="true">EN</button>
+      <button data-set="ru" aria-pressed="false">RU</button>
+    </div>
+    <a class="btn btn-nav" href="#buy" data-i18n="cta0">Buy now!!</a>
+  </nav>
+</header>
+
+<main id="top">
+
+  <section class="hero">
+    <div class="wrap">
+      <div class="cart">
+        <div class="screen"><canvas id="scr" width="400" height="240"></canvas></div>
+        <div class="crank"></div>
+        <div class="cart-row">
+          <div class="dpad"><i></i><i></i></div>
+          <div class="keys"><b>B</b><b>A</b></div>
+        </div>
+      </div>
+      <h1>
+        <span data-i18n="h1">Two people, one bicycle, and absolutely <em>no talking</em>.</span>
+      </h1>
+      <div class="hero-cta">
+        <a class="btn btn-lg" href="#buy" data-i18n="cta1">Get Tandem</a>
+        <span class="price" data-i18n="price">€14 · one purchase, two players, no accounts</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="band band-yellow" id="game">
+    <div class="wrap">
+      <h2 data-i18n="s1h">One of you pedals. One of you steers. Neither of you can do both.</h2>
+      <p class="lede" data-i18n="s1p">Tandem is a co-op game for two people sitting at one keyboard, and it takes away the one thing co-op games always give you: the ability to explain yourself.</p>
+      <div class="trio">
+        <div>
+          <h3 data-i18n="t1t">The pedaller</h3>
+          <p data-i18n="t1d">Left hand, two keys, alternating. Rush and the chain slips. Slow down on a hill and you roll backwards into whatever you just passed.</p>
+        </div>
+        <div>
+          <h3 data-i18n="t2t">The steerer</h3>
+          <p data-i18n="t2d">Right hand, three keys, and the only view of the road. You can see the pothole. You cannot say the word pothole.</p>
+        </div>
+        <div>
+          <h3 data-i18n="t3t">The rule</h3>
+          <p data-i18n="t3d">The microphone stays off and the game knows it. Speak and the bell rings — a small, disappointed sound your friend will hear too.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band band-fog" id="seasons">
+    <div class="wrap">
+      <h2 data-i18n="s2h">Twelve rides, one summer</h2>
+      <p class="lede" data-i18n="s2p">Each ride is fifteen minutes long and ends where the next one starts. Nothing unlocks, nothing is missable, and there is no shop.</p>
+      <div class="chapters">
+        <article class="chap"><span class="tag" data-i18n="g1">Ride 01</span><span class="n">15 min</span><h3 data-i18n="c1t">The delivery</h3><p data-i18n="c1d">Six eggs, four kilometres, one cobbled square.</p></article>
+        <article class="chap"><span class="tag" data-i18n="g2">Ride 04</span><span class="n">15 min</span><h3 data-i18n="c2t">The funeral</h3><p data-i18n="c2d">You are late, and you are not allowed to be seen hurrying.</p></article>
+        <article class="chap"><span class="tag" data-i18n="g3">Ride 07</span><span class="n">15 min</span><h3 data-i18n="c3t">The dog</h3><p data-i18n="c3d">It is following you. The steerer decides whether that is a problem.</p></article>
+        <article class="chap"><span class="tag" data-i18n="g4">Ride 12</span><span class="n">15 min</span><h3 data-i18n="c4t">The hill, at night</h3><p data-i18n="c4d">One lamp, powered by the pedals. Stop and the road disappears.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="band band-sand" id="press">
+    <div class="wrap">
+      <h2 data-i18n="s3h">What people said after twenty minutes</h2>
+      <div class="quotes">
+        <div class="quote">
+          <p data-i18n="q1">“We finished ride three without a single word and then argued about it for an hour. That is the whole game and it is perfect.”</p>
+          <cite data-i18n="q1c">Nils Bergqvist · Rundgang</cite>
+        </div>
+        <div class="quote">
+          <p data-i18n="q2">“The bell is the cruellest mechanic of the decade. I have never wanted to say one sentence so badly in my life.”</p>
+          <cite data-i18n="q2c">Дарья Кольцова · Пиксель и Пыль</cite>
+        </div>
+        <div class="quote">
+          <p data-i18n="q3">“Fifteen minutes a ride, twelve rides, no unlocks. Somebody finally made a small game and stopped apologising for it.”</p>
+          <cite data-i18n="q3c">Marta Vidal · Coin & Slot</cite>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band band-white" id="play">
+    <div class="wrap">
+      <h2 data-i18n="s4h">Everything you need is one keyboard</h2>
+      <div class="how">
+        <div>
+          <div class="kbd">
+            <span class="key on">Q</span><span class="key on">W</span><span class="key">E</span><span class="key">R</span><span class="key">T</span>
+            <span class="key">A</span><span class="key">S</span><span class="key">D</span><span class="key">F</span><span class="key">G</span>
+            <span class="key">Z</span><span class="key">X</span><span class="key on2">C</span><span class="key on2">V</span><span class="key on2">B</span>
+          </div>
+          <div class="legend">
+            <span><i style="background:var(--color-electric-violet)"></i><span data-i18n="lg1">Pedaller</span></span>
+            <span><i style="background:var(--color-sunbeam-yellow)"></i><span data-i18n="lg2">Steerer</span></span>
+          </div>
+        </div>
+        <ul>
+          <li><b>01</b><span data-i18n="hw1">Sit next to each other. This is not a networked game and never will be.</span></li>
+          <li><b>02</b><span data-i18n="hw2">Pick who pedals. Swap after every ride, or do not — the game keeps score of both.</span></li>
+          <li><b>03</b><span data-i18n="hw3">Fifteen minutes per ride, and it saves the moment you stop.</span></li>
+          <li><b>04</b><span data-i18n="hw4">Runs on anything made after 2014. Windows, macOS, Linux, 240 MB.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="buy" id="buy">
+    <div class="wrap">
+      <h2 data-i18n="buyh">Fourteen euro. Two players. Twelve rides.</h2>
+      <p data-i18n="buyp">One purchase covers both of you, because both of you are sitting right there. No launcher, no account, no season pass.</p>
+      <a class="btn btn-lg btn-white" href="#" data-i18n="cta2">Get Tandem</a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <div class="wordmark">tandem</div>
+        <p class="about" data-i18n="fabout">Made by four people in Ghent over two summers, on one very long table.</p>
+      </div>
+      <div>
+        <h4 data-i18n="fh1">Game</h4>
+        <ul>
+          <li><a href="#seasons" data-i18n="fl1">The rides</a></li>
+          <li><a href="#play" data-i18n="fl2">How to play</a></li>
+          <li><a href="#" data-i18n="fl3">Soundtrack</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 data-i18n="fh2">Studio</h4>
+        <ul>
+          <li><a href="#" data-i18n="fl4">About us</a></li>
+          <li><a href="#" data-i18n="fl5">Devlog</a></li>
+          <li><a href="#press" data-i18n="fl6">Press kit</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 data-i18n="fh3">Support</h4>
+        <ul>
+          <li><a href="#" data-i18n="fl7">Refunds</a></li>
+          <li><a href="#" data-i18n="fl8">Accessibility</a></li>
+          <li><a href="#" data-i18n="fl9">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-legal">
+      <span>© 2026 Tandem</span>
+      <span data-i18n="fnote">Ghent · made small on purpose</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ── Экран игры: однобитная сцена, нарисованная на canvas и увеличенная пикселями ── */
+(function () {
+  var c = document.getElementById('scr'), x = c.getContext('2d');
+  var W = c.width, H = c.height, t = 0;
+  var ON = '#efefef', OFF = '#312f27';
+
+  function dither(px, py, w, h, step) {         // рассеянная заливка вместо серого
+    for (var j = 0; j < h; j += 1) for (var i = (j % 2) * step / 2; i < w; i += step)
+      x.fillRect(px + i | 0, py + j, 1, 1);
+  }
+  function wheel(cx, cy, r, a) {
+    x.beginPath(); x.arc(cx, cy, r, 0, 6.284); x.stroke();
+    for (var k = 0; k < 6; k++) {                // спицы поворачиваются вместе с ездой
+      var an = a + k * 1.047;
+      x.beginPath(); x.moveTo(cx, cy);
+      x.lineTo(cx + Math.cos(an) * r, cy + Math.sin(an) * r); x.stroke();
+    }
+  }
+  function rider(sx, sy, reach, bob) {         // сидит на седле, руки вперёд, нога на педали
+    x.beginPath(); x.arc(sx, sy - 24 + bob, 5, 0, 6.284); x.stroke();
+    x.beginPath();
+    x.moveTo(sx, sy - 19 + bob); x.lineTo(sx - 1, sy - 4);                // корпус
+    x.moveTo(sx - 1, sy - 12 + bob); x.lineTo(sx + reach, sy - 8);        // руки
+    x.moveTo(sx - 1, sy - 4); x.lineTo(sx + 5, sy + 6 + bob * 2);         // нога к педали
+    x.stroke();
+  }
+
+  function frame() {
+    x.fillStyle = OFF; x.fillRect(0, 0, W, H);
+    x.strokeStyle = ON; x.fillStyle = ON; x.lineWidth = 2;
+
+    var road = H - 54;
+    x.beginPath(); x.moveTo(0, road); x.lineTo(W, road); x.stroke();      // дорога
+    dither(0, road + 8, W, 26, 11);                                        // гравий
+
+    var scroll = (t * 1.6) % 90;                                          // столбы уезжают назад
+    for (var p = -1; p < 6; p++) {
+      var px = W - (p * 90 + scroll);
+      x.fillRect(px, road - 26, 2, 26);
+      x.fillRect(px - 8, road - 30, 18, 4);
+    }
+    for (var h = 0; h < 5; h++) {                                         // холмы вдали
+      var hx = ((h * 130 - t * 0.35) % (W + 160)) - 80;
+      x.beginPath(); x.moveTo(hx - 60, road - 40); x.lineTo(hx, road - 78);
+      x.lineTo(hx + 60, road - 40); x.stroke();
+    }
+
+    var bob = Math.sin(t * 0.18) > 0 ? 0 : 1;                             // «качание» на педалях
+    var bx = 140, by = road, wy = by - 18;
+    wheel(bx, wy, 18, t * 0.12);
+    wheel(bx + 96, wy, 18, t * 0.12);
+    x.beginPath();                                                        // рама тандема
+    x.moveTo(bx, wy); x.lineTo(bx + 30, wy);                              // перья
+    x.lineTo(bx + 70, wy); x.lineTo(bx + 96, wy);
+    x.moveTo(bx + 30, wy); x.lineTo(bx + 26, wy - 30);                    // подседельные трубы
+    x.moveTo(bx + 70, wy); x.lineTo(bx + 66, wy - 30);
+    x.moveTo(bx + 26, wy - 30); x.lineTo(bx, wy);                         // нижняя труба
+    x.moveTo(bx + 26, wy - 30); x.lineTo(bx + 66, wy - 30);               // верхние трубы
+    x.lineTo(bx + 92, wy - 26); x.lineTo(bx + 96, wy);
+    x.moveTo(bx + 18, wy - 30); x.lineTo(bx + 32, wy - 30);               // сёдла
+    x.moveTo(bx + 58, wy - 30); x.lineTo(bx + 72, wy - 30);
+    x.moveTo(bx + 86, wy - 30); x.lineTo(bx + 98, wy - 24);               // руль
+    x.stroke();
+    var pa = t * 0.12;                                                    // педали крутятся
+    x.beginPath(); x.arc(bx + 30 + Math.cos(pa) * 7, wy + Math.sin(pa) * 7, 2, 0, 6.284); x.stroke();
+    x.beginPath(); x.arc(bx + 70 + Math.cos(pa + 3.1) * 7, wy + Math.sin(pa + 3.1) * 7, 2, 0, 6.284); x.stroke();
+    rider(bx + 26, wy - 30, 26, bob);
+    rider(bx + 66, wy - 30, 22, 1 - bob);
+
+    x.font = '12px monospace';                                            // HUD игры
+    x.fillText('RIDE 07 — THE DOG', 10, 18);
+    x.fillText('11:42', W - 46, 18);
+    x.fillRect(10, 26, 84, 4); x.fillRect(10, 26, 30 + (t * 0.4 % 50), 4);
+
+    t++;
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
+
+/* ── RU/EN. Английский — исходный, русский — перевод под него ── */
+var RU = {
+  nav1:'Игра', nav2:'Заезды', nav3:'Как играть', nav4:'Пресса', cta0:'Купить!!',
+  h1:'Двое, один велосипед и <em>ни единого слова</em>.',
+  cta1:'Взять «Тандем»', price:'€14 · одна покупка, двое игроков, без аккаунтов',
+  s1h:'Один крутит педали. Второй рулит. Ни один не может делать и то, и другое.',
+  s1p:'«Тандем» — кооп для двоих за одной клавиатурой, и он отбирает единственное, что кооперативы всегда дают: возможность объясниться.',
+  t1t:'Тот, кто крутит', t1d:'Левая рука, две клавиши, попеременно. Поспешишь — слетит цепь. Замедлишься на подъёме — покатишься назад в то, что только что проехали.',
+  t2t:'Тот, кто рулит', t2d:'Правая рука, три клавиши и единственный вид на дорогу. Вы видите яму. Сказать слово «яма» вы не можете.',
+  t3t:'Правило', t3d:'Микрофон выключен, и игра об этом знает. Заговорите — звякнет звонок, маленький разочарованный звук, который услышит и ваш напарник.',
+  s2h:'Двенадцать заездов, одно лето',
+  s2p:'Каждый заезд идёт пятнадцать минут и заканчивается там, где начинается следующий. Ничего не открывается, ничего нельзя пропустить, магазина нет.',
+  g1:'Заезд 01', g2:'Заезд 04', g3:'Заезд 07', g4:'Заезд 12',
+  c1t:'Доставка', c1d:'Шесть яиц, четыре километра, одна брусчатая площадь.',
+  c2t:'Похороны', c2d:'Вы опаздываете, и торопиться на виду нельзя.',
+  c3t:'Собака', c3d:'Она бежит за вами. Проблема это или нет — решает рулевой.',
+  c4t:'Подъём, ночью', c4d:'Одна фара, питается от педалей. Остановитесь — дорога исчезнет.',
+  s3h:'Что говорили после двадцати минут',
+  q1:'«Мы прошли третий заезд, не сказав ни слова, а потом час из-за него спорили. В этом вся игра, и это прекрасно».',
+  q1c:'Нильс Бергквист · Rundgang',
+  q2:'«Звонок — самая жестокая механика десятилетия. Никогда в жизни мне так не хотелось произнести одну-единственную фразу».',
+  q2c:'Дарья Кольцова · Пиксель и Пыль',
+  q3:'«Пятнадцать минут на заезд, двенадцать заездов, ничего не открывается. Кто-то наконец сделал маленькую игру и перестал за это извиняться».',
+  q3c:'Марта Видаль · Coin & Slot',
+  s4h:'Всё, что нужно, — одна клавиатура',
+  lg1:'Педали', lg2:'Руль',
+  hw1:'Сядьте рядом. Это не сетевая игра и никогда ею не станет.',
+  hw2:'Решите, кто крутит педали. Меняйтесь после каждого заезда — или нет, игра считает счёт обоим.',
+  hw3:'Пятнадцать минут на заезд, сохранение в момент остановки.',
+  hw4:'Пойдёт на всём, что сделано после 2014 года. Windows, macOS, Linux, 240 МБ.',
+  buyh:'Четырнадцать евро. Двое игроков. Двенадцать заездов.',
+  buyp:'Одна покупка на двоих — потому что вы оба и так сидите рядом. Ни лаунчера, ни аккаунта, ни сезонного пропуска.',
+  cta2:'Взять «Тандем»',
+  fabout:'Сделано вчетвером в Генте за два лета, за одним очень длинным столом.',
+  fh1:'Игра', fl1:'Заезды', fl2:'Как играть', fl3:'Саундтрек',
+  fh2:'Студия', fl4:'О нас', fl5:'Дневник разработки', fl6:'Пресс-кит',
+  fh3:'Поддержка', fl7:'Возвраты', fl8:'Доступность', fl9:'Связаться',
+  fnote:'Гент · маленькая намеренно'
+};
+var EN = {};
+document.querySelectorAll('[data-i18n]').forEach(function (el) { EN[el.dataset.i18n] = el.innerHTML; });
+
+function setLang(l) {
+  var dict = l === 'ru' ? RU : EN;
+  document.querySelectorAll('[data-i18n]').forEach(function (el) {
+    var v = dict[el.dataset.i18n];
+    if (v !== undefined) el.innerHTML = v;
+  });
+  document.documentElement.lang = l;
+  document.documentElement.dataset.lang = l;
+  document.querySelectorAll('.lang button').forEach(function (b) {
+    b.setAttribute('aria-pressed', b.dataset.set === l ? 'true' : 'false');
+  });
+}
+document.querySelectorAll('.lang button').forEach(function (b) {
+  b.addEventListener('click', function () { setLang(b.dataset.set); });
+});
+</script>
+</body>
+</html>

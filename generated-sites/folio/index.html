@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>Folio — art collections managed as an asset</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,400&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════════════════════════════
+   Дизайн-система Franco Maria Ricci Editore
+   styles.refero.design/style/6120469b-a1c8-46d3-b7fd-8aa6dc22c0d9
+   :root ниже вставлен ДОСЛОВНО со вкладки CSS Variables.
+   ══════════════════════════════════════════════════════════════════ */
+:root {
+  /* Colors */
+  --color-vellum-white: #f6f6f6;
+  --color-paper: #ffffff;
+  --color-gallery-ink: #0a0a0a;
+  --color-letterpress-black: #000000;
+  --color-silver-wash: #b3b3b3;
+  --color-burnished-gold: #bc9c5c;
+
+  /* Typography — Font Families */
+  --font-bodonisvntytwoitcstd-book: 'BodoniSvntytwoITCStd-Book', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-bodonisvntytwoitcstd-bookit: 'BodoniSvntytwoITCStd-BookIt', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-arial: 'Arial', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* Typography — Scale */
+  --text-caption: 12px;
+  --leading-caption: 1.25;
+  --text-body-sm: 14px;
+  --leading-body-sm: 1.25;
+  --text-body: 16px;
+  --leading-body: 1.25;
+  --text-subheading: 22px;
+  --leading-subheading: 1.25;
+  --text-heading: 42px;
+  --leading-heading: 0.95;
+
+  /* Typography — Weights */
+  --font-weight-regular: 400;
+  --font-weight-bold: 700;
+
+  /* Spacing */
+  --spacing-unit: 8px;
+  --spacing-8: 8px;
+  --spacing-16: 16px;
+  --spacing-24: 24px;
+  --spacing-32: 32px;
+  --spacing-40: 40px;
+  --spacing-48: 48px;
+  --spacing-64: 64px;
+  --spacing-80: 80px;
+  --spacing-128: 128px;
+
+  /* Layout */
+  --page-max-width: 1280px;
+  --section-gap: 48px;
+  --card-padding: 40px;
+  --element-gap: 20px;
+
+  /* Named Radii */
+  --radius-tags: 0px;
+  --radius-cards: 0px;
+  --radius-inputs: 0px;
+  --radius-buttons: 0px;
+
+  /* Surfaces */
+  --surface-vellum: #f6f6f6;
+  --surface-paper: #ffffff;
+  --surface-silver-wash: #b3b3b3;
+  --surface-gallery-ink: #0a0a0a;
+  --surface-letterpress-black: #000000;
+}
+
+/* Подстановки шрифтов. У Bodoni Moda и Bodoni 72 кириллицы нет, поэтому из трёх
+   замен DESIGN.md взят Playfair Display — тот же высококонтрастный дидон, есть
+   роман и курсив. Arial (утилитарные метки) → Inter, из списка замен. */
+:root {
+  --font-bodoni: 'Playfair Display', var(--font-bodonisvntytwoitcstd-book);
+  --font-util: 'Inter', var(--font-arial);
+}
+
+* { box-sizing: border-box; }
+html { -webkit-font-smoothing: antialiased; }
+body {
+  margin: 0;
+  background: var(--surface-vellum);
+  color: var(--color-letterpress-black);
+  font-family: var(--font-bodoni);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  font-weight: var(--font-weight-regular);
+}
+svg { display: block; }
+a { color: inherit; text-decoration: none; }
+h1, h2, h3, h4, p, ul { margin: 0; padding: 0; }
+ul { list-style: none; }
+
+.wrap { max-width: var(--page-max-width); margin: 0 auto; padding: 0 var(--spacing-64); }
+.sec { padding: var(--spacing-80) 0; }
+.h { font-size: var(--text-heading); line-height: var(--leading-heading); }
+.sub { font-size: var(--text-subheading); line-height: var(--leading-subheading); }
+.it { font-style: italic; }
+.sm { font-size: var(--text-body-sm); line-height: var(--leading-body-sm); }
+.util { font-family: var(--font-util); font-size: var(--text-caption); line-height: var(--leading-caption); }
+.muted { color: var(--color-silver-wash); }
+
+/* все действия — текстовые, с волосяным подчёркиванием; заливок не бывает */
+.act {
+  display: inline-block;
+  font-size: var(--text-body-sm);
+  border-bottom: 1px solid var(--color-letterpress-black);
+  padding-bottom: 4px;
+}
+.act:hover { color: var(--color-burnished-gold); border-bottom-color: var(--color-burnished-gold); }
+.act-dark { border-bottom-color: var(--color-paper); }
+.act-dark:hover { color: var(--color-burnished-gold); border-bottom-color: var(--color-burnished-gold); }
+
+/* шапка */
+.topbar { display: flex; align-items: flex-start; justify-content: space-between; padding: var(--spacing-40) var(--spacing-64); }
+.emblem { display: flex; align-items: center; gap: var(--spacing-16); }
+.emblem .ring { width: 44px; height: 44px; border: 1px solid var(--color-letterpress-black); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+.wordmark { text-align: right; }
+.wordmark .n { font-size: var(--text-body-sm); }
+.wordmark .s { font-size: var(--text-caption); font-style: italic; }
+.topnav { display: flex; gap: var(--spacing-32); align-items: center; }
+.topnav a { font-size: var(--text-body-sm); }
+.topnav a:hover { color: var(--color-burnished-gold); }
+.lang { display: inline-flex; gap: 5px; align-items: center; font-family: var(--font-util); font-size: var(--text-caption); }
+.lang button { font: inherit; border: none; background: none; padding: 0; cursor: pointer; color: var(--color-silver-wash); }
+.lang button[aria-pressed="true"] { color: var(--color-letterpress-black); }
+.lang span { color: var(--color-silver-wash); }
+
+/* герой: 40% текст, 60% пластина */
+.hero { display: grid; grid-template-columns: 40% 1fr; gap: var(--spacing-48); align-items: center; padding-bottom: var(--spacing-80); }
+.hero .txt { padding-left: var(--spacing-64); }
+.hero p { max-width: 320px; margin-top: var(--spacing-24); }
+.hero .act { margin-top: var(--spacing-32); }
+.plate { background: var(--surface-paper); padding: var(--spacing-48); }
+
+/* заголовок секции с золотым правилом */
+.sectitle { text-align: center; }
+.sectitle .t { font-style: italic; font-size: var(--text-subheading); }
+.sectitle .rule { height: 1px; background: var(--color-burnished-gold); margin-top: var(--spacing-16); }
+
+/* трёхколоночная сетка с вертикальными линейками */
+.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); background: var(--surface-paper); margin-top: var(--spacing-48); }
+.grid3 > div { padding: var(--card-padding); border-left: 1px solid var(--color-letterpress-black); }
+.grid3 > div:first-child { border-left: none; }
+.grid3 .obj { margin: var(--spacing-24) 0 var(--spacing-32); }
+.grid3 h3 { font-size: var(--text-subheading); line-height: var(--leading-subheading); margin-bottom: var(--spacing-16); }
+
+/* тёмная полоса-разворот */
+.dark { background: var(--surface-gallery-ink); color: var(--color-paper); }
+.dark .split { display: grid; grid-template-columns: 1fr 1fr; align-items: center; min-height: 420px; }
+.dark .left { background: var(--surface-silver-wash); align-self: stretch; display: flex; align-items: center; justify-content: center; }
+.dark .right { text-align: center; padding: var(--spacing-64); }
+.dark .right .h { color: var(--color-paper); }
+.dark .right .util { letter-spacing: 0.34em; margin-top: var(--spacing-16); }
+
+/* таблица условий */
+.terms { margin-top: var(--spacing-48); border-top: 1px solid var(--color-letterpress-black); }
+.terms .r { display: grid; grid-template-columns: 300px 1fr; gap: var(--spacing-40); padding: var(--spacing-24) 0; border-bottom: 1px solid var(--color-letterpress-black); }
+.terms .k { font-style: italic; font-size: var(--text-subheading); }
+
+/* индикатор страницы в углу */
+.pager { display: flex; justify-content: space-between; align-items: center; padding: var(--spacing-24) var(--spacing-64); border-top: 1px solid var(--color-letterpress-black); }
+
+footer { background: var(--surface-gallery-ink); color: var(--color-paper); padding: var(--spacing-64) 0 var(--spacing-32); }
+.fcols { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: var(--spacing-40); }
+.fcols h4 { font-style: italic; font-size: var(--text-body); margin-bottom: var(--spacing-16); }
+.fcols li { margin-bottom: var(--spacing-8); font-size: var(--text-body-sm); }
+.flegal { display: flex; justify-content: space-between; margin-top: var(--spacing-64); padding-top: var(--spacing-24); border-top: 1px solid var(--color-burnished-gold); }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="emblem">
+    <div class="ring it">F</div>
+    <div class="topnav">
+      <a href="#work" data-i18n="n1">What we do</a>
+      <a href="#custody" data-i18n="n2">Custody</a>
+      <a href="#terms" data-i18n="n3">Terms</a>
+      <a href="#write" data-i18n="n4">Enquire</a>
+    </div>
+  </div>
+  <div style="display:flex;align-items:center;gap:var(--spacing-32)">
+    <div class="lang"><button data-set="en" aria-pressed="true">EN</button><span>/</span><button data-set="ru" aria-pressed="false">RU</button></div>
+    <div class="wordmark">
+      <div class="n">Folio</div>
+      <div class="s it" data-i18n="wm">Collection office</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── герой ────────────────────────────────────────────────────── -->
+<section class="hero">
+  <div class="txt">
+    <h1 class="h" data-i18n="h1">A collection is an asset that has to be looked after twice.</h1>
+    <p class="sm" data-i18n="hp">Once as property — insured, stored, catalogued, valued. And once as art, which is the part everyone forgets until it is time to sell.</p>
+    <a class="act" href="#work" data-i18n="hb">{ How we work }</a>
+  </div>
+  <div class="plate">
+    <!-- пластина: гравированный разворот вместо иллюстрации -->
+    <svg width="100%" height="440" viewBox="0 0 700 440" fill="none">
+      <rect x="0.5" y="0.5" width="699" height="439" stroke="#000000"/>
+      <rect x="40" y="40" width="620" height="360" stroke="#bc9c5c"/>
+      <rect x="56" y="56" width="588" height="328" stroke="#000000" stroke-dasharray="1 5"/>
+      <line x1="350" y1="40" x2="350" y2="400" stroke="#000000"/>
+      <g stroke="#000000" stroke-width="1">
+        <path d="M120 330 C 120 240, 180 250, 190 190 C 200 130, 150 120, 160 96"/>
+        <path d="M190 190 C 230 200, 250 170, 244 140"/>
+        <path d="M190 190 C 150 196, 128 168, 132 140"/>
+        <ellipse cx="160" cy="90" rx="18" ry="9" transform="rotate(-24 160 90)"/>
+        <ellipse cx="248" cy="134" rx="16" ry="8" transform="rotate(18 248 134)"/>
+        <ellipse cx="128" cy="134" rx="16" ry="8" transform="rotate(-18 128 134)"/>
+        <path d="M96 330 h128" stroke-width="1.4"/>
+      </g>
+      <g stroke="#bc9c5c" stroke-width="1">
+        <circle cx="520" cy="180" r="86"/>
+        <circle cx="520" cy="180" r="60"/>
+        <path d="M434 180 h172"/><path d="M520 94 v172"/>
+        <path d="M459 119 l122 122"/><path d="M581 119 l-122 122"/>
+      </g>
+      <text x="96" y="368" font-family="Playfair Display, serif" font-size="13" font-style="italic" fill="#000000">Pl. XIV · botanical plate, 1817</text>
+      <text x="434" y="300" font-family="Playfair Display, serif" font-size="13" font-style="italic" fill="#000000">Rose window · study, 1892</text>
+    </svg>
+  </div>
+</section>
+
+<!-- ── что мы делаем ────────────────────────────────────────────── -->
+<section class="sec" id="work">
+  <div class="wrap">
+    <div class="sectitle">
+      <div class="t" data-i18n="s0">What the office does</div>
+      <div class="rule"></div>
+    </div>
+    <div class="grid3">
+      <div>
+        <div class="util muted">I</div>
+        <div class="obj">
+          <svg width="100%" height="150" viewBox="0 0 300 150" fill="none" stroke="#000000">
+            <rect x="60" y="20" width="180" height="110"/>
+            <rect x="76" y="36" width="148" height="78" stroke="#bc9c5c"/>
+            <path d="M76 100 l40 -38 l30 26 l34 -30 l44 42"/>
+            <circle cx="112" cy="60" r="8"/>
+          </svg>
+        </div>
+        <h3 data-i18n="c1t">Attribution</h3>
+        <p class="sm" data-i18n="c1d">Provenance research, condition reports and a written opinion from two specialists who do not know each other's conclusion.</p>
+      </div>
+      <div>
+        <div class="util muted">II</div>
+        <div class="obj">
+          <svg width="100%" height="150" viewBox="0 0 300 150" fill="none" stroke="#000000">
+            <rect x="52" y="24" width="196" height="102"/>
+            <path d="M52 56 h196"/><path d="M52 88 h196"/>
+            <path d="M116 24 v102"/><path d="M184 24 v102"/>
+            <circle cx="84" cy="40" r="5" stroke="#bc9c5c"/>
+            <circle cx="150" cy="72" r="5" stroke="#bc9c5c"/>
+            <circle cx="216" cy="104" r="5" stroke="#bc9c5c"/>
+          </svg>
+        </div>
+        <h3 data-i18n="c2t">Custody</h3>
+        <p class="sm" data-i18n="c2d">Climate-controlled storage in two buildings, never one, with a quarterly physical count you are welcome to attend.</p>
+      </div>
+      <div>
+        <div class="util muted">III</div>
+        <div class="obj">
+          <svg width="100%" height="150" viewBox="0 0 300 150" fill="none" stroke="#000000">
+            <path d="M60 126 h180"/>
+            <path d="M84 126 v-30"/><path d="M126 126 v-58"/><path d="M168 126 v-42"/><path d="M210 126 v-76"/>
+            <path d="M84 96 l42 -28 l42 16 l42 -34" stroke="#bc9c5c"/>
+            <circle cx="210" cy="50" r="5" stroke="#bc9c5c"/>
+          </svg>
+        </div>
+        <h3 data-i18n="c3t">Realisation</h3>
+        <p class="sm" data-i18n="c3d">When a piece is sold we take a fee on the hammer price and nothing on the valuation — so the valuation stays honest.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── тёмная полоса ────────────────────────────────────────────── -->
+<section class="dark" id="custody">
+  <div class="split">
+    <div class="left">
+      <svg width="260" height="300" viewBox="0 0 260 300" fill="none" stroke="#0a0a0a">
+        <rect x="30" y="30" width="200" height="240"/>
+        <rect x="52" y="52" width="156" height="196" stroke="#bc9c5c"/>
+        <path d="M52 150 h156" stroke-dasharray="2 6"/>
+        <path d="M130 52 v196" stroke-dasharray="2 6"/>
+        <circle cx="130" cy="150" r="34"/>
+      </svg>
+    </div>
+    <div class="right">
+      <div class="h" data-i18n="d1">Folio</div>
+      <div class="util" data-i18n="d2">QUARTERLY REPORT</div>
+      <p class="sm" style="max-width:44ch;margin:var(--spacing-32) auto 0" data-i18n="d3">Every three months you receive one bound document: each work, where it physically is, what it is insured for, what changed in the market for comparable pieces, and what we would advise doing about it. Nothing arrives as a dashboard.</p>
+      <a class="act act-dark" href="#write" style="margin-top:var(--spacing-32)" data-i18n="d4">{ See a specimen report }</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── условия ──────────────────────────────────────────────────── -->
+<section class="sec" id="terms">
+  <div class="wrap">
+    <div class="sectitle">
+      <div class="t" data-i18n="t0">Terms of engagement</div>
+      <div class="rule"></div>
+    </div>
+    <div class="terms">
+      <div class="r">
+        <div class="k" data-i18n="t1k">Minimum</div>
+        <div class="sm" data-i18n="t1v">Eight works or a single work valued above twelve million roubles. Below that, an hourly consultation is honestly the better arrangement and we will say so.</div>
+      </div>
+      <div class="r">
+        <div class="k" data-i18n="t2k">Our fee</div>
+        <div class="sm" data-i18n="t2v">A flat annual retainer for custody and reporting, and six per cent of the hammer price on anything sold. We never take a percentage of an appraisal.</div>
+      </div>
+      <div class="r">
+        <div class="k" data-i18n="t3k">Conflicts</div>
+        <div class="sm" data-i18n="t3v">We do not deal on our own account, we do not hold stock, and we do not accept a commission from the auction house. All three are in the contract.</div>
+      </div>
+      <div class="r">
+        <div class="k" data-i18n="t4k">Leaving</div>
+        <div class="sm" data-i18n="t4v">Thirty days, and the collection goes out with its full file — provenance, condition, correspondence — in a form the next office can read.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── призыв ───────────────────────────────────────────────────── -->
+<section class="sec" id="write">
+  <div class="wrap" style="text-align:center">
+    <h2 class="h" style="max-width:20ch;margin:0 auto" data-i18n="w1">Tell us what you have inherited.</h2>
+    <p class="sm" style="max-width:46ch;margin:var(--spacing-24) auto 0" data-i18n="w2">The first conversation costs nothing and usually ends with us telling you that half of it is worth insuring and half of it is worth keeping for reasons that have nothing to do with money.</p>
+    <div style="margin-top:var(--spacing-32)">
+      <a class="act" href="#write" data-i18n="w3">{ Write to the office }</a>
+    </div>
+  </div>
+</section>
+
+<div class="pager util">
+  <span>Folio · <span data-i18n="pg1">collection office since 2011</span></span>
+  <span>← 2 / 5 →</span>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="fcols">
+      <div>
+        <div class="sub it">Folio</div>
+        <p class="sm" style="max-width:32ch;margin-top:var(--spacing-16)" data-i18n="fa">An office of four that looks after eleven collections. No gallery, no dealing, no stock of our own.</p>
+      </div>
+      <div>
+        <h4 data-i18n="fh1">The work</h4>
+        <ul><li data-i18n="fl1">Attribution</li><li data-i18n="fl2">Custody</li><li data-i18n="fl3">Realisation</li></ul>
+      </div>
+      <div>
+        <h4 data-i18n="fh2">Documents</h4>
+        <ul><li data-i18n="fl4">Specimen report</li><li data-i18n="fl5">Standard contract</li><li data-i18n="fl6">Fee schedule</li></ul>
+      </div>
+      <div>
+        <h4 data-i18n="fh3">Office</h4>
+        <ul><li data-i18n="fl7">Write to us</li><li data-i18n="fl8">Visit by appointment</li><li data-i18n="fl9">People</li></ul>
+      </div>
+    </div>
+    <div class="flegal util">
+      <span>© 2026 Folio</span>
+      <span data-i18n="fn">Two buildings · counted every quarter</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ── RU/EN. Английский — исходный, русский — перевод под него ── */
+var RU = {
+  n1:'Чем занимаемся', n2:'Хранение', n3:'Условия', n4:'Написать', wm:'Кабинет собраний',
+  h1:'Собрание — это актив, за которым надо смотреть дважды.',
+  hp:'Один раз как за имуществом: застраховать, хранить, описать, оценить. И один раз как за искусством — про эту часть забывают все, пока не приходит время продавать.',
+  hb:'{ Как мы работаем }',
+  s0:'Чем занимается кабинет',
+  c1t:'Атрибуция', c1d:'Изучение провенанса, отчёты о сохранности и письменное мнение двух специалистов, которые не знают выводов друг друга.',
+  c2t:'Хранение', c2d:'Климатическое хранение в двух зданиях, а не в одном, с ежеквартальным пересчётом, на который можно приехать.',
+  c3t:'Реализация', c3d:'При продаже мы берём процент с молотка и ничего с оценки — чтобы оценка оставалась честной.',
+  d1:'Folio', d2:'ЕЖЕКВАРТАЛЬНЫЙ ОТЧЁТ',
+  d3:'Раз в три месяца вы получаете один переплетённый документ: каждая вещь, где она физически находится, на какую сумму застрахована, что изменилось на рынке сопоставимых вещей и что мы советуем с этим делать. Никаких дашбордов.',
+  d4:'{ Посмотреть образец отчёта }',
+  t0:'Условия работы',
+  t1k:'Минимум', t1v:'Восемь предметов или один дороже двенадцати миллионов рублей. Ниже этого честнее почасовая консультация, и мы так и скажем.',
+  t2k:'Наше вознаграждение', t2v:'Фиксированный годовой платёж за хранение и отчётность и шесть процентов с молотка при продаже. Процент с оценки мы не берём никогда.',
+  t3k:'Конфликты', t3v:'Мы не торгуем за свой счёт, не держим собственный запас и не принимаем комиссию от аукционного дома. Все три пункта записаны в договоре.',
+  t4k:'Расставание', t4v:'Тридцать дней — и собрание уходит вместе с полным делом: провенанс, сохранность, переписка, в форме, которую прочтёт следующий кабинет.',
+  w1:'Расскажите, что вам досталось.',
+  w2:'Первый разговор ничего не стоит и обычно заканчивается тем, что мы говорим: половину стоит застраховать, а половину стоит хранить по причинам, не имеющим отношения к деньгам.',
+  w3:'{ Написать в кабинет }',
+  pg1:'кабинет собраний с 2011 года',
+  fa:'Кабинет из четырёх человек, который ведёт одиннадцать собраний. Без галереи, без торговли и без собственного запаса.',
+  fh1:'Работа', fl1:'Атрибуция', fl2:'Хранение', fl3:'Реализация',
+  fh2:'Документы', fl4:'Образец отчёта', fl5:'Типовой договор', fl6:'Тарифы',
+  fh3:'Кабинет', fl7:'Написать нам', fl8:'Визит по записи', fl9:'Люди',
+  fn:'Два здания · пересчёт каждый квартал'
+};
+var EN = {};
+document.querySelectorAll('[data-i18n]').forEach(function (el) { EN[el.dataset.i18n] = el.innerHTML; });
+function setLang(l) {
+  var dict = l === 'ru' ? RU : EN;
+  document.querySelectorAll('[data-i18n]').forEach(function (el) {
+    var v = dict[el.dataset.i18n];
+    if (v !== undefined) el.innerHTML = v;
+  });
+  document.documentElement.lang = l;
+  document.documentElement.dataset.lang = l;
+  document.querySelectorAll('.lang button').forEach(function (b) {
+    b.setAttribute('aria-pressed', b.dataset.set === l ? 'true' : 'false');
+  });
+}
+document.querySelectorAll('.lang button').forEach(function (b) {
+  b.addEventListener('click', function () { setLang(b.dataset.set); });
+});
+</script>
+</body>
+</html>

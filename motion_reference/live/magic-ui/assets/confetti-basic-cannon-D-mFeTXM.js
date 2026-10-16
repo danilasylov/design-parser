@@ -1,0 +1,1 @@
+import{j as t}from"./index-WM7-nNXq.js";import{C as o}from"./confetti-D5B_MdBr.js";import"./confetti.module-B5JVzsfH.js";import"./button-CLeK08vN.js";import"./index-D4omu1s7.js";import"./index-CFN0zKgi.js";function p(){return t.jsx("div",{className:"relative",children:t.jsx(o,{children:"Confetti 🎉"})})}export{p as default};

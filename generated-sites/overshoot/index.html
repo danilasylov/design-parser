@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Overshoot — Motion and realtime graphics studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+/* ─── Токены дизайн-системы Gt-planar — вставлены дословно ────────────── */
+:root {
+  /* Colors */
+  --color-hyperspace-violet: #6100ff;
+  --color-reactor-yellow: #fcff76;
+  --color-plasma-green: #00ff85;
+  --color-crimson-alert: #ff003d;
+  --color-deep-indigo: #29006c;
+  --color-plum-void: #1a0014;
+  --color-ember-violet: #7000ff;
+  --color-amber-signal: #ff8a00;
+  --color-photon-white: #ffffff;
+  --color-null-black: #000000;
+  --color-graphite: #949494;
+  --color-carbon: #606060;
+
+  /* Typography — Font Families */
+  --font-gt-planar: 'GT Planar', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* Typography — Scale */
+  --text-caption: 11px;
+  --leading-caption: 1.43;
+  --tracking-caption: 0.25px;
+  --text-body-sm: 14px;
+  --leading-body-sm: 1.5;
+  --text-body: 16px;
+  --leading-body: 1.63;
+  --tracking-body: -0.16px;
+  --text-subheading: 20px;
+  --leading-subheading: 1.2;
+  --tracking-subheading: 0.5px;
+  --text-heading-sm: 25px;
+  --leading-heading-sm: 1.15;
+  --tracking-heading-sm: 1.15px;
+  --text-heading: 37px;
+  --leading-heading: 1.1;
+  --tracking-heading: 2.59px;
+  --text-heading-lg: 58px;
+  --leading-heading-lg: 1;
+  --tracking-heading-lg: 2.9px;
+  --text-display: 115px;
+  --leading-display: 0.9;
+  --tracking-display: 5.75px;
+  --text-display-xl: 187px;
+  --leading-display-xl: 0.85;
+  --tracking-display-xl: 130.9px;
+
+  /* Typography — Weights */
+  --font-weight-light: 300;
+  --font-weight-regular: 400;
+  --font-weight-bold: 700;
+
+  /* Spacing */
+  --spacing-unit: 4px;
+  --spacing-4: 4px;
+  --spacing-5: 5px;
+  --spacing-8: 8px;
+  --spacing-10: 10px;
+  --spacing-15: 15px;
+  --spacing-20: 20px;
+  --spacing-25: 25px;
+  --spacing-29: 29px;
+  --spacing-50: 50px;
+  --spacing-58: 58px;
+  --spacing-100: 100px;
+  --spacing-150: 150px;
+
+  /* Layout */
+  --section-gap: 25px;
+  --card-padding: 15-25px;
+  --element-gap: 5px;
+
+  /* Border Radius */
+  --radius-full: 9999px;
+
+  /* Named Radii */
+  --radius-tags: 9999px;
+  --radius-cards: 0px;
+  --radius-inputs: 0px;
+  --radius-buttons: 9999px;
+
+  /* Shadows */
+  --shadow-subtle: rgb(255, 255, 255) 1px 0px 0px 0px, rgb(255, 255, 255) 0px 1px 0px 0px, rgb(255, 255, 255) 1px 1px 0px 0px, rgb(255, 255, 255) 1px 0px 0px 0px inset, rgb(255, 255, 255) 0px 1px 0px 0px inset;
+
+  /* Surfaces */
+  --surface-null-black-canvas: #000000;
+  --surface-plum-void-recess: #1a0014;
+  --surface-deep-indigo-plate: #29006c;
+  --surface-ember-violet-field: #7000ff;
+  --surface-hyperspace-violet: #6100ff;
+}
+
+/* Подстановка шрифта: GT Planar — кастомный. DESIGN.md предлагает Space Grotesk
+   и Space Mono, у обоих нет кириллицы; третий вариант из того же списка —
+   JetBrains Mono — кириллицу имеет и совпадает по характеру («geometric,
+   monospaced-influenced»). «Схематичность» набора даёт не сам шрифт, а
+   экстремальный трекинг из токенов — это и названо подписью системы. */
+:root { --font-ui: 'JetBrains Mono', var(--font-gt-planar); }
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: var(--font-ui);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  letter-spacing: var(--tracking-body);
+  background: var(--surface-null-black-canvas);
+  color: var(--color-photon-white);
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "kern", "tnum";
+}
+
+/* Раскладка полноэкранная, без max-width — требование системы */
+.pad { padding-left: var(--spacing-25); padding-right: var(--spacing-25); }
+/* Разделитель-каркас: 1px белая линия, нарисованная тенью, не занимает поток */
+.rule { box-shadow: rgb(255, 255, 255) 0px 1px 0px 0px; }
+
+/* ─── Типографика ─────────────────────────────────────────────────────── */
+.caption {
+  font-size: var(--text-caption); line-height: var(--leading-caption);
+  letter-spacing: var(--tracking-caption); text-transform: uppercase;
+}
+.body-sm { font-size: var(--text-body-sm); line-height: var(--leading-body-sm); }
+.subheading {
+  font-size: var(--text-subheading); line-height: var(--leading-subheading);
+  letter-spacing: var(--tracking-subheading); text-transform: uppercase;
+}
+.heading-sm {
+  font-size: var(--text-heading-sm); line-height: var(--leading-heading-sm);
+  letter-spacing: var(--tracking-heading-sm); text-transform: uppercase;
+}
+.heading {
+  font-size: var(--text-heading); line-height: var(--leading-heading);
+  letter-spacing: var(--tracking-heading); text-transform: uppercase;
+}
+.heading-lg {
+  font-size: var(--text-heading-lg); line-height: var(--leading-heading-lg);
+  letter-spacing: var(--tracking-heading-lg); text-transform: uppercase;
+}
+.display {
+  font-size: var(--text-display); line-height: var(--leading-display);
+  letter-spacing: var(--tracking-display); text-transform: uppercase;
+  font-weight: var(--font-weight-bold);
+}
+.muted { color: var(--color-graphite); }
+/* Ссылка-«сигнал»: плазменно-зелёный, подчёркивание только на ховере */
+.link { color: var(--color-plasma-green); text-decoration: none; }
+.link:hover { box-shadow: var(--color-plasma-green) 0px 1px 0px 0px; }
+/* Янтарь — только данные. Кримсон — только предупреждение. */
+.data { color: var(--color-amber-signal); }
+
+/* ─── Кнопки: радиус только 9999 ──────────────────────────────────────── */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  font-family: var(--font-ui); font-size: var(--text-body-sm);
+  font-weight: var(--font-weight-regular); letter-spacing: 0.14px;
+  text-transform: uppercase; text-decoration: none; cursor: pointer;
+  border-radius: var(--radius-buttons);
+  border: 1px solid transparent;
+  padding: var(--spacing-25) var(--spacing-50);
+  transition: background-color .12s linear, border-color .12s linear, color .12s linear;
+}
+/* Единственная залитая кнопка в системе */
+.btn--violet { background: var(--surface-hyperspace-violet); color: var(--color-photon-white); }
+.btn--violet:hover { background: var(--color-ember-violet); }
+.btn--yellow { border-color: var(--color-reactor-yellow); color: var(--color-photon-white); }
+.btn--yellow:hover { background: var(--color-reactor-yellow); color: var(--color-null-black); }
+.btn--ghost {
+  border-color: var(--color-graphite); color: var(--color-photon-white);
+  padding: var(--spacing-10) var(--spacing-25);
+}
+.btn--ghost:hover { border-color: var(--color-photon-white); }
+
+.tag {
+  display: inline-block; border-radius: var(--radius-tags);
+  border: 1px solid var(--color-plasma-green);
+  padding: 2px var(--spacing-15);
+  font-size: var(--text-caption); letter-spacing: var(--tracking-caption);
+  text-transform: uppercase; color: var(--color-photon-white);
+}
+.tag--yellow { border-color: var(--color-reactor-yellow); }
+
+/* ─── Шапка: одна горизонтальная полоса ───────────────────────────────── */
+.hdr {
+  display: flex; align-items: center; gap: var(--spacing-15);
+  padding: var(--spacing-15) var(--spacing-25);
+  box-shadow: rgb(255, 255, 255) 0px 1px 0px 0px;
+  position: relative; z-index: 3;
+}
+.mark {
+  border: 1px solid var(--color-reactor-yellow);
+  color: var(--color-reactor-yellow);
+  padding: var(--spacing-5) var(--spacing-15);
+  font-size: var(--text-body-sm); font-weight: var(--font-weight-bold);
+  letter-spacing: 0.5px; text-transform: uppercase; text-decoration: none;
+}
+/* Полоса-предупреждение: кримсон только рамкой, без заливки и иконки */
+.warn {
+  flex: 1; text-align: center;
+  border: 1px solid var(--color-crimson-alert);
+  padding: var(--spacing-8) var(--spacing-15);
+  font-size: var(--text-caption); letter-spacing: 0.28px; text-transform: uppercase;
+}
+.hdr__nav { display: flex; align-items: center; gap: var(--spacing-8); }
+.lang { display: inline-flex; border: 1px solid var(--color-graphite); border-radius: var(--radius-tags); overflow: hidden; }
+.lang button {
+  font-family: var(--font-ui); font-size: var(--text-caption);
+  letter-spacing: var(--tracking-caption);
+  padding: var(--spacing-8) var(--spacing-15);
+  border: none; background: transparent; color: var(--color-graphite); cursor: pointer;
+}
+.lang button[aria-pressed="true"] { background: var(--color-photon-white); color: var(--color-null-black); }
+
+/* ─── Герой: варп-поле, линии, а не заливка ───────────────────────────── */
+.hero { position: relative; min-height: 620px; display: flex; align-items: flex-end; overflow: hidden; }
+.hero__warp {
+  position: absolute; inset: 0;
+  /* Лучи из точки схода: жёсткие белые линии, а не градиентная подложка.
+     Точка схода уведена вправо, маска гасит поле слева — текст лежит
+     на чистом чёрном, без полупрозрачных подложек (их система запрещает). */
+  background: repeating-conic-gradient(
+    from 0deg at 72% 44%,
+    var(--color-photon-white) 0deg 0.16deg,
+    transparent 0.16deg 2.6deg
+  );
+  -webkit-mask-image:
+    radial-gradient(circle at 72% 44%, transparent 0, transparent 46px, #000 300px),
+    linear-gradient(to right, transparent 44%, #000 68%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    radial-gradient(circle at 72% 44%, transparent 0, transparent 46px, #000 300px),
+    linear-gradient(to right, transparent 44%, #000 68%);
+  mask-composite: intersect;
+}
+.hero__body { position: relative; z-index: 2; padding: var(--spacing-50) var(--spacing-25) var(--spacing-50); width: 100%; }
+/* Дисплей-заголовок обрамлён снизу жёлтой линией — «показание прибора» */
+.hero h1 {
+  display: inline-block;
+  box-shadow: var(--color-reactor-yellow) 0px 1px 0px 0px;
+  padding-bottom: var(--spacing-10);
+}
+.hero__meta { display: flex; gap: var(--spacing-25); margin-top: var(--spacing-25); flex-wrap: wrap; }
+.hero__actions { display: flex; gap: var(--spacing-10); margin-top: var(--spacing-29); }
+
+/* ─── Секции ──────────────────────────────────────────────────────────── */
+.sec { padding: var(--spacing-58) var(--spacing-25); box-shadow: rgb(255, 255, 255) 0px 1px 0px 0px; }
+.sec__head { display: flex; align-items: baseline; gap: var(--spacing-25); margin-bottom: var(--spacing-29); }
+.sec__head .caption { color: var(--color-reactor-yellow); }
+/* Абзацы всегда по левому краю — центрирование текста система запрещает */
+.prose { max-width: 62ch; }
+.prose p + p { margin-top: var(--spacing-15); }
+
+/* ─── Таблица-каркас ──────────────────────────────────────────────────── */
+.grid-table { width: 100%; border-collapse: collapse; }
+.grid-table th, .grid-table td {
+  border: 1px solid var(--color-photon-white);
+  padding: var(--spacing-10) var(--spacing-15);
+  text-align: left; font-size: var(--text-body-sm); line-height: var(--leading-body-sm);
+  vertical-align: top;
+}
+.grid-table th {
+  font-weight: var(--font-weight-regular); font-size: var(--text-caption);
+  letter-spacing: var(--tracking-caption); text-transform: uppercase;
+  color: var(--color-null-black); background: var(--color-reactor-yellow);
+  border-color: var(--color-reactor-yellow);
+}
+.grid-table td:first-child { text-transform: uppercase; letter-spacing: 0.5px; }
+
+/* ─── Плоские карточки: рамка и есть карточка ─────────────────────────── */
+.cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-15); }
+.card {
+  border: 1px solid var(--color-photon-white);
+  border-radius: var(--radius-cards);
+  padding: var(--spacing-25);
+  background: var(--surface-null-black-canvas);
+  display: flex; flex-direction: column; gap: var(--spacing-10);
+}
+.card--recess { background: var(--surface-plum-void-recess); }
+.card__no { color: var(--color-graphite); font-size: var(--text-caption); letter-spacing: var(--tracking-caption); }
+.card p { font-size: var(--text-body-sm); line-height: var(--leading-body-sm); color: var(--color-graphite); }
+.card__tags { display: flex; gap: var(--spacing-5); flex-wrap: wrap; margin-top: auto; }
+
+/* ─── Полоса показаний ────────────────────────────────────────────────── */
+.readout { display: grid; grid-template-columns: repeat(4, 1fr); }
+.readout > div {
+  border: 1px solid var(--color-photon-white);
+  margin-right: -1px; margin-bottom: -1px;
+  padding: var(--spacing-20) var(--spacing-15);
+}
+.readout .n { font-size: var(--text-heading); line-height: 1; letter-spacing: 1.2px; color: var(--color-amber-signal); }
+.readout .l { font-size: var(--text-caption); letter-spacing: var(--tracking-caption); text-transform: uppercase; color: var(--color-graphite); margin-top: var(--spacing-10); }
+
+/* ─── Процесс ─────────────────────────────────────────────────────────── */
+.steps { display: grid; grid-template-columns: repeat(4, 1fr); }
+.steps > div {
+  border: 1px solid var(--color-photon-white);
+  margin-right: -1px; padding: var(--spacing-20) var(--spacing-15);
+}
+.steps .k { color: var(--color-plasma-green); font-size: var(--text-caption); letter-spacing: var(--tracking-caption); }
+.steps h3 { font-size: var(--text-body); line-height: 1.2; letter-spacing: 0.5px; text-transform: uppercase; margin: var(--spacing-10) 0; }
+.steps p { font-size: var(--text-body-sm); line-height: var(--leading-body-sm); color: var(--color-graphite); }
+
+/* ─── Финал ───────────────────────────────────────────────────────────── */
+.final { padding: var(--spacing-100) var(--spacing-25); box-shadow: rgb(255, 255, 255) 0px 1px 0px 0px; }
+.final__actions { display: flex; gap: var(--spacing-10); margin-top: var(--spacing-29); }
+
+/* ─── Подвал: тонкая линия и всё ──────────────────────────────────────── */
+.ftr {
+  display: flex; justify-content: space-between; align-items: center; gap: var(--spacing-25);
+  padding: var(--spacing-20) var(--spacing-25);
+  font-size: var(--text-caption); letter-spacing: var(--tracking-caption);
+  text-transform: uppercase; color: var(--color-graphite);
+}
+.ftr nav { display: flex; gap: var(--spacing-20); }
+.ftr a { color: var(--color-graphite); text-decoration: none; }
+.ftr a:hover { color: var(--color-photon-white); }
+</style>
+</head>
+<body>
+
+<!-- ─── Шапка ─────────────────────────────────────────────────────────── -->
+<header class="hdr">
+  <a class="mark" href="#top">Overshoot</a>
+  <div class="warn" data-i18n="warn">Studio at capacity — next intake window opens in October</div>
+  <div class="hdr__nav">
+    <div class="lang">
+      <button type="button" data-set="en" aria-pressed="true">EN</button>
+      <button type="button" data-set="ru" aria-pressed="false">RU</button>
+    </div>
+    <a class="btn btn--ghost" href="#work" data-i18n="nav.work">Work</a>
+    <a class="btn btn--ghost" href="#services" data-i18n="nav.services">Services</a>
+    <a class="btn btn--ghost" href="#brief" data-i18n="nav.brief">Brief</a>
+  </div>
+</header>
+
+<!-- ─── Герой ─────────────────────────────────────────────────────────── -->
+<section class="hero" id="top">
+  <div class="hero__warp"></div>
+  <div class="hero__body">
+    <h1 class="display" data-i18n="hero.title">Screen graphics<br>at speed</h1>
+    <div class="hero__meta">
+      <span class="tag" data-i18n="hero.tag1">Film · Titles</span>
+      <span class="tag tag--yellow" data-i18n="hero.tag2">Games · HUD</span>
+      <span class="tag tag--yellow" data-i18n="hero.tag3">Realtime · Broadcast</span>
+    </div>
+    <div class="prose" style="margin-top:var(--spacing-25)">
+      <p class="body-sm muted" data-i18n="hero.lede">We build the interfaces that appear on screens inside films, games and live broadcast — the readouts a pilot squints at, the menu a player never questions, the lower third that survives a director's note at 2am.</p>
+    </div>
+    <div class="hero__actions">
+      <a class="btn btn--violet" href="#brief" data-i18n="hero.cta1">Start a brief</a>
+      <a class="btn btn--yellow" href="#work" data-i18n="hero.cta2">See the reel</a>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Манифест ──────────────────────────────────────────────────────── -->
+<section class="sec">
+  <div class="sec__head">
+    <span class="caption">01</span>
+    <h2 class="heading-sm" data-i18n="man.title">The screen inside the screen</h2>
+  </div>
+  <div class="prose">
+    <p class="body-sm" data-i18n="man.p1">A fictional interface has one job: to be read in under two seconds by an audience that is not looking at it. That is a harder constraint than any product UI, and it is the only constraint we optimise for.</p>
+    <p class="body-sm muted" data-i18n="man.p2">Everything we ship is built as a working instrument first — real data structures, real states, real failure modes — and only then dressed for camera. It is why our panels hold up in close-up and why a director can call for a new readout on set without a rebuild.</p>
+  </div>
+</section>
+
+<!-- ─── Услуги: таблица-каркас ────────────────────────────────────────── -->
+<section class="sec" id="services">
+  <div class="sec__head">
+    <span class="caption">02</span>
+    <h2 class="heading-sm" data-i18n="srv.title">Capability</h2>
+  </div>
+  <table class="grid-table">
+    <thead>
+      <tr>
+        <th data-i18n="srv.h1">Discipline</th>
+        <th data-i18n="srv.h2">What it is</th>
+        <th data-i18n="srv.h3">Delivered as</th>
+        <th data-i18n="srv.h4">Lead</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td data-i18n="srv.1.a">Fictional UI</td>
+        <td data-i18n="srv.1.b">Cockpit readouts, terminals and diegetic panels designed to be read at a glance on camera.</td>
+        <td data-i18n="srv.1.c">After Effects · Cavalry · plates</td>
+        <td class="data">4–7 wk</td>
+      </tr>
+      <tr>
+        <td data-i18n="srv.2.a">Title sequence</td>
+        <td data-i18n="srv.2.b">Opening and end titles, typographic systems that survive a full-length credit roll.</td>
+        <td data-i18n="srv.2.c">ProRes 4444 · source project</td>
+        <td class="data">6–10 wk</td>
+      </tr>
+      <tr>
+        <td data-i18n="srv.3.a">Game HUD</td>
+        <td data-i18n="srv.3.b">Playable heads-up displays built against the engine, not mocked over a screenshot.</td>
+        <td data-i18n="srv.3.c">Unreal · Unity · design system</td>
+        <td class="data">8–14 wk</td>
+      </tr>
+      <tr>
+        <td data-i18n="srv.4.a">Realtime graphics</td>
+        <td data-i18n="srv.4.b">Broadcast overlays driven by live feeds, with a control surface an operator can run alone.</td>
+        <td data-i18n="srv.4.c">Notch · WebGL · operator build</td>
+        <td class="data">5–9 wk</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ─── Работы ────────────────────────────────────────────────────────── -->
+<section class="sec" id="work">
+  <div class="sec__head">
+    <span class="caption">03</span>
+    <h2 class="heading-sm" data-i18n="work.title">Selected work</h2>
+  </div>
+  <div class="cards">
+    <article class="card">
+      <span class="card__no">2026 / 01</span>
+      <h3 class="subheading" data-i18n="work.1.t">Halyard</h3>
+      <p data-i18n="work.1.d">Eleven cockpit states for a submarine thriller, built as one instrument system so the art department could re-shoot any panel without us.</p>
+      <div class="card__tags"><span class="tag" data-i18n="work.1.g1">Feature film</span><span class="tag tag--yellow" data-i18n="work.1.g2">Fictional UI</span></div>
+    </article>
+    <article class="card card--recess">
+      <span class="card__no">2025 / 04</span>
+      <h3 class="subheading" data-i18n="work.2.t">Ferrous Rally</h3>
+      <p data-i18n="work.2.d">A racing HUD that stays legible at 240 km/h on a split screen — telemetry, damage and position in one glance, shipped as an engine module.</p>
+      <div class="card__tags"><span class="tag" data-i18n="work.2.g1">Game</span><span class="tag tag--yellow" data-i18n="work.2.g2">Realtime</span></div>
+    </article>
+    <article class="card">
+      <span class="card__no">2025 / 02</span>
+      <h3 class="subheading" data-i18n="work.3.t">Kestrel Open</h3>
+      <p data-i18n="work.3.d">Live broadcast package for a nine-day tournament: overlays driven straight from timing data, run by two operators in a truck.</p>
+      <div class="card__tags"><span class="tag" data-i18n="work.3.g1">Broadcast</span><span class="tag tag--yellow" data-i18n="work.3.g2">Operator build</span></div>
+    </article>
+  </div>
+</section>
+
+<!-- ─── Показания ─────────────────────────────────────────────────────── -->
+<section class="sec">
+  <div class="sec__head">
+    <span class="caption">04</span>
+    <h2 class="heading-sm" data-i18n="read.title">Readout</h2>
+  </div>
+  <div class="readout">
+    <div><div class="n">184</div><div class="l" data-i18n="read.1">Panels shipped</div></div>
+    <div><div class="n">27</div><div class="l" data-i18n="read.2">Titles delivered</div></div>
+    <div><div class="n">6</div><div class="l" data-i18n="read.3">People in the studio</div></div>
+    <div><div class="n">0</div><div class="l" data-i18n="read.4">Stock UI kits used</div></div>
+  </div>
+</section>
+
+<!-- ─── Процесс ───────────────────────────────────────────────────────── -->
+<section class="sec">
+  <div class="sec__head">
+    <span class="caption">05</span>
+    <h2 class="heading-sm" data-i18n="proc.title">How a job runs</h2>
+  </div>
+  <div class="steps">
+    <div>
+      <span class="k">→ 01</span>
+      <h3 data-i18n="proc.1.t">Read the script</h3>
+      <p data-i18n="proc.1.d">We start from the scene, not the moodboard. What must the audience understand, and in how many frames.</p>
+    </div>
+    <div>
+      <span class="k">→ 02</span>
+      <h3 data-i18n="proc.2.t">Build the instrument</h3>
+      <p data-i18n="proc.2.d">States, data and failure modes first. If the panel cannot show an error, it is not finished.</p>
+    </div>
+    <div>
+      <span class="k">→ 03</span>
+      <h3 data-i18n="proc.3.t">Dress for camera</h3>
+      <p data-i18n="proc.3.d">Contrast, scale and motion tuned to the lens and the distance it will actually be shot from.</p>
+    </div>
+    <div>
+      <span class="k">→ 04</span>
+      <h3 data-i18n="proc.4.t">Hand over the keys</h3>
+      <p data-i18n="proc.4.d">You get the source project and a short manual, so the next change does not require us.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Финал ─────────────────────────────────────────────────────────── -->
+<section class="final" id="brief">
+  <h2 class="heading" data-i18n="fin.title">Tell us what<br>the audience must read</h2>
+  <div class="prose" style="margin-top:var(--spacing-25)">
+    <p class="body-sm muted" data-i18n="fin.lede">Send the scene, the shot list or a single sentence. We answer within two working days, and we say no when the schedule cannot hold it.</p>
+  </div>
+  <div class="final__actions">
+    <a class="btn btn--violet" href="#brief" data-i18n="fin.cta1">Start a brief</a>
+    <a class="btn btn--yellow" href="#work" data-i18n="fin.cta2">studio@overshoot.tv</a>
+  </div>
+</section>
+
+<!-- ─── Подвал ────────────────────────────────────────────────────────── -->
+<footer class="ftr">
+  <span data-i18n="ftr.copy">© 2026 Overshoot — Tbilisi</span>
+  <nav>
+    <a href="#work" data-i18n="ftr.1">Work</a>
+    <a href="#services" data-i18n="ftr.2">Services</a>
+    <a href="#brief" data-i18n="ftr.3">Brief</a>
+    <a href="#top" data-i18n="ftr.4">Top</a>
+  </nav>
+</footer>
+
+<script>
+/* Английский — исходный; русский — перевод. Дефолт EN, без автодетекта. */
+var I18N = {
+  ru: {
+    "warn": "Студия загружена — следующее окно набора откроется в октябре",
+    "nav.work": "Работы",
+    "nav.services": "Услуги",
+    "nav.brief": "Бриф",
+
+    "hero.title": "Экранная графика<br>на скорости",
+    "hero.tag1": "Кино · Титры",
+    "hero.tag2": "Игры · HUD",
+    "hero.tag3": "Реалтайм · Эфир",
+    "hero.lede": "Мы делаем интерфейсы, которые появляются на экранах внутри фильмов, игр и прямого эфира: показания, в которые щурится пилот; меню, к которому у игрока не возникает вопросов; плашку, пережившую замечание режиссёра в два часа ночи.",
+    "hero.cta1": "Отправить бриф",
+    "hero.cta2": "Смотреть шоурил",
+
+    "man.title": "Экран внутри экрана",
+    "man.p1": "У выдуманного интерфейса одна задача: быть прочитанным меньше чем за две секунды зрителем, который на него не смотрит. Это условие жёстче любого продуктового UI, и только под него мы и оптимизируем.",
+    "man.p2": "Всё, что мы отдаём, сначала собирается как работающий прибор — настоящие структуры данных, настоящие состояния, настоящие отказы — и только потом одевается под камеру. Поэтому наши панели держат крупный план, а режиссёр может попросить новое показание прямо на площадке, без пересборки.",
+
+    "srv.title": "Что умеем",
+    "srv.h1": "Направление",
+    "srv.h2": "Что это",
+    "srv.h3": "Отдаём как",
+    "srv.h4": "Срок",
+    "srv.1.a": "Выдуманный UI",
+    "srv.1.b": "Показания кокпита, терминалы и диегетические панели, читаемые с одного взгляда в кадре.",
+    "srv.1.c": "After Effects · Cavalry · плейты",
+    "srv.2.a": "Титры",
+    "srv.2.b": "Начальные и финальные титры, типографическая система, выдерживающая полный список.",
+    "srv.2.c": "ProRes 4444 · исходный проект",
+    "srv.3.a": "HUD для игры",
+    "srv.3.b": "Играбельные интерфейсы, собранные в движке, а не нарисованные поверх скриншота.",
+    "srv.3.c": "Unreal · Unity · дизайн-система",
+    "srv.4.a": "Реалтайм-графика",
+    "srv.4.b": "Эфирные оверлеи на живых данных, с пультом, который оператор ведёт один.",
+    "srv.4.c": "Notch · WebGL · сборка оператора",
+
+    "work.title": "Избранное",
+    "work.1.t": "Halyard",
+    "work.1.d": "Одиннадцать состояний кокпита для подводного триллера, собранные как одна приборная система, чтобы художники могли переснять любую панель без нас.",
+    "work.1.g1": "Полный метр",
+    "work.1.g2": "Выдуманный UI",
+    "work.2.t": "Ferrous Rally",
+    "work.2.d": "Гоночный HUD, читаемый на 240 км/ч в разделённом экране: телеметрия, повреждения и позиция за один взгляд, отдан модулем движка.",
+    "work.2.g1": "Игра",
+    "work.2.g2": "Реалтайм",
+    "work.3.t": "Kestrel Open",
+    "work.3.d": "Эфирный пакет для девятидневного турнира: оверлеи прямо из данных хронометража, работают силами двух операторов в ПТС.",
+    "work.3.g1": "Эфир",
+    "work.3.g2": "Сборка оператора",
+
+    "read.title": "Показания",
+    "read.1": "Панелей сдано",
+    "read.2": "Титров сделано",
+    "read.3": "Человек в студии",
+    "read.4": "Стоковых UI-китов",
+
+    "proc.title": "Как идёт работа",
+    "proc.1.t": "Читаем сценарий",
+    "proc.1.d": "Начинаем со сцены, а не с мудборда. Что зритель должен понять и за сколько кадров.",
+    "proc.2.t": "Собираем прибор",
+    "proc.2.d": "Сначала состояния, данные и отказы. Если панель не умеет показать ошибку — она не готова.",
+    "proc.3.t": "Одеваем под камеру",
+    "proc.3.d": "Контраст, масштаб и движение подгоняются под объектив и реальную дистанцию съёмки.",
+    "proc.4.t": "Отдаём ключи",
+    "proc.4.d": "Вы получаете исходный проект и короткую инструкцию, чтобы следующая правка обошлась без нас.",
+
+    "fin.title": "Расскажите, что<br>должен прочесть зритель",
+    "fin.lede": "Пришлите сцену, шот-лист или одно предложение. Отвечаем за два рабочих дня и говорим «нет», когда график не выдержит.",
+    "fin.cta1": "Отправить бриф",
+    "fin.cta2": "studio@overshoot.tv",
+
+    "ftr.copy": "© 2026 Overshoot — Тбилиси",
+    "ftr.1": "Работы",
+    "ftr.2": "Услуги",
+    "ftr.3": "Бриф",
+    "ftr.4": "Наверх"
+  }
+};
+
+(function () {
+  var nodes = document.querySelectorAll('[data-i18n]');
+  var EN = {};
+  nodes.forEach(function (n) { EN[n.getAttribute('data-i18n')] = n.innerHTML; });
+
+  function apply(lang) {
+    nodes.forEach(function (n) {
+      var k = n.getAttribute('data-i18n');
+      var v = lang === 'ru' ? I18N.ru[k] : EN[k];
+      if (v) n.innerHTML = v;
+    });
+    document.documentElement.lang = lang;
+    document.documentElement.setAttribute('data-lang', lang);
+    document.querySelectorAll('.lang [data-set]').forEach(function (b) {
+      b.setAttribute('aria-pressed', String(b.getAttribute('data-set') === lang));
+    });
+  }
+
+  document.querySelectorAll('.lang [data-set]').forEach(function (b) {
+    b.addEventListener('click', function () { apply(b.getAttribute('data-set')); });
+  });
+})();
+</script>
+</body>
+</html>

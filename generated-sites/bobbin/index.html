@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>Bobbin — reissues from provincial radio tape archives</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;800&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════════════════════════════
+   Дизайн-система Cassette — styles.refero.design/style/fb4cfe58-00b5-4e6a-b251-0c65e60b6649
+   :root ниже вставлен ДОСЛОВНО со вкладки CSS Variables.
+   ══════════════════════════════════════════════════════════════════ */
+:root {
+  /* Colors */
+  --color-hi-vis-yellow: #f0e226;
+  --color-ink-black: #19181a;
+  --color-pure-black: #000000;
+  --color-bone: #f5f4f0;
+  --color-charcoal: #272727;
+  --color-sand: #d9d7ce;
+
+  /* Typography — Font Families */
+  --font-apercu-pro: 'Apercu Pro', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-apercu-mono-pro: 'Apercu Mono Pro', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Typography — Scale */
+  --text-caption: 13px;
+  --leading-caption: 1.16;
+  --text-body: 15px;
+  --leading-body: 1.2;
+  --text-heading: 37px;
+  --leading-heading: 1.08;
+  --text-display: 56px;
+  --leading-display: 1.08;
+
+  /* Typography — Weights */
+  --font-weight-regular: 400;
+
+  /* Spacing */
+  --spacing-unit: 4px;
+  --spacing-4: 4px;
+  --spacing-8: 8px;
+  --spacing-12: 12px;
+  --spacing-16: 16px;
+  --spacing-20: 20px;
+  --spacing-24: 24px;
+  --spacing-32: 32px;
+  --spacing-48: 48px;
+  --spacing-64: 64px;
+  --spacing-128: 128px;
+
+  /* Layout */
+  --page-max-width: 1440px;
+  --section-gap: 80px;
+  --card-padding: 24px;
+  --element-gap: 8px;
+
+  /* Border Radius */
+  --radius-full: 900px;
+
+  /* Named Radii */
+  --radius-cards: 0px;
+  --radius-badges: 900px;
+  --radius-images: 0px;
+  --radius-buttons: 900px;
+
+  /* Surfaces */
+  --surface-ink-black-canvas: #19181a;
+  --surface-bone-surface: #f5f4f0;
+  --surface-hi-vis-accent: #f0e226;
+}
+
+/* Подстановки шрифтов. Apercu Pro → Onest (Söhne и Neue Haas недоступны, у Inter
+   кириллица есть, но он уже занят половиной галереи; Onest — тот же нео-гротеск
+   с кириллицей). Apercu Mono Pro → JetBrains Mono, первая замена DESIGN.md.
+   Вес 800 разрешён ровно логотипу: система говорит «только 400», но на скриншоте
+   оригинала слово CASSETTE набрано сверхжирным — скриншот главнее прозы. */
+:root {
+  --font-ui: 'Onest', var(--font-apercu-pro);
+  --font-mono: 'JetBrains Mono', var(--font-apercu-mono-pro);
+}
+
+* { box-sizing: border-box; }
+html { -webkit-font-smoothing: antialiased; }
+body {
+  margin: 0;
+  background: var(--surface-ink-black-canvas);
+  color: var(--color-bone);
+  font-family: var(--font-ui);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  font-weight: var(--font-weight-regular);
+}
+svg { display: block; }
+a { color: inherit; text-decoration: none; }
+h1, h2, h3, h4, p, ul { margin: 0; padding: 0; }
+ul { list-style: none; }
+
+.wrap { max-width: var(--page-max-width); margin: 0 auto; padding: 0 var(--spacing-32); }
+.sec { padding: var(--section-gap) 0; }
+
+.mono { font-family: var(--font-mono); font-size: var(--text-caption); line-height: var(--leading-caption); }
+.up { text-transform: uppercase; }
+.h { font-size: var(--text-heading); line-height: var(--leading-heading); font-weight: var(--font-weight-regular); }
+.d { font-size: var(--text-display); line-height: var(--leading-display); font-weight: var(--font-weight-regular); }
+.sand { color: var(--color-sand); }
+
+/* зерно — обязательный риз-эффект на больших жёлтых заливках */
+.grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E");
+  background-blend-mode: multiply;
+}
+
+/* пилюли: радиус 900px, меньше нельзя */
+.pill {
+  display: inline-flex; align-items: center;
+  border-radius: var(--radius-buttons);
+  padding: 5px 13px;
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  line-height: 1;
+  text-transform: uppercase;
+  background: var(--color-hi-vis-yellow);
+  color: var(--color-pure-black);
+  border: 1px solid var(--color-hi-vis-yellow);
+  cursor: pointer;
+}
+.pill-out { background: transparent; color: var(--color-hi-vis-yellow); }
+.pill-out:hover { background: var(--color-hi-vis-yellow); color: var(--color-pure-black); }
+.pill:hover { background: transparent; color: var(--color-hi-vis-yellow); }
+.badge {
+  display: inline-flex; flex-direction: column; gap: 2px;
+  border: 1px solid var(--color-hi-vis-yellow);
+  border-radius: var(--radius-badges);
+  color: var(--color-hi-vis-yellow);
+  padding: var(--spacing-8) var(--spacing-20);
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  line-height: 1.16;
+  text-transform: uppercase;
+  margin-bottom: var(--spacing-24);
+}
+
+/* герой */
+.hero { position: relative; min-height: 840px; padding-bottom: var(--spacing-48); }
+.wordmark { width: 100%; }
+.cities { display: flex; justify-content: space-between; padding: 0 var(--spacing-12); }
+.navrow { display: flex; align-items: flex-start; gap: var(--spacing-16); padding: var(--spacing-128) var(--spacing-32) 0; }
+.cluster { display: flex; flex-wrap: wrap; gap: var(--spacing-8); max-width: 320px; }
+.hero .claim { margin-left: auto; text-align: right; width: 700px; }
+.eq { position: absolute; right: 0; bottom: var(--spacing-48); display: flex; flex-direction: column; gap: var(--spacing-8); align-items: flex-end; }
+.eq i { display: block; height: 10px; background: var(--color-hi-vis-yellow); }
+.lang { display: inline-flex; gap: 5px; align-items: center; font-family: var(--font-mono); font-size: var(--text-caption); }
+.lang button { font: inherit; text-transform: uppercase; border: none; background: none; padding: 0; cursor: pointer; color: var(--color-sand); }
+.lang button[aria-pressed="true"] { color: var(--color-hi-vis-yellow); }
+.lang span { color: var(--color-sand); }
+
+/* асимметричный сплит: коллаж слева, текст справа */
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-64); align-items: center; }
+.collage { position: relative; height: 460px; }
+.collage > div { position: absolute; border: 1px solid var(--color-bone); border-radius: var(--radius-images); }
+.collage .c1 { left: 0; top: 20px; width: 280px; height: 280px; background: var(--color-charcoal); }
+.collage .c2 { left: 190px; top: 130px; width: 300px; height: 220px; background: var(--color-ink-black); border-color: var(--color-hi-vis-yellow); }
+.collage .c3 { left: 60px; top: 300px; width: 200px; height: 130px; background: var(--color-hi-vis-yellow); border-color: var(--color-pure-black); }
+.split p { margin-top: var(--spacing-24); max-width: 46ch; }
+.split .acts { margin-top: var(--spacing-32); display: flex; gap: var(--spacing-8); }
+
+/* каталог — решётка с общими границами 1px */
+.grid { display: grid; grid-template-columns: repeat(4, 1fr); margin-top: var(--spacing-48); border-top: 1px solid var(--color-charcoal); border-left: 1px solid var(--color-charcoal); }
+.cell { border-right: 1px solid var(--color-charcoal); border-bottom: 1px solid var(--color-charcoal); padding: var(--card-padding); min-height: 190px; display: flex; flex-direction: column; justify-content: space-between; }
+.cell .no { color: var(--color-hi-vis-yellow); }
+.cell .ttl { font-size: 20px; margin: var(--spacing-16) 0 var(--spacing-8); }
+
+/* строки-факты */
+.facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-48); margin-top: var(--spacing-48); }
+.facts .n { font-size: var(--text-display); line-height: var(--leading-display); color: var(--color-hi-vis-yellow); }
+
+footer { border-top: 1px solid var(--color-charcoal); padding: var(--spacing-64) 0 var(--spacing-24); }
+.fcols { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: var(--spacing-32); }
+.fcols h4 { margin-bottom: var(--spacing-16); color: var(--color-hi-vis-yellow); }
+.fcols li { margin-bottom: var(--spacing-8); }
+.flegal { display: flex; justify-content: space-between; margin-top: var(--spacing-64); }
+</style>
+</head>
+<body>
+
+<!-- ── герой ────────────────────────────────────────────────────── -->
+<section class="hero">
+  <svg class="wordmark" viewBox="0 0 1400 210" preserveAspectRatio="none" role="img" aria-label="Bobbin">
+    <defs>
+      <filter id="grain">
+        <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" result="n"/>
+        <feColorMatrix in="n" type="saturate" values="0"/>
+        <feComponentTransfer result="g"><feFuncA type="linear" slope="0.42"/></feComponentTransfer>
+        <feComposite in="SourceGraphic" in2="g" operator="in"/>
+      </filter>
+      <mask id="m"><rect width="1400" height="210" fill="#fff"/></mask>
+    </defs>
+    <text x="0" y="176" textLength="1400" lengthAdjust="spacingAndGlyphs"
+          font-family="Onest, sans-serif" font-weight="800" font-size="200" fill="#f0e226">BOBBIN</text>
+    <g opacity="0.5" style="mix-blend-mode:multiply">
+      <rect width="1400" height="210" filter="url(#grain)" fill="#19181a" mask="url(#m)"/>
+    </g>
+  </svg>
+
+  <div class="cities mono up sand">
+    <span data-i18n="ct1">Kuybyshev</span>
+    <span data-i18n="ct2">Sverdlovsk</span>
+    <span data-i18n="ct3">Gorky</span>
+    <span data-i18n="ct4">Chita</span>
+  </div>
+
+  <div class="navrow">
+    <svg width="42" height="42" viewBox="0 0 42 42" fill="#f0e226" aria-hidden="true">
+      <path d="M19 2h4v38h-4z"/><path d="M2 19h38v4H2z"/>
+      <path d="M7.4 4.6l30 30-2.8 2.8-30-30z"/><path d="M34.6 4.6l2.8 2.8-30 30-2.8-2.8z"/>
+    </svg>
+    <div class="cluster">
+      <a class="pill" href="#catalogue" data-i18n="n1">Catalogue</a>
+      <a class="pill" href="#work" data-i18n="n2">How</a>
+      <a class="pill" href="#rights" data-i18n="n3">Rights</a>
+      <a class="pill" href="#tape" data-i18n="n4">Tape</a>
+      <a class="pill" href="#contact" data-i18n="n5">Contact</a>
+      <div class="pill pill-out lang"><button data-set="en" aria-pressed="true">EN</button><span>/</span><button data-set="ru" aria-pressed="false">RU</button></div>
+    </div>
+    <div class="claim">
+      <div class="d" data-i18n="claim">Tape nobody was allowed to copy.</div>
+    </div>
+  </div>
+
+  <div class="eq">
+    <i class="grain" style="width:300px"></i>
+    <i class="grain" style="width:340px"></i>
+    <i class="grain" style="width:260px"></i>
+    <i class="grain" style="width:380px"></i>
+  </div>
+</section>
+
+<!-- ── что мы делаем ────────────────────────────────────────────── -->
+<section class="sec" id="work">
+  <div class="wrap split">
+    <div class="collage">
+      <div class="c1">
+        <svg width="100%" height="100%" viewBox="0 0 280 280" fill="none" stroke="#f5f4f0" stroke-width="1.5">
+          <circle cx="140" cy="140" r="104"/><circle cx="140" cy="140" r="34"/>
+          <circle cx="140" cy="140" r="10" fill="#f5f4f0"/>
+          <path d="M140 106 L140 60"/><path d="M174 140 L220 140"/><path d="M140 174 L140 220"/><path d="M106 140 L60 140"/>
+        </svg>
+      </div>
+      <div class="c2">
+        <svg width="100%" height="100%" viewBox="0 0 300 220" fill="none" stroke="#f0e226" stroke-width="1.5">
+          <rect x="24" y="30" width="252" height="160"/>
+          <circle cx="106" cy="110" r="34"/><circle cx="194" cy="110" r="34"/>
+          <circle cx="106" cy="110" r="10"/><circle cx="194" cy="110" r="10"/>
+          <rect x="76" y="150" width="148" height="24"/>
+          <path d="M24 62 L276 62"/>
+        </svg>
+      </div>
+      <div class="c3 grain"></div>
+    </div>
+    <div>
+      <div class="badge">
+        <span data-i18n="bd1">The label</span>
+        <span data-i18n="bd2">Radio tape, 1964–1991</span>
+      </div>
+      <h2 class="h" data-i18n="w1">We buy the tape, not the rights</h2>
+      <p data-i18n="w2">Provincial radio committees recorded everything and broadcast most of it once. When the buildings were sold the tape went into basements, and about a third of it is still playable if you handle it correctly and only once.</p>
+      <p data-i18n="w3">We find the reels, bake them, transfer them at 38 cm/s, and then spend far longer finding whoever played on them — or their children — before anything is released.</p>
+      <div class="acts">
+        <a class="pill" href="#catalogue" data-i18n="w4">See the catalogue</a>
+        <a class="pill pill-out" href="#rights" data-i18n="w5">How we pay</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── каталог ──────────────────────────────────────────────────── -->
+<section class="sec" id="catalogue">
+  <div class="wrap">
+    <div class="badge">
+      <span data-i18n="cb1">Catalogue</span>
+      <span data-i18n="cb2">Twelve out, four in transfer</span>
+    </div>
+    <h2 class="h" data-i18n="c0">Everything is a tape somebody kept</h2>
+    <div class="grid">
+      <div class="cell">
+        <div class="mono up no">BB—01</div>
+        <div>
+          <div class="ttl" data-i18n="r1t">Jazz Hour, 1968</div>
+          <div class="mono up sand" data-i18n="r1d">Kuybyshev · quintet · 42 min</div>
+        </div>
+      </div>
+      <div class="cell">
+        <div class="mono up no">BB—02</div>
+        <div>
+          <div class="ttl" data-i18n="r2t">Factory Choir</div>
+          <div class="mono up sand" data-i18n="r2d">Sverdlovsk · 1971 · 31 min</div>
+        </div>
+      </div>
+      <div class="cell">
+        <div class="mono up no">BB—03</div>
+        <div>
+          <div class="ttl" data-i18n="r3t">Night Broadcast</div>
+          <div class="mono up sand" data-i18n="r3d">Gorky · 1976 · 58 min</div>
+        </div>
+      </div>
+      <div class="cell">
+        <div class="mono up no">BB—04</div>
+        <div>
+          <div class="ttl" data-i18n="r4t">Two Guitars, One Mic</div>
+          <div class="mono up sand" data-i18n="r4d">Chita · 1979 · 26 min</div>
+        </div>
+      </div>
+      <div class="cell">
+        <div class="mono up no">BB—05</div>
+        <div>
+          <div class="ttl" data-i18n="r5t">Wedding Orchestra</div>
+          <div class="mono up sand" data-i18n="r5d">Kuybyshev · 1983 · 47 min</div>
+        </div>
+      </div>
+      <div class="cell">
+        <div class="mono up no">BB—06</div>
+        <div>
+          <div class="ttl" data-i18n="r6t">Studio 4, Take 2</div>
+          <div class="mono up sand" data-i18n="r6d">Sverdlovsk · 1985 · 39 min</div>
+        </div>
+      </div>
+      <div class="cell">
+        <div class="mono up no">BB—07</div>
+        <div>
+          <div class="ttl" data-i18n="r7t">Youth Programme</div>
+          <div class="mono up sand" data-i18n="r7d">Gorky · 1988 · 52 min</div>
+        </div>
+      </div>
+      <div class="cell">
+        <div class="mono up no">BB—08</div>
+        <div>
+          <div class="ttl" data-i18n="r8t">Last Broadcast</div>
+          <div class="mono up sand" data-i18n="r8d">Chita · 1991 · 44 min</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── права и цифры ────────────────────────────────────────────── -->
+<section class="sec" id="rights">
+  <div class="wrap">
+    <div class="badge">
+      <span data-i18n="rb1">Rights</span>
+      <span data-i18n="rb2">Nothing goes out unsigned</span>
+    </div>
+    <h2 class="h" style="max-width:24ch" data-i18n="rt0">A release waits until somebody signs for it</h2>
+    <div class="facts">
+      <div>
+        <div class="n">61</div>
+        <div class="mono up sand" style="margin-top:var(--spacing-12)" data-i18n="f1">Reels transferred</div>
+        <p style="margin-top:var(--spacing-8)" data-i18n="f1d">Baked at 54° for eight hours, played once, digitised at 24/96 and then never played again.</p>
+      </div>
+      <div>
+        <div class="n">12</div>
+        <div class="mono up sand" style="margin-top:var(--spacing-12)" data-i18n="f2">Released</div>
+        <p style="margin-top:var(--spacing-8)" data-i18n="f2d">The rest are transferred and waiting: we could not find the musicians, or we found them and they said no.</p>
+      </div>
+      <div>
+        <div class="n">50%</div>
+        <div class="mono up sand" style="margin-top:var(--spacing-12)" data-i18n="f3">Goes back</div>
+        <p style="margin-top:var(--spacing-8)" data-i18n="f3d">Half of everything a release earns goes to the players or their heirs, from the first rouble, before we take costs.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── плёнка ───────────────────────────────────────────────────── -->
+<section class="sec" id="tape">
+  <div class="wrap split">
+    <div>
+      <div class="badge">
+        <span data-i18n="tb1">Tape</span>
+        <span data-i18n="tb2">Because it was made for tape</span>
+      </div>
+      <h2 class="h" data-i18n="t0">Pressed to cassette, in runs of three hundred</h2>
+      <p data-i18n="t1">Every release goes out as a chrome cassette with the transfer sheet printed inside the J-card: reel number, speed, machine, the date of the broadcast and the name of the engineer who recorded it, where the box still said.</p>
+      <p data-i18n="t2">The same master is free to stream. We are not precious about it — the tape is for the people who want the object, and the object should tell you where it came from.</p>
+      <div class="acts">
+        <a class="pill" href="#contact" data-i18n="t3">Get the next run</a>
+        <a class="pill pill-out" href="#contact" data-i18n="t4">Send us a basement</a>
+      </div>
+    </div>
+    <div class="collage">
+      <div class="c1" style="left:40px">
+        <svg width="100%" height="100%" viewBox="0 0 280 280" fill="none" stroke="#f5f4f0" stroke-width="1.5">
+          <rect x="30" y="70" width="220" height="140"/>
+          <rect x="52" y="92" width="176" height="66" stroke="#f0e226"/>
+          <circle cx="106" cy="180" r="16"/><circle cx="174" cy="180" r="16"/>
+          <path d="M30 100 L250 100"/>
+        </svg>
+      </div>
+      <div class="c2" style="top:180px">
+        <svg width="100%" height="100%" viewBox="0 0 300 220" fill="none" stroke="#f0e226" stroke-width="1.5">
+          <path d="M20 190 L60 40 L100 190" /><path d="M120 190 L120 40 L180 40" />
+          <path d="M200 40 L200 190 L280 190"/>
+          <path d="M20 120 L280 120" stroke-dasharray="4 6" opacity=".6"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="wrap">
+    <div class="fcols">
+      <div>
+        <div class="h" style="font-size:28px" data-i18n="fl0">Bobbin</div>
+        <p class="sand" style="max-width:32ch;margin-top:var(--spacing-16)" data-i18n="fa">A two-room label that transfers radio tape and puts it back into the world with the names attached.</p>
+      </div>
+      <div>
+        <h4 class="mono up" data-i18n="fh1">Catalogue</h4>
+        <ul class="mono up">
+          <li data-i18n="fl1">All releases</li><li data-i18n="fl2">In transfer</li><li data-i18n="fl3">Unreleased</li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="mono up" data-i18n="fh2">The work</h4>
+        <ul class="mono up">
+          <li data-i18n="fl4">Transfer method</li><li data-i18n="fl5">Rights and payment</li><li data-i18n="fl6">Archive partners</li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="mono up" data-i18n="fh3">Reach us</h4>
+        <ul class="mono up">
+          <li data-i18n="fl7">Send a tape</li><li data-i18n="fl8">Stockists</li><li data-i18n="fl9">Write</li>
+        </ul>
+      </div>
+    </div>
+    <div class="flegal mono up sand">
+      <span>© 2026 Bobbin</span>
+      <span data-i18n="fn">Played once · digitised once · paid every quarter</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ── RU/EN. Английский — исходный, русский — перевод под него ── */
+var RU = {
+  ct1:'Куйбышев', ct2:'Свердловск', ct3:'Горький', ct4:'Чита',
+  n1:'Каталог', n2:'Как', n3:'Права', n4:'Плёнка', n5:'Связь',
+  claim:'Плёнка, которую не разрешали переписывать.',
+  bd1:'Лейбл', bd2:'Радиоплёнка, 1964–1991',
+  w1:'Мы покупаем плёнку, а не права',
+  w2:'Областные радиокомитеты записывали всё и почти всё выпускали в эфир один раз. Когда здания продали, плёнка ушла в подвалы, и примерно треть её ещё играет — если обращаться правильно и ровно один раз.',
+  w3:'Мы находим катушки, прогреваем их, снимаем на 38 см/с, а потом гораздо дольше ищем тех, кто на них играл, — или их детей — прежде чем что-то выпустить.',
+  w4:'Смотреть каталог', w5:'Как мы платим',
+  cb1:'Каталог', cb2:'Двенадцать вышло, четыре в работе',
+  c0:'Всё это — плёнка, которую кто-то сохранил',
+  r1t:'Час джаза, 1968', r1d:'Куйбышев · квинтет · 42 мин',
+  r2t:'Заводской хор', r2d:'Свердловск · 1971 · 31 мин',
+  r3t:'Ночной эфир', r3d:'Горький · 1976 · 58 мин',
+  r4t:'Две гитары, один микрофон', r4d:'Чита · 1979 · 26 мин',
+  r5t:'Свадебный оркестр', r5d:'Куйбышев · 1983 · 47 мин',
+  r6t:'Студия 4, дубль 2', r6d:'Свердловск · 1985 · 39 мин',
+  r7t:'Молодёжная передача', r7d:'Горький · 1988 · 52 мин',
+  r8t:'Последний эфир', r8d:'Чита · 1991 · 44 мин',
+  rb1:'Права', rb2:'Без подписи ничего не выходит',
+  rt0:'Релиз ждёт, пока за него кто-нибудь распишется',
+  f1:'Катушек снято', f1d:'Прогрев при 54° восемь часов, одно воспроизведение, оцифровка 24/96 — и больше эта плёнка не играет никогда.',
+  f2:'Выпущено', f2d:'Остальное снято и ждёт: мы не нашли музыкантов или нашли, и они сказали нет.',
+  f3:'Уходит обратно', f3d:'Половина всего, что зарабатывает релиз, идёт исполнителям или наследникам — с первого рубля, до вычета наших расходов.',
+  tb1:'Плёнка', tb2:'Потому что это делалось для плёнки',
+  t0:'Издаём на кассетах тиражом в триста',
+  t1:'Каждый релиз выходит хромовой кассетой, а внутрь J-карты вложен лист переноса: номер катушки, скорость, аппарат, дата эфира и фамилия звукорежиссёра — там, где она ещё была на коробке.',
+  t2:'Тот же мастер свободно лежит на стримингах. Мы не делаем из этого культа: кассета — для тех, кому нужен предмет, а предмет обязан рассказывать, откуда он взялся.',
+  t3:'Забрать следующий тираж', t4:'Прислать нам подвал',
+  fl0:'Bobbin',
+  fa:'Лейбл на две комнаты, который снимает радиоплёнку и возвращает её в мир вместе с именами.',
+  fh1:'Каталог', fl1:'Все релизы', fl2:'В работе', fl3:'Не выпущено',
+  fh2:'Работа', fl4:'Метод переноса', fl5:'Права и выплаты', fl6:'Архивы-партнёры',
+  fh3:'Связь', fl7:'Прислать плёнку', fl8:'Где купить', fl9:'Написать',
+  fn:'Сыграно один раз · оцифровано один раз · выплаты ежеквартально'
+};
+var EN = {};
+document.querySelectorAll('[data-i18n]').forEach(function (el) { EN[el.dataset.i18n] = el.innerHTML; });
+function setLang(l) {
+  var dict = l === 'ru' ? RU : EN;
+  document.querySelectorAll('[data-i18n]').forEach(function (el) {
+    var v = dict[el.dataset.i18n];
+    if (v !== undefined) el.innerHTML = v;
+  });
+  document.documentElement.lang = l;
+  document.documentElement.dataset.lang = l;
+  document.querySelectorAll('.lang button').forEach(function (b) {
+    b.setAttribute('aria-pressed', b.dataset.set === l ? 'true' : 'false');
+  });
+}
+document.querySelectorAll('.lang button').forEach(function (b) {
+  b.addEventListener('click', function () { setLang(b.dataset.set); });
+});
+</script>
+</body>
+</html>

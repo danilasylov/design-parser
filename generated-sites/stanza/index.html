@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stanza — Interaction &amp; Media Laboratory</title>
+<meta name="description" content="Stanza is a two-week laboratory in interaction and media design. Riga, 12—23 May 2026.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- CSS шрифтов грузится асинхронно: обычный <link rel=stylesheet> блокирует выполнение
+     inline-скрипта в конце body, и подгонка кегля вордмарков запаздывает на всё время ответа CDN -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Unbounded:wght@900&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Unbounded:wght@900&display=swap"></noscript>
+<style>
+/* ─── Токены дизайн-системы Iad-lab, скопированы дословно со страницы стиля:
+       https://styles.refero.design/style/7d66c966-6cee-4c82-b2e4-2bf1ca7b2ccd
+       (вкладка CSS Variables). Ничего не переименовано и не добавлено. ─── */
+:root {
+  /* Colors */
+  --color-charcoal-canvas: #222222;
+  --color-bone: #f8f8f8;
+  --color-graphite: #2a2b2d;
+  --color-ash: #757577;
+
+  /* Typography — Font Families */
+  --font-neue-haas-unica: 'Neue Haas Unica', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-display-custom-or-system-fallback: 'Display (custom or system fallback)', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* Typography — Scale */
+  --text-caption: 16px;
+  --leading-caption: 1.3;
+  --text-body: 18px;
+  --leading-body: 1.35;
+  --text-subheading: 24px;
+  --leading-subheading: 1.3;
+  --text-heading-sm: 27px;
+  --leading-heading-sm: 1.25;
+  --text-heading: 36px;
+  --leading-heading: 1.1;
+
+  /* Typography — Weights */
+  --font-weight-regular: 400;
+  --font-weight-bold: 700;
+
+  /* Spacing */
+  --spacing-unit: 4px;
+  --spacing-4: 4px;
+  --spacing-16: 16px;
+  --spacing-20: 20px;
+  --spacing-24: 24px;
+  --spacing-40: 40px;
+  --spacing-60: 60px;
+  --spacing-80: 80px;
+
+  /* Layout */
+  --section-gap: 40px;
+  --card-padding: 24px;
+  --element-gap: 24px;
+
+  /* Border Radius */
+  --radius-xl: 15px;
+  --radius-2xl: 20px;
+
+  /* Named Radii */
+  --radius-tags: 20px;
+  --radius-cards: 20px;
+  --radius-inputs: 20px;
+  --radius-buttons: 20px;
+
+  /* Surfaces */
+  --surface-charcoal-canvas: #222222;
+  --surface-photographic-surface: #222222;
+  --surface-text-surface: #222222;
+}
+
+/* Подстановки шрифтов: оригинальных гарнитур нет в Google Fonts и у них нет кириллицы,
+   поэтому берём стойки из раздела Substitute самой системы — Inter вместо Neue Haas Unica,
+   Unbounded вместо широкого чёрного display (Obviously Wide Black / Neue Machina Pop). */
+:root {
+  --font-ui: 'Inter', var(--font-neue-haas-unica);
+  --font-display: 'Unbounded', var(--font-display-custom-or-system-fallback);
+  --display-leading: .85;   /* компонент Full-Bleed Display Wordmark, line-height 0.85 */
+  --display-weight: 900;    /* тот же компонент: вес 900 */
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{
+  background:var(--color-charcoal-canvas);
+  color:var(--color-bone);
+  font-family:var(--font-ui);
+  font-size:var(--text-body);
+  font-weight:var(--font-weight-regular);
+  line-height:var(--leading-body);
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+::selection{background:var(--color-bone);color:var(--color-charcoal-canvas)}
+a{color:inherit;text-decoration:none}
+
+/* ————— fixed meta label, 16px from top-left ————— */
+.meta{
+  position:fixed; top:var(--spacing-16); left:var(--spacing-16); z-index:40;
+  font-size:var(--text-caption); line-height:var(--leading-caption); color:var(--color-bone);
+  mix-blend-mode:difference;
+}
+.meta span{display:block}
+
+/* ————— language switch: minimal chrome, top-right ————— */
+.lang{
+  position:fixed; top:var(--spacing-16); right:var(--spacing-16); z-index:40;
+  display:flex; align-items:center; gap:var(--spacing-4);
+  font-size:var(--text-caption); line-height:var(--leading-caption);
+  mix-blend-mode:difference;
+}
+.lang button{
+  font:inherit; background:none; border:0; padding:0 2px;
+  color:var(--color-ash); cursor:pointer; font-weight:var(--font-weight-regular);
+}
+.lang button[aria-current="true"]{color:var(--color-bone);font-weight:var(--font-weight-bold)}
+.lang i{font-style:normal;color:var(--color-ash)}
+
+/* ————— section dots: the only navigation ————— */
+.dots{
+  position:fixed; right:var(--spacing-24); top:50%; transform:translateY(-50%);
+  z-index:40; display:flex; flex-direction:column; gap:var(--spacing-16);
+}
+.dots a{
+  width:8px; height:8px; border-radius:50%;
+  border:1px solid var(--color-bone); background:transparent;
+  transition:background .2s linear;
+}
+.dots a[aria-current="true"]{background:var(--color-bone)}
+
+/* ————— full-bleed display wordmark ————— */
+.display{
+  display:block; width:100%; overflow:hidden;
+  font-family:var(--font-display); font-weight:var(--display-weight);
+  line-height:var(--display-leading); letter-spacing:normal;
+  color:var(--color-bone); white-space:nowrap;
+  /* стартовый кегль ~ ширина окна: 0.62em на символ у чёрного широкого гротеска.
+     fit() затем уточняет по реальной метрике шрифта; без JS слово всё равно во всю ширину */
+  font-size:calc(164vw / var(--n, 8));
+}
+.display span{
+  display:inline-block; position:relative; left:50%;
+  transform:translateX(-50%);
+}
+.hero .display{padding-top:0;margin-top:-.06em}
+
+/* ————— layout: full-bleed, edge alignment only ————— */
+section{padding:0 var(--spacing-16)}
+.bleed{padding:0}
+.stack{display:flex;flex-direction:column;gap:var(--section-gap)}
+/* Quiet Text Section: колонки короткие, 4—6 слов в строке (DESIGN.md, Components) */
+.col{max-width:32ch}
+.col-wide{max-width:44ch}
+.col p + p{margin-top:var(--spacing-24)}
+
+.hero{
+  min-height:100svh; display:flex; flex-direction:column;
+  justify-content:space-between; padding:0;
+}
+.hero-foot{
+  padding:var(--spacing-16) var(--spacing-16) var(--spacing-24);
+  display:flex; flex-wrap:wrap; gap:var(--spacing-24) var(--spacing-40);
+  align-items:baseline;
+}
+.hero-foot p{font-size:var(--text-body)}
+.hero-foot .quiet{color:var(--color-ash)}
+
+.block{padding-top:var(--spacing-80);padding-bottom:var(--spacing-80)}
+.block-tight{padding-top:120px;padding-bottom:var(--spacing-60)}
+
+/* content sits in a column to the right of the fixed meta label */
+.pad{padding:var(--spacing-40) var(--spacing-60) var(--spacing-80) 140px}
+
+h3{font-size:var(--text-heading-sm);font-weight:var(--font-weight-bold);line-height:var(--leading-heading-sm)}
+.sub{font-size:var(--text-subheading);line-height:var(--leading-subheading);font-weight:var(--font-weight-regular)}
+.caption{font-size:var(--text-caption);line-height:var(--leading-caption)}
+.ash{color:var(--color-ash)}
+
+/* ————— hairline lists ————— */
+.list{border-top:1px solid var(--color-bone);margin-top:var(--spacing-40)}
+.list-row{
+  display:grid; grid-template-columns:60px 1fr auto;
+  gap:var(--element-gap); align-items:baseline;
+  padding:var(--spacing-24) 0; border-bottom:1px solid var(--color-bone);
+  transition:padding-left .18s linear;
+}
+.list-row:hover{padding-left:var(--spacing-16)}
+.list-row .num{font-size:var(--text-caption);color:var(--color-ash);line-height:var(--leading-caption)}
+.list-row:hover .num{color:var(--color-bone)}
+.list-row .name{font-size:var(--text-subheading);line-height:var(--leading-subheading)}
+.list-row:hover .name{font-weight:var(--font-weight-bold)}
+.list-row .who{
+  font-size:var(--text-body); color:var(--color-ash); line-height:var(--leading-body);
+  margin-top:var(--spacing-4);
+}
+.list-row .side{font-size:var(--text-caption);color:var(--color-ash);line-height:var(--leading-caption);text-align:right}
+
+/* ————— rounded interactive surfaces: 20px only ————— */
+.chips{display:flex;flex-wrap:wrap;gap:var(--spacing-16);margin-top:var(--spacing-40)}
+.chip{
+  display:inline-block; border:1px solid var(--color-bone); border-radius:var(--radius-buttons);
+  padding:12px var(--spacing-24); font-size:var(--text-body); line-height:var(--leading-body);
+  background:transparent; color:var(--color-bone); cursor:pointer;
+  font-family:inherit; transition:background .18s linear,color .18s linear;
+}
+.chip:hover{background:var(--color-bone);color:var(--color-charcoal-canvas)}
+.chip.filled{background:var(--color-bone);color:var(--color-charcoal-canvas)}
+.chip.filled:hover{background:transparent;color:var(--color-bone)}
+
+/* ————— tuition rows ————— */
+.rates{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:var(--spacing-24); margin-top:var(--spacing-40);
+}
+.rate{border:1px solid var(--color-bone);border-radius:var(--radius-cards);padding:var(--card-padding)}
+.rate .price{font-size:var(--text-heading);font-weight:var(--font-weight-bold);line-height:var(--leading-heading);margin-top:var(--spacing-16)}
+.rate .note{font-size:var(--text-caption);color:var(--color-ash);line-height:var(--leading-caption);margin-top:var(--spacing-16)}
+
+/* ————— info grid ————— */
+.grid3{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:var(--spacing-40) var(--spacing-24); margin-top:var(--spacing-40);
+}
+/* graphite — «subtle list dividers, muted fill details», на шаг темнее холста */
+.grid3 > * + *{border-left:1px solid var(--color-graphite);padding-left:var(--spacing-24)}
+.rate + .rate{border-color:var(--color-bone)}
+.grid3 h3{margin-bottom:var(--spacing-16)}
+.grid3 p{max-width:34ch}
+
+/* ————— full-bleed panels ————— */
+.panel{position:relative;width:100vw;height:78vh;min-height:420px;overflow:hidden}
+.panel canvas{display:block;width:100%;height:100%}
+.panel .cap{
+  position:absolute; left:140px; bottom:var(--spacing-16);
+  font-size:var(--text-caption); line-height:var(--leading-caption); color:var(--color-bone);
+  mix-blend-mode:difference;
+}
+.panel.cut-r canvas{clip-path:polygon(0 0,100% 0,86% 100%,0 100%)}
+.panel.cut-l canvas{clip-path:polygon(14% 0,100% 0,100% 100%,0 100%)}
+
+/* ————— closing block ————— */
+.end{padding:var(--spacing-80) var(--spacing-60) var(--spacing-60) 140px;border-top:1px solid var(--color-bone)}
+.end .row{display:flex;flex-wrap:wrap;gap:var(--spacing-24) var(--spacing-40);align-items:baseline}
+.end p{font-size:var(--text-body)}
+
+@media (max-width:900px){
+  .pad{padding:var(--spacing-40) var(--spacing-40) var(--spacing-60) var(--spacing-24)}  /* right gap clears the dots */
+  .panel .cap{left:var(--spacing-24)}
+  .end{padding:var(--spacing-60) var(--spacing-40) var(--spacing-60) var(--spacing-24)}
+  .block-tight{padding-top:var(--spacing-80)}
+  .meta,.lang{position:absolute}   /* stop trailing the content on small screens */
+}
+@media (max-width:720px){
+  :root{--t-head:27px;--t-head-sm:24px}
+  .dots{gap:var(--spacing-16);right:var(--spacing-16)}
+  .panel{height:58vh;min-height:320px}
+  .list-row{grid-template-columns:40px 1fr;gap:var(--spacing-16)}
+  .list-row .side{grid-column:2;text-align:left}
+  .block{padding-top:var(--spacing-60);padding-bottom:var(--spacing-60)}
+  .hero-foot{gap:var(--spacing-16)}
+}
+</style>
+</head>
+<body>
+
+<div class="meta">
+  <span data-i18n="meta1">Interaction</span>
+  <span data-i18n="meta2">Media</span>
+  <span data-i18n="meta3">School</span>
+  <span data-i18n="meta4">Riga — 26</span>
+</div>
+
+<div class="lang">
+  <button type="button" data-set="en" aria-current="true">EN</button><i>/</i><button type="button" data-set="ru" aria-current="false">RU</button>
+</div>
+
+<nav class="dots" aria-label="Sections">
+  <a href="#program" aria-current="true" aria-label="Program"></a>
+  <a href="#enrol" aria-current="false" aria-label="Enrol"></a>
+  <a href="#info" aria-current="false" aria-label="Info"></a>
+  <a href="#archive" aria-current="false" aria-label="Archive"></a>
+</nav>
+
+<!-- ————— hero ————— -->
+<header class="hero">
+  <h1 class="display" style="--n:6"><span>STANZA</span></h1>
+  <div class="hero-foot">
+    <p data-i18n="heroA">Two-week laboratory in interaction and media design</p>
+    <p class="quiet" data-i18n="heroB">12—23 May 2026 · Sixteen places</p>
+  </div>
+</header>
+
+<!-- ————— dates + manifesto ————— -->
+<section class="block-tight bleed">
+  <h2 class="display" style="--n:9"><span data-i18n="bigDate">12—23 MAY</span></h2>
+  <div class="stack pad" style="padding-bottom:0">
+    <div class="col-wide">
+      <p class="sub" data-i18n="m1">Stanza is a two-week laboratory in interaction and media design. Sixteen participants, five tutors, one question: what does a screen owe the person standing in front of it?</p>
+      <p style="margin-top:24px" data-i18n="m2">No lectures. Mornings are studio work, afternoons are critique, evenings are whatever the group decides. Nothing is graded — everything is shown.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ————— panel 1 ————— -->
+<div class="panel cut-r"><canvas data-draw="moire"></canvas><span class="cap" data-i18n="cap1">Field study 04 — moiré</span></div>
+
+<!-- ————— program ————— -->
+<section id="program" class="block-tight bleed">
+  <h2 class="display" style="--n:7"><span data-i18n="bigProgram">PROGRAM</span></h2>
+  <div class="pad">
+    <div class="col"><p class="sub" data-i18n="p1">Five modules run in parallel. You pick two and defend the choice on the first evening.</p></div>
+    <div class="list">
+      <div class="list-row">
+        <span class="num">01</span>
+        <span><span class="name" data-i18n="mod1">Interaction Grammar</span><span class="who" style="display:block" data-i18n="mod1w">Ana Reis · Lisbon</span></span>
+        <span class="side" data-i18n="ses8">8 sessions</span>
+      </div>
+      <div class="list-row">
+        <span class="num">02</span>
+        <span><span class="name" data-i18n="mod2">Type in Motion</span><span class="who" style="display:block" data-i18n="mod2w">Kaspars Vītols · Riga</span></span>
+        <span class="side" data-i18n="ses6">6 sessions</span>
+      </div>
+      <div class="list-row">
+        <span class="num">03</span>
+        <span><span class="name" data-i18n="mod3">Sound as Interface</span><span class="who" style="display:block" data-i18n="mod3w">Jonas Feld · Leipzig</span></span>
+        <span class="side" data-i18n="ses8">8 sessions</span>
+      </div>
+      <div class="list-row">
+        <span class="num">04</span>
+        <span><span class="name" data-i18n="mod4">Physical Computing</span><span class="who" style="display:block" data-i18n="mod4w">Mira Okonkwo · Rotterdam</span></span>
+        <span class="side" data-i18n="ses10">10 sessions</span>
+      </div>
+      <div class="list-row">
+        <span class="num">05</span>
+        <span><span class="name" data-i18n="mod5">Critical Media</span><span class="who" style="display:block" data-i18n="mod5w">Elin Haugen · Oslo</span></span>
+        <span class="side" data-i18n="ses6">6 sessions</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ————— panel 2 ————— -->
+<div class="panel cut-l"><canvas data-draw="interference"></canvas><span class="cap" data-i18n="cap2">Field study 07 — interference</span></div>
+
+<!-- ————— enrol ————— -->
+<section id="enrol" class="block-tight bleed">
+  <h2 class="display" style="--n:5"><span data-i18n="bigEnrol">ENROL</span></h2>
+  <div class="pad">
+    <div class="col">
+      <p class="sub" data-i18n="e1">Applications close 20 February.</p>
+      <p style="margin-top:24px" data-i18n="e2">Send five works and two paragraphs about the one you would remake. No cover letter, no CV, no portfolio site — a folder is fine.</p>
+    </div>
+    <div class="rates">
+      <div class="rate">
+        <div class="caption ash" data-i18n="rateA">Professional</div>
+        <div class="price">€ 380</div>
+        <div class="note" data-i18n="rateAn">Studio access, materials, evening programme, one printed volume of the results.</div>
+      </div>
+      <div class="rate">
+        <div class="caption ash" data-i18n="rateB">Student</div>
+        <div class="price">€ 140</div>
+        <div class="note" data-i18n="rateBn">Same access. Proof of enrolment for the current term, any country.</div>
+      </div>
+      <div class="rate">
+        <div class="caption ash" data-i18n="rateC">Grant</div>
+        <div class="price">€ 0</div>
+        <div class="note" data-i18n="rateCn">Four places, decided blind by the tutors. Tick the box in the form; nothing else changes.</div>
+      </div>
+    </div>
+    <div class="chips">
+      <button type="button" class="chip filled" data-i18n="cta1">Apply</button>
+      <button type="button" class="chip" data-i18n="cta2">Download brief</button>
+      <button type="button" class="chip" data-i18n="cta3">Ask a question</button>
+    </div>
+  </div>
+</section>
+
+<!-- ————— info ————— -->
+<section id="info" class="block-tight bleed">
+  <h2 class="display" style="--n:4"><span data-i18n="bigInfo">INFO</span></h2>
+  <div class="pad">
+    <div class="grid3">
+      <div>
+        <h3 data-i18n="i1h">Where</h3>
+        <p data-i18n="i1p">Stanza Studio, Miera iela 42, Riga. A former print works; the presses are still in the back room and still work.</p>
+      </div>
+      <div>
+        <h3 data-i18n="i2h">Getting there</h3>
+        <p data-i18n="i2p">Tram 11 to Zirgu Pasts, four stops from the central station. Doors open 08:30, the room is yours until midnight.</p>
+      </div>
+      <div>
+        <h3 data-i18n="i3h">Bring</h3>
+        <p data-i18n="i3p">A laptop, a camera of any kind, and one object you cannot explain. The last one is not a joke.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ————— archive ————— -->
+<section id="archive" class="block-tight bleed">
+  <h2 class="display" style="--n:7"><span data-i18n="bigArchive">ARCHIVE</span></h2>
+  <div class="pad">
+    <div class="col"><p class="sub" data-i18n="a1">Five laboratories, one theme each, all of them published.</p></div>
+    <div class="list">
+      <div class="list-row">
+        <span class="num">25</span>
+        <span><span class="name" data-i18n="ar1">Repair</span><span class="who" style="display:block" data-i18n="ar1d">Interfaces that admit they are broken</span></span>
+        <span class="side" data-i18n="pubA">Volume 05 · 128 pp</span>
+      </div>
+      <div class="list-row">
+        <span class="num">24</span>
+        <span><span class="name" data-i18n="ar2">Noise</span><span class="who" style="display:block" data-i18n="ar2d">Everything the signal leaves behind</span></span>
+        <span class="side" data-i18n="pubB">Volume 04 · 96 pp</span>
+      </div>
+      <div class="list-row">
+        <span class="num">23</span>
+        <span><span class="name" data-i18n="ar3">Distance</span><span class="who" style="display:block" data-i18n="ar3d">Working with people you never meet</span></span>
+        <span class="side" data-i18n="pubC">Volume 03 · 112 pp</span>
+      </div>
+      <div class="list-row">
+        <span class="num">22</span>
+        <span><span class="name" data-i18n="ar4">Weight</span><span class="who" style="display:block" data-i18n="ar4d">Screens that push back</span></span>
+        <span class="side" data-i18n="pubD">Volume 02 · 84 pp</span>
+      </div>
+      <div class="list-row">
+        <span class="num">21</span>
+        <span><span class="name" data-i18n="ar5">Slow</span><span class="who" style="display:block" data-i18n="ar5d">Two hundred hours of a single loading bar</span></span>
+        <span class="side" data-i18n="pubE">Volume 01 · 72 pp</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ————— closing ————— -->
+<section class="end">
+  <div class="row">
+    <p>Stanza Studio · Miera iela 42 · Riga LV-1001</p>
+    <p><a href="mailto:hello@stanza.school">hello@stanza.school</a></p>
+    <p class="ash" data-i18n="endSet">Set in Unbounded and Inter</p>
+    <p class="ash">© 2026</p>
+  </div>
+</section>
+
+<script>
+/* ————————— i18n: English is the source, Russian follows ————————— */
+const I18N = {
+  en:{},
+  ru:{
+    meta1:"Интеракция", meta2:"Медиа", meta3:"Школа", meta4:"Рига — 26",
+    heroA:"Двухнедельная лаборатория интерактивного и медиадизайна",
+    heroB:"12—23 мая 2026 · Шестнадцать мест",
+    bigDate:"12—23 МАЯ",
+    m1:"Stanza — двухнедельная лаборатория интерактивного и медиадизайна. Шестнадцать участников, пять преподавателей и один вопрос: что экран должен человеку, который стоит перед ним?",
+    m2:"Никаких лекций. Утро — работа в студии, день — разбор, вечер — как решит группа. Оценок нет: показывают всё.",
+    cap1:"Полевой этюд 04 — муар",
+    cap2:"Полевой этюд 07 — интерференция",
+    bigProgram:"ПРОГРАММА",
+    p1:"Пять модулей идут параллельно. Вы выбираете два и защищаете выбор в первый же вечер.",
+    mod1:"Грамматика взаимодействия", mod1w:"Ана Рейш · Лиссабон",
+    mod2:"Шрифт в движении",         mod2w:"Каспарс Витолс · Рига",
+    mod3:"Звук как интерфейс",        mod3w:"Йонас Фельд · Лейпциг",
+    mod4:"Физические вычисления",     mod4w:"Мира Оконкво · Роттердам",
+    mod5:"Критические медиа",         mod5w:"Элин Хауген · Осло",
+    ses6:"6 занятий", ses8:"8 занятий", ses10:"10 занятий",
+    bigEnrol:"ЗАПИСЬ",
+    e1:"Приём заявок до 20 февраля.",
+    e2:"Пришлите пять работ и два абзаца о той, которую переделали бы. Без сопроводительных писем, резюме и сайта-портфолио — папки достаточно.",
+    rateA:"Практикующим", rateAn:"Студия, материалы, вечерняя программа и печатный том с результатами.",
+    rateB:"Студентам",    rateBn:"Тот же доступ. Нужна справка об обучении в текущем семестре, страна любая.",
+    rateC:"Грант",        rateCn:"Четыре места, преподаватели выбирают вслепую. Отметьте галочку в форме — больше ничего не меняется.",
+    cta1:"Подать заявку", cta2:"Скачать бриф", cta3:"Задать вопрос",
+    bigInfo:"ИНФО",
+    i1h:"Где", i1p:"Студия Stanza, ул. Миера 42, Рига. Бывшая типография; станки стоят в дальней комнате и до сих пор работают.",
+    i2h:"Как добраться", i2p:"Трамвай 11 до остановки Zirgu Pasts, четыре остановки от вокзала. Двери открыты с 08:30, зал ваш до полуночи.",
+    i3h:"С собой", i3p:"Ноутбук, любую камеру и один предмет, который не можете объяснить. Последнее — не шутка.",
+    bigArchive:"АРХИВ",
+    a1:"Пять лабораторий, у каждой одна тема, все изданы.",
+    ar1:"Ремонт",    ar1d:"Интерфейсы, которые признают, что сломаны",
+    ar2:"Шум",       ar2d:"Всё, что сигнал оставляет позади",
+    ar3:"Дистанция", ar3d:"Работа с людьми, которых не встретишь",
+    ar4:"Вес",       ar4d:"Экраны, которые сопротивляются",
+    ar5:"Медленно",  ar5d:"Двести часов одной полосы загрузки",
+    pubA:"Том 05 · 128 с.", pubB:"Том 04 · 96 с.", pubC:"Том 03 · 112 с.",
+    pubD:"Том 02 · 84 с.",  pubE:"Том 01 · 72 с.",
+    endSet:"Набрано шрифтами Unbounded и Inter"
+  }
+};
+/* english dictionary is read straight from the markup */
+document.querySelectorAll('[data-i18n]').forEach(el=>{
+  if(!(el.dataset.i18n in I18N.en)) I18N.en[el.dataset.i18n] = el.textContent;
+});
+
+const langButtons = document.querySelectorAll('.lang button');
+function setLang(code){
+  const dict = I18N[code] || I18N.en;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const v = dict[el.dataset.i18n];
+    if(v) el.textContent = v;
+  });
+  document.documentElement.lang = code;
+  document.documentElement.dataset.lang = code;
+  langButtons.forEach(b=>b.setAttribute('aria-current', String(b.dataset.set===code)));
+  refit();
+  /* Кириллический subset Unbounded грузится лениво — до его прихода слово меряется по
+     запасному шрифту и кегль выходит завышенным. Пересчитываем, когда глифы готовы. */
+  if(document.fonts && document.fonts.load){
+    const sample = [...document.querySelectorAll('.display span')].map(s=>s.textContent).join('');
+    document.fonts.load('900 1em Unbounded', sample).then(refit).catch(()=>{});
+  }
+  setTimeout(refit, 400);
+  setTimeout(refit, 1500);
+}
+langButtons.forEach(b=>b.addEventListener('click',()=>setLang(b.dataset.set)));
+
+/* ————————— display wordmarks must overflow the viewport ————————— */
+const displays = document.querySelectorAll('.display');
+function fit(el){
+  const span = el.querySelector('span');
+  if(!span) return;
+  const fallback = el.style.fontSize;      /* вернём, если замерить не вышло */
+  el.style.fontSize = '100px';
+  const w = span.getBoundingClientRect().width;
+  if(!w){ el.style.fontSize = fallback; return; }
+  /* the word spans the full viewport and just touches both edges, as on the reference */
+  el.style.fontSize = (100 * window.innerWidth * 1.02 / w) + 'px';
+}
+function fitAll(){ displays.forEach(fit); }
+function refit(){ fitAll(); placeMeta(); }
+fitAll();
+
+/* Кегль подгоняется по метрике реального шрифта, поэтому пересчитываем на каждом рубеже
+   его загрузки. document.fonts.ready одного мало: при медленном CDN он может не
+   зарезолвиться вовсе, и тогда вордмарк застревает на дефолтных 200px. */
+addEventListener('load', refit);
+if(document.fonts){
+  if(document.fonts.ready) document.fonts.ready.then(refit).catch(()=>{});
+  if(document.fonts.load) document.fonts.load('900 1em Unbounded').then(refit).catch(()=>{});
+}
+setTimeout(refit, 1200);
+setTimeout(refit, 3500);
+
+let rt;
+addEventListener('resize',()=>{ clearTimeout(rt); rt = setTimeout(()=>{ fitAll(); placeMeta(); },120); });
+
+/* ————————— meta label rides below the hero wordmark, then pins to 16px ————————— */
+const meta = document.querySelector('.meta');
+const langBox = document.querySelector('.lang');
+const heroMark = document.querySelector('.hero .display');
+function placeMeta(){
+  if(matchMedia('(max-width:900px)').matches){      /* absolute: rides with the page */
+    const t = (heroMark.offsetHeight + 16) + 'px';
+    meta.style.top = t; langBox.style.top = t;
+    return;
+  }
+  langBox.style.top = '';
+  const b = heroMark.getBoundingClientRect().bottom;
+  meta.style.top = Math.max(16, b + 16) + 'px';
+}
+placeMeta();
+addEventListener('scroll',placeMeta,{passive:true});
+addEventListener('resize',placeMeta);
+
+/* ————————— section dots ————————— */
+const dots = [...document.querySelectorAll('.dots a')];
+const targets = dots.map(d=>document.querySelector(d.getAttribute('href')));
+const io = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(!e.isIntersecting) return;
+    const i = targets.indexOf(e.target);
+    dots.forEach((d,k)=>d.setAttribute('aria-current', String(k===i)));
+  });
+},{rootMargin:'-45% 0px -45% 0px'});
+targets.forEach(t=>t && io.observe(t));
+
+/* ————————— full-bleed panels: monochrome field studies ————————— */
+const BONE='#f8f8f8', ASH='#757577', CHARCOAL='#222222';
+const panels = [...document.querySelectorAll('.panel canvas')].map(c=>({
+  c, ctx:c.getContext('2d'), kind:c.dataset.draw, visible:false
+}));
+
+function size(p){
+  const r = p.c.getBoundingClientRect();
+  const dpr = Math.min(devicePixelRatio||1, 2);
+  p.c.width = Math.round(r.width*dpr);
+  p.c.height = Math.round(r.height*dpr);
+  p.ctx.setTransform(dpr,0,0,dpr,0,0);
+  p.w = r.width; p.h = r.height;
+}
+
+function moire(p,t){
+  const {ctx,w,h} = p;
+  ctx.fillStyle = CHARCOAL; ctx.fillRect(0,0,w,h);
+  const step = 15, cx = w*0.42, cy = h*0.52;
+  for(let y=step/2; y<h; y+=step){
+    for(let x=step/2; x<w; x+=step){
+      const d = Math.hypot(x-cx,y-cy)/48;
+      const a = Math.sin(d - t*1.4) * Math.sin(x/220 + t*0.5);
+      const r = Math.max(0, a) * (step*0.46);
+      if(r < 0.35) continue;
+      ctx.fillStyle = r > step*0.3 ? BONE : ASH;
+      ctx.beginPath(); ctx.arc(x,y,r,0,6.2832); ctx.fill();
+    }
+  }
+}
+
+function interference(p,t){
+  const {ctx,w,h} = p;
+  ctx.fillStyle = CHARCOAL; ctx.fillRect(0,0,w,h);
+  ctx.lineWidth = 1;
+  const lines = 64, gap = h/lines;
+  for(let i=0;i<lines;i++){
+    const base = gap*(i+0.5);
+    const k = i/lines;
+    ctx.strokeStyle = (i % 5 === 0) ? BONE : ASH;
+    ctx.beginPath();
+    for(let x=0; x<=w; x+=6){
+      const amp = 26 * Math.sin(k*Math.PI) ;
+      const y = base
+        + Math.sin(x/180 + t + k*5.2) * amp
+        + Math.sin(x/47  - t*0.6 + k*11) * amp*0.28;
+      x===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+  }
+}
+
+const draw = {moire, interference};
+function render(){
+  const t = scrollY * 0.0022;
+  panels.forEach(p=>{ if(p.visible && p.w) draw[p.kind](p,t); });
+}
+let raf = false;
+function schedule(){
+  if(raf) return;
+  raf = true;
+  requestAnimationFrame(()=>{ raf = false; render(); });
+}
+const pio = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    const p = panels.find(x=>x.c===e.target);
+    if(p){ p.visible = e.isIntersecting; if(p.visible) schedule(); }
+  });
+},{rootMargin:'20% 0px'});
+panels.forEach(p=>{ size(p); pio.observe(p.c); });
+addEventListener('scroll',schedule,{passive:true});
+addEventListener('resize',()=>{ panels.forEach(size); schedule(); });
+schedule();
+</script>
+</body>
+</html>

@@ -1,0 +1,3 @@
+/* Original keyframes: Animista, Ana Travas. https://animista.net/play/basic/swing/swing-left-fwd */
+.swing-left-fwd{animation:swing-left-fwd 0.4s cubic-bezier(.25,.46,.45,.94) 0s 1 normal both;}
+@keyframes swing-left-fwd{0%{-webkit-transform:rotateY(0);transform:rotateY(0);-webkit-transform-origin:left bottom;transform-origin:left bottom}to{-webkit-transform:rotateY(-180deg);transform:rotateY(-180deg);-webkit-transform-origin:left bottom;transform-origin:left bottom}}

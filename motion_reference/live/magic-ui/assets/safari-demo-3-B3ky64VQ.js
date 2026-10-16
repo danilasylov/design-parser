@@ -1,0 +1,1 @@
+import{j as r}from"./index-WM7-nNXq.js";import{S as a}from"./safari-CjqhO3DW.js";function s(){return r.jsx("div",{className:"w-[1203px]",children:r.jsx(a,{url:"magicui.design",videoSrc:"./external/47f3916bdcafdbb269.mp4"})})}export{s as default};

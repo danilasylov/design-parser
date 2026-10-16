@@ -1,0 +1,3 @@
+/* Original keyframes: Animista, Ana Travas. https://animista.net/play/attention/pulsate/pulsate-bck */
+.pulsate-bck{animation:pulsate-bck 0.5s ease-in-out 0s infinite normal both;}
+@keyframes pulsate-bck{0%,to{-webkit-transform:scale(1);transform:scale(1)}50%{-webkit-transform:scale(.9);transform:scale(.9)}}

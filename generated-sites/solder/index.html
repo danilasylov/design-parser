@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>Solder — twelve boards, twelve Tuesdays</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400&display=swap" rel="stylesheet">
+<style>
+/* ─────────────────────────────────────────────────────────────
+   Дизайн-система: SuperHi Plus (refero a1f9e844) — tokens.css дословно
+   ───────────────────────────────────────────────────────────── */
+:root {
+  /* Colors */
+  --color-cobalt-voltage: #0033e5;
+  --color-ice-white: #f0f7ff;
+  --color-cobalt-mist: #527ceb;
+  --color-pitch: #000000;
+
+  /* Typography — Font Families */
+  --font-haas-grot-disp-web: 'Haas Grot Disp Web', ui-sans-serif, system-ui, sans-serif;
+
+  /* Typography — Scale */
+  --text-body-sm: 16px;      --leading-body-sm: 1.5;
+  --text-body: 18px;         --leading-body: 1.33;
+  --text-subheading: 24px;   --leading-subheading: 1.25;
+  --text-heading-sm: 32px;   --leading-heading-sm: 1.2;
+  --text-heading: 42px;      --leading-heading: 1.14;
+  --text-heading-lg: 56px;   --leading-heading-lg: 1.13;
+  --text-display: 85px;      --leading-display: 1.14;
+
+  /* Typography — Weights */
+  --font-weight-regular: 400;
+
+  /* Spacing */
+  --spacing-8: 8px; --spacing-16: 16px; --spacing-24: 24px; --spacing-32: 32px;
+  --spacing-40: 40px; --spacing-48: 48px; --spacing-96: 96px;
+
+  /* Layout */
+  --page-max-width: 1440px; --section-gap: 64px; --card-padding: 24px; --element-gap: 16px;
+
+  /* Border Radius */
+  --radius-sm: 2.4px; --radius-2xl: 16px; --radius-3xl: 24px; --radius-full: 50px;
+  --radius-tags: 50px; --radius-cards: 16px; --radius-inputs: 2px;
+  --radius-buttons: 16px; --radius-nav-buttons: 50px; --radius-pill-buttons: 72px;
+
+  /* Shadows (только inset-обводки, теней в системе нет) */
+  --shadow-subtle: rgb(0, 51, 229) 0px 0px 0px 1px inset;
+  --shadow-subtle-2: rgb(240, 247, 255) 0px 0px 0px 1px inset;
+
+  /* Surfaces */
+  --surface-cobalt-voltage: #0033e5;
+  --surface-ice-white: #f0f7ff;
+  --surface-cobalt-mist: #527ceb;
+}
+
+/* Подстановка шрифта: Haas Grot Disp Web недоступен — взят неогротеск того же
+   класса с кириллицей. Вес только 400, как в системе. */
+:root { --font-haas-grot-disp-web: 'Inter', 'Haas Grot Disp Web', sans-serif; }
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--surface-cobalt-voltage);
+  color: var(--color-ice-white);
+  font-family: var(--font-haas-grot-disp-web);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--text-body); line-height: var(--leading-body);
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, p { margin: 0; font-weight: var(--font-weight-regular); }
+a { color: inherit; }
+
+.split { display: grid; grid-template-columns: 1fr 1fr; }
+.ice { background: var(--surface-ice-white); color: var(--color-cobalt-voltage); }
+.blue { background: var(--surface-cobalt-voltage); color: var(--color-ice-white); }
+.pad { padding: var(--spacing-48); }
+
+.display { font-size: var(--text-display); line-height: var(--leading-display); }
+.h-lg { font-size: var(--text-heading-lg); line-height: var(--leading-heading-lg); }
+.h { font-size: var(--text-heading); line-height: var(--leading-heading); }
+.h-sm { font-size: var(--text-heading-sm); line-height: var(--leading-heading-sm); }
+.sub { font-size: var(--text-subheading); line-height: var(--leading-subheading); }
+.sm { font-size: var(--text-body-sm); line-height: var(--leading-body-sm); }
+a.inline { text-decoration: underline; }
+
+/* Логотип с кружком-меткой вместо точки над i */
+.mark { display: inline-flex; align-items: center; gap: 4px; font-size: var(--text-subheading); line-height: 1; }
+.mark .dot { width: 18px; height: 18px; border-radius: 50%; border: 1px solid currentColor; display: inline-block; position: relative; }
+.mark .dot::after { content: ''; position: absolute; inset: 5px; border-radius: 50%; background: currentColor; }
+
+.pill {
+  display: inline-block; border-radius: var(--radius-full); border: 1px solid currentColor;
+  padding: 14px var(--spacing-24); font-size: var(--text-body); background: none; color: inherit;
+  font-family: inherit; cursor: pointer; text-decoration: none;
+}
+.arrowbtn {
+  display: block; font-size: var(--text-heading); line-height: var(--leading-heading);
+  padding: var(--spacing-24); border-radius: var(--radius-buttons); text-decoration: none;
+}
+.arrowbtn:hover { box-shadow: var(--shadow-subtle-2); }
+
+.lang { display: flex; gap: var(--spacing-8); align-items: baseline; }
+.lang button { background: none; border: 0; padding: 0; cursor: pointer; font-family: inherit; font-size: var(--text-body-sm); color: inherit; opacity: .5; }
+.lang button[aria-pressed="true"] { opacity: 1; }
+
+/* Шапка героя */
+.top { display: flex; align-items: center; justify-content: space-between; }
+
+/* Поле «шариков» — компоненты вместо эмодзи */
+.marbles { display: block; width: 100%; height: auto; margin-top: var(--spacing-32); }
+
+/* Плитки-показатели */
+.tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-32); margin-top: var(--spacing-48); text-align: center; }
+.tiles svg { display: block; margin: 0 auto; }
+.tiles .l { margin-top: var(--spacing-16); font-size: var(--text-body); }
+.tiles .v { font-size: var(--text-subheading); line-height: var(--leading-subheading); }
+.hr { height: 1px; background: currentColor; opacity: .5; margin: var(--spacing-48) 0; }
+
+/* Нумерованный список */
+.nums { display: flex; flex-direction: column; gap: var(--spacing-40); margin-top: var(--spacing-40); }
+.num .n { width: 40px; height: 40px; border-radius: 50%; border: 1px solid currentColor; display: flex; align-items: center; justify-content: center; font-size: var(--text-subheading); }
+.num h3 { margin-top: var(--spacing-16); font-size: var(--text-heading-sm); line-height: var(--leading-heading-sm); }
+.num p { margin-top: var(--spacing-16); font-size: var(--text-body); }
+
+/* Карточка на кобальте */
+.card { background: var(--surface-ice-white); color: var(--color-cobalt-voltage); border-radius: var(--radius-cards); padding: var(--card-padding); }
+.ice .card { box-shadow: var(--shadow-subtle); } /* 1px inset вместо тени — карточка на светлой панели */
+.card + .card { margin-top: var(--spacing-16); }
+.boards { margin-top: var(--spacing-24); }
+.boards .r { display: grid; grid-template-columns: 40px 1fr 128px; gap: var(--spacing-16); padding: var(--spacing-8) 0; border-top: 1px solid rgba(0,51,229,.25); font-size: var(--text-body-sm); }
+.boards .r:first-child { border-top: 0; }
+.boards .w { opacity: .6; }
+
+/* Калькулятор-строка */
+.field { display: flex; gap: var(--spacing-8); margin-top: var(--spacing-24); }
+.field input {
+  flex: 1; background: none; border: 1px solid currentColor; border-radius: var(--radius-inputs);
+  padding: 12px var(--spacing-16); color: inherit; font-family: inherit; font-size: var(--text-body-sm);
+}
+.field input::placeholder { color: currentColor; opacity: .6; }
+
+/* FAQ */
+.faq { margin-top: var(--spacing-40); }
+.faq .q { padding: var(--spacing-24) 0; border-top: 1px solid rgba(240,247,255,.4); }
+.faq .q b { font-weight: var(--font-weight-regular); font-size: var(--text-subheading); line-height: var(--leading-subheading); display: block; }
+.faq .q span { display: block; margin-top: var(--spacing-8); font-size: var(--text-body); }
+
+footer { padding: var(--spacing-48); display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: var(--spacing-24); }
+footer .h5 { font-size: var(--text-body-sm); opacity: .7; }
+footer a, footer span.i { display: block; margin-top: var(--spacing-8); font-size: var(--text-body); text-decoration: none; }
+</style>
+</head>
+<body>
+
+<div class="split">
+  <div class="ice pad">
+    <div class="top">
+      <span class="mark">Solder<span class="dot"></span></span>
+      <div class="lang">
+        <button data-set="en" aria-pressed="true">En</button>
+        <button data-set="ru" aria-pressed="false">Ru</button>
+      </div>
+    </div>
+    <h1 class="display" style="margin-top:40px" data-i18n="h1">Twelve boards, twelve Tuesdays</h1>
+    <svg class="marbles" viewBox="0 0 700 460" aria-hidden="true">
+      <g stroke="#0033e5" stroke-width="2">
+        <!-- резистор -->
+        <circle cx="90" cy="120" r="58" fill="#527ceb"/>
+        <path d="M52 120h14l8-16 14 32 14-32 8 16h18" fill="none" stroke="#f0f7ff" stroke-width="4"/>
+        <!-- конденсатор -->
+        <circle cx="214" cy="70" r="52" fill="#f0f7ff"/>
+        <path d="M180 70h26M234 70h26M206 46v48M234 46v48" fill="none" stroke="#0033e5" stroke-width="4"/>
+        <!-- диод -->
+        <circle cx="330" cy="128" r="62" fill="#0033e5"/>
+        <path d="M292 128h20M312 104l38 24-38 24z M350 104v48M350 128h20" fill="none" stroke="#f0f7ff" stroke-width="4"/>
+        <!-- катушка -->
+        <circle cx="452" cy="72" r="48" fill="#527ceb"/>
+        <path d="M418 78h10a10 10 0 0 1 20 0a10 10 0 0 1 20 0a10 10 0 0 1 20 0h6" fill="none" stroke="#f0f7ff" stroke-width="4"/>
+        <!-- микросхема -->
+        <circle cx="574" cy="130" r="66" fill="#f0f7ff"/>
+        <rect x="540" y="104" width="68" height="52" fill="none" stroke="#0033e5" stroke-width="4"/>
+        <path d="M540 116h-14M540 130h-14M540 144h-14M608 116h14M608 130h14M608 144h14" stroke="#0033e5" stroke-width="4"/>
+        <!-- светодиод -->
+        <circle cx="122" cy="264" r="66" fill="#f0f7ff"/>
+        <path d="M84 264h18M102 240l38 24-38 24z M140 240v48M140 264h18M132 226l16-16M148 236l16-16" fill="none" stroke="#0033e5" stroke-width="4"/>
+        <!-- транзистор -->
+        <circle cx="266" cy="236" r="54" fill="#0033e5"/>
+        <path d="M232 236h18M250 210v52M250 224l30-16M250 248l30 16" fill="none" stroke="#f0f7ff" stroke-width="4"/>
+        <!-- кнопка -->
+        <circle cx="392" cy="278" r="60" fill="#527ceb"/>
+        <path d="M352 288h20M412 288h20M372 288l14-16h20l14 16" fill="none" stroke="#f0f7ff" stroke-width="4"/>
+        <!-- батарея -->
+        <circle cx="520" cy="252" r="50" fill="#0033e5"/>
+        <path d="M488 252h18M506 234v36M520 242v20M520 252h14M534 234v36" fill="none" stroke="#f0f7ff" stroke-width="4"/>
+        <!-- земля -->
+        <circle cx="628" cy="286" r="46" fill="#f0f7ff"/>
+        <path d="M628 262v22M610 284h36M616 294h24M622 304h12" fill="none" stroke="#0033e5" stroke-width="4"/>
+        <!-- припой -->
+        <circle cx="196" cy="378" r="58" fill="#527ceb"/>
+        <circle cx="196" cy="378" r="22" fill="#f0f7ff" stroke="none"/>
+        <path d="M196 320v34M196 402v34" stroke="#f0f7ff" stroke-width="4"/>
+        <!-- кварц -->
+        <circle cx="326" cy="392" r="48" fill="#0033e5"/>
+        <path d="M296 392h14M342 392h14M310 372h32v40h-32z M318 366v52M334 366v52" fill="none" stroke="#f0f7ff" stroke-width="4"/>
+        <!-- разъём -->
+        <circle cx="452" cy="392" r="56" fill="#f0f7ff"/>
+        <path d="M416 392h16M472 392h16M432 372h40v40h-40z" fill="none" stroke="#0033e5" stroke-width="4"/>
+        <!-- пустой -->
+        <circle cx="566" cy="392" r="40" fill="#527ceb"/>
+        <circle cx="640" cy="396" r="28" fill="#0033e5"/>
+        <circle cx="66" cy="386" r="34" fill="#f0f7ff"/>
+      </g>
+    </svg>
+  </div>
+
+  <div class="blue pad">
+    <p class="h-sm" data-i18n="lead">Solder is an evening course in electronics for people who have never held an iron. Twelve weeks, twelve boards, and you keep every one of them.</p>
+    <div class="tiles">
+      <div>
+        <svg width="64" height="64" viewBox="0 0 64 64" aria-hidden="true"><g stroke="#f0f7ff" stroke-width="3" fill="none"><circle cx="32" cy="32" r="22"/><circle cx="32" cy="32" r="15"/><path d="M32 22v20M27 27h8a4 4 0 0 1 0 8h-6a4 4 0 0 0 0 8h8"/></g></svg>
+        <div class="l" data-i18n="t1">Course fee</div><div class="v">£420</div>
+      </div>
+      <div>
+        <svg width="64" height="64" viewBox="0 0 64 64" aria-hidden="true"><g stroke="#f0f7ff" stroke-width="3" fill="none"><rect x="10" y="14" width="44" height="36" rx="2"/><path d="M10 26h44M22 14v36M38 14v36"/><circle cx="16" cy="20" r="2" fill="#f0f7ff"/><circle cx="46" cy="44" r="2" fill="#f0f7ff"/></g></svg>
+        <div class="l" data-i18n="t2">Boards you keep</div><div class="v">12</div>
+      </div>
+      <div>
+        <svg width="64" height="64" viewBox="0 0 64 64" aria-hidden="true"><g stroke="#f0f7ff" stroke-width="3" fill="none"><circle cx="32" cy="32" r="22"/><path d="M32 18v14l10 8"/></g></svg>
+        <div class="l" data-i18n="t3">Tuesdays, 18:30</div><div class="v" data-i18n="t3v">3 hours</div>
+      </div>
+    </div>
+    <div class="hr"></div>
+    <h2 class="h" data-i18n="h2">Nobody starts knowing</h2>
+    <p style="margin-top:24px" data-i18n="p1">Half the room has never stripped a wire. The first evening is spent making one LED light up, badly, and taking it apart again. By week four you are reading a schematic without asking what the triangle means.</p>
+    <p style="margin-top:16px" data-i18n="p2">There is no exam and no certificate. There is a shelf at the end with twelve working things on it that were not there in September, and <a class="inline" href="#weeks" data-i18n="p2l">the list of what they are</a>.</p>
+    <div style="margin-top:32px"><a class="pill" href="#apply" data-i18n="cta">Take a bench</a></div>
+  </div>
+</div>
+
+<div class="blue" style="padding:24px 48px">
+  <a class="arrowbtn" href="#weeks" data-i18n="a1">→ The twelve weeks</a>
+  <a class="arrowbtn" href="#bench" data-i18n="a2">→ What is on your bench</a>
+  <a class="arrowbtn" href="#apply" data-i18n="a3">→ Cost and places</a>
+</div>
+
+<div class="split" id="weeks">
+  <div class="blue pad">
+    <h2 class="h-lg" data-i18n="w_h">How an evening goes</h2>
+    <div class="nums">
+      <div class="num">
+        <div class="n">1</div>
+        <h3 data-i18n="n1t">Twenty minutes at the board</h3>
+        <p data-i18n="n1d">One idea drawn on the whiteboard: what a capacitor does, why the transistor needs a resistor, what the smoke means. No slides.</p>
+      </div>
+      <div class="num">
+        <div class="n">2</div>
+        <h3 data-i18n="n2t">Two hours at the bench</h3>
+        <p data-i18n="n2d">You build the week's board from a bag of parts and a paper drawing. Two tutors for fourteen people, and neither of them will touch your iron.</p>
+      </div>
+      <div class="num">
+        <div class="n">3</div>
+        <h3 data-i18n="n3t">Twenty minutes of failure</h3>
+        <p data-i18n="n3d">Everything that did not work goes on the table at the end and gets fixed in front of everybody. This is the part people remember.</p>
+      </div>
+    </div>
+  </div>
+  <div class="ice pad">
+    <h2 class="h" data-i18n="b_h">The twelve boards</h2>
+    <div class="card" style="margin-top:24px">
+      <div class="boards">
+        <div class="r"><span class="w">01</span><span data-i18n="b1">Blinking LED, through-hole, no chip</span><span class="w">555</span></div>
+        <div class="r"><span class="w">02</span><span data-i18n="b2">Continuity tester that beeps</span><span class="w" data-i18n="b2w">buzzer</span></div>
+        <div class="r"><span class="w">03</span><span data-i18n="b3">Bench power supply, 5 V regulated</span><span class="w">7805</span></div>
+        <div class="r"><span class="w">04</span><span data-i18n="b4">Two-transistor amplifier for a speaker</span><span class="w">BC547</span></div>
+        <div class="r"><span class="w">05</span><span data-i18n="b5">Light-following robot, no code</span><span class="w">LDR</span></div>
+        <div class="r"><span class="w">06</span><span data-i18n="b6">Your first PCB, etched here</span><span class="w" data-i18n="b6w">copper</span></div>
+        <div class="r"><span class="w">07</span><span data-i18n="b7">Microcontroller, blinking again</span><span class="w">AVR</span></div>
+        <div class="r"><span class="w">08</span><span data-i18n="b8">Temperature logger with a screen</span><span class="w">I²C</span></div>
+        <div class="r"><span class="w">09</span><span data-i18n="b9">Noise box, four knobs, one output</span><span class="w">4093</span></div>
+        <div class="r"><span class="w">10</span><span data-i18n="b10">Mains-safe relay board, tested</span><span class="w" data-i18n="b10w">opto</span></div>
+        <div class="r"><span class="w">11</span><span data-i18n="b11">Repair week: bring a dead thing</span><span class="w" data-i18n="b11w">yours</span></div>
+        <div class="r"><span class="w">12</span><span data-i18n="b12">Your own board, from a drawing</span><span class="w" data-i18n="b12w">free</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="split" id="bench">
+  <div class="ice pad">
+    <h2 class="h-lg" data-i18n="k_h">What is on your bench</h2>
+    <p class="sub" style="margin-top:24px" data-i18n="k_p">Everything below stays in the room and is yours for the evening. The only thing you bring is a pair of glasses if you need them for close work.</p>
+    <div class="card" style="margin-top:32px">
+      <div class="boards">
+        <div class="r"><span class="w">01</span><span data-i18n="k1">Temperature-controlled iron, 350 °C</span><span class="w">Hakko</span></div>
+        <div class="r"><span class="w">02</span><span data-i18n="k2">Fume extractor, one per bench</span><span class="w" data-i18n="k2w">on</span></div>
+        <div class="r"><span class="w">03</span><span data-i18n="k3">Bench meter and a scope between two</span><span class="w" data-i18n="k3w">shared</span></div>
+        <div class="r"><span class="w">04</span><span data-i18n="k4">Parts drawers, open, take what you need</span><span class="w" data-i18n="k4w">free</span></div>
+        <div class="r"><span class="w">05</span><span data-i18n="k5">A stool, a lamp, and nobody behind you</span><span class="w" data-i18n="k5w">yours</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="blue pad" id="apply">
+    <h2 class="h-lg" data-i18n="ap_h">Fourteen benches</h2>
+    <p style="margin-top:24px" data-i18n="ap_p">£420 for the twelve weeks, parts included, paid in one go or in three. Four benches each term are free and are given to whoever asks first — no form, no means test, just say so in the letter.</p>
+    <div class="field">
+      <input type="email" placeholder="you@example.com" aria-label="email">
+      <button class="pill" data-i18n="ap_b">Ask for a bench</button>
+    </div>
+    <div class="faq">
+      <div class="q"><b data-i18n="q1">I have never soldered. Is that a problem?</b><span data-i18n="a1x">It is the assumption. Week one starts with how to hold the iron and what a cold joint looks like.</span></div>
+      <div class="q"><b data-i18n="q2">Do I need to know how to code?</b><span data-i18n="a2x">Not until week seven, and then only twenty lines. We write them together and they are printed on paper.</span></div>
+      <div class="q"><b data-i18n="q3">What if I miss an evening?</b><span data-i18n="a3x">The room is open on Thursdays with one tutor. Come and catch up on the board you missed.</span></div>
+      <div class="q"><b data-i18n="q4">Can I bring my own project?</b><span data-i18n="a4x">Week eleven and week twelve are exactly that. Bring the dead radio, or the drawing you have had for years.</span></div>
+    </div>
+  </div>
+</div>
+
+<footer class="blue">
+  <div>
+    <span class="mark">Solder<span class="dot"></span></span>
+    <span class="i" data-i18n="fa">Evening electronics, twelve weeks</span>
+    <span class="i" data-i18n="fb">Unit 6, the old telephone exchange</span>
+  </div>
+  <div>
+    <div class="h5" data-i18n="fh1">Course</div>
+    <a href="#weeks" data-i18n="fl1">The twelve boards</a>
+    <a href="#bench" data-i18n="fl2">The bench</a>
+    <a href="#apply" data-i18n="fl3">Cost and places</a>
+  </div>
+  <div>
+    <div class="h5" data-i18n="fh2">Room</div>
+    <a href="#bench" data-i18n="fl4">Thursday catch-up</a>
+    <a href="#apply" data-i18n="fl5">Free benches</a>
+    <a href="#apply" data-i18n="fl6">Access and stairs</a>
+  </div>
+  <div>
+    <div class="h5" data-i18n="fh3">Contact</div>
+    <a href="#apply" data-i18n="fl7">iron@solder.school</a>
+    <span class="i" data-i18n="fl8">Terms start in September and January</span>
+  </div>
+</footer>
+
+<script>
+/* ── RU/EN. Английский — исходный, русский — перевод под него ── */
+var RU = {
+  h1:'Двенадцать плат, двенадцать вторников',
+  lead:'Solder — вечерний курс электроники для тех, кто никогда не держал паяльник. Двенадцать недель, двенадцать плат, и все они остаются у вас.',
+  t1:'Стоимость курса', t2:'Плат остаётся у вас', t3:'Вторники, 18:30', t3v:'3 часа',
+  h2:'Никто не приходит уже умея',
+  p1:'Половина зала ни разу не зачищала провод. Первый вечер уходит на то, чтобы зажечь один светодиод, криво, и разобрать всё обратно. К четвёртой неделе вы читаете схему, не спрашивая, что означает треугольник.',
+  p2:'Экзамена нет, сертификата нет. В конце есть полка с двенадцатью работающими вещами, которых в сентябре не существовало, и ',
+  p2l:'список того, что это',
+  cta:'Занять место',
+  a1:'→ Двенадцать недель', a2:'→ Что стоит на столе', a3:'→ Цена и места',
+  w_h:'Как проходит вечер',
+  n1t:'Двадцать минут у доски', n1d:'Одна мысль, нарисованная на доске: что делает конденсатор, зачем транзистору резистор, что означает дым. Слайдов нет.',
+  n2t:'Два часа за столом', n2d:'Вы собираете плату недели из пакетика деталей и бумажного чертежа. Двое преподавателей на четырнадцать человек, и ни один из них не возьмётся за ваш паяльник.',
+  n3t:'Двадцать минут провалов', n3d:'Всё, что не заработало, выкладывается на стол в конце и чинится при всех. Именно это потом и вспоминают.',
+  b_h:'Двенадцать плат',
+  b1:'Мигающий светодиод, выводной монтаж, без микросхем',
+  b2:'Прозвонка, которая пищит', b2w:'зуммер',
+  b3:'Лабораторный источник, 5 В со стабилизатором',
+  b4:'Усилитель на двух транзисторах под динамик',
+  b5:'Робот, который едет на свет, без кода',
+  b6:'Ваша первая печатная плата, травим здесь', b6w:'медь',
+  b7:'Микроконтроллер, снова мигает',
+  b8:'Логгер температуры с экраном',
+  b9:'Шумовая коробка: четыре ручки, один выход',
+  b10:'Релейная плата с безопасной сетью, проверенная', b10w:'опто',
+  b11:'Неделя ремонта: принесите что-нибудь мёртвое', b11w:'ваше',
+  b12:'Своя плата по своему чертежу', b12w:'свободно',
+  k_h:'Что стоит на столе',
+  k_p:'Всё перечисленное остаётся в комнате и на вечер ваше. Приносить нужно только очки, если они нужны для близкой работы.',
+  k1:'Паяльная станция с терморегулятором, 350 °C',
+  k2:'Дымоуловитель, по одному на стол', k2w:'вкл',
+  k3:'Мультиметр на столе и осциллограф на двоих', k3w:'общий',
+  k4:'Открытые ящики с деталями — берите что нужно', k4w:'бесплатно',
+  k5:'Табурет, лампа и никого за спиной', k5w:'ваше',
+  ap_h:'Четырнадцать мест',
+  ap_p:'£420 за двенадцать недель, детали включены, одним платежом или в три. Четыре места каждый семестр бесплатные и достаются тем, кто попросит первым: без анкет и проверок доходов, достаточно написать об этом в письме.',
+  ap_b:'Попросить место',
+  q1:'Я никогда не паял. Это проблема?', a1x:'Это исходное условие. Первая неделя начинается с того, как держать паяльник и как выглядит холодная пайка.',
+  q2:'Нужно ли уметь программировать?', a2x:'Только с седьмой недели и всего двадцать строк. Мы пишем их вместе, и они напечатаны на бумаге.',
+  q3:'А если я пропущу вечер?', a3x:'По четвергам комната открыта, там один преподаватель. Приходите и доделайте пропущенную плату.',
+  q4:'Можно принести свой проект?', a4x:'Одиннадцатая и двенадцатая недели ровно про это. Приносите мёртвый приёмник или чертёж, который лежит у вас годами.',
+  fa:'Вечерняя электроника, двенадцать недель', fb:'Блок 6, старая телефонная станция',
+  fh1:'Курс', fl1:'Двенадцать плат', fl2:'Рабочее место', fl3:'Цена и места',
+  fh2:'Комната', fl4:'Четверговые досдачи', fl5:'Бесплатные места', fl6:'Доступ и лестница',
+  fh3:'Связь', fl7:'iron@solder.school', fl8:'Наборы в сентябре и январе'
+};
+var EN = {};
+document.querySelectorAll('[data-i18n]').forEach(function (el) { EN[el.dataset.i18n] = el.innerHTML; });
+
+function setLang(l) {
+  var dict = l === 'ru' ? RU : EN;
+  document.querySelectorAll('[data-i18n]').forEach(function (el) {
+    var v = dict[el.dataset.i18n];
+    if (v !== undefined) el.innerHTML = v;
+  });
+  document.documentElement.lang = l;
+  document.documentElement.dataset.lang = l;
+  document.querySelectorAll('.lang button').forEach(function (b) {
+    b.setAttribute('aria-pressed', b.dataset.set === l ? 'true' : 'false');
+  });
+}
+document.querySelectorAll('.lang button').forEach(function (b) {
+  b.addEventListener('click', function () { setLang(b.dataset.set); });
+});
+</script>
+</body>
+</html>

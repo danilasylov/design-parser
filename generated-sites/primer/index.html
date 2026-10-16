@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>Primer — a reading club for five-year-olds and their grown-ups</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@900&family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════════════════════════════
+   Дизайн-система Lpalo — styles.refero.design/style/79b4ebc4-30f6-45b6-b2d2-922e28e05ca9
+   :root ниже вставлен ДОСЛОВНО со вкладки CSS Variables.
+   ══════════════════════════════════════════════════════════════════ */
+:root {
+  /* Colors */
+  --color-peach-paper: #f6e0db;
+  --color-charcoal-ink: #000000;
+  --color-snow: #ffffff;
+  --color-ember-orange: #ef724f;
+  --color-magenta-pop: #981082;
+  --color-sunbeam-yellow: #e7db4c;
+  --color-mint-wash: #ace2df;
+  --color-powder-blue: #84bfff;
+  --color-lilac-tint: #e69dff;
+  --color-lime-zest: #6ed311;
+  --color-cobalt-spark: #5196ff;
+
+  /* Typography — Font Families */
+  --font-alfa-slab-one: 'Alfa Slab One', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-manrope: 'Manrope', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* Typography — Scale */
+  --text-caption: 12px;
+  --leading-caption: 1.5;
+  --text-body: 16px;
+  --leading-body: 1.6;
+  --text-heading-sm: 25px;
+  --leading-heading-sm: 1.24;
+  --text-subheading: 34px;
+  --leading-subheading: 1.16;
+  --text-heading: 46px;
+  --leading-heading: 1.09;
+  --text-heading-lg: 50px;
+  --leading-heading-lg: 1.12;
+  --text-display: 120px;
+  --leading-display: 1;
+
+  /* Typography — Weights */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+
+  /* Spacing */
+  --spacing-4: 4px;
+  --spacing-8: 8px;
+  --spacing-10: 10px;
+  --spacing-13: 13px;
+  --spacing-15: 15px;
+  --spacing-16: 16px;
+  --spacing-17: 17px;
+  --spacing-20: 20px;
+  --spacing-24: 24px;
+  --spacing-25: 25px;
+  --spacing-27: 27px;
+  --spacing-30: 30px;
+  --spacing-38: 38px;
+  --spacing-40: 40px;
+  --spacing-46: 46px;
+  --spacing-80: 80px;
+
+  /* Layout */
+  --page-max-width: 1200px;
+  --section-gap: 46-64px;
+  --card-padding: 24-40px;
+  --element-gap: 8-16px;
+
+  /* Border Radius */
+  --radius-lg: 10px;
+  --radius-3xl: 40px;
+  --radius-3xl-2: 47px;
+
+  /* Named Radii */
+  --radius-nav: 47px;
+  --radius-cards: 40-47px;
+  --radius-small: 10px;
+  --radius-buttons: 47px;
+
+  /* Surfaces */
+  --surface-peach-canvas: #f6e0db;
+  --surface-snow-card: #ffffff;
+  --surface-color-card: #ef724f;
+  --surface-mint-card: #ace2df;
+  --surface-lilac-card: #e69dff;
+}
+
+/* Подстановки шрифтов. Alfa Slab One кириллицы не имеет — взят Roboto Slab 900,
+   тот же «кричащий» слэб с кириллицей. Manrope назван в системе прямо, кириллица есть.
+   Токены --card-padding и --radius-cards нечисловые («24-40px», «40-47px»),
+   поэтому взяты --spacing-40 и --radius-3xl-2. */
+:root {
+  --font-slab: 'Roboto Slab', var(--font-alfa-slab-one);
+  --font-ui: 'Manrope', var(--font-manrope);
+}
+
+* { box-sizing: border-box; }
+html { -webkit-font-smoothing: antialiased; }
+body {
+  margin: 0;
+  background: var(--surface-peach-canvas);
+  color: var(--color-charcoal-ink);
+  font-family: var(--font-ui);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  font-weight: var(--font-weight-regular);
+}
+svg { display: block; }
+a { color: inherit; text-decoration: none; }
+h1, h2, h3, h4, p, ul { margin: 0; padding: 0; }
+ul { list-style: none; }
+
+.wrap { max-width: var(--page-max-width); margin: 0 auto; padding: 0 var(--spacing-40); }
+.sec { padding: var(--spacing-80) 0; }
+
+/* слэб — только крупно, ниже 16px запрещён */
+.slab { font-family: var(--font-slab); font-weight: 900; }
+.d { font-size: var(--text-heading); line-height: var(--leading-heading); }
+.d-lg { font-size: var(--text-heading-lg); line-height: var(--leading-heading-lg); }
+.sub { font-size: var(--text-subheading); line-height: var(--leading-subheading); }
+.h-sm { font-size: var(--text-heading-sm); line-height: var(--leading-heading-sm); }
+.cap { font-size: var(--text-caption); line-height: var(--leading-caption); }
+
+/* пилюли: 47px, белая заливка, рамка 2px чёрным; цветная — активное состояние */
+.pill {
+  display: inline-block;
+  background: var(--color-snow);
+  border: 2px solid var(--color-charcoal-ink);
+  border-radius: var(--radius-buttons);
+  padding: 10px 20px;
+  font-family: var(--font-ui);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--text-body);
+  line-height: 1.2;
+  cursor: pointer;
+}
+.pill.on { background: var(--color-ember-orange); }
+.pill:hover { background: var(--color-sunbeam-yellow); }
+.pill.mint { background: var(--color-mint-wash); }
+.pill.lilac { background: var(--color-lilac-tint); }
+
+/* карточка: белая заливка, рамка 2px, радиус 47px, без теней */
+.card {
+  background: var(--surface-snow-card);
+  border: 2px solid var(--color-charcoal-ink);
+  border-radius: var(--radius-3xl-2);
+  padding: var(--spacing-40);
+}
+.card.orange { background: var(--color-ember-orange); }
+.card.mint { background: var(--surface-mint-card); }
+.card.lilac { background: var(--surface-lilac-card); }
+.card.yellow { background: var(--color-sunbeam-yellow); }
+.card.blue { background: var(--color-powder-blue); }
+
+/* шапка — ряд пилюль в левой трети */
+header { display: flex; align-items: center; gap: var(--spacing-8); padding: var(--spacing-30) var(--spacing-40); }
+header .brand { font-family: var(--font-slab); font-weight: 900; font-size: var(--text-heading-sm); margin-right: var(--spacing-24); }
+header .right { margin-left: auto; display: flex; gap: var(--spacing-8); align-items: center; }
+.lang { display: inline-flex; gap: 5px; align-items: center; font-weight: var(--font-weight-medium); }
+.lang button { font: inherit; border: none; background: none; padding: 0; cursor: pointer; color: rgba(0,0,0,.4); }
+.lang button[aria-pressed="true"] { color: var(--color-charcoal-ink); }
+.lang span { color: rgba(0,0,0,.4); }
+
+/* герой: заголовок по центру, каракули по кругу */
+.hero { position: relative; text-align: center; padding: var(--spacing-80) 0 var(--spacing-80); overflow: hidden; }
+.hero h1 { max-width: 18ch; margin: 0 auto; }
+.hero p { max-width: 46ch; margin: var(--spacing-24) auto 0; text-align: left; }
+.hero .acts { display: flex; gap: var(--spacing-16); justify-content: center; margin-top: var(--spacing-30); }
+.doodle { position: absolute; }
+
+/* сетки */
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-24); }
+.three { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-24); }
+.tilt-l { transform: rotate(-1.4deg); }
+.tilt-r { transform: rotate(1.2deg); }
+
+/* цветная полоса-передышка */
+.band { padding: var(--spacing-80) 0; }
+.band.mint { background: var(--color-mint-wash); }
+.band.yellow { background: var(--color-sunbeam-yellow); }
+
+/* расписание */
+.rows { display: flex; flex-direction: column; gap: var(--spacing-16); margin-top: var(--spacing-40); }
+.row { display: grid; grid-template-columns: 200px 1fr 180px; gap: var(--spacing-24); align-items: center; }
+.row .when { font-weight: var(--font-weight-extrabold); }
+
+footer { padding: var(--spacing-80) 0 var(--spacing-40); }
+.fcols { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: var(--spacing-40); }
+.fcols h4 { font-family: var(--font-slab); font-weight: 900; font-size: var(--text-body); margin-bottom: var(--spacing-16); }
+.fcols li { margin-bottom: var(--spacing-8); }
+.flegal { display: flex; justify-content: space-between; margin-top: var(--spacing-80); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">Primer</div>
+  <a class="pill on" href="#how" data-i18n="n1">How it works</a>
+  <a class="pill" href="#weeks" data-i18n="n2">The year</a>
+  <a class="pill" href="#books" data-i18n="n3">Books</a>
+  <a class="pill" href="#join" data-i18n="n4">Join</a>
+  <div class="right">
+    <div class="pill lang"><button data-set="en" aria-pressed="true">EN</button><span>/</span><button data-set="ru" aria-pressed="false">RU</button></div>
+  </div>
+</header>
+
+<!-- ── герой ────────────────────────────────────────────────────── -->
+<section class="hero">
+  <!-- каракули: тонкая чёрная линия, разбросаны под разными углами -->
+  <svg class="doodle" style="left:6%;top:12%;transform:rotate(-12deg)" width="120" height="120" viewBox="0 0 120 120" fill="none" stroke="#000" stroke-width="2">
+    <path d="M22 92 V34 a10 10 0 0 1 10-10 h56 a10 10 0 0 1 10 10 v58"/>
+    <path d="M22 92 h76"/><path d="M60 24 V92"/><path d="M34 44 h18"/><path d="M34 58 h18"/><path d="M70 44 h18"/>
+  </svg>
+  <svg class="doodle" style="right:8%;top:16%;transform:rotate(14deg)" width="110" height="110" viewBox="0 0 110 110" fill="none" stroke="#000" stroke-width="2">
+    <circle cx="55" cy="55" r="34"/><circle cx="44" cy="48" r="4"/><circle cx="66" cy="48" r="4"/>
+    <path d="M42 68 q13 12 26 0"/><path d="M55 21 v-12"/><circle cx="55" cy="6" r="5"/>
+  </svg>
+  <svg class="doodle" style="left:12%;bottom:8%;transform:rotate(9deg)" width="130" height="90" viewBox="0 0 130 90" fill="none" stroke="#000" stroke-width="2">
+    <path d="M14 70 q22 -46 50 -30 t52 -10"/><path d="M14 70 h102"/>
+    <path d="M40 54 v16"/><path d="M64 40 v30"/><path d="M92 44 v26"/>
+  </svg>
+  <svg class="doodle" style="right:12%;bottom:6%;transform:rotate(-8deg)" width="120" height="100" viewBox="0 0 120 100" fill="none" stroke="#000" stroke-width="2">
+    <path d="M18 82 l24 -60 l24 44 l16 -26 l20 42 z"/><circle cx="42" cy="22" r="5"/>
+  </svg>
+
+  <h1 class="slab d-lg" data-i18n="h1">Reading is a thing you do together, out loud, on Wednesdays</h1>
+  <p data-i18n="hp">Primer is a reading club for children of five to eight and whoever brings them. One book a fortnight, read at home in small pieces and finished together in a room with a carpet, a librarian and eleven other families.</p>
+  <div class="acts">
+    <a class="pill" href="#join" data-i18n="hb1">Come to a trial Wednesday</a>
+    <a class="pill mint" href="#books" data-i18n="hb2">See this year's books</a>
+  </div>
+</section>
+
+<!-- ── как это устроено ─────────────────────────────────────────── -->
+<section class="sec" id="how">
+  <div class="wrap">
+    <h2 class="slab d" style="max-width:16ch;margin-bottom:var(--spacing-40)" data-i18n="w0">Three things happen every fortnight</h2>
+    <div class="three">
+      <div class="card tilt-l">
+        <svg width="72" height="72" viewBox="0 0 72 72" fill="none" stroke="#000" stroke-width="2">
+          <path d="M10 56 V18 a8 8 0 0 1 8-8 h18 v46 z"/><path d="M62 56 V18 a8 8 0 0 0 -8-8 H36"/>
+          <path d="M10 56 h52"/>
+        </svg>
+        <h3 class="slab h-sm" style="margin:var(--spacing-24) 0 var(--spacing-10)" data-i18n="w1t">A book arrives</h3>
+        <p data-i18n="w1d">Posted to the house, one copy per child, with four bookmarks that mark where to stop. Nobody has to read ahead and nobody has to catch up.</p>
+      </div>
+      <div class="card mint tilt-r">
+        <svg width="72" height="72" viewBox="0 0 72 72" fill="none" stroke="#000" stroke-width="2">
+          <circle cx="24" cy="24" r="10"/><circle cx="48" cy="30" r="8"/>
+          <path d="M8 62 q16 -22 32 -8 t24 8"/>
+        </svg>
+        <h3 class="slab h-sm" style="margin:var(--spacing-24) 0 var(--spacing-10)" data-i18n="w2t">You read four evenings</h3>
+        <p data-i18n="w2d">Ten minutes each, out loud, taking turns. The grown-up reads the hard page; the child reads the page with the dog on it.</p>
+      </div>
+      <div class="card lilac tilt-l">
+        <svg width="72" height="72" viewBox="0 0 72 72" fill="none" stroke="#000" stroke-width="2">
+          <rect x="10" y="16" width="52" height="38" rx="6"/>
+          <path d="M22 30 h28"/><path d="M22 40 h18"/><path d="M28 54 l-6 10"/><path d="M44 54 l6 10"/>
+        </svg>
+        <h3 class="slab h-sm" style="margin:var(--spacing-24) 0 var(--spacing-10)" data-i18n="w3t">Wednesday, everyone talks</h3>
+        <p data-i18n="w3d">An hour in the library. We argue about the ending, draw the part nobody liked, and the librarian never asks what the author meant.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── мятная полоса-передышка ──────────────────────────────────── -->
+<section class="band mint">
+  <div class="wrap two" style="align-items:center">
+    <h2 class="slab d" data-i18n="b1">We do not teach reading. We give it somewhere to go.</h2>
+    <p data-i18n="b2">Children who can read perfectly well often stop, because nothing happens after the last page. Primer is the thing that happens after: eleven other people who read the same book and disagree about it.</p>
+  </div>
+</section>
+
+<!-- ── год ──────────────────────────────────────────────────────── -->
+<section class="sec" id="weeks">
+  <div class="wrap">
+    <h2 class="slab d" data-i18n="y0">The year, fortnight by fortnight</h2>
+    <div class="rows">
+      <div class="row card yellow" style="padding:var(--spacing-24) var(--spacing-40)">
+        <span class="when" data-i18n="y1w">September – November</span>
+        <span data-i18n="y1d">Six picture books with almost no words, so the youngest ones do the reading and the grown-ups have to listen.</span>
+        <span class="cap" data-i18n="y1n">6 meetings</span>
+      </div>
+      <div class="row card" style="padding:var(--spacing-24) var(--spacing-40)">
+        <span class="when" data-i18n="y2w">December – February</span>
+        <span data-i18n="y2d">Four longer stories in chapters. This is where children discover a book can be waited for.</span>
+        <span class="cap" data-i18n="y2n">5 meetings</span>
+      </div>
+      <div class="row card blue" style="padding:var(--spacing-24) var(--spacing-40)">
+        <span class="when" data-i18n="y3w">March – May</span>
+        <span data-i18n="y3d">Everyone writes and staples one book of their own, eight pages, and reads it to the room. Spelling is nobody's business.</span>
+        <span class="cap" data-i18n="y3n">6 meetings</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── книги ────────────────────────────────────────────────────── -->
+<section class="sec" id="books">
+  <div class="wrap">
+    <h2 class="slab d" style="margin-bottom:var(--spacing-40)" data-i18n="k0">Books we are reading now</h2>
+    <div class="two">
+      <div class="card orange tilt-r">
+        <div class="cap" data-i18n="k1n">Fortnight 03</div>
+        <h3 class="slab sub" style="margin:var(--spacing-10) 0 var(--spacing-16)" data-i18n="k1t">The Boy Who Kept a Crow</h3>
+        <p data-i18n="k1d">Forty pages, one bird, and an argument about whether keeping a wild thing is ever kind. Half the room says yes.</p>
+      </div>
+      <div class="card tilt-l">
+        <div class="cap" data-i18n="k2n">Fortnight 04</div>
+        <h3 class="slab sub" style="margin:var(--spacing-10) 0 var(--spacing-16)" data-i18n="k2t">Everything on Our Street</h3>
+        <p data-i18n="k2d">A picture book with no story, only a street drawn eleven times across a year. The children find what changed.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── жёлтая полоса: запись ────────────────────────────────────── -->
+<section class="band yellow" id="join">
+  <div class="wrap" style="text-align:center">
+    <h2 class="slab d" style="max-width:20ch;margin:0 auto" data-i18n="j0">Twelve families. Two places left for spring.</h2>
+    <p style="max-width:44ch;margin:var(--spacing-24) auto 0;text-align:left" data-i18n="j1">Come to one Wednesday for free before you decide. If your child hides under the table the whole hour, that is data and we will tell you honestly whether to come back.</p>
+    <div class="acts" style="display:flex;gap:var(--spacing-16);justify-content:center;margin-top:var(--spacing-30)">
+      <a class="pill" href="#join" data-i18n="j2">Book a trial Wednesday</a>
+      <a class="pill lilac" href="#join" data-i18n="j3">What it costs</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="fcols">
+      <div>
+        <div class="slab h-sm">Primer</div>
+        <p style="max-width:32ch;margin-top:var(--spacing-16)" data-i18n="fa">A reading club that meets on Wednesdays in the children's library on Sadovaya. Started by two parents in 2023.</p>
+      </div>
+      <div>
+        <h4 data-i18n="fh1">The club</h4>
+        <ul><li data-i18n="fl1">How it works</li><li data-i18n="fl2">The year</li><li data-i18n="fl3">Books</li></ul>
+      </div>
+      <div>
+        <h4 data-i18n="fh2">For grown-ups</h4>
+        <ul><li data-i18n="fl4">Reading out loud</li><li data-i18n="fl5">If it isn't working</li><li data-i18n="fl6">Prices</li></ul>
+      </div>
+      <div>
+        <h4 data-i18n="fh3">Come along</h4>
+        <ul><li data-i18n="fl7">Trial Wednesday</li><li data-i18n="fl8">Where we meet</li><li data-i18n="fl9">Write to us</li></ul>
+      </div>
+    </div>
+    <div class="flegal cap">
+      <span>© 2026 Primer</span>
+      <span data-i18n="fn">Sadovaya 14 · Wednesdays at five</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ── RU/EN. Английский — исходный, русский — перевод под него ── */
+var RU = {
+  n1:'Как устроено', n2:'Год', n3:'Книги', n4:'Записаться',
+  h1:'Читать — это вместе, вслух и по средам',
+  hp:'Primer — читательский клуб для детей пяти-восьми лет и тех, кто их приводит. Одна книга в две недели: дома читается маленькими кусками, а дочитывается вместе в комнате с ковром, библиотекарем и одиннадцатью другими семьями.',
+  hb1:'Прийти на пробную среду', hb2:'Смотреть книги года',
+  w0:'Раз в две недели происходит три вещи',
+  w1t:'Приходит книга', w1d:'Почтой на дом, по экземпляру на ребёнка, с четырьмя закладками, которые показывают, где остановиться. Никому не надо забегать вперёд и никому не надо догонять.',
+  w2t:'Четыре вечера вслух', w2d:'По десять минут, по очереди. Взрослый читает трудную страницу, ребёнок — ту, где собака.',
+  w3t:'В среду все спорят', w3d:'Час в библиотеке. Спорим про финал, рисуем то место, которое никому не понравилось, и библиотекарь ни разу не спрашивает, что хотел сказать автор.',
+  b1:'Мы не учим читать. Мы даём чтению, куда деваться.',
+  b2:'Дети, которые прекрасно читают, часто бросают: после последней страницы ничего не происходит. Primer — это то, что происходит после: ещё одиннадцать человек, прочитавших ту же книгу и не согласных с вами.',
+  y0:'Год, от двухнедельки к двухнедельке',
+  y1w:'Сентябрь – ноябрь', y1d:'Шесть книжек-картинок почти без слов, так что читают младшие, а взрослым приходится слушать.', y1n:'6 встреч',
+  y2w:'Декабрь – февраль', y2d:'Четыре длинные истории с главами. Здесь дети обнаруживают, что книгу можно ждать.', y2n:'5 встреч',
+  y3w:'Март – май', y3d:'Каждый пишет и сшивает свою книгу на восемь страниц и читает её вслух. Орфография — ничьё дело.', y3n:'6 встреч',
+  k0:'Что читаем сейчас',
+  k1n:'Двухнедельник 03', k1t:'Мальчик, который держал ворону',
+  k1d:'Сорок страниц, одна птица и спор о том, бывает ли добрым держать дикое. Половина комнаты говорит, что бывает.',
+  k2n:'Двухнедельник 04', k2t:'Всё, что есть на нашей улице',
+  k2d:'Книжка-картинка без сюжета: одна улица, нарисованная одиннадцать раз за год. Дети находят, что изменилось.',
+  j0:'Двенадцать семей. На весну осталось два места.',
+  j1:'Приходите на одну среду бесплатно, прежде чем решать. Если ребёнок весь час просидит под столом — это тоже результат, и мы честно скажем, стоит ли приходить снова.',
+  j2:'Записаться на пробную среду', j3:'Сколько стоит',
+  fa:'Читательский клуб, который собирается по средам в детской библиотеке на Садовой. Начат двумя родителями в 2023 году.',
+  fh1:'Клуб', fl1:'Как устроено', fl2:'Год', fl3:'Книги',
+  fh2:'Взрослым', fl4:'Как читать вслух', fl5:'Если не идёт', fl6:'Цены',
+  fh3:'Прийти', fl7:'Пробная среда', fl8:'Где мы собираемся', fl9:'Написать нам',
+  fn:'Садовая, 14 · по средам в пять'
+};
+var EN = {};
+document.querySelectorAll('[data-i18n]').forEach(function (el) { EN[el.dataset.i18n] = el.innerHTML; });
+function setLang(l) {
+  var dict = l === 'ru' ? RU : EN;
+  document.querySelectorAll('[data-i18n]').forEach(function (el) {
+    var v = dict[el.dataset.i18n];
+    if (v !== undefined) el.innerHTML = v;
+  });
+  document.documentElement.lang = l;
+  document.documentElement.dataset.lang = l;
+  document.querySelectorAll('.lang button').forEach(function (b) {
+    b.setAttribute('aria-pressed', b.dataset.set === l ? 'true' : 'false');
+  });
+}
+document.querySelectorAll('.lang button').forEach(function (b) {
+  b.addEventListener('click', function () { setLang(b.dataset.set); });
+});
+</script>
+</body>
+</html>

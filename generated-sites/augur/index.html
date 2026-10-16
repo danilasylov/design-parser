@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>Augur — the next forty-eight hours of grid load</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Inter+Tight:wght@300&display=swap" rel="stylesheet">
+<style>
+/* ─────────────────────────────────────────────────────────────
+   Дизайн-система: Aaru (refero ad98aac8) — tokens.css дословно
+   ───────────────────────────────────────────────────────────── */
+:root {
+  /* Colors */
+  --color-void-black: #000000;
+  --color-carbon: #0a0a0a;
+  --color-graphite: #18181b;
+  --color-frost: #ffffff;
+  --color-ash: #bababa;
+  --color-smoke: #9d9d9d;
+  --color-slate: #858484;
+  --color-reactor-lime: #ebfb10;
+  --color-plasma-blue: #1019ec;
+
+  /* Typography — Font Families */
+  /* abcOracle → Inter (замена из DESIGN.md), вес 330 → 300; gtPantheon → Inter Tight 300 */
+  --font-abcoracle: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-gtpantheon: 'Inter Tight', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* Typography — Scale */
+  --text-caption: 12px;
+  --leading-caption: 1.33;
+  --tracking-caption: 0.96px;
+  --text-body: 15px;
+  --leading-body: 1.5;
+  --tracking-body: 0.6px;
+  --text-subheading: 20px;
+  --leading-subheading: 1.25;
+  --tracking-subheading: -0.5px;
+  --text-heading-sm: 30px;
+  --leading-heading-sm: 1.25;
+  --tracking-heading-sm: -0.75px;
+  --text-heading: 34px;
+  --leading-heading: 1.25;
+  --tracking-heading: -0.85px;
+  --text-heading-lg: 40px;
+  --leading-heading-lg: 1.2;
+  --tracking-heading-lg: -2px;
+  --text-display: 50px;
+  --leading-display: 1.2;
+  --tracking-display: -1.25px;
+
+  /* Typography — Weights */
+  --font-weight-w330: 300;   /* у Inter нет 330 — ближайший ультралайт */
+  --font-weight-regular: 400;
+
+  /* Spacing */
+  --spacing-unit: 4px;
+  --spacing-8: 8px;
+  --spacing-12: 12px;
+  --spacing-16: 16px;
+  --spacing-20: 20px;
+  --spacing-24: 24px;
+  --spacing-28: 28px;
+  --spacing-32: 32px;
+  --spacing-40: 40px;
+  --spacing-48: 48px;
+  --spacing-64: 64px;
+  --spacing-80: 80px;
+  --spacing-96: 96px;
+  --spacing-128: 128px;
+
+  /* Layout */
+  --page-max-width: 1280px;
+  --section-gap: 80px;
+  --card-padding: 30px;
+  --element-gap: 8px;
+
+  /* Border Radius */
+  --radius-md: 6px;
+  --radius-tags: 0px;
+  --radius-cards: 6px;
+  --radius-inputs: 0px;
+  --radius-buttons: 0px;
+
+  /* Surfaces */
+  --surface-void-canvas: #000000;
+  --surface-carbon: #0a0a0a;
+  --surface-graphite: #18181b;
+  --surface-plasma-blue: #1019ec;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--surface-void-canvas);
+  color: var(--color-frost);
+  font-family: var(--font-abcoracle);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  letter-spacing: 0.04em;
+  font-weight: var(--font-weight-w330);
+  font-feature-settings: "tnum" on;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; text-decoration: none; }
+h1, h2, h3, h4, p, ul, ol, figure { margin: 0; }
+ul { list-style: none; padding: 0; }
+
+.wrap { max-width: var(--page-max-width); margin: 0 auto; padding: 0 var(--spacing-40); }
+section { padding: var(--spacing-80) 0; }
+
+.label {
+  font-size: var(--text-caption); line-height: var(--leading-caption);
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-frost);
+}
+.muted { color: var(--color-smoke); }
+p.body { font-weight: var(--font-weight-regular); letter-spacing: 0.025em; }
+
+/* ── Полоса объявления ── */
+.announce {
+  background: var(--color-reactor-lime); color: var(--color-void-black);
+  text-align: center; padding: 10px var(--spacing-40);
+  font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase;
+}
+.announce a { border-bottom: 1px solid var(--color-void-black); }
+
+/* ── Навигация ── */
+.nav { position: sticky; top: 0; z-index: 30; background: var(--surface-void-canvas); }
+.nav .wrap { display: flex; align-items: center; gap: var(--spacing-32); height: 64px; }
+.logo { display: flex; align-items: center; gap: 10px; font-size: 16px; letter-spacing: 0.02em; }
+.nav-links { margin-left: auto; display: flex; gap: var(--spacing-32); }
+.nav-links a { font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-smoke); }
+.nav-links a:hover, .nav-links a.on { color: var(--color-frost); }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 0; padding: 12px 32px; cursor: pointer;
+  font-family: inherit; font-size: 13px; font-weight: var(--font-weight-w330);
+  letter-spacing: 0.08em; text-transform: uppercase;
+}
+.btn-ghost { background: transparent; border: 1px solid var(--color-frost); color: var(--color-frost); }
+.btn-ghost:hover { background: rgba(255,255,255,0.06); }
+.btn-filled { background: var(--color-frost); border: 1px solid var(--color-frost); color: var(--color-void-black); }
+.btn-lime { background: var(--color-reactor-lime); border: 1px solid var(--color-reactor-lime); color: var(--color-void-black); padding: 14px 30px; font-size: 14px; }
+.btn-onblue { background: var(--color-void-black); border: 1px solid var(--color-void-black); color: var(--color-frost); }
+.switch { display: inline-flex; border: 1px solid var(--color-smoke); }
+.switch button {
+  background: transparent; border: 0; color: var(--color-smoke);
+  font-family: inherit; font-size: 12px; letter-spacing: 0.08em;
+  padding: 8px 10px; cursor: pointer;
+}
+.switch button[aria-pressed="true"] { background: var(--color-frost); color: var(--color-void-black); }
+
+/* ── Хиро ── */
+.hero { position: relative; min-height: 720px; padding: 0; overflow: hidden; }
+.hero .wrap { position: relative; height: 720px; }
+#field { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.hero h1 {
+  position: absolute; top: 300px; left: var(--spacing-40);
+  font-size: var(--text-display); line-height: var(--leading-display);
+  letter-spacing: var(--tracking-display); font-weight: var(--font-weight-w330);
+  max-width: 540px;
+}
+.hero .side { position: absolute; right: var(--spacing-40); bottom: 90px; width: 300px; }
+.hero .side hr { border: 0; border-top: 1px solid var(--color-frost); margin: 0 0 var(--spacing-16); }
+.hero .side .claim { font-size: var(--text-body); letter-spacing: 0.025em; }
+.hero .side p { margin-top: var(--spacing-64); font-size: 14px; color: var(--color-smoke); font-weight: var(--font-weight-regular); letter-spacing: 0.025em; }
+
+/* ── Цифры ── */
+.metrics { border-top: 1px solid var(--color-graphite); }
+.metrics .grid { display: grid; grid-template-columns: repeat(4, 1fr); }
+.metric { padding: var(--spacing-40) var(--spacing-32) var(--spacing-40) 0; border-right: 1px solid var(--color-graphite); }
+.metric:last-child { border-right: 0; }
+.metric .n { font-family: var(--font-gtpantheon); font-size: var(--text-heading-lg); line-height: var(--leading-heading-lg); letter-spacing: var(--tracking-heading-lg); font-weight: 300; }
+.metric .k { margin-top: var(--spacing-12); font-size: var(--text-caption); letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-smoke); }
+
+/* ── Синяя секция ── */
+.blue { background: var(--surface-plasma-blue); color: var(--color-frost); padding: var(--spacing-96) 0; }
+.blue h2 {
+  font-family: var(--font-gtpantheon); font-size: var(--text-heading-lg);
+  line-height: var(--leading-heading-lg); letter-spacing: var(--tracking-heading-lg);
+  font-weight: 300; max-width: 560px;
+}
+.rows { margin-top: var(--spacing-64); }
+.row { border-top: 1px solid var(--color-void-black); padding: var(--spacing-24) 0; }
+.row .head { display: flex; gap: var(--spacing-32); align-items: baseline; cursor: pointer; }
+.row .idx { font-size: 13px; letter-spacing: 0.04em; width: 40px; }
+.row .ttl { font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; }
+.row .plus { margin-left: auto; font-size: 15px; }
+.row .body { display: none; padding: var(--spacing-16) 0 var(--spacing-8) 72px; max-width: 620px; font-weight: var(--font-weight-regular); letter-spacing: 0.025em; }
+.row.open .body { display: block; }
+.blue .foot { margin-top: var(--spacing-48); display: flex; gap: var(--spacing-16); }
+
+/* ── График ── */
+.chart-head { display: flex; align-items: flex-end; gap: var(--spacing-40); margin-bottom: var(--spacing-32); }
+.chart-head h2 { font-family: var(--font-gtpantheon); font-size: var(--text-heading); letter-spacing: var(--tracking-heading); font-weight: 300; max-width: 520px; }
+.legend { margin-left: auto; display: flex; gap: var(--spacing-24); font-size: var(--text-caption); letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-smoke); }
+.legend i { display: inline-block; width: 18px; height: 1px; background: currentColor; vertical-align: middle; margin-right: 8px; }
+.chart { border: 1px solid var(--color-graphite); border-radius: var(--radius-cards); background: var(--surface-carbon); padding: var(--spacing-32); }
+.chart svg { display: block; width: 100%; height: auto; }
+
+/* ── Таблица ── */
+table { width: 100%; border-collapse: collapse; font-size: 14px; letter-spacing: 0.025em; }
+thead th { text-align: left; font-weight: var(--font-weight-w330); font-size: var(--text-caption); letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-smoke); padding-bottom: var(--spacing-16); border-bottom: 1px solid var(--color-frost); }
+tbody td { padding: var(--spacing-16) var(--spacing-16) var(--spacing-16) 0; border-bottom: 1px solid var(--color-graphite); color: var(--color-ash); }
+tbody td:first-child { color: var(--color-frost); }
+td.num { font-variant-numeric: tabular-nums; }
+td.flag span { display: inline-block; padding: 2px 8px; border: 1px solid var(--color-smoke); font-size: var(--text-caption); letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-smoke); }
+td.flag span.lime { border-color: var(--color-reactor-lime); color: var(--color-reactor-lime); }
+
+/* ── Входы ── */
+.inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 0 var(--spacing-64); }
+.inputs li { border-top: 1px solid var(--color-graphite); padding: var(--spacing-20) 0; display: flex; gap: var(--spacing-24); }
+.inputs li b { font-weight: var(--font-weight-w330); min-width: 180px; }
+.inputs li span { color: var(--color-smoke); font-weight: var(--font-weight-regular); letter-spacing: 0.025em; font-size: 14px; }
+
+/* ── Карточки ── */
+.cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-24); }
+.card { background: var(--surface-graphite); border-radius: var(--radius-cards); padding: var(--card-padding); }
+.card h3 { font-family: var(--font-gtpantheon); font-size: var(--text-subheading); letter-spacing: var(--tracking-subheading); font-weight: 300; margin-bottom: var(--spacing-12); }
+.card p { font-size: 14px; color: var(--color-ash); font-weight: var(--font-weight-regular); letter-spacing: 0.025em; }
+
+/* ── Финал ── */
+.final { border-top: 1px solid var(--color-graphite); }
+.final h2 { font-family: var(--font-gtpantheon); font-size: var(--text-heading); letter-spacing: var(--tracking-heading); font-weight: 300; max-width: 620px; }
+.final p { margin-top: var(--spacing-20); max-width: 560px; color: var(--color-smoke); font-weight: var(--font-weight-regular); letter-spacing: 0.025em; }
+.final .actions { margin-top: var(--spacing-40); display: flex; gap: var(--spacing-16); }
+
+/* ── Подвал ── */
+footer { border-top: 1px solid var(--color-graphite); padding: var(--spacing-64) 0 var(--spacing-40); }
+.foot { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: var(--spacing-40); }
+footer h4 { font-size: var(--text-caption); letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-smoke); font-weight: var(--font-weight-w330); margin-bottom: var(--spacing-20); }
+footer li { padding: 6px 0; font-size: 14px; letter-spacing: 0.025em; }
+footer li a { color: var(--color-smoke); }
+footer li a:hover { color: var(--color-frost); }
+.foot-note { margin-top: var(--spacing-20); max-width: 300px; font-size: 13px; color: var(--color-slate); font-weight: var(--font-weight-regular); letter-spacing: 0.025em; }
+.foot-bottom { margin-top: var(--spacing-48); padding-top: var(--spacing-20); border-top: 1px solid var(--color-graphite); display: flex; font-size: var(--text-caption); letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-slate); }
+.foot-bottom .right { margin-left: auto; display: flex; gap: var(--spacing-24); }
+</style>
+</head>
+<body>
+
+<div class="announce">
+  <span data-i18n="an1">Augur now forecasts 41 zones across three price areas.</span>
+  <a href="#" data-i18n="an2">Read more →</a>
+</div>
+
+<nav class="nav">
+  <div class="wrap">
+    <a class="logo" href="#">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="#ffffff" aria-hidden="true">
+        <circle cx="3" cy="3" r="1.6"/><circle cx="13" cy="3" r="1.6"/><circle cx="3" cy="13" r="1.6"/><circle cx="13" cy="13" r="1.6"/><circle cx="8" cy="8" r="1.6"/>
+      </svg>
+      augur
+    </a>
+    <div class="nav-links">
+      <a class="on" href="#" data-i18n="n1">Home</a>
+      <a href="#method" data-i18n="n2">Method</a>
+      <a href="#accuracy" data-i18n="n3">Accuracy</a>
+      <a href="#inputs" data-i18n="n4">Inputs</a>
+    </div>
+    <a class="btn btn-ghost" href="#" data-i18n="n5">Log in</a>
+    <a class="btn btn-filled" href="#" data-i18n="n6">Contact</a>
+    <span class="switch">
+      <button type="button" data-set="en" aria-pressed="true">EN</button>
+      <button type="button" data-set="ru" aria-pressed="false">RU</button>
+    </span>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <svg id="field" viewBox="0 0 1200 720" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg>
+    <h1 data-i18n="h1">Rendering the next forty-eight hours.</h1>
+    <div class="side">
+      <hr>
+      <div class="claim" data-i18n="h2">Forecast any load.</div>
+      <p data-i18n="h3">Augur predicts electricity demand for a distribution zone in fifteen-minute steps, with the interval printed next to every number. Ninety-six steps ahead, twice a day, for dispatchers who have to commit reserve before the morning ramp.</p>
+    </div>
+  </div>
+</header>
+
+<section class="metrics">
+  <div class="wrap">
+    <div class="grid">
+      <div class="metric"><div class="n">1.94 %</div><div class="k" data-i18n="m1">Median MAPE, day-ahead, 41 zones</div></div>
+      <div class="metric"><div class="n">96</div><div class="k" data-i18n="m2">Steps per run, 15-minute resolution</div></div>
+      <div class="metric"><div class="n">11 min</div><div class="k" data-i18n="m3">From gate closure to published forecast</div></div>
+      <div class="metric"><div class="n">2019</div><div class="k" data-i18n="m4">First year in the training window</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="blue" id="method">
+  <div class="wrap">
+    <h2 data-i18n="b1">A forecast that cannot say how sure it is has told you nothing.</h2>
+    <div class="rows">
+      <div class="row open">
+        <div class="head"><span class="idx">01</span><span class="ttl" data-i18n="r1t">Quantiles, not a single line</span><span class="plus">−</span></div>
+        <div class="body" data-i18n="r1b">Every step is published as five quantiles — 10, 25, 50, 75, 90. The dispatcher books reserve against the upper one and sells against the lower one; the median is for the report. Models trained on pinball loss keep the intervals honest instead of decorative.</div>
+      </div>
+      <div class="row">
+        <div class="head"><span class="idx">02</span><span class="ttl" data-i18n="r2t">Weather enters as an ensemble</span><span class="plus">+</span></div>
+        <div class="body" data-i18n="r2b">Fifty-one perturbed weather members go in, fifty-one load paths come out, and the spread between them is most of the uncertainty you see. When the members disagree about the afternoon cloud cover, the interval widens on its own — no manual inflation factor.</div>
+      </div>
+      <div class="row">
+        <div class="head"><span class="idx">03</span><span class="ttl" data-i18n="r3t">The calendar is a first-class input</span><span class="plus">+</span></div>
+        <div class="body" data-i18n="r3b">School holidays, the ten days around New Year, the transfer of working days, the third shift at the two large plants in the zone. Most of the residual error left in this model lives in the four days after a holiday, and we say so on the accuracy page.</div>
+      </div>
+      <div class="row">
+        <div class="head"><span class="idx">04</span><span class="ttl" data-i18n="r4t">Retrained nightly, evaluated openly</span><span class="plus">+</span></div>
+        <div class="body" data-i18n="r4b">The window rolls every night at 01:40. Yesterday's forecast and yesterday's meter readings are published side by side the moment settlement data arrives — including the days we were wrong by nine percent.</div>
+      </div>
+    </div>
+    <div class="foot">
+      <a class="btn btn-onblue" href="#accuracy" data-i18n="b2">See the error log</a>
+      <a class="btn btn-ghost" href="#" data-i18n="b3">Read the model card</a>
+    </div>
+  </div>
+</section>
+
+<section id="accuracy">
+  <div class="wrap">
+    <div class="chart-head">
+      <h2 data-i18n="c1">Zone 14, published 06:00, against what the meters said</h2>
+      <div class="legend">
+        <span><i></i><span data-i18n="lg1">Median</span></span>
+        <span class="muted"><i></i><span data-i18n="lg2">P10–P90</span></span>
+        <span style="color:var(--color-reactor-lime)"><i></i><span data-i18n="lg3">Actual</span></span>
+      </div>
+    </div>
+    <div class="chart">
+      <svg viewBox="0 0 1120 320" fill="none" font-family="Inter, sans-serif" font-size="11">
+        <!-- сетка -->
+        <g stroke="#18181b" stroke-width="1">
+          <path d="M60 20H1100M60 80H1100M60 140H1100M60 200H1100M60 260H1100"/>
+          <path d="M60 20V260M233 20V260M406 20V260M579 20V260M752 20V260M925 20V260M1098 20V260"/>
+        </g>
+        <g fill="#858484" letter-spacing="0.08em">
+          <text x="8" y="24">3.2 GW</text><text x="8" y="84">2.8</text><text x="8" y="144">2.4</text><text x="8" y="204">2.0</text><text x="8" y="264">1.6</text>
+          <text x="60" y="284">00:00</text><text x="212" y="284">08:00</text><text x="385" y="284">16:00</text><text x="558" y="284">00:00</text><text x="731" y="284">08:00</text><text x="904" y="284">16:00</text><text x="1050" y="284">00:00</text>
+        </g>
+        <!-- интервал P10–P90 -->
+        <path d="M60 214 L146 226 L233 178 L320 96 L406 76 L493 88 L579 62 L666 74 L752 128 L839 172 L925 118 L1012 86 L1098 168
+                 L1098 214 L1012 132 L925 164 L839 210 L752 166 L666 112 L579 100 L493 126 L406 114 L320 134 L233 216 L146 262 L60 250 Z"
+              fill="#18181b"/>
+        <!-- медиана -->
+        <path d="M60 232 L146 244 L233 197 L320 115 L406 95 L493 107 L579 81 L666 93 L752 147 L839 191 L925 141 L1012 109 L1098 191"
+              stroke="#ffffff" stroke-width="1.5"/>
+        <!-- факт -->
+        <path d="M60 236 L146 240 L233 202 L320 108 L406 101 L493 99 L579 88 L666 101 L752 152 L839 186 L925 133"
+              stroke="#ebfb10" stroke-width="1.5" stroke-dasharray="5 4"/>
+        <circle cx="925" cy="133" r="3.5" fill="#ebfb10"/>
+        <path d="M925 20V260" stroke="#ebfb10" stroke-width="1" stroke-dasharray="2 6"/>
+        <text x="936" y="34" fill="#ebfb10" letter-spacing="0.08em">NOW</text>
+      </svg>
+    </div>
+    <table style="margin-top:var(--spacing-48)">
+      <thead>
+        <tr><th data-i18n="th1">Zone</th><th data-i18n="th2">Peak</th><th data-i18n="th3">MAPE, 7 days</th><th data-i18n="th4">Worst step</th><th data-i18n="th5">Cause of the miss</th><th data-i18n="th6">Interval</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>14 · Nizhny Posad</td><td class="num">2.94 GW</td><td class="num">1.71 %</td><td class="num">6.2 %</td><td data-i18n="tr1">Plant restart moved four hours</td><td class="flag"><span data-i18n="tf1">Held</span></td></tr>
+        <tr><td>22 · Ust-Kama</td><td class="num">1.18 GW</td><td class="num">2.04 %</td><td class="num">7.8 %</td><td data-i18n="tr2">Fog cleared two hours early</td><td class="flag"><span data-i18n="tf1b">Held</span></td></tr>
+        <tr><td>31 · Sever-3</td><td class="num">0.86 GW</td><td class="num">3.42 %</td><td class="num">11.6 %</td><td data-i18n="tr3">First frost of the season</td><td class="flag"><span class="lime" data-i18n="tf2">Breached 1 step</span></td></tr>
+        <tr><td>08 · Rechnoy</td><td class="num">2.11 GW</td><td class="num">1.55 %</td><td class="num">4.9 %</td><td data-i18n="tr4">Holiday transfer, Monday</td><td class="flag"><span data-i18n="tf1c">Held</span></td></tr>
+        <tr><td>19 · Zapadny</td><td class="num">1.62 GW</td><td class="num">1.88 %</td><td class="num">5.4 %</td><td data-i18n="tr5">Nothing unusual</td><td class="flag"><span data-i18n="tf1d">Held</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="inputs" style="padding-top:0">
+  <div class="wrap">
+    <div class="chart-head">
+      <h2 data-i18n="i1">Eleven inputs, and the meter readings that judge them</h2>
+    </div>
+    <ul class="inputs">
+      <li><b data-i18n="in1">Weather ensemble</b><span data-i18n="in1d">51 members, hourly, 2 m temperature, dew point, wind, global radiation</span></li>
+      <li><b data-i18n="in2">Meter readings</b><span data-i18n="in2d">Settlement-grade, 15-minute, seven years back</span></li>
+      <li><b data-i18n="in3">Calendar</b><span data-i18n="in3d">Holidays, transfers, school terms, the local city day</span></li>
+      <li><b data-i18n="in4">Industrial schedule</b><span data-i18n="in4d">Declared shift plans from the eleven largest consumers</span></li>
+      <li><b data-i18n="in5">Price area state</b><span data-i18n="in5d">Day-ahead prices and planned outages in the neighbouring zones</span></li>
+      <li><b data-i18n="in6">Distributed generation</b><span data-i18n="in6d">Rooftop solar registry, 41 MW installed, growing monthly</span></li>
+      <li><b data-i18n="in7">Network topology</b><span data-i18n="in7d">Which substation feeds which feeder this week</span></li>
+      <li><b data-i18n="in8">Illumination</b><span data-i18n="in8d">Sunrise, sunset, cloud opacity — street lighting is a real step</span></li>
+      <li><b data-i18n="in9">Anomaly flags</b><span data-i18n="in9d">Storm warnings, emergency shutdowns, mass events in the city</span></li>
+      <li><b data-i18n="in10">Own past error</b><span data-i18n="in10d">Yesterday's residual by hour, fed back as a feature</span></li>
+      <li><b data-i18n="in11">Settlement corrections</b><span data-i18n="in11d">Late meter fixes, so history stops shifting under the model</span></li>
+    </ul>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="cards">
+      <div class="card">
+        <h3 data-i18n="k1h">Runs where the data lives</h3>
+        <p data-i18n="k1p">A container in your perimeter, a read-only connection to the metering database, one outbound call for weather. No consumption data leaves the utility.</p>
+      </div>
+      <div class="card">
+        <h3 data-i18n="k2h">Every forecast is kept</h3>
+        <p data-i18n="k2p">Publication time, model version, weather run, input hash. A year later you can reproduce exactly the number the dispatcher saw at six in the morning.</p>
+      </div>
+      <div class="card">
+        <h3 data-i18n="k3h">Degrades out loud</h3>
+        <p data-i18n="k3p">When an input stops arriving, the forecast keeps running on a reduced feature set and says so in the header — instead of quietly producing a confident line.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="final">
+  <div class="wrap">
+    <h2 data-i18n="fi1">Send us three years of meter readings. We will send back the days we would have missed.</h2>
+    <p data-i18n="fi2">A backtest on your own zone takes about a week and costs nothing. If our intervals do not hold on your history, that is a useful thing to learn before a contract.</p>
+    <div class="actions">
+      <a class="btn btn-lime" href="#" data-i18n="fi3">Request a backtest</a>
+      <a class="btn btn-ghost" href="#" data-i18n="fi4">Read the model card</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <a class="logo" href="#">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="#ffffff" aria-hidden="true"><circle cx="3" cy="3" r="1.6"/><circle cx="13" cy="3" r="1.6"/><circle cx="3" cy="13" r="1.6"/><circle cx="13" cy="13" r="1.6"/><circle cx="8" cy="8" r="1.6"/></svg>
+          augur
+        </a>
+        <p class="foot-note" data-i18n="ft1">Five people, two of them former dispatchers who spent a decade committing reserve on a spreadsheet and a feeling.</p>
+      </div>
+      <div>
+        <h4 data-i18n="fh1">Product</h4>
+        <ul>
+          <li><a href="#" data-i18n="fl1">Day-ahead</a></li>
+          <li><a href="#" data-i18n="fl2">Intraday</a></li>
+          <li><a href="#" data-i18n="fl3">Reserve sizing</a></li>
+          <li><a href="#" data-i18n="fl4">API</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 data-i18n="fh2">Evidence</h4>
+        <ul>
+          <li><a href="#" data-i18n="fl5">Error log</a></li>
+          <li><a href="#" data-i18n="fl6">Model card</a></li>
+          <li><a href="#" data-i18n="fl7">Backtest method</a></li>
+          <li><a href="#" data-i18n="fl8">Publications</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 data-i18n="fh3">Company</h4>
+        <ul>
+          <li><a href="#" data-i18n="fl9">About</a></li>
+          <li><a href="#" data-i18n="fl10">Careers</a></li>
+          <li><a href="#" data-i18n="fl11">Security</a></li>
+          <li><a href="#" data-i18n="fl12">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Augur</span>
+      <span class="right"><a href="#" data-i18n="fb1">Privacy</a><a href="#" data-i18n="fb2">Terms</a><span data-i18n="fb3">Status: nominal</span></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ── Поле частиц: облако штрихов принимает форму суточной кривой нагрузки ── */
+(function () {
+  var svg = document.getElementById('field');
+  if (!svg) return;
+  var W = 1200, H = 720, N = 1100, out = [];
+  function curve(x) {            /* нормированная кривая спроса 0..1 */
+    var t = x / W * Math.PI * 2;
+    return 0.5 + 0.28 * Math.sin(t - 1.1) + 0.16 * Math.sin(t * 2 + 0.4) + 0.06 * Math.sin(t * 5);
+  }
+  var s = 20250819;
+  function rnd() { s = (s * 16807) % 2147483647; return s / 2147483647; }
+  for (var i = 0; i < N; i++) {
+    var x = 380 + rnd() * 360;
+    var base = H - curve(x) * H * 0.72 - 40;
+    var spread = 60 + 190 * Math.pow(rnd(), 2);
+    var y = base + (rnd() - 0.5) * spread * 2;
+    if (y < 40 || y > H - 20) continue;
+    var w = 2 + rnd() * 7, h = rnd() > 0.75 ? 2 : 1;
+    var g = Math.round(90 + rnd() * 150);
+    var o = 0.25 + rnd() * 0.6;
+    out.push('<rect x="' + x.toFixed(1) + '" y="' + y.toFixed(1) + '" width="' + w.toFixed(1) + '" height="' + h +
+             '" fill="rgb(' + g + ',' + g + ',' + g + ')" opacity="' + o.toFixed(2) + '"/>');
+  }
+  svg.innerHTML = out.join('');
+})();
+
+/* ── Аккордеон в синей секции ── */
+document.querySelectorAll('.row .head').forEach(function (h) {
+  h.addEventListener('click', function () {
+    var row = h.parentNode;
+    document.querySelectorAll('.row').forEach(function (r) {
+      if (r !== row) { r.classList.remove('open'); r.querySelector('.plus').textContent = '+'; }
+    });
+    row.classList.toggle('open');
+    h.querySelector('.plus').textContent = row.classList.contains('open') ? '−' : '+';
+  });
+});
+
+/* ── RU/EN. Английский — исходный, русский — перевод под него ── */
+var RU = {
+  an1:'Augur считает прогноз по 41 зоне в трёх ценовых зонах.', an2:'Подробнее →',
+  n1:'Главная', n2:'Метод', n3:'Точность', n4:'Входные данные', n5:'Войти', n6:'Связаться',
+  h1:'Отрисовка следующих сорока восьми часов.',
+  h2:'Прогноз любой нагрузки.',
+  h3:'Augur предсказывает потребление электроэнергии в зоне с шагом пятнадцать минут и печатает интервал рядом с каждым числом. Девяносто шесть шагов вперёд, дважды в сутки — для диспетчеров, которым резерв нужно законтрактовать до утреннего подъёма.',
+  m1:'Медианная MAPE на сутки вперёд, 41 зона',
+  m2:'Шагов в прогоне, разрешение 15 минут',
+  m3:'От закрытия ворот до опубликованного прогноза',
+  m4:'Первый год в обучающем окне',
+  b1:'Прогноз, который не может сказать, насколько он уверен, не сказал ничего.',
+  r1t:'Квантили, а не одна линия',
+  r1b:'Каждый шаг публикуется пятью квантилями — 10, 25, 50, 75, 90. Диспетчер держит резерв по верхнему и продаёт по нижнему; медиана нужна отчёту. Модели учатся на pinball-функции потерь, поэтому интервалы честные, а не декоративные.',
+  r2t:'Погода входит ансамблем',
+  r2b:'Внутрь идёт пятьдесят один возмущённый прогноз погоды, наружу выходит пятьдесят один сценарий нагрузки, и расхождение между ними — это и есть большая часть неопределённости, которую вы видите. Когда члены ансамбля спорят о дневной облачности, интервал расширяется сам, без ручного коэффициента.',
+  r3t:'Календарь — полноправный вход',
+  r3b:'Школьные каникулы, десять дней вокруг Нового года, переносы рабочих дней, третья смена на двух больших заводах зоны. Почти вся оставшаяся ошибка живёт в четырёх днях после праздника — и мы пишем об этом на странице точности.',
+  r4t:'Переобучение ночью, оценка на виду',
+  r4b:'Окно сдвигается каждую ночь в 01:40. Вчерашний прогноз и вчерашние показания счётчиков публикуются рядом, как только приходят данные коммерческого учёта, — включая дни, когда мы ошиблись на девять процентов.',
+  b2:'Смотреть журнал ошибок', b3:'Читать карточку модели',
+  c1:'Зона 14, выпуск 06:00, против того, что сказали счётчики',
+  lg1:'Медиана', lg2:'P10–P90', lg3:'Факт',
+  th1:'Зона', th2:'Пик', th3:'MAPE, 7 дней', th4:'Худший шаг', th5:'Причина промаха', th6:'Интервал',
+  tr1:'Пуск завода сдвинулся на четыре часа',
+  tr2:'Туман разошёлся на два часа раньше',
+  tr3:'Первые заморозки сезона',
+  tr4:'Перенос выходного, понедельник',
+  tr5:'Ничего необычного',
+  tf1:'Удержан', tf1b:'Удержан', tf1c:'Удержан', tf1d:'Удержан', tf2:'Пробит на 1 шаге',
+  i1:'Одиннадцать входов и показания счётчиков, которые их судят',
+  in1:'Ансамбль погоды', in1d:'51 член, почасово: температура на 2 м, точка росы, ветер, суммарная радиация',
+  in2:'Показания счётчиков', in2d:'Коммерческий учёт, 15 минут, семь лет назад',
+  in3:'Календарь', in3d:'Праздники, переносы, учебные четверти, день города',
+  in4:'График производства', in4d:'Заявленные сменные планы одиннадцати крупнейших потребителей',
+  in5:'Состояние ценовой зоны', in5d:'Цены на сутки вперёд и плановые ремонты в соседних зонах',
+  in6:'Распределённая генерация', in6d:'Реестр крышных панелей: 41 МВт установлено, прибавляется ежемесячно',
+  in7:'Топология сети', in7d:'Какая подстанция питает какой фидер на этой неделе',
+  in8:'Освещённость', in8d:'Восход, закат, плотность облаков — уличный свет даёт реальную ступеньку',
+  in9:'Флаги аномалий', in9d:'Штормовые предупреждения, аварийные отключения, массовые события в городе',
+  in10:'Собственная прошлая ошибка', in10d:'Вчерашний остаток по часам, поданный обратно как признак',
+  in11:'Уточнения учёта', in11d:'Поздние правки показаний, чтобы история перестала ездить под моделью',
+  k1h:'Работает там, где лежат данные',
+  k1p:'Контейнер в вашем контуре, соединение с базой учёта только на чтение, один исходящий запрос за погодой. Данные потребления не покидают компанию.',
+  k2h:'Каждый прогноз сохранён',
+  k2p:'Время публикации, версия модели, прогон погоды, хеш входов. Через год вы воспроизведёте ровно то число, которое диспетчер видел в шесть утра.',
+  k3h:'Деградирует вслух',
+  k3p:'Если вход перестал приходить, прогноз продолжает считаться на урезанном наборе признаков и пишет об этом в шапке, а не выдаёт молча уверенную линию.',
+  fi1:'Пришлите три года показаний. Мы вернём дни, в которые промахнулись бы.',
+  fi2:'Бэктест на вашей зоне занимает около недели и ничего не стоит. Если наши интервалы не держатся на вашей истории — это полезно узнать до договора, а не после.',
+  fi3:'Заказать бэктест', fi4:'Читать карточку модели',
+  ft1:'Пятеро, двое из них — бывшие диспетчеры, десять лет державшие резерв по таблице и по ощущению.',
+  fh1:'Продукт', fl1:'Сутки вперёд', fl2:'Внутри суток', fl3:'Расчёт резерва', fl4:'API',
+  fh2:'Доказательства', fl5:'Журнал ошибок', fl6:'Карточка модели', fl7:'Методика бэктеста', fl8:'Публикации',
+  fh3:'Компания', fl9:'О нас', fl10:'Вакансии', fl11:'Безопасность', fl12:'Контакты',
+  fb1:'Приватность', fb2:'Условия', fb3:'Статус: норма'
+};
+var EN = {};
+document.querySelectorAll('[data-i18n]').forEach(function (el) { EN[el.dataset.i18n] = el.innerHTML; });
+
+function setLang(l) {
+  var dict = l === 'ru' ? RU : EN;
+  document.querySelectorAll('[data-i18n]').forEach(function (el) {
+    var v = dict[el.dataset.i18n];
+    if (v !== undefined) el.innerHTML = v;
+  });
+  document.documentElement.lang = l;
+  document.documentElement.dataset.lang = l;
+  document.querySelectorAll('.switch button').forEach(function (b) {
+    b.setAttribute('aria-pressed', b.dataset.set === l ? 'true' : 'false');
+  });
+}
+document.querySelectorAll('.switch button').forEach(function (b) {
+  b.addEventListener('click', function () { setLang(b.dataset.set); });
+});
+</script>
+</body>
+</html>

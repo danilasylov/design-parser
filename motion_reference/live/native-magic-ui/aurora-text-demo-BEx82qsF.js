@@ -1,0 +1,38 @@
+import { r as l, j as t } from "./inline-Mcm4wFdg.js";
+const r = l.memo(
+  ({
+    children: e,
+    className: n = "",
+    colors: a = ["#FF0080", "#7928CA", "#0070F3", "#38bdf8"],
+    speed: s = 1
+  }) => {
+    const i = {
+      backgroundImage: `linear-gradient(135deg, ${a.join(", ")}, ${a[0]})`,
+      WebkitBackgroundClip: "text",
+      WebkitTextFillColor: "transparent",
+      animationDuration: `${10 / s}s`
+    };
+    return /* @__PURE__ */ t.jsxs("span", { className: `relative inline-block ${n}`, children: [
+      /* @__PURE__ */ t.jsx("span", { className: "sr-only", children: e }),
+      /* @__PURE__ */ t.jsx(
+        "span",
+        {
+          className: "animate-aurora relative bg-size-[200%_auto] bg-clip-text text-transparent",
+          style: i,
+          "aria-hidden": "true",
+          children: e
+        }
+      )
+    ] });
+  }
+);
+r.displayName = "AuroraText";
+function x() {
+  return /* @__PURE__ */ t.jsxs("h1", { className: "text-4xl font-bold tracking-tighter md:text-5xl lg:text-7xl", children: [
+    "Ship ",
+    /* @__PURE__ */ t.jsx(r, { children: "beautiful" })
+  ] });
+}
+export {
+  x as default
+};

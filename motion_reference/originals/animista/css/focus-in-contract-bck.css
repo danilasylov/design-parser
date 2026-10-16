@@ -1,0 +1,3 @@
+/* Original keyframes: Animista, Ana Travas. https://animista.net/play/text/focus-in/focus-in-contract-bck */
+.focus-in-contract-bck{animation:focus-in-contract-bck 1s cubic-bezier(.25,.46,.45,.94) 0s 1 normal both;}
+@keyframes focus-in-contract-bck{0%{letter-spacing:1em;-webkit-transform:translateZ(300px);transform:translateZ(300px);-webkit-filter:blur(12px);filter:blur(12px);opacity:0}to{-webkit-transform:translateZ(12px);transform:translateZ(12px);-webkit-filter:blur(0);filter:blur(0);opacity:1}}

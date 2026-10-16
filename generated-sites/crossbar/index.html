@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crossbar — two days of street sport</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ─── Токены дизайн-системы Champions4good — вставлены дословно ───────── */
+:root {
+  /* Colors */
+  --color-deep-plum: #23002b;
+  --color-lavender-shock: #e894ff;
+  --color-espresso-brown: #291900;
+  --color-ink-teal: #002629;
+  --color-slate: #333333;
+  --color-charcoal: #121212;
+  --color-black: #000000;
+  --color-paper-white: #ffffff;
+  --color-mint-signal: #93ffe4;
+  --color-amber-pulse: #ffac47;
+
+  /* Typography — Font Families */
+  --font-druk-condensed-super-desktop: 'Druk Condensed Super Desktop', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-neue-montreal: 'Neue Montreal', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-arial: 'Arial', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* Typography — Scale */
+  --text-caption: 12px;
+  --leading-caption: 1.43;
+  --tracking-caption: -0.22px;
+  --text-body-sm: 14px;
+  --leading-body-sm: 1.43;
+  --tracking-body-sm: -0.22px;
+  --text-subheading: 24px;
+  --leading-subheading: 1;
+  --tracking-subheading: 0.05px;
+  --text-heading-sm: 32px;
+  --leading-heading-sm: 0.85;
+  --tracking-heading-sm: 0.05px;
+  --text-heading: 58px;
+  --leading-heading: 1.1;
+  --tracking-heading: -0.22px;
+  --text-display: 187px;
+  --leading-display: 0.85;
+  --tracking-display: 0.05px;
+  --text-display-xl: 317px;
+  --leading-display-xl: 0.78;
+  --tracking-display-xl: 0.05px;
+
+  /* Typography — Weights */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+
+  /* Spacing */
+  --spacing-unit: 8px;
+  --spacing-8: 8px;
+  --spacing-16: 16px;
+  --spacing-32: 32px;
+  --spacing-40: 40px;
+  --spacing-48: 48px;
+  --spacing-160: 160px;
+  --spacing-192: 192px;
+
+  /* Layout */
+  --page-max-width: 1200px;
+  --section-gap: 64px;
+  --card-padding: 20px;
+  --element-gap: 8px;
+
+  /* Border Radius */
+  --radius-md: 6px;
+  --radius-xl: 14px;
+  --radius-3xl: 24px;
+
+  /* Named Radii */
+  --radius-tags: 6px;
+  --radius-cards: 14px;
+  --radius-pills: 9999px;
+  --radius-buttons: 9999px;
+  --radius-special: 24px;
+
+  /* Surfaces */
+  --surface-deep-plum-ground: #23002b;
+  --surface-espresso-card: #291900;
+  --surface-ink-teal-card: #002629;
+  --surface-paper-white: #ffffff;
+}
+
+/* Подстановки шрифтов: Druk Condensed и Neue Montreal — кастомные.
+   Из списка замен DESIGN.md кириллицу имеет только Oswald (Bebas Neue и Anton
+   отпали), для UI взят Manrope оттуда же. Oswald шире Druk, поэтому дисплейные
+   кегли сняты с реального заполнения строки, а не скопированы числом. */
+:root {
+  --font-display: 'Oswald', var(--font-druk-condensed-super-desktop);
+  --font-ui: 'Manrope', var(--font-neue-montreal);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: var(--font-ui);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  letter-spacing: var(--tracking-body-sm);
+  background: var(--surface-deep-plum-ground);
+  color: var(--color-paper-white);
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap { max-width: var(--page-max-width); margin: 0 auto; padding: 0 var(--spacing-32); }
+.plum { background: var(--surface-deep-plum-ground); color: var(--color-paper-white); }
+.paper { background: var(--surface-paper-white); color: var(--color-slate); }
+section { padding: var(--spacing-160) 0; }
+
+/* ─── Дисплейная типографика: постерная, всегда влево, lh < 1 ─────────── */
+.d {
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-transform: uppercase;
+  line-height: var(--leading-display-xl);
+  letter-spacing: var(--tracking-display-xl);
+  display: block;
+}
+.d--xl { font-size: 200px; }
+.d--lg { font-size: 132px; line-height: var(--leading-display); }
+.d--md { font-size: 64px; line-height: var(--leading-heading-sm); }
+.d--sm { font-size: 32px; line-height: var(--leading-heading-sm); }
+/* Связки «YOUR / OF» — UI-шрифтом, ломают дисплейный ритм */
+.d__join {
+  font-family: var(--font-ui);
+  font-weight: var(--font-weight-semibold);
+  font-size: 44px;
+  line-height: 1.1;
+  letter-spacing: var(--tracking-heading);
+  text-transform: uppercase;
+  vertical-align: baseline;
+  margin-right: var(--spacing-16);
+}
+.lav { color: var(--color-lavender-shock); }
+.ink { color: var(--color-black); }
+.sub { font-size: var(--text-subheading); line-height: var(--leading-subheading); letter-spacing: var(--tracking-subheading); }
+.body { font-size: 16px; line-height: 1.4; letter-spacing: var(--tracking-body-sm); }
+.cap { font-size: var(--text-caption); line-height: var(--leading-caption); letter-spacing: var(--tracking-caption); }
+.muted-d { color: rgba(255, 255, 255, .65); }
+.muted-l { color: var(--color-slate); }
+
+/* ─── Кнопки: всё пилюли, без теней ───────────────────────────────────── */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  font-family: var(--font-ui); font-size: var(--text-body-sm);
+  font-weight: var(--font-weight-medium); letter-spacing: var(--tracking-body-sm);
+  padding: 12px 20px; border-radius: var(--radius-buttons);
+  border: 1px solid transparent; text-decoration: none; cursor: pointer;
+  transition: background-color .12s linear, color .12s linear, border-color .12s linear;
+}
+/* Единственная залитая кнопка — на сливовом; на белое лавандовый не выносим */
+.btn--lav { background: var(--color-lavender-shock); color: var(--color-deep-plum); }
+.btn--lav:hover { background: var(--color-paper-white); }
+.btn--outline-d { border-color: rgba(255, 255, 255, .35); color: var(--color-paper-white); }
+.btn--outline-d:hover { border-color: var(--color-paper-white); }
+.btn--ink { background: var(--color-black); color: var(--color-paper-white); }
+.btn--ink:hover { background: var(--color-slate); }
+.btn--outline-l { border-color: #e5e5e5; color: var(--color-black); }
+.btn--outline-l:hover { border-color: var(--color-black); }
+
+.tag {
+  display: inline-block; border-radius: var(--radius-tags);
+  padding: 4px 10px; font-size: var(--text-caption); font-weight: var(--font-weight-medium);
+  letter-spacing: var(--tracking-caption);
+}
+/* Мята и янтарь — только в светлых зонах, мелкой пунктуацией */
+.tag--mint { background: var(--color-mint-signal); color: var(--color-ink-teal); }
+.tag--amber { background: var(--color-amber-pulse); color: var(--color-espresso-brown); }
+.tag--lav { background: var(--color-lavender-shock); color: var(--color-deep-plum); }
+
+/* ─── Навигация: без полосы, поверх канвы ─────────────────────────────── */
+.nav {
+  height: 64px; display: flex; align-items: center; gap: var(--spacing-32);
+  max-width: var(--page-max-width); margin: 0 auto; padding: 0 var(--spacing-32);
+}
+.wordmark {
+  font-family: var(--font-display); font-weight: 700; text-transform: uppercase;
+  font-size: 15px; line-height: .92; letter-spacing: .3px;
+  color: var(--color-lavender-shock); text-decoration: none;
+}
+.nav__links { display: flex; gap: var(--spacing-32); list-style: none; margin: 0 auto; }
+.nav__links a { color: var(--color-paper-white); text-decoration: none; font-size: var(--text-body-sm); }
+.nav__links a:hover { color: var(--color-lavender-shock); }
+.nav__right { display: flex; align-items: center; gap: var(--spacing-8); }
+.lang { display: inline-flex; border: 1px solid rgba(255,255,255,.35); border-radius: var(--radius-pills); overflow: hidden; }
+.lang button {
+  font-family: var(--font-ui); font-size: var(--text-caption);
+  padding: 7px 12px; border: none; background: transparent; color: rgba(255,255,255,.7); cursor: pointer;
+}
+.lang button[aria-pressed="true"] { background: var(--color-lavender-shock); color: var(--color-deep-plum); }
+
+/* ─── Пилюли-переключатели вида спорта ────────────────────────────────── */
+.toggles { display: flex; gap: var(--spacing-8); margin-bottom: var(--spacing-40); }
+.tog {
+  width: 80px; height: 48px; border-radius: var(--radius-pills);
+  display: flex; align-items: center; justify-content: center;
+  background: transparent; border: 1px solid var(--color-lavender-shock);
+  cursor: pointer; padding: 0;
+}
+.tog svg { width: 26px; height: 26px; color: var(--color-lavender-shock); }
+.tog.is-on { background: var(--color-lavender-shock); }
+.tog.is-on svg { color: var(--color-deep-plum); }
+
+/* ─── Герой ───────────────────────────────────────────────────────────── */
+.hero { padding: var(--spacing-48) 0 var(--spacing-160); }
+.hero__meta { display: flex; gap: var(--spacing-32); margin-top: var(--spacing-48); flex-wrap: wrap; }
+.hero__meta div { border-left: 1px solid rgba(255,255,255,.25); padding-left: var(--spacing-16); }
+.hero__meta b { display: block; font-family: var(--font-display); font-weight: 500; font-size: 32px; line-height: 1; text-transform: uppercase; }
+.hero__actions { display: flex; gap: var(--spacing-8); margin-top: var(--spacing-48); }
+
+/* ─── Светлый разрыв ──────────────────────────────────────────────────── */
+.break__grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: var(--spacing-48); align-items: end; }
+.break__tags { display: flex; gap: var(--spacing-8); margin-bottom: var(--spacing-16); flex-wrap: wrap; }
+
+/* ─── Расписание ──────────────────────────────────────────────────────── */
+.sched { border-top: 1px solid #e5e5e5; margin-top: var(--spacing-48); }
+.row {
+  display: grid; grid-template-columns: 120px 1fr 200px 120px;
+  gap: var(--spacing-32); align-items: baseline;
+  padding: var(--spacing-16) 0; border-bottom: 1px solid #e5e5e5;
+}
+.row__t { font-family: var(--font-display); font-weight: 500; font-size: 28px; line-height: 1; text-transform: uppercase; color: var(--color-black); }
+.row__n { font-size: 16px; color: var(--color-charcoal); font-weight: var(--font-weight-medium); }
+.row__p { font-size: var(--text-body-sm); color: var(--color-slate); }
+
+/* ─── Карточки дисциплин на сливовом ──────────────────────────────────── */
+.cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-16); }
+.card {
+  background: var(--surface-espresso-card);
+  border-radius: var(--radius-cards);
+  padding: var(--card-padding);
+  display: flex; flex-direction: column; gap: var(--spacing-8);
+}
+.card h3 { font-family: var(--font-display); font-weight: 700; font-size: 34px; line-height: .9; text-transform: uppercase; color: var(--color-lavender-shock); }
+.card p { font-size: var(--text-body-sm); color: rgba(255,255,255,.72); }
+.card span { margin-top: auto; align-self: flex-start; }
+
+/* ─── Числа на белом ──────────────────────────────────────────────────── */
+.nums { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--spacing-32); }
+.num b { font-family: var(--font-display); font-weight: 700; font-size: 96px; line-height: .85; text-transform: uppercase; color: var(--color-black); display: block; }
+.num span { font-size: var(--text-body-sm); color: var(--color-slate); display: block; margin-top: var(--spacing-8); }
+
+/* ─── Подвал ──────────────────────────────────────────────────────────── */
+.footer { padding: var(--spacing-48) 0; border-top: 1px solid rgba(255,255,255,.2); }
+.footer__grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: var(--spacing-32); }
+.footer__grid h4 { font-size: var(--text-caption); letter-spacing: var(--tracking-caption); color: var(--color-lavender-shock); margin-bottom: var(--spacing-16); text-transform: uppercase; }
+.footer__grid ul { list-style: none; display: flex; flex-direction: column; gap: var(--spacing-8); }
+.footer__grid a { color: var(--color-paper-white); text-decoration: none; font-size: var(--text-body-sm); }
+.footer__grid a:hover { color: var(--color-lavender-shock); }
+.footer__bottom { margin-top: var(--spacing-48); display: flex; justify-content: space-between; color: rgba(255,255,255,.6); }
+</style>
+</head>
+<body>
+
+<!-- ─── Навигация ─────────────────────────────────────────────────────── -->
+<header class="plum">
+  <nav class="nav">
+    <a class="wordmark" href="#top">Crossbar<br>Street Sport<br>Festival</a>
+    <ul class="nav__links">
+      <li><a href="#program" data-i18n="nav.1">Program</a></li>
+      <li><a href="#sports" data-i18n="nav.2">Sports</a></li>
+      <li><a href="#numbers" data-i18n="nav.3">Numbers</a></li>
+      <li><a href="#join" data-i18n="nav.4">FAQ</a></li>
+    </ul>
+    <div class="nav__right">
+      <div class="lang">
+        <button type="button" data-set="en" aria-pressed="true">EN</button>
+        <button type="button" data-set="ru" aria-pressed="false">RU</button>
+      </div>
+      <a class="btn btn--lav" href="#join" data-i18n="nav.cta">Join</a>
+    </div>
+  </nav>
+</header>
+
+<!-- ─── Герой ─────────────────────────────────────────────────────────── -->
+<div class="plum" id="top">
+  <div class="wrap hero">
+    <div class="toggles">
+      <button class="tog is-on" type="button" aria-label="Street football">
+        <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="16" cy="16" r="11"/><path d="M16 9.5l4.5 3.3-1.7 5.4h-5.6l-1.7-5.4z"/><path d="M16 5v4.5M25.5 12.5l-4.9 1.6M22.2 24.6l-3.4-4.4M9.8 24.6l3.4-4.4M6.5 12.5l4.9 1.6"/>
+        </svg>
+      </button>
+      <button class="tog" type="button" aria-label="Running">
+        <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="19" cy="6" r="3"/><path d="M17 11l-5 6 4 4-2 8M12 17l-6 2M21 15l5 3"/>
+        </svg>
+      </button>
+    </div>
+    <h1>
+      <span class="d d--xl lav" data-i18n="hero.1">Weekend</span>
+      <span><span class="d__join" data-i18n="hero.of">of</span><span class="d d--xl lav" style="display:inline" data-i18n="hero.2">Street&nbsp;Sport</span></span>
+    </h1>
+    <div class="hero__meta">
+      <div><b data-i18n="meta.1b">12–13 Sep</b><span class="cap muted-d" data-i18n="meta.1s">two days, one city</span></div>
+      <div><b data-i18n="meta.2b">Tbilisi</b><span class="cap muted-d" data-i18n="meta.2s">nine open courts</span></div>
+      <div><b data-i18n="meta.3b">No qualifiers</b><span class="cap muted-d" data-i18n="meta.3s">you sign up, you play</span></div>
+    </div>
+    <div class="hero__actions">
+      <a class="btn btn--lav" href="#join" data-i18n="hero.cta1">Take a slot</a>
+      <a class="btn btn--outline-d" href="#program" data-i18n="hero.cta2">See the program</a>
+    </div>
+  </div>
+</div>
+
+<!-- ─── Светлый разрыв: контраст и есть раскладка ─────────────────────── -->
+<div class="paper">
+  <section>
+    <div class="wrap break__grid">
+      <div>
+        <div class="break__tags">
+          <span class="tag tag--mint" data-i18n="brk.t1">Free entry</span>
+          <span class="tag tag--amber" data-i18n="brk.t2">Amateurs only</span>
+        </div>
+        <span class="d d--lg ink" data-i18n="brk.a">Two days.</span>
+        <span class="d d--lg ink" data-i18n="brk.b">Nine sports.</span>
+      </div>
+      <div>
+        <p class="body muted-l" data-i18n="brk.p1">Crossbar is a weekend of street sport for people who never made a team. No rankings, no qualifiers, no coaches shouting from the line — you put your name down on Friday and you are on a court by Saturday morning.</p>
+        <p class="body muted-l" style="margin-top:var(--spacing-16)" data-i18n="brk.p2">Every court is public and stays public after the festival. What we bring is the schedule, the referees, the water and someone who knows the rules.</p>
+        <a class="btn btn--ink" style="margin-top:var(--spacing-32)" href="#program" data-i18n="brk.cta">Read the rules</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Расписание ──────────────────────────────────────────────────── -->
+  <section id="program" style="padding-top:0">
+    <div class="wrap">
+      <span class="d d--md ink" data-i18n="prog.title">Saturday</span>
+      <div class="sched">
+        <div class="row">
+          <span class="row__t">09:00</span>
+          <span class="row__n" data-i18n="prog.1n">Street football · 5×5</span>
+          <span class="row__p" data-i18n="prog.1p">Vake courts, three pitches</span>
+          <span><span class="tag tag--mint" data-i18n="prog.1t">12 slots</span></span>
+        </div>
+        <div class="row">
+          <span class="row__t">10:30</span>
+          <span class="row__n" data-i18n="prog.2n">Ten-kilometre run</span>
+          <span class="row__p" data-i18n="prog.2p">Start at the river, one loop</span>
+          <span><span class="tag tag--amber" data-i18n="prog.2t">Filling up</span></span>
+        </div>
+        <div class="row">
+          <span class="row__t">13:00</span>
+          <span class="row__n" data-i18n="prog.3n">Basketball 3×3</span>
+          <span class="row__p" data-i18n="prog.3p">Rustaveli yard, two hoops</span>
+          <span><span class="tag tag--mint" data-i18n="prog.3t">Open</span></span>
+        </div>
+        <div class="row">
+          <span class="row__t">16:00</span>
+          <span class="row__n" data-i18n="prog.4n">Bouldering jam</span>
+          <span class="row__p" data-i18n="prog.4p">Old wall behind the station</span>
+          <span><span class="tag tag--mint" data-i18n="prog.4t">Open</span></span>
+        </div>
+        <div class="row">
+          <span class="row__t">19:00</span>
+          <span class="row__n" data-i18n="prog.5n">Table tennis, floodlit</span>
+          <span class="row__p" data-i18n="prog.5p">Under the bridge, six tables</span>
+          <span><span class="tag tag--amber" data-i18n="prog.5t">Waitlist</span></span>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ─── Дисциплины на сливовом ────────────────────────────────────────── -->
+<div class="plum" id="sports">
+  <section>
+    <div class="wrap">
+      <span class="d d--lg lav" style="margin-bottom:var(--spacing-48)" data-i18n="sp.title">The nine</span>
+      <div class="cards">
+        <article class="card">
+          <h3 data-i18n="sp.1t">Street football</h3>
+          <p data-i18n="sp.1d">Five a side, rolling substitutions, no offside and no goalkeeper taller than the crossbar.</p>
+          <span class="tag tag--lav" data-i18n="sp.1g">Both days</span>
+        </article>
+        <article class="card">
+          <h3 data-i18n="sp.2t">Ten kilometres</h3>
+          <p data-i18n="sp.2d">One flat loop along the river. Chip timing, but the results page only shows your own time.</p>
+          <span class="tag tag--lav" data-i18n="sp.2g">Saturday</span>
+        </article>
+        <article class="card">
+          <h3 data-i18n="sp.3t">Basketball 3×3</h3>
+          <p data-i18n="sp.3d">Ten minutes or twenty-one points. Losers keep the court if nobody is waiting.</p>
+          <span class="tag tag--lav" data-i18n="sp.3g">Both days</span>
+        </article>
+        <article class="card">
+          <h3 data-i18n="sp.4t">Bouldering</h3>
+          <p data-i18n="sp.4d">Twenty problems on an old wall, graded by whoever set them that morning.</p>
+          <span class="tag tag--lav" data-i18n="sp.4g">Saturday</span>
+        </article>
+        <article class="card">
+          <h3 data-i18n="sp.5t">Table tennis</h3>
+          <p data-i18n="sp.5d">Six tables under floodlights, single elimination, bats provided and mostly warped.</p>
+          <span class="tag tag--lav" data-i18n="sp.5g">Saturday night</span>
+        </article>
+        <article class="card">
+          <h3 data-i18n="sp.6t">Open water</h3>
+          <p data-i18n="sp.6d">Eight hundred metres in the reservoir, wetsuits allowed, medals aggressively not awarded.</p>
+          <span class="tag tag--lav" data-i18n="sp.6g">Sunday</span>
+        </article>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ─── Числа на белом ────────────────────────────────────────────────── -->
+<div class="paper" id="numbers">
+  <section>
+    <div class="wrap">
+      <span class="d d--md ink" style="margin-bottom:var(--spacing-48)" data-i18n="num.title">Last year</span>
+      <div class="nums">
+        <div class="num"><b>2 480</b><span data-i18n="num.1">people took a slot</span></div>
+        <div class="num"><b>9</b><span data-i18n="num.2">sports on public courts</span></div>
+        <div class="num"><b>41</b><span data-i18n="num.3">volunteers and referees</span></div>
+        <div class="num"><b>0</b><span data-i18n="num.4">entry fees collected</span></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ─── Финал ─────────────────────────────────────────────────────────── -->
+<div class="plum" id="join">
+  <section>
+    <div class="wrap">
+      <span class="d d--lg lav" data-i18n="fin.a">Put your</span>
+      <span class="d d--lg lav" data-i18n="fin.b">name down.</span>
+      <p class="body muted-d" style="max-width:52ch;margin-top:var(--spacing-32)" data-i18n="fin.p">Slots open on 1 August and close when the courts are full. One person, one sport per day — pick the one you would actually turn up for.</p>
+      <div class="hero__actions">
+        <a class="btn btn--lav" href="#join" data-i18n="fin.cta1">Take a slot</a>
+        <a class="btn btn--outline-d" href="#join" data-i18n="fin.cta2">Volunteer instead</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Подвал ──────────────────────────────────────────────────────── -->
+  <footer class="footer">
+    <div class="wrap">
+      <div class="footer__grid">
+        <div>
+          <a class="wordmark" href="#top">Crossbar<br>Street Sport<br>Festival</a>
+        </div>
+        <div>
+          <h4 data-i18n="f.c1">Festival</h4>
+          <ul>
+            <li><a href="#program" data-i18n="f.c1.1">Program</a></li>
+            <li><a href="#sports" data-i18n="f.c1.2">Sports</a></li>
+            <li><a href="#numbers" data-i18n="f.c1.3">Numbers</a></li>
+            <li><a href="#join" data-i18n="f.c1.4">Rules</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 data-i18n="f.c2">Take part</h4>
+          <ul>
+            <li><a href="#join" data-i18n="f.c2.1">Take a slot</a></li>
+            <li><a href="#join" data-i18n="f.c2.2">Volunteer</a></li>
+            <li><a href="#join" data-i18n="f.c2.3">Bring a court</a></li>
+            <li><a href="#join" data-i18n="f.c2.4">Referee</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 data-i18n="f.c3">Club</h4>
+          <ul>
+            <li><a href="#top" data-i18n="f.c3.1">About</a></li>
+            <li><a href="#top" data-i18n="f.c3.2">Contact</a></li>
+            <li><a href="#top" data-i18n="f.c3.3">Press</a></li>
+            <li><a href="#top" data-i18n="f.c3.4">Archive</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer__bottom cap">
+        <span data-i18n="f.copy">© 2026 Crossbar Street Sport Festival</span>
+        <span data-i18n="f.legal">Tbilisi · free entry · public courts</span>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script>
+/* Английский — исходный; русский — перевод. Дефолт EN, без автодетекта. */
+var I18N = {
+  ru: {
+    "nav.1": "Программа", "nav.2": "Виды", "nav.3": "Цифры", "nav.4": "Вопросы", "nav.cta": "Участвовать",
+
+    "hero.1": "Выходные",
+    "hero.of": "уличного",
+    "hero.2": "спорта",
+    "meta.1b": "12–13 сент.", "meta.1s": "два дня, один город",
+    "meta.2b": "Тбилиси", "meta.2s": "девять открытых площадок",
+    "meta.3b": "Без отбора", "meta.3s": "записался — играешь",
+    "hero.cta1": "Занять место",
+    "hero.cta2": "Смотреть программу",
+
+    "brk.t1": "Вход свободный",
+    "brk.t2": "Только любители",
+    "brk.a": "Два дня.",
+    "brk.b": "Девять видов.",
+    "brk.p1": "Crossbar — это выходные уличного спорта для тех, кто никогда не попадал в команду. Ни рейтингов, ни отборов, ни тренера, орущего с бровки: записываетесь в пятницу и в субботу утром выходите на площадку.",
+    "brk.p2": "Все площадки городские и остаются городскими после фестиваля. От нас — расписание, судьи, вода и человек, который знает правила.",
+    "brk.cta": "Прочитать правила",
+
+    "prog.title": "Суббота",
+    "prog.1n": "Уличный футбол · 5×5", "prog.1p": "Площадки в Ваке, три поля", "prog.1t": "12 мест",
+    "prog.2n": "Забег на десять километров", "prog.2p": "Старт у реки, один круг", "prog.2t": "Заполняется",
+    "prog.3n": "Баскетбол 3×3", "prog.3p": "Двор на Руставели, два кольца", "prog.3t": "Открыто",
+    "prog.4n": "Болдеринговый джем", "prog.4p": "Старая стена за вокзалом", "prog.4t": "Открыто",
+    "prog.5n": "Настольный теннис под софитами", "prog.5p": "Под мостом, шесть столов", "prog.5t": "Лист ожидания",
+
+    "sp.title": "Девять",
+    "sp.1t": "Уличный футбол", "sp.1d": "Пять на пять, замены на ходу, без офсайда и без вратаря выше перекладины.", "sp.1g": "Оба дня",
+    "sp.2t": "Десять километров", "sp.2d": "Один плоский круг вдоль реки. Чип есть, но в таблице вы видите только своё время.", "sp.2g": "Суббота",
+    "sp.3t": "Баскетбол 3×3", "sp.3d": "Десять минут или двадцать одно очко. Проигравшие остаются на площадке, если никто не ждёт.", "sp.3g": "Оба дня",
+    "sp.4t": "Болдеринг", "sp.4d": "Двадцать трасс на старой стене, категории ставит тот, кто накрутил их утром.", "sp.4g": "Суббота",
+    "sp.5t": "Настольный теннис", "sp.5d": "Шесть столов под софитами, на вылет, ракетки наши и в основном кривые.", "sp.5g": "Субботний вечер",
+    "sp.6t": "Открытая вода", "sp.6d": "Восемьсот метров в водохранилище, гидрокостюм можно, медали принципиально не вручаются.", "sp.6g": "Воскресенье",
+
+    "num.title": "В прошлом году",
+    "num.1": "человек заняли место",
+    "num.2": "видов на городских площадках",
+    "num.3": "волонтёров и судей",
+    "num.4": "рублей взносов собрано",
+
+    "fin.a": "Впишите",
+    "fin.b": "своё имя.",
+    "fin.p": "Места открываются 1 августа и закрываются, когда площадки заполнены. Один человек, один вид в день — выбирайте тот, на который реально придёте.",
+    "fin.cta1": "Занять место",
+    "fin.cta2": "Пойти волонтёром",
+
+    "f.c1": "Фестиваль",
+    "f.c1.1": "Программа", "f.c1.2": "Виды", "f.c1.3": "Цифры", "f.c1.4": "Правила",
+    "f.c2": "Участвовать",
+    "f.c2.1": "Занять место", "f.c2.2": "Волонтёрить", "f.c2.3": "Предложить площадку", "f.c2.4": "Судить",
+    "f.c3": "Клуб",
+    "f.c3.1": "О нас", "f.c3.2": "Контакты", "f.c3.3": "Пресса", "f.c3.4": "Архив",
+    "f.copy": "© 2026 Crossbar Street Sport Festival",
+    "f.legal": "Тбилиси · вход свободный · городские площадки"
+  }
+};
+
+(function () {
+  var nodes = document.querySelectorAll('[data-i18n]');
+  var EN = {};
+  nodes.forEach(function (n) { EN[n.getAttribute('data-i18n')] = n.innerHTML; });
+
+  function apply(lang) {
+    nodes.forEach(function (n) {
+      var k = n.getAttribute('data-i18n');
+      var v = lang === 'ru' ? I18N.ru[k] : EN[k];
+      if (v) n.innerHTML = v;
+    });
+    document.documentElement.lang = lang;
+    document.documentElement.setAttribute('data-lang', lang);
+    document.querySelectorAll('.lang [data-set]').forEach(function (b) {
+      b.setAttribute('aria-pressed', String(b.getAttribute('data-set') === lang));
+    });
+  }
+  document.querySelectorAll('.lang [data-set]').forEach(function (b) {
+    b.addEventListener('click', function () { apply(b.getAttribute('data-set')); });
+  });
+
+  /* переключатель вида спорта в герое */
+  var togs = document.querySelectorAll('.tog');
+  togs.forEach(function (t) {
+    t.addEventListener('click', function () {
+      togs.forEach(function (x) { x.classList.remove('is-on'); });
+      t.classList.add('is-on');
+    });
+  });
+})();
+</script>
+</body>
+</html>

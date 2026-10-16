@@ -1,0 +1,3 @@
+/* Original keyframes: Animista, Ana Travas. https://animista.net/play/exits/slide-out-fwd/slide-out-fwd-center */
+.slide-out-fwd-center{animation:slide-out-fwd-center 0.7s cubic-bezier(.55,.085,.68,.53) 0s 1 normal both;}
+@keyframes slide-out-fwd-center{0%{-webkit-transform:translateZ(1);transform:translateZ(1);opacity:1}to{-webkit-transform:translateZ(600px);transform:translateZ(600px);opacity:0}}

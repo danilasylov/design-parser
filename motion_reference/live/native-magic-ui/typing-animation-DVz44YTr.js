@@ -1,0 +1,129 @@
+import { r as n, j as W, m as e, c as E } from "./inline-Mcm4wFdg.js";
+import { u as H } from "./use-in-view-CCO1JRFq.js";
+const J = {
+  article: e.article,
+  div: e.div,
+  h1: e.h1,
+  h2: e.h2,
+  h3: e.h3,
+  h4: e.h4,
+  h5: e.h5,
+  h6: e.h6,
+  li: e.li,
+  p: e.p,
+  section: e.section,
+  span: e.span
+};
+function U({
+  children: i,
+  words: o,
+  className: A,
+  duration: M = 100,
+  typeSpeed: R,
+  deleteSpeed: v,
+  delay: l = 0,
+  pauseDelay: y = 1e3,
+  loop: a = !1,
+  as: S = "span",
+  startOnView: w = !0,
+  showCursor: L = !0,
+  blinkCursor: N = !0,
+  cursorStyle: V = "line",
+  ...D
+}) {
+  const G = J[S], [h, m] = n.useState(""), [r, k] = n.useState(0), [t, p] = n.useState(0), [c, u] = n.useState("typing"), C = n.useRef(null), K = H(C, {
+    amount: 0.3,
+    once: !0
+  }), s = n.useMemo(
+    () => o ?? (i ? [i] : []),
+    [o, i]
+  ), g = s.length > 1, d = R ?? M, b = v ?? d / 2, j = w ? K : !0, P = n.useMemo(
+    () => o ? o.join("\0") : i ?? "",
+    [o, i]
+  );
+  n.useEffect(() => {
+    m(""), k(0), p(0), u("typing");
+  }, [P]), n.useEffect(() => {
+    let f = null;
+    if (j && s.length > 0) {
+      const B = l > 0 && h === "" ? l : c === "typing" ? d : c === "deleting" ? b : y;
+      f = setTimeout(() => {
+        const F = s[r] || "", x = Array.from(F);
+        switch (c) {
+          case "typing":
+            t < x.length ? (m(
+              x.slice(0, t + 1).join("")
+            ), p(t + 1)) : (g || a) && (!(r === s.length - 1) || a) && u("pause");
+            break;
+          case "pause":
+            u("deleting");
+            break;
+          case "deleting":
+            if (t > 0)
+              m(
+                x.slice(0, t - 1).join("")
+              ), p(t - 1);
+            else {
+              const T = (r + 1) % s.length;
+              k(T), u("typing");
+            }
+            break;
+        }
+      }, B);
+    }
+    return () => {
+      f !== null && clearTimeout(f);
+    };
+  }, [
+    j,
+    c,
+    t,
+    r,
+    h,
+    s,
+    g,
+    a,
+    d,
+    b,
+    y,
+    l
+  ]);
+  const I = Array.from(
+    s[r] || ""
+  ), _ = !a && r === s.length - 1 && t >= I.length && c !== "deleting", q = L && !_ && (g || a || t < I.length), z = () => {
+    switch (V) {
+      case "block":
+        return "▌";
+      case "underscore":
+        return "_";
+      case "line":
+      default:
+        return "|";
+    }
+  };
+  return /* @__PURE__ */ W.jsxs(
+    G,
+    {
+      ref: C,
+      className: E(
+        "leading-20 tracking-[-0.02em]",
+        S === "span" && "inline-block",
+        A
+      ),
+      ...D,
+      children: [
+        h,
+        q && /* @__PURE__ */ W.jsx(
+          "span",
+          {
+            className: E("inline-block", N && "animate-blink-cursor"),
+            children: z()
+          }
+        )
+      ]
+    }
+  );
+}
+export {
+  U as T
+};

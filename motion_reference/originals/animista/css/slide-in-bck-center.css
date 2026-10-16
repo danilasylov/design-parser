@@ -1,0 +1,3 @@
+/* Original keyframes: Animista, Ana Travas. https://animista.net/play/entrances/slide-in-bck/slide-in-bck-center */
+.slide-in-bck-center{animation:slide-in-bck-center 0.7s cubic-bezier(.25,.46,.45,.94) 0s 1 normal both;}
+@keyframes slide-in-bck-center{0%{-webkit-transform:translateZ(600px);transform:translateZ(600px);opacity:0}to{-webkit-transform:translateZ(0);transform:translateZ(0);opacity:1}}

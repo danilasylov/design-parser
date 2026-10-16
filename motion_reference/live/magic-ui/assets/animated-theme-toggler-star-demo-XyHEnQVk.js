@@ -1,0 +1,1 @@
+import{j as e}from"./index-WM7-nNXq.js";import{A as r}from"./animated-theme-toggler-DelQQJfd.js";import"./createLucideIcon-BmO5EyrG.js";function i(){return e.jsx("div",{className:"flex justify-center p-6",children:e.jsx(r,{variant:"star"})})}export{i as default};

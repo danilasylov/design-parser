@@ -1,0 +1,7 @@
+{
+  "asset": "cult-jars.png",
+  "method": "built-in image_gen",
+  "background": "transparent",
+  "purpose": "Fictional Cult product photograph, embedded into self-contained index.html",
+  "prompt": "Create a premium photorealistic product-mockup asset for a fictional small fermented-food brand called CULT. Three separate clear glass jars aligned in a row, fully visible and separated, same baseline: left tall jar of ivory cultured yogurt with dark forest-green metal lid, center wide jar of pale creamy kefir with forest green metal lid, right smaller jar of thick labneh with same green lid. Beautiful actual glass texture, creamy contents, minimal ivory paper labels with only large dark green text CULT and small 01,02,03 respectively. Studio front three-quarter view, high-key lighting, premium food product photography, no illustrations, no gradients, no table props, no hands. Transparent background, true alpha; each jar isolated, generous spacing, landscape 3:2 composition. Asset will sit in front of oversized turquoise typography on white website."
+}

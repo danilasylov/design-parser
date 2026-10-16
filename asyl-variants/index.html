@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>asyl-book — семь вариантов лендинга</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #111;
+    --muted: #6b6b6b;
+    --line: #e2e2e2;
+    --bg: #fafafa;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: 'Inter', system-ui, sans-serif; font-size: 14px; line-height: 1.5; }
+  a { color: inherit; }
+  .wrap { max-width: 1320px; margin: 0 auto; padding: 40px 32px 80px; }
+  header { border-bottom: 1px solid var(--line); padding-bottom: 24px; margin-bottom: 32px; }
+  h1 { font-size: 26px; font-weight: 600; margin: 0 0 8px; letter-spacing: -0.02em; }
+  header p { margin: 0; color: var(--muted); max-width: 90ch; }
+  header code { background: #eee; padding: 1px 5px; border-radius: 3px; font-size: 12px; }
+
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+  .card { background: #fff; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; }
+  .card.wide { grid-column: 1 / -1; }
+
+  .shot { position: relative; height: 420px; overflow: hidden; border-bottom: 1px solid var(--line); background: #fff; }
+  .card.wide .shot { height: 480px; }
+  .shot iframe { width: 1440px; height: 1600px; border: 0; transform-origin: top left; position: absolute; top: 0; left: 0; }
+  .shot .veil { position: absolute; inset: 0; }
+
+  .body { padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 12px; flex: 1; }
+  .top { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+  .name { font-size: 18px; font-weight: 600; letter-spacing: -0.01em; }
+  .slug { color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; }
+  .desc { color: #333; margin: 0; }
+  .meta { display: grid; grid-template-columns: 96px 1fr; gap: 6px 12px; font-size: 12.5px; color: var(--muted); }
+  .meta b { color: #111; font-weight: 500; }
+  .sw { display: inline-flex; gap: 4px; vertical-align: -3px; margin-right: 8px; }
+  .sw i { width: 16px; height: 16px; border: 1px solid rgba(0,0,0,.15); border-radius: 3px; display: block; }
+  .acts { display: flex; gap: 8px; margin-top: auto; padding-top: 4px; }
+  .btn { display: inline-block; padding: 7px 12px; border: 1px solid var(--ink); border-radius: 5px; text-decoration: none; font-size: 13px; font-weight: 500; }
+  .btn.fill { background: var(--ink); color: #fff; }
+  .btn.ghost { border-color: var(--line); color: var(--muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>asyl-book — семь вариантов лендинга</h1>
+    <p>Один и тот же текст обзорной страницы (<code>app/components/Landing.tsx</code>) собран по семи разным дизайн-системам из галереи refero. Токены (цвета, шкала типографики, отступы, радиусы) взяты со страниц стилей дословно; шрифты заменены на ближайшие с кириллицей. Вёрстка — только десктоп 1440. Слоты под ролики оставлены пустыми плашками с подписями из <code>CLIPS</code>. У трёх последних вариантов блоки «Мелочи» и «Приватность» убраны по просьбе — ссылка на словарь WikDict переехала в подвал.</p>
+  </header>
+
+  <div class="grid">
+
+    <article class="card">
+      <div class="shot"><iframe src="../generated-sites/asyl-kinfolk/index.html" scrolling="no" loading="lazy"></iframe><div class="veil"></div></div>
+      <div class="body">
+        <div class="top"><span class="name">Издание</span><span class="slug">asyl-kinfolk</span></div>
+        <p class="desc">Бумажный журнал: всё по центру, воздух, антиква в один вес, ноль заливок. Единственный цвет — шалфейная полоса на «Зачем это». Кнопок нет вообще: действия — текстовые ссылки с волосяной чертой, внизу чёрная колофон-полоса.</p>
+        <div class="meta">
+          <b>Система</b><span><a href="https://styles.refero.design/style/ac9b040e-36aa-4881-ada5-72d4744947a4" target="_blank">Kinfolk</a> (kinfolk.com)</span>
+          <b>Палитра</b><span><span class="sw"><i style="background:#ffffff"></i><i style="background:#f4f4f4"></i><i style="background:#dbded5"></i><i style="background:#000000"></i></span>монохром + шалфей</span>
+          <b>Шрифты</b><span>Cormorant Garamond · EB Garamond · Inter</span>
+          <b>Кому</b><span>если продукт должен читаться как книжное издание, а не как сервис</span>
+        </div>
+        <div class="acts">
+          <a class="btn fill" href="../generated-sites/asyl-kinfolk/index.html" target="_blank">Открыть</a>
+          <a class="btn ghost" href="https://styles.refero.design/style/ac9b040e-36aa-4881-ada5-72d4744947a4" target="_blank">Дизайн-система ⧉</a>
+        </div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="shot"><iframe src="../generated-sites/asyl-typewolf/index.html" scrolling="no" loading="lazy"></iframe><div class="veil"></div></div>
+      <div class="body">
+        <div class="top"><span class="name">Кабинет</span><span class="slug">asyl-typewolf</span></div>
+        <p class="desc">Тёплая пыльно-розовая бумага, коричневая тушь вместо чёрного, центрированная мачта с навигацией капслоком. Контент — белые плиты с розоватой тенью в две колонки: девять возможностей читаются как развороты каталога.</p>
+        <div class="meta">
+          <b>Система</b><span><a href="https://styles.refero.design/style/c46ecd77-9c92-4a85-9162-c6d4afd99d95" target="_blank">Typewolf</a> (typewolf.com)</span>
+          <b>Палитра</b><span><span class="sw"><i style="background:#f8f5f5"></i><i style="background:#ffffff"></i><i style="background:#443235"></i><i style="background:#916a70"></i></span>пергамент + коричневая тушь</span>
+          <b>Шрифты</b><span>Playfair Display · PT Serif · Oswald</span>
+          <b>Кому</b><span>если нужен тёплый «журнал о языке», уютный и несовременный нарочно</span>
+        </div>
+        <div class="acts">
+          <a class="btn fill" href="../generated-sites/asyl-typewolf/index.html" target="_blank">Открыть</a>
+          <a class="btn ghost" href="https://styles.refero.design/style/c46ecd77-9c92-4a85-9162-c6d4afd99d95" target="_blank">Дизайн-система ⧉</a>
+        </div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="shot"><iframe src="../generated-sites/asyl-vac/index.html" scrolling="no" loading="lazy"></iframe><div class="veil"></div></div>
+      <div class="body">
+        <div class="top"><span class="name">Каталог</span><span class="slug">asyl-vac</span></div>
+        <p class="desc">Выставочный каталог: регистрационная планка A—S—B по верху, навигация повёрнута к правому краю экрана, всё — один вес 400, ни одного жирного слова. Метки с ↗, межрядные провалы по 150 px, серые диагональные водяные знаки на карточках.</p>
+        <div class="meta">
+          <b>Система</b><span><a href="https://styles.refero.design/style/40154dc4-e681-4df9-be01-a6681d5887a6" target="_blank">V–A–C</a> (v-a-c.org)</span>
+          <b>Палитра</b><span><span class="sw"><i style="background:#ffffff"></i><i style="background:#f5f5f5"></i><i style="background:#999999"></i><i style="background:#000000"></i></span>только чёрный, белый, графит</span>
+          <b>Шрифты</b><span>Onest (один вес 400)</span>
+          <b>Кому</b><span>если хочется тихой институции: ничего не продаёт, просто показывает</span>
+        </div>
+        <div class="acts">
+          <a class="btn fill" href="../generated-sites/asyl-vac/index.html" target="_blank">Открыть</a>
+          <a class="btn ghost" href="https://styles.refero.design/style/40154dc4-e681-4df9-be01-a6681d5887a6" target="_blank">Дизайн-система ⧉</a>
+        </div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="shot"><iframe src="../generated-sites/asyl-archive/index.html" scrolling="no" loading="lazy"></iframe><div class="veil"></div></div>
+      <div class="body">
+        <div class="top"><span class="name">Справочник</span><span class="slug">asyl-archive</span></div>
+        <p class="desc">Самый плотный: газетная мачта в узком гротеске, строка поиска, подшапка-фильтр, строка «записей в каталоге», таблицы с чересполосицей. Возможности — записи каталога в три колонки, мелочи и приватность — таблицы. Вся страница влезает в четыре экрана.</p>
+        <div class="meta">
+          <b>Система</b><span><a href="https://styles.refero.design/style/348c83bc-bed3-4562-841a-26a30ee19a9b" target="_blank">Fonts In Use</a> (fontsinuse.com)</span>
+          <b>Палитра</b><span><span class="sw"><i style="background:#ffffff"></i><i style="background:#f0f0f0"></i><i style="background:#999999"></i><i style="background:#000000"></i></span>ахроматика, волосяные линейки</span>
+          <b>Шрифты</b><span>Roboto Condensed · Golos Text</span>
+          <b>Кому</b><span>если продукт продаёт полноту: 9 возможностей, 61 правило, 12 тем</span>
+        </div>
+        <div class="acts">
+          <a class="btn fill" href="../generated-sites/asyl-archive/index.html" target="_blank">Открыть</a>
+          <a class="btn ghost" href="https://styles.refero.design/style/348c83bc-bed3-4562-841a-26a30ee19a9b" target="_blank">Дизайн-система ⧉</a>
+        </div>
+      </div>
+    </article>
+
+    <article class="card wide">
+      <div class="shot"><iframe src="../generated-sites/asyl-promova/index.html" scrolling="no" loading="lazy"></iframe><div class="veil"></div></div>
+      <div class="body">
+        <div class="top"><span class="name">Приложение</span><span class="slug">asyl-promova</span></div>
+        <p class="desc">Единственный тёмный вариант: чёрный холст на всю страницу, белые карточки с радиусом 30 как бумажные вкладыши, барвинковые панели под ролики и ровно одна жёлтая кнопка на весь экран. Заголовки — сверхкрупный гротеск, мелочи и приватность — строки-аккордеоны на волосяных линиях.</p>
+        <div class="meta">
+          <b>Система</b><span><a href="https://styles.refero.design/style/dae5e893-ca18-44c3-8f83-358cb52af237" target="_blank">Promova</a> (promova.com)</span>
+          <b>Палитра</b><span><span class="sw"><i style="background:#000000"></i><i style="background:#ffffff"></i><i style="background:#dfe3ff"></i><i style="background:#fff050"></i></span>чёрный + барвинок + жёлтый маркер</span>
+          <b>Шрифты</b><span>Manrope (200–800)</span>
+          <b>Кому</b><span>если это в первую очередь приложение, а лендинг — витрина экранов</span>
+        </div>
+        <div class="acts">
+          <a class="btn fill" href="../generated-sites/asyl-promova/index.html" target="_blank">Открыть</a>
+          <a class="btn ghost" href="https://styles.refero.design/style/dae5e893-ca18-44c3-8f83-358cb52af237" target="_blank">Дизайн-система ⧉</a>
+        </div>
+      </div>
+    </article>
+
+
+    <article class="card">
+      <div class="shot"><iframe src="../generated-sites/asyl-promova/coda/index.html" scrolling="no" loading="lazy"></iframe><div class="veil"></div></div>
+      <div class="body">
+        <div class="top"><span class="name">Мастерская</span><span class="slug">asyl-promova/coda</span></div>
+        <p class="desc">Кремовая полоса первого экрана и тяжёлый сжатый заголовок, где одно слово горит оранжевым. Карточки «зачем это» — с жёсткой печатной тенью 8/8/0 без размытия, ролики показаны в браузерных рамках, которые свисают через границу секций. Дальше секции чередуют белое и кремовое.</p>
+        <div class="meta">
+          <b>Система</b><span><a href="https://styles.refero.design/style/0f0d4cb7-5109-4e81-8c8d-f6bd0441b27c" target="_blank">Coda</a> (coda.io)</span>
+          <b>Палитра</b><span><span class="sw"><i style="background:#fff6ec"></i><i style="background:#ffffff"></i><i style="background:#212121"></i><i style="background:#ee5a29"></i></span>крем + чёрный, один оранжевый</span>
+          <b>Шрифты</b><span>Manrope 800 · Inter · Source Serif 4</span>
+          <b>Кому</b><span>если продукт продаёт себя тепло и по-редакционному, но остаётся продуктом</span>
+        </div>
+        <div class="acts">
+          <a class="btn fill" href="../generated-sites/asyl-promova/coda/index.html" target="_blank">Открыть</a>
+          <a class="btn ghost" href="https://styles.refero.design/style/0f0d4cb7-5109-4e81-8c8d-f6bd0441b27c" target="_blank">Дизайн-система ⧉</a>
+        </div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="shot"><iframe src="../generated-sites/asyl-promova/convex/index.html" scrolling="no" loading="lazy"></iframe><div class="veil"></div></div>
+      <div class="body">
+        <div class="top"><span class="name">Тетрадь</span><span class="slug">asyl-promova/convex</span></div>
+        <p class="desc">Инженерная тетрадь: кремовый холст, белые карточки на волосяных линиях и ни одной тени во всём документе. Слева на первом экране — раскладка «зачем это» на линейках, справа — превью продукта, светлое и тёмное. Один раз на всю ширину включается сумеречный градиент с голубой кнопкой.</p>
+        <div class="meta">
+          <b>Система</b><span><a href="https://styles.refero.design/style/f71e92b0-d7a5-4203-b975-394f185218c2" target="_blank">Convex</a> (convex.dev)</span>
+          <b>Палитра</b><span><span class="sw"><i style="background:#f6f6f6"></i><i style="background:#f7f1ff"></i><i style="background:#141414"></i><i style="background:#69bee2"></i></span>крем + лиловая подложка, синий только на тёмном</span>
+          <b>Шрифты</b><span>Inter · JetBrains Mono</span>
+          <b>Кому</b><span>если важнее показать экраны продукта, чем сказать о нём громко</span>
+        </div>
+        <div class="acts">
+          <a class="btn fill" href="../generated-sites/asyl-promova/convex/index.html" target="_blank">Открыть</a>
+          <a class="btn ghost" href="https://styles.refero.design/style/f71e92b0-d7a5-4203-b975-394f185218c2" target="_blank">Дизайн-система ⧉</a>
+        </div>
+      </div>
+    </article>
+  </div>
+</div>
+
+<script>
+  // Живое превью: iframe шириной 1440 масштабируется под ширину карточки.
+  function fit() {
+    document.querySelectorAll('.shot').forEach(function (box) {
+      var f = box.querySelector('iframe');
+      var k = box.clientWidth / 1440;
+      f.style.transform = 'scale(' + k + ')';
+      f.style.height = Math.ceil(box.clientHeight / k) + 'px';
+    });
+  }
+  new ResizeObserver(fit).observe(document.body);
+  window.addEventListener('load', fit);
+  fit();
+</script>
+</body>
+</html>

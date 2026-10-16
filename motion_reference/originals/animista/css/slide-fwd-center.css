@@ -1,0 +1,3 @@
+/* Original keyframes: Animista, Ana Travas. https://animista.net/play/basic/slide-fwd/slide-fwd-center */
+.slide-fwd-center{animation:slide-fwd-center 0.45s cubic-bezier(.25,.46,.45,.94) 0s 1 normal both;}
+@keyframes slide-fwd-center{0%{-webkit-transform:translateZ(0);transform:translateZ(0)}to{-webkit-transform:translateZ(160px);transform:translateZ(160px)}}

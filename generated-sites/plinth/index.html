@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>plinth_ — We measure what is already standing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&display=swap" rel="stylesheet">
+<style>
+/* ───────── ДИЗАЙН-СИСТЕМА SPACELAB — tokens.css ДОСЛОВНО ───────── */
+:root {
+  /* Colors */
+  --color-paper-white: #ffffff;
+  --color-ink-black: #000000;
+  --color-charcoal: #2c2222;
+  --color-fossil: #b2b4b1;
+  --color-slate-iris: #495472;
+
+  /* Typography — Font Families */
+  --font-helveticaneue: 'HelveticaNeue', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-helveticaneue-light: 'HelveticaNeue-Light', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* Typography — Scale */
+  --text-caption: 15px;
+  --leading-caption: 1.2;
+  --tracking-caption: 0.165px;
+  --text-body: 17px;
+  --leading-body: 1.2;
+  --tracking-body: 0.187px;
+  --text-subheading: 19px;
+  --leading-subheading: 1.15;
+  --tracking-subheading: 0.209px;
+  --text-heading-sm: 21px;
+  --leading-heading-sm: 1.15;
+  --tracking-heading-sm: 0.231px;
+  --text-heading: 30px;
+  --leading-heading: 1.1;
+  --tracking-heading: 0.33px;
+  --text-display: 62px;
+  --leading-display: 1;
+  --tracking-display: 0.682px;
+
+  /* Typography — Weights */
+  --font-weight-regular: 400;
+
+  /* Spacing */
+  --spacing-5: 5px;
+  --spacing-10: 10px;
+  --spacing-21: 21px;
+  --spacing-42: 42px;
+  --spacing-84: 84px;
+  --spacing-147: 147px;
+
+  /* Layout */
+  --page-max-width: 1200px;
+  --section-gap: 84px;
+  --card-padding: 21px;
+  --element-gap: 21px;
+
+  /* Border Radius */
+  --radius-md: 4px;
+
+  /* Named Radii */
+  --radius-tags: 0px;
+  --radius-cards: 0px;
+  --radius-other: 4px;
+  --radius-images: 0px;
+  --radius-buttons: 0px;
+
+  /* Surfaces */
+  --surface-paper: #ffffff;
+  --surface-slate-iris-surface: #495472;
+}
+
+/* ───────── ПОДСТАНОВКА ─────────
+   HelveticaNeue / -Light → Inter 400 / 300. Inter прямо назван заменой в DESIGN.md
+   и несёт кириллицу; вторую гарнитуру система запрещает, поэтому вариативность
+   держится только на весе 400 против Light, как и в оригинале. */
+:root { --font-sans-sub: 'Inter', var(--font-helveticaneue); }
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--surface-paper);
+  color: var(--color-ink-black);
+  font-family: var(--font-sans-sub);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  letter-spacing: var(--tracking-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+.page {
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+  padding: var(--spacing-42) var(--spacing-42) 0;
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: var(--spacing-84);
+  align-items: start;
+}
+
+/* ───────── Левый рельс ───────── */
+.rail { position: sticky; top: var(--spacing-42); }
+.wordmark {
+  display: block;
+  font-size: var(--text-heading-sm);
+  line-height: var(--leading-heading-sm);
+  letter-spacing: var(--tracking-heading-sm);
+  color: var(--color-ink-black);
+  text-decoration: none;
+  margin-bottom: var(--spacing-147);
+}
+.index { list-style: none; }
+.index li { margin-bottom: var(--spacing-10); }
+.index a {
+  font-size: var(--text-body);
+  letter-spacing: var(--tracking-body);
+  color: var(--color-fossil);
+  text-decoration: none;
+}
+.index a:hover, .index a[aria-current="true"] { color: var(--color-ink-black); }
+
+.lang { margin-top: var(--spacing-42); display: flex; gap: var(--spacing-10); }
+.lang button {
+  font-family: var(--font-sans-sub);
+  font-size: var(--text-caption);
+  letter-spacing: var(--tracking-caption);
+  border: 0; background: transparent; padding: 0; cursor: pointer;
+  color: var(--color-fossil);
+}
+.lang button[aria-pressed="true"] { color: var(--color-ink-black); }
+
+/* ───────── Правая колонка ───────── */
+.col > section { padding-bottom: var(--spacing-84); }
+.rule { border-top: 1px solid var(--color-ink-black); }
+.rule-soft { border-top: 1px solid var(--color-charcoal); }
+
+h1 {
+  font-weight: var(--font-weight-regular);
+  font-size: var(--text-display);
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-display);
+  margin-bottom: var(--spacing-42);
+}
+h2 {
+  font-weight: var(--font-weight-regular);
+  font-size: var(--text-heading);
+  line-height: var(--leading-heading);
+  letter-spacing: var(--tracking-heading);
+  margin-bottom: var(--spacing-42);
+}
+h3 {
+  font-weight: var(--font-weight-regular);
+  font-size: var(--text-heading-sm);
+  line-height: var(--leading-heading-sm);
+  letter-spacing: var(--tracking-heading-sm);
+}
+p {
+  font-weight: 300; /* HelveticaNeue-Light */
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  letter-spacing: var(--tracking-body);
+  margin-bottom: var(--spacing-21);
+}
+p:last-child { margin-bottom: 0; }
+.cap { font-size: var(--text-caption); line-height: var(--leading-caption); letter-spacing: var(--tracking-caption); }
+.fossil { color: var(--color-fossil); }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-42); }
+
+/* ───────── Кнопка: единственная заливка в системе ───────── */
+.btn {
+  display: inline-block;
+  background: var(--surface-slate-iris-surface);
+  color: var(--color-paper-white);
+  font-size: var(--text-caption);
+  letter-spacing: var(--tracking-caption);
+  padding: var(--spacing-21);
+  border-radius: var(--radius-buttons);
+  text-decoration: none;
+  border: 0;
+}
+.btn:hover { background: var(--color-charcoal); }
+
+/* ───────── Чертёж вместо фотографии ─────────
+   Система строит страницу на полноширинной архитектурной съёмке; фотографий
+   в самодостаточном файле нет, поэтому её место занимают обмерные чертежи
+   тем же волосяным штрихом, которым система разделяет содержимое. */
+.plate { border-top: 1px solid var(--color-ink-black); border-bottom: 1px solid var(--color-ink-black); padding: var(--spacing-42) 0; }
+.plate svg { display: block; width: 100%; height: auto; }
+.plate-cap { display: flex; justify-content: space-between; margin-top: var(--spacing-21); }
+svg .ln { fill: none; stroke: var(--color-ink-black); stroke-width: 1; }
+svg .ln-soft { fill: none; stroke: var(--color-fossil); stroke-width: 1; }
+svg .ln-dash { fill: none; stroke: var(--color-fossil); stroke-width: 1; stroke-dasharray: 4 4; }
+svg .fl { fill: var(--color-ink-black); }
+
+/* ───────── Список работ ───────── */
+.works { list-style: none; }
+.works li {
+  display: grid; grid-template-columns: 80px 1fr 200px 130px;
+  gap: var(--spacing-21); align-items: baseline;
+  padding: var(--spacing-21) 0;
+  border-top: 1px solid var(--color-charcoal);
+}
+.works li:last-child { border-bottom: 1px solid var(--color-charcoal); }
+.works .yr { color: var(--color-fossil); font-size: var(--text-caption); letter-spacing: var(--tracking-caption); }
+.works .nm { font-size: var(--text-subheading); letter-spacing: var(--tracking-subheading); }
+.works .pl { color: var(--color-charcoal); font-size: var(--text-caption); font-weight: 300; }
+.works .st { color: var(--color-fossil); font-size: var(--text-caption); text-align: right; }
+
+/* ───────── Акцентная карточка — единственная хроматическая поверхность ───────── */
+.accent {
+  background: var(--surface-slate-iris-surface);
+  color: var(--color-paper-white);
+  padding: var(--spacing-42);
+  border-radius: var(--radius-cards);
+}
+.accent p { font-size: var(--text-heading); line-height: var(--leading-heading); letter-spacing: var(--tracking-heading); font-weight: 400; }
+.accent .cap { margin-top: var(--spacing-42); opacity: .7; }
+
+/* ───────── Числа ───────── */
+.figures { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--spacing-21); }
+.figures div { border-top: 1px solid var(--color-ink-black); padding-top: var(--spacing-21); }
+.figures b {
+  display: block; font-weight: var(--font-weight-regular);
+  font-size: var(--text-heading); line-height: var(--leading-heading);
+  letter-spacing: var(--tracking-heading); margin-bottom: var(--spacing-10);
+}
+.figures span { font-size: var(--text-caption); letter-spacing: var(--tracking-caption); color: var(--color-charcoal); font-weight: 300; }
+
+/* ───────── Тексты ───────── */
+.notes { list-style: none; }
+.notes li {
+  display: grid; grid-template-columns: 110px 1fr;
+  gap: var(--spacing-21); padding: var(--spacing-21) 0;
+  border-top: 1px solid var(--color-charcoal);
+}
+.notes li:last-child { border-bottom: 1px solid var(--color-charcoal); }
+.notes .d { color: var(--color-fossil); font-size: var(--text-caption); letter-spacing: var(--tracking-caption); }
+.notes a { color: var(--color-ink-black); text-decoration: none; font-size: var(--text-subheading); letter-spacing: var(--tracking-subheading); }
+.notes a:hover { color: var(--color-fossil); }
+
+/* ───────── Контакты ───────── */
+.contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-42); }
+.contact-grid .cap { color: var(--color-fossil); margin-bottom: var(--spacing-10); }
+
+/* ───────── Низ страницы ───────── */
+.tail {
+  grid-column: 1 / -1;
+  border-top: 1px solid var(--color-ink-black);
+  margin-top: var(--spacing-42);
+  padding: var(--spacing-21) 0 var(--spacing-42);
+  display: flex; justify-content: space-between; gap: var(--spacing-21);
+}
+.tail span { font-size: var(--text-caption); letter-spacing: var(--tracking-caption); color: var(--color-fossil); }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- ЛЕВЫЙ РЕЛЬС -->
+  <div class="rail">
+    <a class="wordmark" href="#">plinth_</a>
+    <ul class="index">
+      <li><a href="#work" aria-current="true" data-i18n="i1">All projects</a></li>
+      <li><a href="#work" data-i18n="i2">Work</a></li>
+      <li><a href="#surveys" data-i18n="i3">Surveys</a></li>
+      <li><a href="#writing" data-i18n="i4">Writing</a></li>
+      <li><a href="#about" data-i18n="i5">About</a></li>
+      <li><a href="#contact" data-i18n="i6">Contact</a></li>
+    </ul>
+    <div class="lang">
+      <button data-set="en" aria-pressed="true">EN</button>
+      <button data-set="ru" aria-pressed="false">RU</button>
+    </div>
+  </div>
+
+  <!-- ПРАВАЯ КОЛОНКА -->
+  <div class="col">
+
+    <section>
+      <h1 data-i18n="h1">We are an architecture practice that measures what is already standing.</h1>
+      <div class="plate">
+        <!-- обмерный разрез: перекрытия, колонны, лестница, новая вставка пунктиром -->
+        <svg viewBox="0 0 880 300" aria-hidden="true">
+          <!-- существующий каркас: перекрытия, колонны, кровля -->
+          <path class="ln" d="M20 20h840v20H20z"/>
+          <path class="ln" d="M20 100h840M20 160h840M20 220h840M20 280h840"/>
+          <path class="ln" d="M60 40v240M180 40v240M300 40v240M420 40v240M540 40v240M660 40v240M780 40v240"/>
+          <!-- проёмы в пролётах -->
+          <path class="ln-soft" d="M76 116h88v28H76zM196 116h88v28h-88zM316 116h88v28h-88z"/>
+          <path class="ln-soft" d="M676 176h88v28h-88zM796 176h48v28h-48z"/>
+          <!-- лестница -->
+          <path class="ln-soft" d="M60 220h20v-10h20v-10h20v-10h20v-10h20v-10h20v-10"/>
+          <path class="ln-soft" d="M60 208L180 148"/>
+          <!-- новая вставка: перекрытие внутри старого каркаса -->
+          <path class="ln-dash" d="M420 100h240v120H420z"/>
+          <path class="ln-dash" d="M420 160h240"/>
+          <!-- отметки уровней -->
+          <circle class="fl" cx="420" cy="100" r="3"/>
+          <circle class="fl" cx="660" cy="220" r="3"/>
+          <!-- земля -->
+          <path class="ln-soft" d="M20 288h6M60 288h6M100 288h6M140 288h6M180 288h6M220 288h6M260 288h6M300 288h6M340 288h6M380 288h6M420 288h6M460 288h6M500 288h6M540 288h6M580 288h6M620 288h6M660 288h6M700 288h6M740 288h6M780 288h6M820 288h6M854 288h6"/>
+          <path class="ln" d="M20 286v10M860 286v10"/>
+        </svg>
+        <div class="plate-cap">
+          <span class="cap fossil" data-i18n="pc1">Kombinat Hall, Rustavi — long section, existing frame retained</span>
+          <span class="cap fossil" data-i18n="pc2">1:200 · surveyed 2024</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="about">
+      <div class="two-col">
+        <div>
+          <h2 data-i18n="h2a">Nothing we work on was designed to be temporary.</h2>
+        </div>
+        <div>
+          <p data-i18n="p1">Plinth was founded in 2016 to do the unglamorous half of architecture: surveying post-war buildings that nobody has drawn since they were built, and finding out what they can still carry.</p>
+          <p data-i18n="p2">We take on a project only when the existing structure stays. Sometimes that means a new floor plate inside an old frame; sometimes it means the honest answer that the building needs nothing but a roof and a decade of patience.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="work">
+      <h2 data-i18n="h2b">Selected work</h2>
+      <ul class="works">
+        <li>
+          <span class="yr">2026</span>
+          <span class="nm" data-i18n="w1n">Kombinat Hall</span>
+          <span class="pl" data-i18n="w1p">Rustavi · textile plant, 1961</span>
+          <span class="st" data-i18n="w1s">In construction</span>
+        </li>
+        <li>
+          <span class="yr">2025</span>
+          <span class="nm" data-i18n="w2n">Block 9</span>
+          <span class="pl" data-i18n="w2p">Tbilisi · housing slab, 1968</span>
+          <span class="st" data-i18n="w2s">Completed</span>
+        </li>
+        <li>
+          <span class="yr">2024</span>
+          <span class="nm" data-i18n="w3n">Water Tower</span>
+          <span class="pl" data-i18n="w3p">Batumi · municipal, 1937</span>
+          <span class="st" data-i18n="w3s">Completed</span>
+        </li>
+        <li>
+          <span class="yr">2023</span>
+          <span class="nm" data-i18n="w4n">Cinema Iveria</span>
+          <span class="pl" data-i18n="w4p">Kutaisi · cinema, 1974</span>
+          <span class="st" data-i18n="w4s">Drawings only</span>
+        </li>
+      </ul>
+    </section>
+
+    <section>
+      <div class="accent">
+        <p data-i18n="q">“The cheapest structure available is the one that is already there. Everything after that is a question of what it can still carry.”</p>
+        <div class="cap" data-i18n="qw">Marta Ivane · founding partner · from the 2025 survey report</div>
+      </div>
+    </section>
+
+    <section id="surveys">
+      <h2 data-i18n="h2c">Surveys</h2>
+      <div class="two-col" style="margin-bottom: var(--spacing-42)">
+        <div>
+          <p data-i18n="p3">Before anything is drawn we measure. Hand survey first, laser scan second, and a written note of every place the two disagree — which on a building of this age is most of them.</p>
+        </div>
+        <div>
+          <p data-i18n="p4">The survey is published with the project. If we conclude that a building should be left alone, that conclusion is published too, with the drawings that led to it.</p>
+        </div>
+      </div>
+      <div class="figures">
+        <div><b>34</b><span data-i18n="f1">buildings surveyed since 2016</span></div>
+        <div><b>11</b><span data-i18n="f2">kept standing that were slated for demolition</span></div>
+        <div><b>0</b><span data-i18n="f3">buildings we have demolished</span></div>
+        <div><b>2</b><span data-i18n="f4">offices — Tbilisi and Rotterdam</span></div>
+      </div>
+    </section>
+
+    <section id="writing">
+      <h2 data-i18n="h2d">Writing</h2>
+      <ul class="notes">
+        <li>
+          <span class="d">04.2026</span>
+          <a href="#" data-i18n="n1">What a 1961 frame will still carry, and how we found out</a>
+        </li>
+        <li>
+          <span class="d">01.2026</span>
+          <a href="#" data-i18n="n2">Against the word “obsolete” in municipal building reports</a>
+        </li>
+        <li>
+          <span class="d">09.2025</span>
+          <a href="#" data-i18n="n3">Block 9: twelve months of measured drawings, in full</a>
+        </li>
+        <li>
+          <span class="d">05.2025</span>
+          <a href="#" data-i18n="n4">The survey we published that argued against our own commission</a>
+        </li>
+      </ul>
+    </section>
+
+    <section id="contact">
+      <h2 data-i18n="h2e">Contact</h2>
+      <div class="contact-grid" style="margin-bottom: var(--spacing-42)">
+        <div>
+          <div class="cap" data-i18n="ct1">Tbilisi</div>
+          <p>Chitaia 6, III floor<br>+995 32 000 00 00</p>
+        </div>
+        <div>
+          <div class="cap" data-i18n="ct2">Rotterdam</div>
+          <p>Schiedamse Vest 154<br>+31 10 000 00 00</p>
+        </div>
+      </div>
+      <a class="btn" href="#" data-i18n="cta">Send us a building</a>
+    </section>
+
+  </div>
+
+  <div class="tail">
+    <span data-i18n="tail1">© 2026 Plinth</span>
+    <span data-i18n="tail2">Surveys published under CC BY 4.0</span>
+  </div>
+</div>
+
+<script>
+/* RU/EN. Английский — исходный, русский — перевод. Дефолт en, без авто-детекта. */
+var RU = {
+  i1:'Все проекты', i2:'Работы', i3:'Обмеры', i4:'Тексты', i5:'О бюро', i6:'Контакты',
+  h1:'Мы архитектурное бюро, которое обмеряет то, что уже стоит.',
+  pc1:'Комбинат, Рустави — продольный разрез, существующий каркас сохранён',
+  pc2:'1:200 · обмер 2024',
+  h2a:'Ничего из того, с чем мы работаем, не задумывалось временным.',
+  p1:'Plinth основан в 2016 году, чтобы делать неблагодарную половину архитектуры: обмерять послевоенные здания, которых никто не чертил с момента постройки, и выяснять, что они ещё способны нести.',
+  p2:'Мы беремся за проект только тогда, когда существующая конструкция остаётся. Иногда это новое перекрытие внутри старого каркаса; иногда — честный ответ, что зданию нужна только кровля и десять лет терпения.',
+  h2b:'Избранные работы',
+  w1n:'Комбинат', w1p:'Рустави · текстильный завод, 1961', w1s:'В строительстве',
+  w2n:'Корпус 9', w2p:'Тбилиси · жилая пластина, 1968', w2s:'Завершено',
+  w3n:'Водонапорная башня', w3p:'Батуми · муниципальное, 1937', w3s:'Завершено',
+  w4n:'Кинотеатр «Иверия»', w4p:'Кутаиси · кинотеатр, 1974', w4s:'Только чертежи',
+  q:'«Самая дешёвая конструкция из доступных — та, что уже стоит. Всё дальнейшее — вопрос о том, что она ещё способна нести.»',
+  qw:'Марта Иване · партнёр-основатель · из отчёта по обмерам 2025 года',
+  h2c:'Обмеры',
+  p3:'До того как что-либо начерчено, мы измеряем. Сначала ручной обмер, потом лазерное сканирование и письменная пометка в каждом месте, где эти два расходятся, — а на здании такого возраста расходятся они почти везде.',
+  p4:'Обмер публикуется вместе с проектом. Если мы приходим к выводу, что здание лучше не трогать, этот вывод публикуется тоже — вместе с чертежами, которые к нему привели.',
+  f1:'зданий обмеряно с 2016 года',
+  f2:'сохранено из тех, что шли под снос',
+  f3:'зданий снесено нами',
+  f4:'офиса — Тбилиси и Роттердам',
+  h2d:'Тексты',
+  n1:'Что ещё несёт каркас 1961 года и как мы это выяснили',
+  n2:'Против слова «морально устарело» в муниципальных отчётах о зданиях',
+  n3:'Корпус 9: двенадцать месяцев обмерных чертежей, целиком',
+  n4:'Обмер, который мы опубликовали против собственного заказа',
+  h2e:'Контакты', ct1:'Тбилиси', ct2:'Роттердам',
+  cta:'Пришлите нам здание',
+  tail1:'© 2026 Plinth', tail2:'Обмеры публикуются под CC BY 4.0'
+};
+var EN = {};
+document.querySelectorAll('[data-i18n]').forEach(function (el) { EN[el.dataset.i18n] = el.innerHTML; });
+
+function setLang(l) {
+  var dict = l === 'ru' ? RU : EN;
+  document.querySelectorAll('[data-i18n]').forEach(function (el) {
+    var v = dict[el.dataset.i18n];
+    if (v !== undefined) el.innerHTML = v;
+  });
+  document.documentElement.lang = l;
+  document.documentElement.dataset.lang = l;
+  document.querySelectorAll('.lang button').forEach(function (b) {
+    b.setAttribute('aria-pressed', b.dataset.set === l ? 'true' : 'false');
+  });
+}
+document.querySelectorAll('.lang button').forEach(function (b) {
+  b.addEventListener('click', function () { setLang(b.dataset.set); });
+});
+</script>
+</body>
+</html>

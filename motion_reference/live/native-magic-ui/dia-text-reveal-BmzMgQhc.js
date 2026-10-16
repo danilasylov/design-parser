@@ -1,0 +1,124 @@
+import { r as n, j as V, m as z, c as G } from "./inline-Mcm4wFdg.js";
+import { u as H, a as U } from "./index-RrOJv8re.js";
+import { u as Y } from "./use-motion-value-CcTD1FWM.js";
+import { u as q } from "./use-transform-DTx9FOYX.js";
+import { u as J } from "./use-in-view-CCO1JRFq.js";
+const K = ["#c679c4", "#fa3d1d", "#ffb005", "#e1e1fe", "#0358f7"], f = 17, D = -f, M = 100 + f, Q = (e) => e < 0.5 ? 4 * e ** 3 : 1 - (-2 * e + 2) ** 3 / 2;
+function X(e, a, t) {
+  const r = e - f, o = e + f;
+  if (r >= 100)
+    return `linear-gradient(90deg, ${t}, ${t})`;
+  const u = a.length, i = [];
+  return r > 0 && i.push(`${t} 0%`, `${t} ${r.toFixed(2)}%`), a.forEach((p, c) => {
+    const x = u === 1 ? e : r + c / (u - 1) * f * 2;
+    i.push(`${p} ${x.toFixed(2)}%`);
+  }), o < 100 && i.push(`transparent ${o.toFixed(2)}%`, "transparent 100%"), `linear-gradient(90deg, ${i.join(", ")})`;
+}
+function Z(e, a) {
+  const t = e.cloneNode();
+  Object.assign(t.style, {
+    position: "absolute",
+    visibility: "hidden",
+    pointerEvents: "none",
+    width: "auto",
+    whiteSpace: "nowrap"
+  }), e.parentElement.appendChild(t);
+  const r = a.map((o) => (t.textContent = o, t.getBoundingClientRect().width));
+  return t.remove(), r;
+}
+function ae({
+  text: e,
+  colors: a = K,
+  textColor: t = "var(--foreground)",
+  duration: r = 1.5,
+  delay: o = 0,
+  repeat: u = !1,
+  repeatDelay: i = 0.5,
+  startOnView: p = !0,
+  once: c = !0,
+  className: x,
+  fixedWidth: w = !1,
+  ...F
+}) {
+  const d = Array.isArray(e) ? e : [e], m = d.length > 1, y = H(), E = n.useRef(null), h = n.useRef({
+    colors: a,
+    textColor: t,
+    duration: r,
+    delay: o,
+    repeat: u,
+    repeatDelay: i,
+    texts: d
+  });
+  h.current = {
+    colors: a,
+    textColor: t,
+    duration: r,
+    delay: o,
+    repeat: u,
+    repeatDelay: i,
+    texts: d
+  };
+  const A = n.useRef(0), S = n.useRef(!1), $ = n.useRef(void 0), b = n.useRef(null), g = n.useRef(null), [v, I] = n.useState(0), [R, C] = n.useState([]), l = Y(D), N = q(
+    l,
+    (s) => X(s, h.current.colors, h.current.textColor)
+  ), T = J(E, { once: c, amount: 0.1 });
+  n.useEffect(() => {
+    const s = E.current;
+    !s || !m || C(Z(s, d));
+  }, [Array.isArray(e) ? e.join("\0") : e]), b.current = () => {
+    const { duration: s, delay: P, repeat: _, repeatDelay: B, texts: L } = h.current;
+    l.set(D);
+    const O = U(l, M, {
+      duration: s,
+      delay: P,
+      ease: Q,
+      onComplete() {
+        _ && ($.current = setTimeout(() => {
+          const k = (A.current + 1) % L.length;
+          A.current = k, I(k), b.current();
+        }, B * 1e3));
+      }
+    });
+    g.current = () => O.stop();
+  }, n.useEffect(() => {
+    if (y) {
+      l.set(M);
+      return;
+    }
+    if (!(p && !T) && !(c && S.current))
+      return S.current = !0, b.current(), () => {
+        var s;
+        (s = g.current) == null || s.call(g), clearTimeout($.current);
+      };
+  }, [T, p, c, y, l]);
+  const W = m && w && R.length > 0 ? Math.max(...R) : void 0, j = m && !w && R[v] != null ? R[v] : void 0;
+  return /* @__PURE__ */ V.jsx(
+    z.span,
+    {
+      ref: E,
+      className: G("align-bottom leading-[100%] text-inherit", x),
+      style: {
+        transform: "translateY(-2px)",
+        color: "transparent",
+        backgroundClip: "text",
+        WebkitBackgroundClip: "text",
+        backgroundSize: "100% 100%",
+        backgroundImage: N,
+        ...m && {
+          display: "inline-block",
+          overflow: "hidden",
+          whiteSpace: "nowrap",
+          verticalAlign: "text-center",
+          ...W != null && { width: W }
+        }
+      },
+      animate: j != null ? { width: j } : void 0,
+      transition: { duration: 0.4, ease: [0.4, 0, 0.2, 1] },
+      ...F,
+      children: d[v]
+    }
+  );
+}
+export {
+  ae as D
+};

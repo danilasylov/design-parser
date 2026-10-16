@@ -1,0 +1,3 @@
+/* Original keyframes: Animista, Ana Travas. https://animista.net/play/text/focus-in/text-focus-in */
+.text-focus-in{animation:text-focus-in 1s cubic-bezier(.55,.085,.68,.53) 0s 1 normal both;}
+@keyframes text-focus-in{0%{-webkit-filter:blur(12px);filter:blur(12px);opacity:0}to{-webkit-filter:blur(0);filter:blur(0);opacity:1}}

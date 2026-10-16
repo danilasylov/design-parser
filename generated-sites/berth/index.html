@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Berth — sleep through the journey, wake up in the city</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500&display=swap" rel="stylesheet">
+<style>
+/* ───────── ДИЗАЙН-СИСТЕМА NAVAN — tokens.css ДОСЛОВНО ───────── */
+:root {
+  /* Colors */
+  --color-deep-iris: #15002c;
+  --color-vivid-iris: #6307f8;
+  --color-iris-mist: #e1e2fe;
+  --color-iris-glow: #7c51fa;
+  --gradient-iris-glow: linear-gradient(90deg, rgba(0, 0, 0, 0) 0%, rgba(124, 81, 250, 0.3) 35%, rgba(255, 181, 206, 0.3) 50%, rgba(124, 81, 250, 0.3) 65%, rgba(0, 0, 0, 0) 100%);
+  --color-cinder: #060000;
+  --color-graphite: #5a5a72;
+  --color-fog: #8d8da5;
+  --color-smoke: #70708f;
+  --color-mist-border: #c6c6d2;
+  --color-canvas-tint: #f1f1f9;
+  --color-surface-white: #f8f8fd;
+  --color-pure-white: #ffffff;
+  --color-jet: #000000;
+  --color-violet-twilight: #410566;
+  --gradient-violet-twilight: radial-gradient(197.36% 161.87% at 4.08% 0%, rgba(65, 5, 102, 0.75) 6.19%, rgba(124, 81, 250, 0.75) 52.28%, rgba(255, 181, 206, 0.75) 91.18%);
+
+  /* Typography — Font Families */
+  /* Neue Haas Grotesk → Inter, Sanomat → Source Serif 4 (замены из DESIGN.md; кириллица есть у обоих) */
+  --font-neue-hass-grotesk-text: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-sanomat: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+
+  /* Typography — Scale */
+  --text-caption: 10px;
+  --leading-caption: 1.5;
+  --text-body: 16px;
+  --leading-body: 1.5;
+  --text-subheading: 20px;
+  --leading-subheading: 1.36;
+  --text-heading-sm: 22px;
+  --leading-heading-sm: 1.31;
+  --text-heading: 30px;
+  --leading-heading: 1.2;
+  --text-heading-lg: 42px;
+  --leading-heading-lg: 1.12;
+  --text-display: 45px;
+  --leading-display: 1;
+  --tracking-display: 0.04px;
+  --text-hero: 135px;
+  --leading-hero: 0.87;
+  --tracking-hero: 5.4px;
+
+  /* Typography — Weights */
+  --font-weight-light: 300;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Spacing */
+  --spacing-unit: 4px;
+  --spacing-4: 4px;
+  --spacing-8: 8px;
+  --spacing-12: 12px;
+  --spacing-16: 16px;
+  --spacing-20: 20px;
+  --spacing-24: 24px;
+  --spacing-28: 28px;
+  --spacing-32: 32px;
+  --spacing-36: 36px;
+  --spacing-40: 40px;
+  --spacing-44: 44px;
+  --spacing-56: 56px;
+  --spacing-60: 60px;
+  --spacing-64: 64px;
+  --spacing-80: 80px;
+  --spacing-140: 140px;
+
+  /* Layout */
+  --page-max-width: 1200px;
+  --section-gap: 80px;
+  --card-padding: 20px;
+  --element-gap: 16px;
+
+  /* Border Radius */
+  --radius-md: 4px;
+  --radius-xl: 14px;
+  --radius-full: 9999px;
+
+  /* Named Radii */
+  --radius-cards: 14px;
+  --radius-pills: 9999px;
+  --radius-badges: 14px;
+  --radius-inputs: 14px;
+  --radius-buttons: 14px;
+
+  /* Surfaces */
+  --surface-canvas: #f1f1f9;
+  --surface-card-white: #ffffff;
+  --surface-surface-lift: #f8f8fd;
+  --surface-iris-mist: #e1e2fe;
+  --surface-footer-iris: #15002c;
+}
+
+/* ───────── База ───────── */
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--surface-canvas);color:var(--color-deep-iris);
+  font-family:var(--font-neue-hass-grotesk-text);font-size:var(--text-body);line-height:var(--leading-body);
+  font-weight:var(--font-weight-regular);-webkit-font-smoothing:antialiased;
+}
+a{color:inherit;text-decoration:none}
+h1,h2,h3,h4,p,ul{margin:0}
+ul{list-style:none;padding:0}
+.wrap{max-width:var(--page-max-width);margin:0 auto;padding:0 var(--spacing-24)}
+/* Серифный голос — только заголовки, никогда не текст (см. Don'ts) */
+.serif{font-family:var(--font-sanomat);font-weight:var(--font-weight-regular)}
+
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:var(--spacing-8);
+  font-family:inherit;font-size:var(--text-body);font-weight:var(--font-weight-medium);line-height:1;
+  padding:14px var(--spacing-24);border-radius:var(--radius-buttons);border:0;cursor:pointer;transition:opacity .16s,background .16s;
+}
+.btn:hover{opacity:.9}
+/* Vivid Iris — единственная насыщенная заливка, одна на экран */
+.btn-iris{background:var(--color-vivid-iris);color:var(--color-pure-white)}
+.btn-dark{background:var(--color-deep-iris);color:var(--color-pure-white)}
+.btn-pill{border-radius:var(--radius-pills)}
+.link-u{border-bottom:1px solid var(--color-mist-border);padding-bottom:2px;font-size:var(--text-body)}
+.link-u:hover{border-bottom-color:var(--color-vivid-iris)}
+
+/* ───────── Полоса-анонс + шапка (верхний «бук-энд» бренда) ───────── */
+.promo{background:var(--color-vivid-iris);color:var(--color-pure-white);text-align:center;font-size:var(--text-body);padding:11px 16px}
+.promo a{border-bottom:1px solid rgba(255,255,255,.5);font-weight:var(--font-weight-medium)}
+header{position:sticky;top:0;z-index:40;background:var(--color-pure-white);border-bottom:1px solid var(--color-mist-border)}
+.nav{display:flex;align-items:center;gap:var(--spacing-32);height:68px;max-width:var(--page-max-width);margin:0 auto;padding:0 var(--spacing-24)}
+.wordmark{font-family:var(--font-sanomat);font-size:26px;letter-spacing:-.01em}
+.nav-links{display:flex;gap:var(--spacing-28);margin:0 auto;font-size:var(--text-body);color:var(--color-graphite)}
+.nav-links a:hover{color:var(--color-deep-iris)}
+.nav-right{display:flex;align-items:center;gap:var(--spacing-12)}
+.btn-sm{padding:10px var(--spacing-20);font-size:15px}
+.lang{display:flex;gap:2px;background:var(--surface-surface-lift);border:1px solid var(--color-mist-border);border-radius:var(--radius-pills);padding:3px}
+.lang button{
+  font-family:inherit;font-size:13px;font-weight:var(--font-weight-medium);background:transparent;border:0;
+  color:var(--color-smoke);padding:5px 11px;border-radius:var(--radius-pills);cursor:pointer;
+}
+.lang button[aria-pressed="true"]{background:var(--color-deep-iris);color:var(--color-pure-white)}
+
+/* ───────── Герой ───────── */
+.hero{padding:var(--spacing-64) 0 var(--spacing-80)}
+.hero-in{display:grid;grid-template-columns:1fr 1fr;gap:var(--spacing-64);align-items:center}
+.rating{display:flex;align-items:center;gap:var(--spacing-12);color:var(--color-graphite);font-size:15px;margin-bottom:var(--spacing-24)}
+.stars{color:var(--color-vivid-iris);letter-spacing:2px}
+.hero h1{font-family:var(--font-sanomat);font-size:var(--text-display);line-height:var(--leading-display);letter-spacing:var(--tracking-display);font-weight:var(--font-weight-regular)}
+.hero .ask{margin-top:var(--spacing-24);color:var(--color-graphite)}
+/* Плитки-выборы: светлая брендовая подложка Iris Mist */
+.picks{display:flex;flex-wrap:wrap;gap:var(--spacing-12);margin-top:var(--spacing-20);max-width:520px}
+.pick{
+  display:flex;align-items:center;gap:var(--spacing-12);background:var(--surface-iris-mist);
+  border-radius:var(--radius-cards);padding:14px var(--spacing-16);font-size:15px;cursor:pointer;transition:background .16s;
+}
+.pick:hover{background:#d5d7fd}
+.pick i{width:16px;height:16px;border:1px solid var(--color-smoke);border-radius:var(--radius-md);background:var(--color-pure-white);flex-shrink:0}
+.pick.on i{background:var(--color-vivid-iris);border-color:var(--color-vivid-iris)}
+.hero-cta{display:flex;align-items:center;gap:var(--spacing-24);margin-top:var(--spacing-32)}
+
+/* Ночь вместо фотографии: штатный радиальный градиент системы + белая карточка поверх */
+.night{position:relative;border-radius:var(--radius-cards);overflow:hidden;height:430px;background:var(--color-violet-twilight)}
+.night::before{content:"";position:absolute;inset:0;background:var(--gradient-violet-twilight)}
+/* Окна вагона — редкая ритмичная штриховка поверх сумерек */
+.night::after{
+  content:"";position:absolute;inset:0;
+  background:repeating-linear-gradient(90deg, rgba(255,255,255,.06) 0 30px, rgba(255,255,255,0) 30px 148px);
+}
+.stars-f{position:absolute;inset:0}
+.stars-f i{position:absolute;width:2px;height:2px;border-radius:50%;background:rgba(255,255,255,.8)}
+.ticket{
+  position:absolute;left:32px;bottom:86px;width:330px;background:var(--surface-card-white);
+  border-radius:var(--radius-cards);padding:var(--card-padding);z-index:2;
+  box-shadow:0 24px 60px rgba(21,0,44,.28);
+}
+.ticket .badge{display:inline-block;background:var(--surface-iris-mist);color:var(--color-deep-iris);border-radius:var(--radius-badges);font-size:12px;padding:4px 10px;font-weight:var(--font-weight-medium)}
+.ticket .route{font-family:var(--font-sanomat);font-size:var(--text-heading);line-height:var(--leading-heading);margin:var(--spacing-12) 0 var(--spacing-4)}
+.ticket .op{color:var(--color-smoke);font-size:14px}
+.ticket .opt{display:flex;justify-content:space-between;align-items:baseline;padding:var(--spacing-12) 0;border-top:1px solid var(--color-mist-border);margin-top:var(--spacing-12)}
+.ticket .opt b{font-weight:var(--font-weight-medium)}
+.ticket .opt span{color:var(--color-smoke);font-size:14px}
+.ticket .price{font-weight:var(--font-weight-medium)}
+.toast{
+  position:absolute;left:210px;bottom:22px;background:var(--surface-card-white);border-radius:var(--radius-cards);
+  padding:12px 16px;font-size:14px;display:flex;align-items:center;gap:10px;box-shadow:0 18px 40px rgba(21,0,44,.22);white-space:nowrap;
+}
+.toast i{width:22px;height:22px;border-radius:6px;background:var(--color-vivid-iris);display:inline-block}
+
+/* ───────── Операторы ───────── */
+.ops{border-top:1px solid var(--color-mist-border);padding:var(--spacing-40) 0}
+.ops-t{text-align:center;color:var(--color-graphite);font-size:15px;margin-bottom:var(--spacing-28)}
+.ops-row{display:flex;justify-content:space-between;align-items:center;gap:var(--spacing-24);color:var(--color-smoke);font-size:19px;letter-spacing:.02em}
+
+/* ───────── Секции ───────── */
+section{padding:var(--spacing-80) 0}
+.sec-h{margin-bottom:var(--spacing-40)}
+.sec-h h2{font-family:var(--font-sanomat);font-size:var(--text-heading-lg);line-height:var(--leading-heading-lg);font-weight:var(--font-weight-regular)}
+.sec-h p{margin-top:var(--spacing-12);color:var(--color-graphite);max-width:560px}
+
+/* Отправления: белые карточки на канве, тени нет — только тон и радиус 14 */
+.deps{display:flex;flex-direction:column;gap:var(--spacing-12)}
+.dep{
+  display:grid;grid-template-columns:150px 1fr 190px 150px 130px;gap:var(--spacing-20);align-items:center;
+  background:var(--surface-card-white);border-radius:var(--radius-cards);padding:var(--spacing-20) var(--spacing-24);
+}
+.dep .time{font-family:var(--font-sanomat);font-size:var(--text-heading-sm);line-height:var(--leading-heading-sm)}
+.dep .time span{display:block;font-family:var(--font-neue-hass-grotesk-text);font-size:13px;color:var(--color-smoke);margin-top:2px}
+.dep .line b{font-weight:var(--font-weight-medium)}
+.dep .line span{display:block;color:var(--color-smoke);font-size:14px;margin-top:2px}
+.dep .kinds{display:flex;gap:6px;flex-wrap:wrap}
+.kind{font-style:normal;background:var(--surface-surface-lift);border:1px solid var(--color-mist-border);border-radius:var(--radius-badges);font-size:12px;padding:4px 9px;color:var(--color-graphite)}
+.dep .from{color:var(--color-graphite);font-size:14px}
+.dep .from b{display:block;font-family:var(--font-sanomat);font-size:var(--text-subheading);color:var(--color-deep-iris);font-weight:var(--font-weight-regular)}
+
+/* Что входит в полку */
+.feats{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--element-gap)}
+.feat{background:var(--surface-iris-mist);border-radius:var(--radius-cards);padding:var(--spacing-32)}
+.feat h3{font-family:var(--font-sanomat);font-size:var(--text-heading);line-height:var(--leading-heading);font-weight:var(--font-weight-regular);margin-bottom:var(--spacing-12)}
+.feat p{color:var(--color-graphite);font-size:15px}
+
+/* Редакционная врезка + цифры */
+.editorial{display:grid;grid-template-columns:1.1fr 1fr;gap:var(--spacing-64);align-items:center;background:var(--surface-card-white);border-radius:var(--radius-cards);padding:var(--spacing-56)}
+.editorial blockquote{font-family:var(--font-sanomat);font-size:var(--text-heading);line-height:1.28;margin:0}
+.editorial cite{display:block;margin-top:var(--spacing-20);font-family:var(--font-neue-hass-grotesk-text);font-style:normal;color:var(--color-smoke);font-size:14px}
+.nums{display:grid;grid-template-columns:1fr 1fr;gap:var(--spacing-32) var(--spacing-24)}
+.num b{display:block;font-family:var(--font-sanomat);font-size:var(--text-heading-lg);line-height:1;font-weight:var(--font-weight-regular)}
+.num span{display:block;margin-top:var(--spacing-8);color:var(--color-graphite);font-size:14px}
+
+/* Финальная лента с атмосферным градиентом — один вош на регион страницы */
+.cta-band{background:var(--gradient-iris-glow);padding:var(--spacing-80) 0;text-align:center}
+.cta-band h2{font-family:var(--font-sanomat);font-size:var(--text-heading-lg);line-height:var(--leading-heading-lg);font-weight:var(--font-weight-regular)}
+.cta-band p{margin:var(--spacing-16) auto 0;max-width:520px;color:var(--color-graphite)}
+.cta-band .btn{margin-top:var(--spacing-32)}
+
+/* Нижний «бук-энд»: глубокий ирис во всю ширину */
+footer{background:var(--surface-footer-iris);color:var(--color-pure-white);padding:var(--spacing-64) 0 var(--spacing-40)}
+.foot{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:var(--spacing-32)}
+.foot .about{color:#b9b3d6;font-size:15px;max-width:300px;margin-top:var(--spacing-16)}
+.foot h4{font-size:13px;font-weight:var(--font-weight-medium);color:#9c93c4;margin:0 0 var(--spacing-16);letter-spacing:.04em;text-transform:uppercase}
+.foot li{margin-bottom:var(--spacing-8);font-size:15px;color:#e6e2f5}
+.foot li a:hover{color:var(--color-pure-white)}
+.foot-legal{display:flex;justify-content:space-between;margin-top:var(--spacing-56);padding-top:var(--spacing-20);border-top:1px solid rgba(255,255,255,.16);color:#9c93c4;font-size:14px}
+</style>
+</head>
+<body>
+
+<div class="promo">
+  <span data-i18n="promo">Forty-one night routes are running this winter — twelve of them are new.</span>
+  <a href="#departures" data-i18n="promol">See the map</a>
+</div>
+
+<header>
+  <nav class="nav">
+    <a class="wordmark" href="#top">Berth</a>
+    <div class="nav-links">
+      <a href="#departures" data-i18n="nav1">Departures</a>
+      <a href="#included" data-i18n="nav2">On board</a>
+      <a href="#why" data-i18n="nav3">Why night</a>
+      <a href="#" data-i18n="nav4">Help</a>
+    </div>
+    <div class="nav-right">
+      <div class="lang">
+        <button data-set="en" aria-pressed="true">EN</button>
+        <button data-set="ru" aria-pressed="false">RU</button>
+      </div>
+      <a class="btn btn-dark btn-pill btn-sm" href="#departures" data-i18n="cta0">Find a berth</a>
+    </div>
+  </nav>
+</header>
+
+<main id="top">
+
+  <section class="hero">
+    <div class="wrap hero-in">
+      <div>
+        <div class="rating">
+          <span class="stars">★★★★★</span>
+          <span data-i18n="rate">4.8 of 5 · 21,400 nights slept</span>
+        </div>
+        <h1>
+          <span data-i18n="h1a">Sleep through the journey.</span><br>
+          <span data-i18n="h1b">Wake up in the city.</span>
+        </h1>
+        <p class="ask" data-i18n="ask">What are you booking tonight?</p>
+        <div class="picks">
+          <label class="pick on"><i></i><span data-i18n="p1">A single berth</span></label>
+          <label class="pick"><i></i><span data-i18n="p2">A whole compartment</span></label>
+          <label class="pick"><i></i><span data-i18n="p3">Berth plus bicycle</span></label>
+          <label class="pick"><i></i><span data-i18n="p4">Travelling with a dog</span></label>
+          <label class="pick"><i></i><span data-i18n="p5">Sleeper, then ferry</span></label>
+        </div>
+        <div class="hero-cta">
+          <a class="btn btn-iris" href="#departures" data-i18n="cta1">Find tonight's trains</a>
+          <a class="link-u" href="#why" data-i18n="cta2">Why people go back to night trains</a>
+        </div>
+      </div>
+
+      <div class="night">
+        <div class="stars-f" id="stars"></div>
+        <div class="ticket">
+          <span class="badge" data-i18n="badge">Tonight</span>
+          <div class="route">Berlin → Wien</div>
+          <div class="op" data-i18n="op">Östbahn NJ 457 · 21:38 → 08:52</div>
+          <div class="opt">
+            <b data-i18n="o1">Berth in a six</b>
+            <span class="price">€49</span>
+          </div>
+          <div class="opt">
+            <b data-i18n="o2">Berth in a three</b>
+            <span class="price">€78</span>
+          </div>
+          <div class="opt">
+            <b data-i18n="o3">Compartment for two</b>
+            <span class="price">€164</span>
+          </div>
+        </div>
+        <div class="toast">
+          <i></i><span data-i18n="toast">Berth 42 held for twenty minutes</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="ops">
+    <div class="wrap">
+      <div class="ops-t" data-i18n="opst">Booked directly with the operators who run the carriages</div>
+      <div class="ops-row">
+        <span>ÖSTBAHN</span><span>NORDLAND RAIL</span><span>CARPATIA</span>
+        <span>ADRIA NOTTE</span><span>BALTIC SLEEPER</span><span>RHEIN NACHT</span>
+      </div>
+    </div>
+  </div>
+
+  <section id="departures">
+    <div class="wrap">
+      <div class="sec-h">
+        <h2 data-i18n="s1h">Leaving tonight</h2>
+        <p data-i18n="s1p">Departure boards for the next twelve hours. Prices are per person, per berth, with bedding and the morning coffee included.</p>
+      </div>
+      <div class="deps">
+        <article class="dep">
+          <div class="time">21:38<span data-i18n="d1a">arrives 08:52</span></div>
+          <div class="line"><b>Berlin → Wien</b><span data-i18n="d1b">Östbahn NJ 457 · via Dresden, Praha</span></div>
+          <div class="kinds"><i class="kind" data-i18n="k6">Six-berth</i><i class="kind" data-i18n="k3">Three-berth</i><i class="kind" data-i18n="k2">Double</i></div>
+          <div class="from"><span data-i18n="dur">11 h 14 min</span></div>
+          <div class="from" data-i18n="fromw">from <b>€49</b></div>
+        </article>
+        <article class="dep">
+          <div class="time">20:05<span data-i18n="d2a">arrives 07:40</span></div>
+          <div class="line"><b>Warszawa → Praha</b><span data-i18n="d2b">Carpatia 402 · via Katowice</span></div>
+          <div class="kinds"><i class="kind" data-i18n="k6b">Six-berth</i><i class="kind" data-i18n="k3b">Three-berth</i></div>
+          <div class="from"><span data-i18n="dur2">11 h 35 min</span></div>
+          <div class="from" data-i18n="fromw2">from <b>€38</b></div>
+        </article>
+        <article class="dep">
+          <div class="time">22:14<span data-i18n="d3a">arrives 09:06</span></div>
+          <div class="line"><b>Stockholm → Narvik</b><span data-i18n="d3b">Nordland Rail 94 · above the circle</span></div>
+          <div class="kinds"><i class="kind" data-i18n="k3c">Three-berth</i><i class="kind" data-i18n="k2b">Double</i><i class="kind" data-i18n="kw">Window seat</i></div>
+          <div class="from"><span data-i18n="dur3">18 h 52 min</span></div>
+          <div class="from" data-i18n="fromw3">from <b>€61</b></div>
+        </article>
+        <article class="dep">
+          <div class="time">19:47<span data-i18n="d4a">arrives 06:15</span></div>
+          <div class="line"><b>Zagreb → Split</b><span data-i18n="d4b">Adria Notte 771 · along the coast</span></div>
+          <div class="kinds"><i class="kind" data-i18n="k6c">Six-berth</i><i class="kind" data-i18n="kb">Bicycle van</i></div>
+          <div class="from"><span data-i18n="dur4">10 h 28 min</span></div>
+          <div class="from" data-i18n="fromw4">from <b>€29</b></div>
+        </article>
+        <article class="dep">
+          <div class="time">23:02<span data-i18n="d5a">arrives 08:11</span></div>
+          <div class="line"><b>Rīga → Vilnius</b><span data-i18n="d5b">Baltic Sleeper 12 · slow on purpose</span></div>
+          <div class="kinds"><i class="kind" data-i18n="k3d">Three-berth</i><i class="kind" data-i18n="k2c">Double</i></div>
+          <div class="from"><span data-i18n="dur5">9 h 09 min</span></div>
+          <div class="from" data-i18n="fromw5">from <b>€24</b></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="included">
+    <div class="wrap">
+      <div class="sec-h">
+        <h2 data-i18n="s2h">What a berth actually is</h2>
+      </div>
+      <div class="feats">
+        <div class="feat">
+          <h3 data-i18n="f1t">A bed, not a seat</h3>
+          <p data-i18n="f1d">Sheets, a pillow and a blanket are made up before you board. The berth is 190 cm long, which is longer than most hotel beds are wide.</p>
+        </div>
+        <div class="feat">
+          <h3 data-i18n="f2t">A door that locks</h3>
+          <p data-i18n="f2d">Every compartment locks from the inside, and the attendant holds your ticket overnight so nobody wakes you at the border.</p>
+        </div>
+        <div class="feat">
+          <h3 data-i18n="f3t">Morning included</h3>
+          <p data-i18n="f3d">Coffee and bread arrive forty minutes before arrival, which is roughly when the light starts coming through the blind.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="why">
+    <div class="wrap">
+      <div class="editorial">
+        <div>
+          <blockquote data-i18n="quote">“The night train is the only form of transport that gives you the journey and the hotel in one price, and hands back the day at both ends.”</blockquote>
+          <cite data-i18n="cite">Ida Sørensen · night conductor, Nordland Rail, twenty-two years</cite>
+        </div>
+        <div class="nums">
+          <div class="num"><b>41</b><span data-i18n="n1">routes running this winter</span></div>
+          <div class="num"><b>12</b><span data-i18n="n2">of them opened since 2024</span></div>
+          <div class="num"><b>1/9</b><span data-i18n="n3">of the carbon of the same flight</span></div>
+          <div class="num"><b>0</b><span data-i18n="n4">airport transfers, either end</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="cta-band">
+    <div class="wrap">
+      <h2 data-i18n="ctah">Tonight's berths are released at 18:00</h2>
+      <p data-i18n="ctap">Set the route once. We will tell you the moment a berth opens on it, and hold it for twenty minutes while you decide.</p>
+      <a class="btn btn-iris" href="#departures" data-i18n="cta3">Find a berth</a>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <div class="wordmark">Berth</div>
+        <p class="about" data-i18n="fabout">A booking desk for European night trains, run by people who take them. Independent of any single operator.</p>
+      </div>
+      <div>
+        <h4 data-i18n="fh1">Travel</h4>
+        <ul>
+          <li><a href="#departures" data-i18n="fl1">Tonight's departures</a></li>
+          <li><a href="#" data-i18n="fl2">Route map</a></li>
+          <li><a href="#" data-i18n="fl3">Bicycles and dogs</a></li>
+          <li><a href="#" data-i18n="fl4">Sleeper and ferry</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 data-i18n="fh2">Berth</h4>
+        <ul>
+          <li><a href="#" data-i18n="fl5">About us</a></li>
+          <li><a href="#" data-i18n="fl6">Operators</a></li>
+          <li><a href="#" data-i18n="fl7">Night journal</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 data-i18n="fh3">Support</h4>
+        <ul>
+          <li><a href="#" data-i18n="fl8">Change a booking</a></li>
+          <li><a href="#" data-i18n="fl9">Delays and refunds</a></li>
+          <li><a href="#" data-i18n="fl10">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-legal">
+      <span>© 2026 Berth</span>
+      <span data-i18n="fnote">Wien · Rīga · Ljubljana</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* Звёзды над сумеречным градиентом — детерминированная россыпь, без картинок */
+(function () {
+  var el = document.getElementById('stars'), html = '', seed = 7;
+  function rnd() { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }
+  for (var i = 0; i < 46; i++) {
+    html += '<i style="left:' + (rnd() * 98).toFixed(1) + '%;top:' + (rnd() * 62).toFixed(1)
+          + '%;opacity:' + (0.3 + rnd() * 0.6).toFixed(2) + '"></i>';
+  }
+  el.innerHTML = html;
+})();
+
+/* Плитки-выборы кликаются, как в референсе (чекбоксы в герое) */
+document.querySelectorAll('.pick').forEach(function (p) {
+  p.addEventListener('click', function () { p.classList.toggle('on'); });
+});
+
+/* ── RU/EN. Английский — исходный, русский — перевод под него ── */
+var RU = {
+  promo:'Этой зимой ходит сорок один ночной маршрут — двенадцать из них новые.', promol:'Смотреть карту',
+  nav1:'Отправления', nav2:'В вагоне', nav3:'Зачем ночью', nav4:'Помощь', cta0:'Найти полку',
+  rate:'4,8 из 5 · 21 400 ночей в пути',
+  h1a:'Проспите дорогу.', h1b:'Проснитесь в городе.',
+  ask:'Что бронируете на сегодня?',
+  p1:'Одну полку', p2:'Целое купе', p3:'Полку с велосипедом', p4:'Еду с собакой', p5:'Поезд, потом паром',
+  cta1:'Найти поезда на сегодня', cta2:'Почему к ночным поездам вернулись',
+  badge:'Сегодня', op:'Östbahn NJ 457 · 21:38 → 08:52',
+  o1:'Полка в шестиместном', o2:'Полка в трёхместном', o3:'Купе на двоих',
+  toast:'Полка 42 удерживается двадцать минут',
+  opst:'Бронируем напрямую у операторов, которые водят эти вагоны',
+  s1h:'Уходят сегодня ночью',
+  s1p:'Табло на ближайшие двенадцать часов. Цены за человека и полку, бельё и утренний кофе включены.',
+  d1a:'прибытие 08:52', d1b:'Östbahn NJ 457 · через Дрезден и Прагу',
+  d2a:'прибытие 07:40', d2b:'Carpatia 402 · через Катовице',
+  d3a:'прибытие 09:06', d3b:'Nordland Rail 94 · за полярный круг',
+  d4a:'прибытие 06:15', d4b:'Adria Notte 771 · вдоль побережья',
+  d5a:'прибытие 08:11', d5b:'Baltic Sleeper 12 · медленный намеренно',
+  k6:'Шестиместное', k3:'Трёхместное', k2:'Двухместное',
+  k6b:'Шестиместное', k3b:'Трёхместное', k3c:'Трёхместное', k2b:'Двухместное', kw:'Место у окна',
+  k6c:'Шестиместное', kb:'Вагон для велосипедов', k3d:'Трёхместное', k2c:'Двухместное',
+  dur:'11 ч 14 мин', dur2:'11 ч 35 мин', dur3:'18 ч 52 мин', dur4:'10 ч 28 мин', dur5:'9 ч 09 мин',
+  fromw:'от <b>€49</b>', fromw2:'от <b>€38</b>', fromw3:'от <b>€61</b>', fromw4:'от <b>€29</b>', fromw5:'от <b>€24</b>',
+  s2h:'Что такое полка на самом деле',
+  f1t:'Кровать, а не кресло', f1d:'Бельё, подушка и одеяло застелены до посадки. Полка длиной 190 см — это больше, чем ширина большинства гостиничных кроватей.',
+  f2t:'Дверь, которая запирается', f2d:'Купе запирается изнутри, а проводник держит ваш билет всю ночь, чтобы на границе вас не будили.',
+  f3t:'Утро включено', f3d:'Кофе и хлеб приносят за сорок минут до прибытия — примерно тогда свет и начинает пробиваться сквозь штору.',
+  quote:'«Ночной поезд — единственный транспорт, который отдаёт дорогу и гостиницу за одну цену и возвращает вам день с обоих концов».',
+  cite:'Ида Сёренсен · ночной проводник Nordland Rail, двадцать два года в рейсах',
+  n1:'маршрута ходит этой зимой', n2:'из них открыты с 2024 года',
+  n3:'углеродного следа того же перелёта', n4:'трансферов в аэропорт с обеих сторон',
+  ctah:'Полки на сегодня открываются в 18:00',
+  ctap:'Задайте маршрут один раз. Мы сообщим в ту минуту, когда на нём освободится полка, и удержим её двадцать минут, пока вы думаете.',
+  cta3:'Найти полку',
+  fabout:'Касса европейских ночных поездов, которую держат те, кто сам ими ездит. Ни от одного оператора не зависим.',
+  fh1:'Поездка', fl1:'Отправления сегодня', fl2:'Карта маршрутов', fl3:'Велосипеды и собаки', fl4:'Поезд и паром',
+  fh2:'Berth', fl5:'О нас', fl6:'Операторы', fl7:'Ночной журнал',
+  fh3:'Поддержка', fl8:'Изменить бронь', fl9:'Опоздания и возвраты', fl10:'Связаться',
+  fnote:'Вена · Рига · Любляна'
+};
+var EN = {};
+document.querySelectorAll('[data-i18n]').forEach(function (el) { EN[el.dataset.i18n] = el.innerHTML; });
+
+function setLang(l) {
+  var dict = l === 'ru' ? RU : EN;
+  document.querySelectorAll('[data-i18n]').forEach(function (el) {
+    var v = dict[el.dataset.i18n];
+    if (v !== undefined) el.innerHTML = v;
+  });
+  document.documentElement.lang = l;
+  document.documentElement.dataset.lang = l;
+  document.querySelectorAll('.lang button').forEach(function (b) {
+    b.setAttribute('aria-pressed', b.dataset.set === l ? 'true' : 'false');
+  });
+}
+document.querySelectorAll('.lang button').forEach(function (b) {
+  b.addEventListener('click', function () { setLang(b.dataset.set); });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>sonde — passive acoustic monitoring of the Norwegian Sea</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Commissioner:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ─────────────────────────────────────────────────────────────
+   Дизайн-система: Midjourney (refero 225059ac)
+   tokens.css вставлен дословно
+   ───────────────────────────────────────────────────────────── */
+:root {
+  /* Colors */
+  --color-cosmic-void: #06051d;
+  --gradient-cosmic-void: linear-gradient(0deg, rgb(6, 5, 29) 30%, rgb(6, 20, 52));
+  --color-abyssal-blue: #0f1c36;
+  --color-steel-navy: #1d293d;
+  --color-deep-slate: #314062;
+  --color-mist: #cad5e2;
+  --color-fog: #e5e7eb;
+  --color-ash: #2e3038;
+  --color-ghost-white: #ffffff;
+  --color-ice-blue: #ebf8ff;
+  --color-portal-blue: #63b3ed;
+  --color-bioluminescent-green: #004f3b;
+  --color-terminal-amber: #733e0a;
+  --color-crimson-depth: #8b0836;
+  --color-specimen-green: #00bc7d;
+  --color-warning-amber: #f0b100;
+  --color-fault-red: #ff2056;
+
+  /* Typography — Font Families */
+  --font-jetbrains-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-dm-sans: 'DM Sans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* Typography — Scale */
+  --text-caption: 14px;
+  --leading-caption: 1.63;
+  --text-body: 16px;
+  --leading-body: 1.5;
+  --text-heading: 30px;
+  --leading-heading: 1.25;
+
+  /* Typography — Weights */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+
+  /* Spacing */
+  --spacing-unit: 8px;
+  --spacing-8: 8px;
+  --spacing-16: 16px;
+  --spacing-24: 24px;
+  --spacing-32: 32px;
+  --spacing-48: 48px;
+  --spacing-64: 64px;
+
+  /* Layout */
+  --page-max-width: 800px;
+  --section-gap: 64px;
+  --card-padding: 32px;
+  --element-gap: 8-16px;
+
+  /* Border Radius */
+  --radius-lg: 8px;
+  --radius-full: 9999px;
+
+  /* Named Radii */
+  --radius-cards: 8px;
+  --radius-images: 8px;
+  --radius-inputs: 8px;
+  --radius-buttons: 9999px;
+
+  /* Shadows */
+  --shadow-sm: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.1) 0px 2px 4px -2px;
+
+  /* Surfaces */
+  --surface-cosmic-void: #06051d;
+  --surface-deep-navy-gradient: #061434;
+  --surface-abyssal-blue: #0f1c36;
+  --surface-steel-navy: #1d293d;
+  --surface-deep-slate: #314062;
+}
+
+/* Подстановки шрифтов (в системе — JetBrains Mono + DM Sans;
+   DM Sans без кириллицы, взята указанная в DESIGN.md замена класса Inter) */
+:root {
+  --font-prose: 'Commissioner', var(--font-dm-sans);
+  --text-hero: 40px;   /* лого в герое, DESIGN.md: 36–40px */
+  --prose-width: 640px; /* DESIGN.md: body prose max-width внутри колонки 800px */
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--color-cosmic-void);
+  background-image: var(--gradient-cosmic-void);
+  background-attachment: fixed;
+  color: var(--color-mist);
+  font-family: var(--font-jetbrains-mono);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  font-weight: var(--font-weight-regular);
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--color-portal-blue); text-decoration: none; }
+a:hover { color: var(--color-ice-blue); }
+h1, h2, h3 { font-weight: var(--font-weight-regular); margin: 0; }
+p { margin: 0 0 var(--spacing-16); }
+
+/* ── Навигация ───────────────────────────────────────────── */
+.nav {
+  position: sticky; top: 0; z-index: 40;
+  display: flex; align-items: center; gap: var(--spacing-24);
+  padding: var(--spacing-8) var(--spacing-48);
+  background: var(--color-steel-navy);
+  font-size: var(--text-caption);
+}
+.nav .mark { color: var(--color-ghost-white); letter-spacing: .04em; }
+.nav .flat { padding: 0; border-radius: 0; background: rgba(0,0,0,0); color: var(--color-portal-blue); font-size: var(--text-body); }
+.nav .spacer { flex: 1; }
+.pill {
+  display: inline-block;
+  padding: var(--spacing-8) 20px;
+  border-radius: var(--radius-buttons);
+  border: 1px solid rgba(255,255,255,.1);
+  box-shadow: var(--shadow-sm);
+  font-family: var(--font-jetbrains-mono);
+  font-size: var(--text-caption);
+  line-height: 1.2;
+  cursor: pointer;
+}
+.pill-green  { background: rgba(0,79,59,.2);   color: var(--color-specimen-green); }
+.pill-amber  { background: rgba(115,62,10,.2); color: #fefce8; }
+.pill-red    { background: rgba(139,8,54,.2);  color: #fff1f2; }
+.lang { display: flex; gap: var(--spacing-8); }
+.lang button {
+  background: none; border: 0; padding: 0; cursor: pointer;
+  font-family: var(--font-jetbrains-mono); font-size: var(--text-caption);
+  color: #7c8ba3;
+}
+.lang button[aria-pressed="true"] { color: var(--color-ghost-white); }
+
+/* ── Герой ───────────────────────────────────────────────── */
+.hero {
+  position: relative;
+  height: calc(100vh - 40px);
+  min-height: 620px;
+  overflow: hidden;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
+.ascii-wrap {
+  position: absolute; inset: 0; overflow: hidden;
+  -webkit-mask-image: radial-gradient(ellipse 60% 56% at 50% 50%, #000 35%, transparent 94%);
+          mask-image: radial-gradient(ellipse 60% 56% at 50% 50%, #000 35%, transparent 94%);
+}
+#ascii {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  margin: 0;
+  font-family: var(--font-jetbrains-mono);
+  font-size: 11px; line-height: 13px;
+  color: var(--color-mist);
+  opacity: .34;
+  white-space: pre;
+  text-align: left;
+  user-select: none;
+}
+#ascii b { font-weight: 400; color: var(--color-portal-blue); }
+.hero-mid {
+  position: relative; z-index: 2; text-align: center;
+  padding: var(--spacing-48) var(--spacing-64);
+  /* «прогалина» в ASCII-массе, чтобы лого и подпись читались (значение — Cosmic Void) */
+  background: radial-gradient(ellipse 58% 86% at 50% 50%, rgba(6,5,29,.97) 46%, rgba(6,5,29,0) 82%);
+}
+.hero-mark {
+  font-size: var(--text-hero); line-height: 1.1; color: var(--color-ghost-white);
+  letter-spacing: .02em;
+  text-shadow: 0 0 24px var(--color-cosmic-void), 0 0 48px var(--color-cosmic-void);
+}
+.hero-sub {
+  margin-top: var(--spacing-16);
+  font-size: var(--text-caption); line-height: var(--leading-caption);
+  color: var(--color-mist);
+  max-width: 560px;
+  text-shadow: 0 0 16px var(--color-cosmic-void);
+}
+.hero-pills { position: absolute; z-index: 2; bottom: var(--spacing-64); display: flex; gap: var(--spacing-16); }
+
+/* ── Страница ────────────────────────────────────────────── */
+main {
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+  padding: var(--spacing-64) var(--spacing-24) var(--spacing-64);
+  display: flex; flex-direction: column; gap: var(--section-gap);
+}
+section { scroll-margin-top: 64px; }
+h2 {
+  display: flex; align-items: baseline; gap: var(--spacing-8);
+  font-size: var(--text-heading); line-height: var(--leading-heading);
+  color: var(--color-ghost-white);
+  margin-bottom: var(--spacing-24);
+}
+h2 .ico { font-size: var(--text-body); color: var(--color-warning-amber); line-height: 1; }
+.prose { max-width: var(--prose-width); }
+.prose p + p { margin-top: 0; }
+.sans { font-family: var(--font-prose); }
+.cap { font-size: var(--text-caption); line-height: var(--leading-caption); color: var(--color-mist); }
+.dim { color: #7c8ba3; }
+
+/* ── Карточки / поверхности ──────────────────────────────── */
+.card {
+  background: var(--color-steel-navy);
+  border-radius: var(--radius-cards);
+  padding: var(--card-padding);
+}
+.steps { display: flex; flex-direction: column; gap: var(--spacing-16); margin: 0; padding: 0; list-style: none; }
+.steps li { display: grid; grid-template-columns: 40px 1fr; gap: var(--spacing-16); font-size: var(--text-caption); line-height: var(--leading-caption); }
+.steps b { font-weight: var(--font-weight-regular); color: var(--color-warning-amber); }
+.steps .t { color: var(--color-ghost-white); }
+
+/* Сетка «образцов» — 4 колонки, 8px зазор, 8px радиус (DESIGN.md) */
+.grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--spacing-8); }
+.spec {
+  aspect-ratio: 1 / 1;
+  border-radius: var(--radius-images);
+  border: 1px solid rgba(229,231,235,.15);
+  background: var(--color-abyssal-blue);
+  overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+}
+.spec pre {
+  margin: 0; font-family: var(--font-jetbrains-mono);
+  font-size: 7px; line-height: 7px;
+  color: #8fa9d6; opacity: .9; white-space: pre;
+}
+
+/* Таблицы */
+table { width: 100%; border-collapse: collapse; font-size: var(--text-caption); line-height: var(--leading-caption); }
+th, td { text-align: left; padding: var(--spacing-8) var(--spacing-16) var(--spacing-8) 0; border-bottom: 1px solid rgba(229,231,235,.12); vertical-align: baseline; }
+th { color: var(--color-ash); color: #7c8ba3; font-weight: var(--font-weight-regular); }
+td.n { color: var(--color-ghost-white); }
+td.r, th.r { text-align: right; padding-right: 0; }
+
+/* Журнал */
+.log { font-size: var(--text-caption); line-height: 1.9; }
+.log div { display: grid; grid-template-columns: 84px 64px 176px 128px 64px; gap: var(--spacing-16); white-space: nowrap; }
+.log .g { color: var(--color-specimen-green); }
+.log .a { color: var(--color-warning-amber); }
+.log .r { color: var(--color-fault-red); }
+.log .sp { color: var(--color-mist); }
+.log .tm, .log .st, .log .pr { color: #7c8ba3; }
+
+/* Станции */
+.stations { display: flex; flex-direction: column; }
+.stations .row { display: grid; grid-template-columns: 72px 1fr 156px 64px 12px; gap: var(--spacing-16); align-items: baseline; padding: var(--spacing-8) 0; border-bottom: 1px solid rgba(229,231,235,.12); font-size: var(--text-caption); white-space: nowrap; }
+.stations .row:first-child { border-top: 1px solid rgba(229,231,235,.12); }
+.dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
+.dot.on { background: var(--color-specimen-green); }
+.dot.warn { background: var(--color-warning-amber); }
+.dot.off { background: var(--color-fault-red); }
+
+/* Блок кода */
+pre.code {
+  margin: 0; padding: var(--spacing-24);
+  background: var(--color-abyssal-blue);
+  border-radius: var(--radius-cards);
+  font-size: var(--text-caption); line-height: var(--leading-caption);
+  color: var(--color-mist);
+  overflow-x: auto;
+}
+pre.code .k { color: var(--color-specimen-green); }
+pre.code .c { color: #7c8ba3; }
+
+.figs { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-16); }
+.fig .v { font-size: var(--text-heading); line-height: var(--leading-heading); color: var(--color-ghost-white); }
+.fig .l { font-size: var(--text-caption); color: #7c8ba3; line-height: var(--leading-caption); }
+
+footer {
+  max-width: var(--page-max-width); margin: 0 auto;
+  padding: var(--spacing-32) var(--spacing-24) var(--spacing-64);
+  border-top: 1px solid rgba(229,231,235,.12);
+  display: flex; gap: var(--spacing-32); flex-wrap: wrap;
+  font-size: var(--text-caption); line-height: var(--leading-caption); color: #7c8ba3;
+}
+footer .col { display: flex; flex-direction: column; gap: var(--spacing-8); }
+footer .col span:first-child { color: var(--color-mist); }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <span class="mark">sonde</span>
+  <a class="flat" href="#data" data-i18n="nav1">Documentation</a>
+  <span class="spacer"></span>
+  <div class="lang">
+    <button data-set="en" aria-pressed="true">EN</button>
+    <button data-set="ru" aria-pressed="false">RU</button>
+  </div>
+  <a class="pill pill-amber" href="#species" data-i18n="nav2">Explore</a>
+  <a class="pill pill-green" href="#join" data-i18n="nav3">Request access</a>
+  <a class="pill pill-red" href="#data" data-i18n="nav4">Log in</a>
+</nav>
+
+<header class="hero">
+  <div class="ascii-wrap" aria-hidden="true"><pre id="ascii"></pre></div>
+  <div class="hero-mid">
+    <div class="hero-mark">sonde</div>
+    <div class="hero-sub" data-i18n="herosub">Fourteen hydrophones on the seabed of the Norwegian Sea. One model that tells a whale from a ship. Ninety seconds from call to bridge.</div>
+  </div>
+  <div class="hero-pills">
+    <a class="pill pill-green" href="#join" data-i18n="hp1">Request access</a>
+    <a class="pill pill-red" href="#log" data-i18n="hp2">Live log</a>
+    <a class="pill pill-amber" href="#species" data-i18n="hp3">Explore</a>
+  </div>
+</header>
+
+<main>
+
+  <section id="about">
+    <h2><span class="ico">ⓘ</span><span data-i18n="h_about">About</span></h2>
+    <div class="prose">
+      <p data-i18n="ab1">We are a lab of nine people in Bodø, funded by a shipping consortium and the Norwegian Environment Agency. We keep fourteen hydrophones moored on the seabed between Vestfjorden and the Barents shelf, and one model that listens to all of them at the same time.</p>
+      <p data-i18n="ab2">The model does one thing: it separates the sound an animal makes from the sound a ship makes. When a blue whale is calling inside a shipping lane, the bridge of the nearest vessel is told before the watch changes. Everything the network hears is published — see <a href="#data">open data</a>.</p>
+    </div>
+  </section>
+
+  <section id="how">
+    <h2><span class="ico">◎</span><span data-i18n="h_how">How it listens</span></h2>
+    <ul class="steps">
+      <li><b>01</b><span><span class="t" data-i18n="s1t">Hydrophone.</span> <span data-i18n="s1d">24-bit, 96 kHz, moored between 60 and 400 m. Eleven months on one battery pack, recovered by acoustic release each September.</span></span></li>
+      <li><b>02</b><span><span class="t" data-i18n="s2t">Edge.</span> <span data-i18n="s2d">Thirty-second windows become 128-bin mel spectrograms on the mooring itself. Nothing raw ever leaves the seabed.</span></span></li>
+      <li><b>03</b><span><span class="t" data-i18n="s3t">Model.</span> <span data-i18n="s3d">4.1M parameters, nineteen classes, 380 ms per window on a 0.4 W core. It sends four hundred bytes where the recording would be forty megabytes.</span></span></li>
+      <li><b>04</b><span><span class="t" data-i18n="s4t">Surface.</span> <span data-i18n="s4d">Acoustic modem to a surface buoy, Iridium to the shore station. Median delivery from call to our rack: fifty-one seconds.</span></span></li>
+      <li><b>05</b><span><span class="t" data-i18n="s5t">Bridge.</span> <span data-i18n="s5d">Any vessel within twenty kilometres receives an AIS text message with bearing and species. Median call-to-bridge: ninety seconds.</span></span></li>
+    </ul>
+  </section>
+
+  <section id="species">
+    <h2><span class="ico">⚙</span><span data-i18n="h_species">Classes</span></h2>
+    <div class="grid4" id="specgrid"></div>
+    <div style="height:24px"></div>
+    <table>
+      <thead>
+        <tr>
+          <th data-i18n="t_c1">Class</th>
+          <th data-i18n="t_c2">Call</th>
+          <th data-i18n="t_c3">Band</th>
+          <th class="r" data-i18n="t_c4">2026 detections</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="n" data-i18n="r1a">Blue whale</td><td data-i18n="r1b">A–B pulse</td><td>16–20 Hz</td><td class="r">4 118</td></tr>
+        <tr><td class="n" data-i18n="r2a">Fin whale</td><td data-i18n="r2b">20 Hz doublet</td><td>18–28 Hz</td><td class="r">11 902</td></tr>
+        <tr><td class="n" data-i18n="r3a">Humpback</td><td data-i18n="r3b">Song unit</td><td>30 Hz–4 kHz</td><td class="r">27 460</td></tr>
+        <tr><td class="n" data-i18n="r4a">Minke whale</td><td data-i18n="r4b">Boing</td><td>1–4 kHz</td><td class="r">3 087</td></tr>
+        <tr><td class="n" data-i18n="r5a">Sperm whale</td><td data-i18n="r5b">Usual click</td><td>2–20 kHz</td><td class="r">9 344</td></tr>
+        <tr><td class="n" data-i18n="r6a">Orca</td><td data-i18n="r6b">Call type N4</td><td>1–12 kHz</td><td class="r">6 015</td></tr>
+        <tr><td class="n" data-i18n="r7a">Harbour porpoise</td><td data-i18n="r7b">Narrowband click</td><td>130 kHz</td><td class="r">18 771</td></tr>
+        <tr><td class="n" data-i18n="r8a">Bearded seal</td><td data-i18n="r8b">Descending trill</td><td>0.1–6 kHz</td><td class="r">2 236</td></tr>
+        <tr><td class="n" data-i18n="r9a">Vessel</td><td data-i18n="r9b">Cavitation</td><td>10 Hz–2 kHz</td><td class="r">62 550</td></tr>
+        <tr><td class="n" data-i18n="r10a">Seismic airgun</td><td data-i18n="r10b">Shot, 10 s cycle</td><td>5–120 Hz</td><td class="r">1 409</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="log">
+    <h2><span class="ico">▣</span><span data-i18n="h_log">Detection log</span></h2>
+    <div class="prose">
+      <p class="cap" data-i18n="logn">The shore station writes one line per accepted detection. Green is an animal, amber is a vessel, red is an airgun shot. Below is the tail of the file, replayed.</p>
+    </div>
+    <div class="log" id="logbox"></div>
+  </section>
+
+  <section id="stations">
+    <h2><span class="ico">⚑</span><span data-i18n="h_st">Stations</span></h2>
+    <div class="stations">
+      <div class="row"><span class="dim">ST-01</span><span data-i18n="st1">Vestfjorden, sill</span><span class="dim">68.09 N 14.71 E</span><span class="dim">112 m</span><span class="dot on"></span></div>
+      <div class="row"><span class="dim">ST-03</span><span data-i18n="st3">Røst bank, west slope</span><span class="dim">67.42 N 11.98 E</span><span class="dim">340 m</span><span class="dot on"></span></div>
+      <div class="row"><span class="dim">ST-06</span><span data-i18n="st6">Lofoten lane, mid-channel</span><span class="dim">68.61 N 13.02 E</span><span class="dim">204 m</span><span class="dot on"></span></div>
+      <div class="row"><span class="dim">ST-08</span><span data-i18n="st8">Andfjorden, canyon head</span><span class="dim">69.15 N 16.04 E</span><span class="dim">398 m</span><span class="dot warn"></span></div>
+      <div class="row"><span class="dim">ST-11</span><span data-i18n="st11">Tromsøflaket, north edge</span><span class="dim">71.02 N 19.44 E</span><span class="dim">276 m</span><span class="dot on"></span></div>
+      <div class="row"><span class="dim">ST-14</span><span data-i18n="st14">Bjørnøya trench</span><span class="dim">74.31 N 19.02 E</span><span class="dim">385 m</span><span class="dot off"></span></div>
+    </div>
+    <div style="height:24px"></div>
+    <div class="prose"><p class="cap" data-i18n="stn">ST-08 is on battery reserve until the September recovery. ST-14 has been silent since 2 August; the release is scheduled for the same cruise.</p></div>
+  </section>
+
+  <section id="alerts">
+    <h2><span class="ico">↯</span><span data-i18n="h_al">Ship alerts</span></h2>
+    <div class="prose">
+      <p data-i18n="al1">Nineteen operators subscribe. The message that reaches the bridge has three fields: species, bearing, distance. There is no dashboard to open and nothing to install — it arrives on equipment already required by law.</p>
+      <p data-i18n="al2">Slowing to ten knots inside an alert box is voluntary. In 2026 it was chosen in three of four alerts, which is the number we care about most.</p>
+    </div>
+    <div style="height:24px"></div>
+    <div class="figs">
+      <div class="fig"><div class="v">90 s</div><div class="l" data-i18n="f1">median call to bridge</div></div>
+      <div class="fig"><div class="v">76%</div><div class="l" data-i18n="f2">alerts answered by slowing</div></div>
+      <div class="fig"><div class="v">0.4 W</div><div class="l" data-i18n="f3">model power on the mooring</div></div>
+    </div>
+  </section>
+
+  <section id="data">
+    <h2><span class="ico">⌗</span><span data-i18n="h_data">Open data</span></h2>
+    <div class="prose">
+      <p data-i18n="da1">Every accepted detection is public under CC-BY 4.0 within one hour, including the ones the model got wrong and we later corrected. Audio clips of the animal classes are released in the annual archive; vessel audio is not.</p>
+    </div>
+    <div style="height:16px"></div>
+<pre class="code"><span class="c"># <span data-i18n="da2">last week at the Lofoten lane station</span></span>
+<span class="k">GET</span> https://api.sonde.no/v1/detections
+      ?station=ST-06&amp;since=2026-08-06&amp;class=blue_whale
+
+{ "station": "ST-06", "t": "2026-08-12T04:12:07Z",
+  "class": "blue_whale", "p": 0.97, "band_hz": [16, 20],
+  "bearing_deg": 214, "range_km": 8.1, "reviewed": true }</pre>
+  </section>
+
+  <section id="join">
+    <h2><span class="ico">✎</span><span data-i18n="h_join">Working with us</span></h2>
+    <div class="prose">
+      <p data-i18n="jo1">We are nine: four on acoustics, three on the model, one on the cruises, one on the books. We hire twice a year and read everything. The mooring work is cold, wet and non-negotiable — everyone does one cruise.</p>
+      <p data-i18n="jo2">Operators, ports and institutes can request the alert feed. Write to <a href="#join">station@sonde.no</a> and say which waters you work in.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="col">
+    <span data-i18n="fa">sonde</span>
+    <span data-i18n="fb">Shore station, Bodø</span>
+    <span data-i18n="fc">Norwegian Sea · since 2021</span>
+  </div>
+  <div class="col">
+    <span data-i18n="fd">Network</span>
+    <a href="#stations" data-i18n="fe">Stations</a>
+    <a href="#species" data-i18n="ff">Classes</a>
+    <a href="#log" data-i18n="fg">Detection log</a>
+  </div>
+  <div class="col">
+    <span data-i18n="fh">Data</span>
+    <a href="#data" data-i18n="fi">API</a>
+    <a href="#data" data-i18n="fj">Annual archive</a>
+    <a href="#alerts" data-i18n="fk">Alert feed</a>
+  </div>
+  <div class="col">
+    <span data-i18n="fl">Contact</span>
+    <a href="#join" data-i18n="fm">station@sonde.no</a>
+    <span data-i18n="fn">CC-BY 4.0</span>
+  </div>
+</footer>
+
+<script>
+/* ── ASCII-масса героя: генеративный текст вместо изображения ───────────── */
+(function () {
+  var el = document.getElementById('ascii');
+  var wrap = el && el.parentNode;
+  if (!el) return;
+  var POOL = 'blue whale 18Hz fin doublet humpback unit minke boing sperm click orca N4 porpoise 130k bearded trill cavitation airgun shot bearing range ST-06 ST-11 p=0.9 ';
+  var CH = POOL.replace(/ /g, '·').split('');
+  var cols = 0, rows = 0, t = 0, seed = 0;
+  function measure() {
+    var probe = document.createElement('span');
+    probe.style.cssText = 'position:absolute;visibility:hidden;font:11px/13px ' + getComputedStyle(el).fontFamily;
+    probe.textContent = 'M';
+    document.body.appendChild(probe);
+    var w = probe.getBoundingClientRect().width || 6.6;
+    probe.remove();
+    cols = Math.floor(wrap.clientWidth / w) + 2;
+    rows = Math.floor(wrap.clientHeight / 13) + 2;
+  }
+  function frame() {
+    var cx = cols / 2, cy = rows / 2, out = '', scan = (t * 0.9) % (cols + 40) - 20;
+    for (var y = 0; y < rows; y++) {
+      var line = '';
+      for (var x = 0; x < cols; x++) {
+        var dx = (x - cx) / (cols * 0.46), dy = (y - cy) / (rows * 0.44);
+        var r = dx * dx + dy * dy;
+        if (r > 1) { line += ' '; continue; }
+        var wave = Math.sin(x * 0.21 + y * 0.13 + t * 0.06) + Math.sin((x - y) * 0.09 - t * 0.04);
+        if (wave < -0.55 - r) { line += ' '; continue; }
+        var i = ((x * 31 + y * 17 + ((t / 9) | 0) * 7 + seed) >>> 0) % CH.length;
+        var c = CH[i];
+        if (c === '·' && wave > 1.1) c = ' ';
+        if (Math.abs(x - scan) < 1.2 && c !== ' ') line += '<b>' + c + '</b>';
+        else line += c;
+      }
+      out += line + '\n';
+    }
+    el.innerHTML = out;
+  }
+  measure(); frame();
+  window.addEventListener('resize', function () { measure(); frame(); });
+  setInterval(function () { t += 1; if (t % 37 === 0) seed++; frame(); }, 110);
+})();
+
+/* ── Сетка «образцов»: ASCII-портреты классов вместо фотографий ─────────── */
+(function () {
+  var grid = document.getElementById('specgrid');
+  if (!grid) return;
+  /* Силуэты собираются из примитивов и растеризуются в символы — тот же
+     генеративный текст, что и в герое, только неподвижный. */
+  function ell(cx, cy, rx, ry) {
+    return function (x, y) { var a = (x - cx) / rx, b = (y - cy) / ry; return a * a + b * b <= 1; };
+  }
+  function tri(ax, ay, bx, by, cx, cy) {
+    function s(px, py, qx, qy, rx, ry) { return (px - rx) * (qy - ry) - (qx - rx) * (py - ry); }
+    return function (x, y) {
+      var d1 = s(x, y, ax, ay, bx, by), d2 = s(x, y, bx, by, cx, cy), d3 = s(x, y, cx, cy, ax, ay);
+      var neg = (d1 < 0) || (d2 < 0) || (d3 < 0), pos = (d1 > 0) || (d2 > 0) || (d3 > 0);
+      return !(neg && pos);
+    };
+  }
+  var SHAPES = [
+    /* синий кит */ [ell(.44,.50,.34,.105), tri(.05,.50,.26,.43,.26,.57), tri(.70,.50,.90,.475,.90,.525),
+                     tri(.86,.50,1.0,.33,1.0,.45), tri(.86,.50,1.0,.67,1.0,.55),
+                     tri(.62,.40,.70,.30,.72,.41), tri(.34,.57,.44,.73,.47,.59)],
+    /* финвал   */ [ell(.44,.50,.33,.115), tri(.06,.50,.26,.43,.26,.57), tri(.70,.50,.90,.475,.90,.525),
+                     tri(.86,.50,1.0,.32,1.0,.45), tri(.86,.50,1.0,.68,1.0,.55),
+                     tri(.60,.39,.69,.24,.73,.41), tri(.33,.58,.42,.75,.46,.60)],
+    /* горбач   */ [ell(.46,.48,.30,.135), tri(.10,.48,.28,.40,.28,.58), tri(.72,.48,.90,.455,.90,.505),
+                     tri(.86,.48,1.0,.30,1.0,.44), tri(.86,.48,1.0,.66,1.0,.53),
+                     tri(.58,.36,.66,.27,.70,.38), tri(.36,.56,.06,.86,.26,.60), tri(.46,.58,.30,.88,.44,.62)],
+    /* полосатик*/ [ell(.46,.50,.30,.095), tri(.10,.50,.28,.44,.28,.56), tri(.70,.50,.90,.478,.90,.522),
+                     tri(.87,.50,1.0,.36,1.0,.46), tri(.87,.50,1.0,.64,1.0,.54),
+                     tri(.56,.41,.64,.22,.70,.42), tri(.36,.56,.46,.72,.49,.58)],
+    /* кашалот  */ [ell(.24,.44,.21,.175), ell(.56,.50,.30,.10), tri(.74,.50,.92,.478,.92,.522),
+                     tri(.88,.50,1.0,.34,1.0,.46), tri(.88,.50,1.0,.66,1.0,.54),
+                     tri(.66,.41,.74,.34,.78,.42), tri(.40,.58,.50,.74,.53,.60)],
+    /* косатка  */ [ell(.46,.54,.31,.12), tri(.09,.54,.28,.47,.28,.61), tri(.72,.54,.90,.518,.90,.562),
+                     tri(.87,.54,1.0,.38,1.0,.50), tri(.87,.54,1.0,.70,1.0,.58),
+                     tri(.42,.44,.50,.05,.60,.45), tri(.36,.62,.48,.80,.51,.64)],
+    /* свинья   */ [ell(.50,.52,.24,.095), tri(.20,.52,.34,.46,.34,.58), tri(.70,.52,.86,.50,.86,.545),
+                     tri(.83,.52,.96,.40,.96,.49), tri(.83,.52,.96,.64,.96,.555),
+                     tri(.46,.43,.56,.28,.62,.44), tri(.42,.58,.52,.70,.55,.60)],
+    /* морской заяц */ [ell(.46,.52,.27,.155), ell(.17,.44,.115,.10), tri(.68,.52,.96,.33,.96,.47),
+                     tri(.68,.52,.96,.71,.96,.57), tri(.38,.63,.54,.80,.58,.66), tri(.30,.40,.44,.30,.46,.42)]
+  ];
+  var COLS = 46, ROWS = 23, DENS = [' ', ':', '+', '*', '#'];
+  SHAPES.forEach(function (parts) {
+    var out = '';
+    for (var y = 0; y < ROWS; y++) {
+      for (var x = 0; x < COLS; x++) {
+        var hits = 0;
+        for (var sy = 0; sy < 2; sy++) for (var sx = 0; sx < 2; sx++) {
+          var nx = (x + (sx + .5) / 2) / COLS, ny = (y + (sy + .5) / 2) / ROWS, inside = false;
+          for (var k = 0; k < parts.length; k++) if (parts[k](nx, ny)) { inside = true; break; }
+          if (inside) hits++;
+        }
+        out += DENS[hits];
+      }
+      out += '\n';
+    }
+    var d = document.createElement('div');
+    d.className = 'spec';
+    var p = document.createElement('pre');
+    p.textContent = out.replace(/\s+$/, '');
+    d.appendChild(p);
+    grid.appendChild(d);
+  });
+})();
+
+/* ── Журнал обнаружений: хвост файла, проигранный заново ────────────────── */
+(function () {
+  var box = document.getElementById('logbox');
+  if (!box) return;
+  var ROWS = [
+    ['04:12:07', 'ST-06', 'blue whale',       'g', '16-20 Hz',  'p=0.97'],
+    ['04:12:41', 'ST-06', 'vessel',           'a', 'cavitation','p=0.99'],
+    ['04:19:55', 'ST-11', 'humpback',         'g', 'song unit', 'p=0.93'],
+    ['04:24:02', 'ST-03', 'sperm whale',      'g', 'usual click','p=0.98'],
+    ['04:31:18', 'ST-01', 'harbour porpoise', 'g', '130 kHz',   'p=0.91'],
+    ['04:38:44', 'ST-06', 'fin whale',        'g', '20 Hz x2',  'p=0.96'],
+    ['04:40:12', 'ST-08', 'seismic airgun',   'r', 'shot 10 s', 'p=0.99'],
+    ['04:47:30', 'ST-11', 'orca',             'g', 'call N4',   'p=0.88'],
+    ['04:52:09', 'ST-03', 'vessel',           'a', 'cavitation','p=0.99'],
+    ['05:01:26', 'ST-06', 'blue whale',       'g', '16-20 Hz',  'p=0.95'],
+    ['05:08:53', 'ST-01', 'bearded seal',     'g', 'desc. trill','p=0.90'],
+    ['05:15:11', 'ST-11', 'minke whale',      'g', 'boing',     'p=0.86']
+  ];
+  var LBL = { g: 'sp', a: 'sp', r: 'sp' };
+  var i = 0;
+  function add() {
+    var r = ROWS[i % ROWS.length];
+    var d = document.createElement('div');
+    d.innerHTML = '<span class="tm">' + r[0] + '</span>' +
+                  '<span class="st">' + r[1] + '</span>' +
+                  '<span class="' + r[3] + '">' + r[2] + '</span>' +
+                  '<span class="sp">' + r[4] + '</span>' +
+                  '<span class="pr">' + r[5] + '</span>';
+    box.appendChild(d);
+    while (box.children.length > 9) box.removeChild(box.firstChild);
+    i++;
+  }
+  for (var k = 0; k < 9; k++) add();
+  setInterval(add, 2600);
+})();
+
+/* ── RU/EN. Английский — исходный, русский — перевод под него ───────────── */
+var RU = {
+  nav1:'Документация', nav2:'Смотреть', nav3:'Запросить доступ', nav4:'Войти',
+  herosub:'Четырнадцать гидрофонов на дне Норвежского моря. Одна модель, которая отличает кита от судна. Девяносто секунд от крика до мостика.',
+  hp1:'Запросить доступ', hp2:'Живой журнал', hp3:'Смотреть',
+  h_about:'О проекте',
+  ab1:'Нас девять человек в Будё; проект оплачивают судоходный консорциум и Норвежское агентство по охране среды. На дне между Вестфьордом и Баренцевым шельфом стоят четырнадцать гидрофонов, и одна модель слушает их все одновременно.',
+  ab2:'Модель делает одно: отделяет звук животного от звука судна. Если синий кит кричит внутри судоходного коридора, мостик ближайшего судна узнаёт об этом до смены вахты. Всё, что слышит сеть, публикуется — см. <a href="#data">открытые данные</a>.',
+  h_how:'Как это слушает',
+  s1t:'Гидрофон.', s1d:'24 бита, 96 кГц, постановка на глубине от 60 до 400 м. Одиннадцать месяцев на одном комплекте батарей, подъём акустическим размыкателем каждый сентябрь.',
+  s2t:'На дне.', s2d:'Тридцатисекундные окна прямо на постановке превращаются в мел-спектрограммы на 128 полос. Сырой звук со дна не уходит никогда.',
+  s3t:'Модель.', s3d:'4,1 млн параметров, девятнадцать классов, 380 мс на окно при 0,4 Вт. Наверх уходит четыреста байт там, где запись весила бы сорок мегабайт.',
+  s4t:'Поверхность.', s4d:'Акустический модем до буя, «Иридиум» до береговой станции. Медиана доставки от крика до нашей стойки — пятьдесят одна секунда.',
+  s5t:'Мостик.', s5d:'Любое судно в двадцати километрах получает текст по АИС: класс, пеленг, дистанция. Медиана «крик — мостик»: девяносто секунд.',
+  h_species:'Классы',
+  t_c1:'Класс', t_c2:'Сигнал', t_c3:'Полоса', t_c4:'Обнаружений за 2026',
+  r1a:'Синий кит', r1b:'Импульс A–B',
+  r2a:'Финвал', r2b:'Дублет 20 Гц',
+  r3a:'Горбач', r3b:'Единица песни',
+  r4a:'Малый полосатик', r4b:'«Боинг»',
+  r5a:'Кашалот', r5b:'Обычный щелчок',
+  r6a:'Косатка', r6b:'Крик типа N4',
+  r7a:'Морская свинья', r7b:'Узкополосный щелчок',
+  r8a:'Морской заяц', r8b:'Нисходящая трель',
+  r9a:'Судно', r9b:'Кавитация',
+  r10a:'Сейсмическая пушка', r10b:'Выстрел, цикл 10 с',
+  h_log:'Журнал обнаружений',
+  logn:'Береговая станция пишет по строке на каждое принятое обнаружение. Зелёное — животное, янтарное — судно, красное — выстрел пневмопушки. Ниже — хвост файла, проигранный заново.',
+  h_st:'Станции',
+  st1:'Вестфьорд, порог', st3:'Банка Рёст, западный склон', st6:'Лофотенский коридор, середина',
+  st8:'Анфьорд, вершина каньона', st11:'Тромсёфлакет, северная кромка', st14:'Желоб Медвежьего',
+  stn:'ST-08 живёт на резерве батарей до сентябрьского подъёма. ST-14 молчит со 2 августа; размыкатель поднимут в тот же рейс.',
+  h_al:'Оповещения судам',
+  al1:'Подписаны девятнадцать операторов. В сообщении на мостик три поля: класс, пеленг, дистанция. Нечего открывать и нечего ставить — оно приходит на аппаратуру, которая и так обязательна по правилам.',
+  al2:'Сбросить до десяти узлов внутри рамки оповещения — дело добровольное. В 2026 году так поступали в трёх случаях из четырёх, и это та цифра, которая нам важнее прочих.',
+  f1:'медиана «крик — мостик»', f2:'оповещений, где сбросили ход', f3:'потребление модели на постановке',
+  h_data:'Открытые данные',
+  da1:'Каждое принятое обнаружение становится общедоступным по CC-BY 4.0 в течение часа — включая те, где модель ошиблась, а мы потом поправили. Аудио по классам животных выкладывается в годовом архиве; аудио судов — нет.',
+  da2:'последняя неделя на станции Лофотенского коридора',
+  h_join:'Работа с нами',
+  jo1:'Нас девять: четверо на акустике, трое на модели, один на рейсах, один на бухгалтерии. Мы набираем дважды в год и читаем всё. Работа с постановками холодная, мокрая и не обсуждается — в рейс идёт каждый.',
+  jo2:'Операторы, порты и институты могут запросить ленту оповещений. Напишите на <a href="#join">station@sonde.no</a> и укажите, в каких водах работаете.',
+  fa:'sonde', fb:'Береговая станция, Будё', fc:'Норвежское море · с 2021 года',
+  fd:'Сеть', fe:'Станции', ff:'Классы', fg:'Журнал обнаружений',
+  fh:'Данные', fi:'API', fj:'Годовой архив', fk:'Лента оповещений',
+  fl:'Связь', fm:'station@sonde.no', fn:'CC-BY 4.0'
+};
+var EN = {};
+document.querySelectorAll('[data-i18n]').forEach(function (el) { EN[el.dataset.i18n] = el.innerHTML; });
+
+function setLang(l) {
+  var dict = l === 'ru' ? RU : EN;
+  document.querySelectorAll('[data-i18n]').forEach(function (el) {
+    var v = dict[el.dataset.i18n];
+    if (v !== undefined) el.innerHTML = v;
+  });
+  document.documentElement.lang = l;
+  document.documentElement.dataset.lang = l;
+  document.querySelectorAll('.lang button').forEach(function (b) {
+    b.setAttribute('aria-pressed', b.dataset.set === l ? 'true' : 'false');
+  });
+}
+document.querySelectorAll('.lang button').forEach(function (b) {
+  b.addEventListener('click', function () { setLang(b.dataset.set); });
+});
+</script>
+</body>
+</html>

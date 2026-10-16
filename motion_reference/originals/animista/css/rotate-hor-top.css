@@ -1,0 +1,3 @@
+/* Original keyframes: Animista, Ana Travas. https://animista.net/play/basic/rotate/rotate-hor-top */
+.rotate-hor-top{animation:rotate-hor-top 0.5s cubic-bezier(.645,.045,.355,1) 0s 1 normal both;}
+@keyframes rotate-hor-top{0%{-webkit-transform:rotateX(0);transform:rotateX(0);-webkit-transform-origin:top;transform-origin:top}to{-webkit-transform:rotateX(-360deg);transform:rotateX(-360deg);-webkit-transform-origin:top;transform-origin:top}}

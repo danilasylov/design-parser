@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Keel — Uneven income, evened out every Friday</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@900&family=Playfair+Display:ital,wght@0,600;1,400;1,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ───────── ДИЗАЙН-СИСТЕМА EMPOWER — tokens.css ДОСЛОВНО ───────── */
+:root {
+  /* Colors */
+  --color-chartreuse-pulse: #e4e24e;
+  --color-lemon-cream: #faf9b6;
+  --color-midnight-ink: #100f0f;
+  --color-obsidian: #000000;
+  --color-bone-paper: #fffdf6;
+  --color-pure-white: #ffffff;
+  --color-stone: #64635c;
+  --color-charcoal: #3a3a3a;
+  --color-iron: #262525;
+  --color-smoke: #171616;
+
+  /* Typography — Font Families */
+  --font-gravity: 'Gravity', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-empowerserif: 'EmpowerSerif', ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  --font-gtamericaextendedregular: 'GTAmericaExtendedRegular', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-gtamericaexpandedmedium: 'GTAmericaExpandedMedium', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-gtamericaextendedmedium: 'GTAmericaExtendedMedium', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* Typography — Scale */
+  --text-caption: 11px;
+  --leading-caption: 1.5;
+  --tracking-caption: 1.1px;
+  --text-body: 16px;
+  --leading-body: 1.5;
+  --tracking-body: -0.304px;
+  --text-body-lg: 18px;
+  --leading-body-lg: 1.48;
+  --tracking-body-lg: -0.342px;
+  --text-subheading: 21px;
+  --leading-subheading: 1.38;
+  --tracking-subheading: -0.63px;
+  --text-heading-sm: 26px;
+  --leading-heading-sm: 1.33;
+  --tracking-heading-sm: -0.78px;
+  --text-heading: 36px;
+  --leading-heading: 1.11;
+  --tracking-heading: -0.252px;
+  --text-display: 96px;
+  --leading-display: 1;
+  --tracking-display: -2.016px;
+  --text-display-xl: 205px;
+  --leading-display-xl: 1;
+  --tracking-display-xl: -1.23px;
+
+  /* Typography — Weights */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-black: 900;
+
+  /* Spacing */
+  --spacing-unit: 8px;
+  --spacing-8: 8px;
+  --spacing-16: 16px;
+  --spacing-24: 24px;
+  --spacing-32: 32px;
+  --spacing-40: 40px;
+  --spacing-48: 48px;
+  --spacing-64: 64px;
+  --spacing-80: 80px;
+  --spacing-96: 96px;
+  --spacing-104: 104px;
+  --spacing-112: 112px;
+  --spacing-128: 128px;
+
+  /* Layout */
+  --page-max-width: 1200px;
+  --section-gap: 64px;
+  --card-padding: 24px;
+  --element-gap: 16px;
+
+  /* Border Radius */
+  --radius-2xl: 16px;
+  --radius-3xl: 24px;
+  --radius-3xl-2: 32px;
+  --radius-3xl-3: 40px;
+
+  /* Named Radii */
+  --radius-tags: 9999px;
+  --radius-cards: 24px;
+  --radius-inputs: 16px;
+  --radius-buttons: 9999px;
+  --radius-productcards: 40px;
+
+  /* Surfaces */
+  --surface-smoke-stage: #171616;
+  --surface-bone-canvas: #fffdf6;
+  --surface-white-card: #ffffff;
+  --surface-lemon-wash: #faf9b6;
+  --surface-chartreuse: #e4e24;
+}
+
+/* ───────── ПОДСТАНОВКИ (в системе шрифты кастомные и без кириллицы) ─────────
+   Gravity 900 → Unbounded 900 (геометрический дисплей, есть кириллица; DESIGN.md
+   предлагает Mona Sans Black / Druk — оба без кириллицы).
+   EmpowerSerif → Playfair Display (высококонтрастная антиква с курсивом и кириллицей;
+   предложенные GT Super / Tiempos / Reckless кириллицы не имеют).
+   GTAmericaExtended* / Expanded → Inter (прямо назван подстановкой в DESIGN.md).
+   --surface-chartreuse в tokens.css содержит опечатку (#e4e24 — 5 знаков), поэтому
+   в правилах используется корректный --color-chartreuse-pulse. */
+:root {
+  --font-display-sub: 'Unbounded', var(--font-gravity);
+  --font-serif-sub: 'Playfair Display', var(--font-empowerserif);
+  --font-body-sub: 'Inter', var(--font-gtamericaextendedregular);
+  --font-chrome-sub: 'Inter', var(--font-gtamericaexpandedmedium);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--surface-bone-canvas);
+  color: var(--color-midnight-ink);
+  font-family: var(--font-body-sub);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  letter-spacing: var(--tracking-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap {
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+  padding-left: var(--spacing-40);
+  padding-right: var(--spacing-40);
+}
+
+/* ───────── Полосы-сцены: тёмная и костяная, без градиентов ───────── */
+.stage-dark { background: var(--surface-smoke-stage); color: var(--color-bone-paper); }
+.stage-bone { background: var(--surface-bone-canvas); color: var(--color-midnight-ink); }
+
+section { padding-top: var(--spacing-112); padding-bottom: var(--spacing-112); }
+
+/* ───────── Типографика ───────── */
+.eyebrow {
+  font-family: var(--font-chrome-sub);
+  font-size: var(--text-caption);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--leading-caption);
+  letter-spacing: .10em;
+  text-transform: uppercase;
+  color: var(--color-stone);
+  margin-bottom: var(--spacing-24);
+}
+.stage-dark .eyebrow { color: var(--color-stone); }
+
+h1.display {
+  font-family: var(--font-display-sub);
+  font-weight: var(--font-weight-black);
+  font-size: var(--text-display);
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-display);
+  text-align: center;
+}
+h1.display em {
+  font-family: var(--font-serif-sub);
+  font-weight: 400;
+  font-style: italic;
+  letter-spacing: -0.006em;
+  white-space: nowrap; /* серифная вставка не должна разрываться переносом */
+}
+h2 {
+  font-family: var(--font-body-sub);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--text-heading);
+  line-height: var(--leading-heading);
+  letter-spacing: var(--tracking-heading);
+  max-width: 20ch;
+}
+h2 em {
+  font-family: var(--font-serif-sub);
+  font-weight: 400;
+  font-style: italic;
+}
+h3 {
+  font-family: var(--font-body-sub);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--text-heading-sm);
+  line-height: var(--leading-heading-sm);
+  letter-spacing: var(--tracking-heading-sm);
+}
+.lede {
+  font-size: var(--text-body-lg);
+  line-height: var(--leading-body-lg);
+  letter-spacing: var(--tracking-body-lg);
+  max-width: 54ch;
+}
+.sub { font-size: var(--text-subheading); line-height: var(--leading-subheading); letter-spacing: var(--tracking-subheading); }
+.muted { color: var(--color-stone); }
+.on-dark-muted { color: var(--color-bone-paper); opacity: .65; }
+
+/* ───────── Кнопки: только пилюли ───────── */
+.btn {
+  display: inline-block;
+  font-family: var(--font-chrome-sub);
+  font-size: 13px;
+  font-weight: var(--font-weight-medium);
+  letter-spacing: -0.019em;
+  padding: 12px 20px;
+  border-radius: var(--radius-buttons);
+  text-decoration: none;
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  transition: opacity .15s ease;
+}
+.btn:hover { opacity: .82; }
+.btn-pulse { background: var(--color-chartreuse-pulse); color: var(--color-midnight-ink); }
+.btn-ghost { background: transparent; color: var(--color-midnight-ink); border-color: var(--color-midnight-ink); }
+.stage-dark .btn-ghost { color: var(--color-bone-paper); border-color: var(--color-bone-paper); }
+.btn-lg { font-size: 16px; padding: 16px 32px; letter-spacing: -0.023em; }
+
+/* ───────── Навигация ───────── */
+header {
+  position: sticky; top: 0; z-index: 50;
+  background: var(--surface-smoke-stage);
+  border-bottom: 1px solid transparent;
+}
+/* Система: панель прозрачна над тёмной сценой и получает волосяную границу
+   при переходе на светлую. Меняются только цвета — ширина и высота те же. */
+header.light { background: var(--surface-bone-canvas); border-bottom-color: var(--color-midnight-ink); }
+header.light .logo,
+header.light .nav-links a { color: var(--color-midnight-ink); }
+header.light .nav-links a:hover { color: var(--color-stone); }
+header.light .lang { border-color: var(--color-midnight-ink); }
+header.light .lang button { color: var(--color-midnight-ink); }
+header.light .lang button[aria-pressed="true"] { background: var(--color-midnight-ink); color: var(--color-bone-paper); }
+header.light .btn-ghost { color: var(--color-midnight-ink); border-color: var(--color-midnight-ink); }
+.nav {
+  display: flex; align-items: center; justify-content: space-between;
+  padding-top: var(--spacing-24); padding-bottom: var(--spacing-24);
+}
+.logo {
+  font-family: var(--font-serif-sub);
+  font-style: italic;
+  font-weight: 600;
+  font-size: 32px;
+  letter-spacing: -0.02em;
+  color: var(--color-bone-paper);
+  text-decoration: none;
+}
+.nav-links { display: flex; gap: var(--spacing-32); list-style: none; }
+.nav-links a {
+  font-family: var(--font-chrome-sub);
+  font-size: 13px; font-weight: var(--font-weight-medium);
+  letter-spacing: .10em; text-transform: uppercase;
+  color: var(--color-bone-paper); text-decoration: none;
+}
+.nav-links a:hover { color: var(--color-chartreuse-pulse); }
+.nav-right { display: flex; align-items: center; gap: var(--spacing-16); }
+
+.lang {
+  display: inline-flex; border: 1.5px solid var(--color-bone-paper);
+  border-radius: var(--radius-tags); overflow: hidden;
+}
+.lang button {
+  font-family: var(--font-chrome-sub);
+  font-size: 11px; font-weight: var(--font-weight-medium);
+  letter-spacing: .10em; text-transform: uppercase;
+  padding: 7px 14px; border: 0; background: transparent;
+  color: var(--color-bone-paper); cursor: pointer;
+}
+.lang button[aria-pressed="true"] { background: var(--color-bone-paper); color: var(--color-midnight-ink); }
+
+/* ───────── Герой ───────── */
+.hero-stage { position: relative; overflow: hidden; }
+.hero { padding-top: var(--spacing-80); padding-bottom: var(--spacing-96); position: relative; z-index: 1; }
+/* Заголовок держится в центральной колонке, мозаика — в двух внешних:
+   в референсе портреты фланкируют заголовок, а не проезжают под ним. */
+.hero .display { color: var(--color-bone-paper); max-width: 880px; margin: 0 auto; }
+.hero-actions { text-align: center; margin-top: var(--spacing-48); }
+.hero-login { margin-top: var(--spacing-24); font-size: var(--text-body); color: var(--color-bone-paper); opacity: .65; }
+.hero-login a { color: var(--color-chartreuse-pulse); }
+
+.trust {
+  display: flex; align-items: center; justify-content: center; gap: var(--spacing-8);
+  margin-top: var(--spacing-32);
+  font-family: var(--font-chrome-sub); font-size: 13px; color: var(--color-bone-paper);
+}
+.trust .stars { display: inline-flex; gap: 3px; }
+.trust .stars i {
+  width: 16px; height: 16px; display: block;
+  background: var(--color-chartreuse-pulse); border-radius: 2px;
+}
+
+/* Мозаика: в системе это документальные портреты с денежными пилюлями.
+   Файл самодостаточный, фотографий нет — портреты заменены плитами Iron
+   (глубина строится ступенями поверхностей, как требует система). */
+.mosaic { position: absolute; inset: 0; pointer-events: none; }
+.tile {
+  position: absolute;
+  background: var(--color-iron);
+  border-radius: var(--radius-2xl);
+  border: 1px solid var(--color-charcoal);
+}
+.tile-cap {
+  position: absolute; left: 0; top: calc(100% + 10px);
+  font-family: var(--font-body-sub); font-size: 12px;
+  color: var(--color-bone-paper); opacity: .6; white-space: nowrap;
+}
+.tile-cap em { font-family: var(--font-serif-sub); font-style: italic; opacity: 1; }
+.t1 { left: 24px;  top: 96px;  width: 132px; height: 168px; }
+.t2 { right: 24px; top: 96px;  width: 132px; height: 168px; }
+.t3 { left: 96px;  top: 330px; width: 152px; height: 124px; }
+.t4 { right: 96px; top: 344px; width: 132px; height: 116px; }
+.t5 { left: 20px;  top: 540px; width: 124px; height: 134px; }
+.t6 { right: 12px; top: 520px; width: 150px; height: 150px; }
+
+.money {
+  position: absolute; left: 12px; bottom: 12px;
+  display: inline-flex; align-items: center; gap: 7px;
+  background: var(--color-pure-white); color: var(--color-midnight-ink);
+  border-radius: var(--radius-tags); padding: 5px 12px 5px 5px;
+  font-family: var(--font-body-sub); font-size: 12px; font-weight: var(--font-weight-semibold);
+  letter-spacing: -0.02em;
+}
+.money b {
+  width: 20px; height: 20px; border-radius: 50%;
+  background: var(--color-chartreuse-pulse);
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: var(--font-weight-semibold);
+}
+
+/* ───────── Табы продуктов ───────── */
+.tabs { display: flex; gap: var(--spacing-8); margin-top: var(--spacing-40); flex-wrap: wrap; }
+.tab {
+  font-family: var(--font-chrome-sub);
+  font-size: var(--text-caption); font-weight: var(--font-weight-medium);
+  letter-spacing: .10em; text-transform: uppercase;
+  padding: 11px 20px; border-radius: var(--radius-tags);
+  border: 1px solid var(--color-midnight-ink);
+  background: transparent; color: var(--color-midnight-ink);
+  cursor: pointer;
+}
+.tab[aria-selected="true"] { background: var(--color-midnight-ink); color: var(--color-bone-paper); }
+
+.panel { display: none; margin-top: var(--spacing-40); }
+.panel[data-active="true"] { display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-48); align-items: start; }
+.panel-copy h3 { margin-bottom: var(--spacing-16); max-width: 18ch; }
+.panel-copy p { margin-bottom: var(--spacing-24); }
+.panel-list { list-style: none; margin-bottom: var(--spacing-32); }
+.panel-list li {
+  padding: var(--spacing-16) 0;
+  border-top: 1px solid var(--color-charcoal);
+  display: flex; justify-content: space-between; gap: var(--spacing-24);
+  font-size: var(--text-body);
+}
+.panel-list li:last-child { border-bottom: 1px solid var(--color-charcoal); }
+.panel-list span { color: var(--color-stone); white-space: nowrap; }
+
+/* Карточка-иллюстрация: макет приложения на лимонной подложке */
+.product-card {
+  background: var(--surface-lemon-wash);
+  border-radius: var(--radius-productcards);
+  padding: var(--spacing-40);
+  display: flex; justify-content: center;
+}
+.phone {
+  width: 240px; background: var(--color-pure-white);
+  border-radius: var(--radius-3xl-2); padding: var(--spacing-24);
+  border: 1.5px solid var(--color-midnight-ink);
+}
+.phone-top {
+  font-family: var(--font-chrome-sub); font-size: var(--text-caption);
+  letter-spacing: .10em; text-transform: uppercase; color: var(--color-stone);
+  margin-bottom: var(--spacing-16);
+}
+.phone-amt {
+  font-family: var(--font-display-sub); font-weight: var(--font-weight-black);
+  font-size: 44px; line-height: 1; letter-spacing: -0.03em; margin-bottom: var(--spacing-8);
+}
+.phone-note { font-size: 13px; color: var(--color-stone); margin-bottom: var(--spacing-24); }
+.phone-row {
+  display: flex; justify-content: space-between; padding: 11px 0;
+  border-top: 1px solid #e6e4dc; font-size: 13px;
+}
+.phone-row b { font-weight: var(--font-weight-semibold); }
+.phone-btn {
+  margin-top: var(--spacing-24); text-align: center;
+  background: var(--color-chartreuse-pulse); color: var(--color-midnight-ink);
+  border-radius: var(--radius-buttons); padding: 11px;
+  font-family: var(--font-chrome-sub); font-size: 12px; font-weight: var(--font-weight-medium);
+  letter-spacing: .10em; text-transform: uppercase;
+}
+
+/* ───────── Подход: карточки на костяном ───────── */
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-24); margin-top: var(--spacing-48); }
+.card {
+  background: var(--surface-white-card);
+  border-radius: var(--radius-cards);
+  padding: var(--spacing-32);
+}
+.card.wash { background: var(--surface-lemon-wash); }
+.card h3 { margin-bottom: var(--spacing-16); }
+.card p { color: var(--color-stone); }
+.card .num {
+  font-family: var(--font-display-sub); font-weight: var(--font-weight-black);
+  font-size: 48px; line-height: 1; letter-spacing: -0.03em;
+  display: block; margin-bottom: var(--spacing-16);
+}
+
+/* ───────── Приложение: список возможностей ───────── */
+.app-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-64); align-items: start; }
+.feature-list { list-style: none; }
+.feature-list li { padding: var(--spacing-24) 0; border-top: 1px solid var(--color-charcoal); }
+.feature-list li:last-child { border-bottom: 1px solid var(--color-charcoal); }
+.feature-list h3 { font-size: var(--text-subheading); letter-spacing: var(--tracking-subheading); margin-bottom: var(--spacing-8); }
+.feature-list p { color: var(--color-stone); max-width: 46ch; }
+
+/* ───────── Отзывы ───────── */
+.quotes { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-24); margin-top: var(--spacing-48); }
+.quote {
+  background: var(--color-iron);
+  border-radius: var(--radius-cards);
+  padding: var(--spacing-32);
+}
+.quote p {
+  font-family: var(--font-serif-sub); font-style: italic; font-weight: 400;
+  font-size: var(--text-heading-sm); line-height: 1.3; letter-spacing: -0.01em;
+  color: var(--color-bone-paper); margin-bottom: var(--spacing-24);
+}
+.quote .who {
+  font-family: var(--font-chrome-sub); font-size: var(--text-caption);
+  letter-spacing: .10em; text-transform: uppercase; color: var(--color-stone);
+}
+
+/* ───────── Финальный CTA ───────── */
+.final { text-align: center; }
+.final .display { max-width: 14ch; }
+
+/* ───────── Подвал ───────── */
+footer { background: var(--surface-smoke-stage); color: var(--color-stone); padding: var(--spacing-64) 0 var(--spacing-48); }
+.foot-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: var(--spacing-40); margin-bottom: var(--spacing-64); }
+.foot-top h4 {
+  font-family: var(--font-chrome-sub); font-size: var(--text-caption);
+  letter-spacing: .10em; text-transform: uppercase; color: var(--color-bone-paper);
+  font-weight: var(--font-weight-medium); margin-bottom: var(--spacing-16);
+}
+.foot-top ul { list-style: none; }
+.foot-top li { margin-bottom: var(--spacing-8); }
+.foot-top a { color: var(--color-stone); text-decoration: none; font-size: 13px; }
+.foot-top a:hover { color: var(--color-chartreuse-pulse); }
+.foot-brand .logo { font-size: 28px; display: inline-block; margin-bottom: var(--spacing-16); }
+.foot-brand p { font-size: 13px; max-width: 34ch; }
+.socials { display: flex; gap: var(--spacing-8); margin-top: var(--spacing-24); }
+.socials i {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: var(--color-chartreuse-pulse); color: var(--color-midnight-ink);
+  display: inline-flex; align-items: center; justify-content: center;
+  font-style: normal; font-family: var(--font-chrome-sub);
+  font-size: 12px; font-weight: var(--font-weight-semibold);
+}
+.fine {
+  border-top: 1px solid var(--color-charcoal);
+  padding-top: var(--spacing-32);
+  font-size: var(--text-caption); line-height: var(--leading-caption);
+  max-width: 96ch;
+}
+.foot-bottom {
+  display: flex; justify-content: space-between; gap: var(--spacing-24);
+  margin-top: var(--spacing-32); font-size: 13px; color: var(--color-bone-paper);
+}
+</style>
+</head>
+<body>
+
+<header class="stage-dark">
+  <div class="wrap nav">
+    <a class="logo" href="#">Keel</a>
+    <ul class="nav-links">
+      <li><a href="#products" data-i18n="nav1">Smoothing</a></li>
+      <li><a href="#approach" data-i18n="nav2">Approach</a></li>
+      <li><a href="#app" data-i18n="nav3">The app</a></li>
+      <li><a href="#customers" data-i18n="nav4">Customers</a></li>
+    </ul>
+    <div class="nav-right">
+      <div class="lang">
+        <button data-set="en" aria-pressed="true">EN</button>
+        <button data-set="ru" aria-pressed="false">RU</button>
+      </div>
+      <a class="btn btn-ghost" href="#" data-i18n="login">Log in</a>
+      <a class="btn btn-pulse" href="#" data-i18n="start">Get started</a>
+    </div>
+  </div>
+</header>
+
+<!-- ГЕРОЙ — тёмная сцена -->
+<div class="stage-dark hero-stage">
+  <div class="mosaic">
+    <div class="tile t1"><div class="money"><b>$</b>+840</div><div class="tile-cap"><em data-i18n="cap1">March, a good month</em></div></div>
+    <div class="tile t2"><div class="money"><b>$</b>+1,240</div></div>
+    <div class="tile t3"><div class="money"><b>$</b>+95</div><div class="tile-cap"><em data-i18n="cap2">February, a quiet one</em></div></div>
+    <div class="tile t4"><div class="money"><b>$</b>+610</div></div>
+    <div class="tile t5"><div class="money"><b>$</b>+320</div></div>
+    <div class="tile t6"><div class="money"><b>$</b>+1,075</div></div>
+  </div>
+  <div class="wrap hero">
+    <h1 class="display"><span data-i18n="h1a">Uneven income,</span> <em data-i18n="h1b">evened out</em> <span data-i18n="h1c">every Friday™</span></h1>
+    <div class="hero-actions">
+      <a class="btn btn-pulse btn-lg" href="#" data-i18n="start2">Get started</a>
+      <div class="hero-login"><span data-i18n="already">Already have an account?</span> <a href="#" data-i18n="login2">Log in</a></div>
+      <div class="trust">
+        <span data-i18n="excellent">Excellent</span>
+        <span class="stars"><i></i><i></i><i></i><i></i><i></i></span>
+        <span data-i18n="reviews">2,140 reviews</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ПРОДУКТЫ — костяная сцена, табы -->
+<section class="stage-bone" id="products">
+  <div class="wrap">
+    <div class="eyebrow" data-i18n="eb1">Our products</div>
+    <h2><span data-i18n="h2a">Three ways to make a</span> <em data-i18n="h2b">rough year</em> <span data-i18n="h2c">read as a flat one</span></h2>
+    <p class="lede muted" style="margin-top:var(--spacing-16)" data-i18n="p1">Connect the accounts your money already arrives in. Keel reads twelve months, finds your true average, and pays it to you on a schedule you choose.</p>
+
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" aria-selected="true" data-tab="0" data-i18n="tab1">Smoothing</button>
+      <button class="tab" role="tab" aria-selected="false" data-tab="1" data-i18n="tab2">Safety net</button>
+      <button class="tab" role="tab" aria-selected="false" data-tab="2" data-i18n="tab3">Tax pot</button>
+    </div>
+
+    <div class="panel" data-panel="0" data-active="true">
+      <div class="panel-copy">
+        <h3 data-i18n="pc1h">We hold the peaks and pay you the average</h3>
+        <p class="muted" data-i18n="pc1p">A strong month goes into the keel instead of into your current account. A thin month draws it back out. You see the same figure land every Friday, whatever the invoices did.</p>
+        <ul class="panel-list">
+          <li><span data-i18n="pl1a">Payout day</span><span data-i18n="pl1b">Friday, before noon</span></li>
+          <li><span data-i18n="pl2a">Reads back</span><span data-i18n="pl2b">12 months</span></li>
+          <li><span data-i18n="pl3a">Fee</span><span data-i18n="pl3b">$4 a month, no percentage</span></li>
+        </ul>
+        <a class="btn btn-pulse" href="#" data-i18n="start3">Get started</a>
+      </div>
+      <div class="product-card">
+        <div class="phone">
+          <div class="phone-top" data-i18n="ph1t">This Friday</div>
+          <div class="phone-amt">$740</div>
+          <div class="phone-note" data-i18n="ph1n">Your twelve-month average, paid flat</div>
+          <div class="phone-row"><span data-i18n="ph1r1">Held back in March</span><b>$840</b></div>
+          <div class="phone-row"><span data-i18n="ph1r2">Drawn in February</span><b>$645</b></div>
+          <div class="phone-row"><span data-i18n="ph1r3">In the keel now</span><b>$2,310</b></div>
+          <div class="phone-btn" data-i18n="ph1b">Change the day</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" data-panel="1">
+      <div class="panel-copy">
+        <h3 data-i18n="pc2h">A month of your own money, ready before you ask</h3>
+        <p class="muted" data-i18n="pc2p">The net fills quietly out of the good months until it holds four weeks of your average. It is your money the whole time — no application, no credit check, no interest, because nothing is being lent to you.</p>
+        <ul class="panel-list">
+          <li><span data-i18n="pl4a">Target</span><span data-i18n="pl4b">4 weeks of average income</span></li>
+          <li><span data-i18n="pl5a">Access</span><span data-i18n="pl5b">Same day, any weekday</span></li>
+          <li><span data-i18n="pl6a">Interest charged</span><span data-i18n="pl6b">None — it is your own money</span></li>
+        </ul>
+        <a class="btn btn-pulse" href="#" data-i18n="start4">Get started</a>
+      </div>
+      <div class="product-card">
+        <div class="phone">
+          <div class="phone-top" data-i18n="ph2t">Safety net</div>
+          <div class="phone-amt">$2,960</div>
+          <div class="phone-note" data-i18n="ph2n">Four weeks of your average, fully funded</div>
+          <div class="phone-row"><span data-i18n="ph2r1">Filled since</span><b data-i18n="ph2v1">April</b></div>
+          <div class="phone-row"><span data-i18n="ph2r2">Withdrawals</span><b data-i18n="ph2v2">Same day</b></div>
+          <div class="phone-row"><span data-i18n="ph2r3">Interest owed</span><b data-i18n="ph2v3">$0</b></div>
+          <div class="phone-btn" data-i18n="ph2b">Withdraw</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" data-panel="2">
+      <div class="panel-copy">
+        <h3 data-i18n="pc3h">Set aside on the way in, not scraped together in April</h3>
+        <p class="muted" data-i18n="pc3p">Every payment that lands is split before you ever see it. The tax share goes to a pot you cannot spend by accident, and the rest joins the smoothing. In April there is nothing to find.</p>
+        <ul class="panel-list">
+          <li><span data-i18n="pl7a">Split</span><span data-i18n="pl7b">Set once, applied on arrival</span></li>
+          <li><span data-i18n="pl8a">Pot</span><span data-i18n="pl8b">Separate, spend-locked</span></li>
+          <li><span data-i18n="pl9a">Statement</span><span data-i18n="pl9b">One page, ready to file</span></li>
+        </ul>
+        <a class="btn btn-pulse" href="#" data-i18n="start5">Get started</a>
+      </div>
+      <div class="product-card">
+        <div class="phone">
+          <div class="phone-top" data-i18n="ph3t">Tax pot</div>
+          <div class="phone-amt">$4,180</div>
+          <div class="phone-note" data-i18n="ph3n">Put aside from 34 payments this year</div>
+          <div class="phone-row"><span data-i18n="ph3r1">Share of every payment</span><b>22%</b></div>
+          <div class="phone-row"><span data-i18n="ph3r2">Payments split</span><b>34</b></div>
+          <div class="phone-row"><span data-i18n="ph3r3">Still to set aside</span><b>$0</b></div>
+          <div class="phone-btn" data-i18n="ph3b">Download statement</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ПОДХОД -->
+<section class="stage-bone" id="approach">
+  <div class="wrap">
+    <div class="eyebrow" data-i18n="eb2">Our approach</div>
+    <h2><span data-i18n="h3a">We read the last twelve months, not the</span> <em data-i18n="h3b">last twelve days</em></h2>
+    <p class="lede muted" style="margin-top:var(--spacing-16)" data-i18n="p2">A thin February is not a risk signal. It is February. Keel is built for people whose work arrives in seasons, batches and late invoices, and it judges a year the way a year should be judged.</p>
+    <div class="grid-3">
+      <div class="card wash">
+        <span class="num">12</span>
+        <h3 data-i18n="c1h">Months, not weeks</h3>
+        <p data-i18n="c1p">The average is taken across a full year, so a quiet stretch never moves your Friday figure on its own.</p>
+      </div>
+      <div class="card">
+        <span class="num">0</span>
+        <h3 data-i18n="c2h">Credit checks</h3>
+        <p data-i18n="c2p">Nothing here is a loan. We move money you have already earned, so there is nothing to underwrite and nothing to score.</p>
+      </div>
+      <div class="card">
+        <span class="num">$4</span>
+        <h3 data-i18n="c3h">Flat, monthly</h3>
+        <p data-i18n="c3p">One fee, the same in a strong month and a thin one. No percentage of your income, no charge for withdrawing early.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ПРИЛОЖЕНИЕ -->
+<section class="stage-bone" id="app">
+  <div class="wrap app-grid">
+    <div>
+      <div class="eyebrow" data-i18n="eb3">Our app</div>
+      <h2><span data-i18n="h4a">Your year, and</span> <em data-i18n="h4b">what it will do next</em></h2>
+      <p class="lede muted" style="margin-top:var(--spacing-16); margin-bottom:var(--spacing-32)" data-i18n="p3">Everything the keel is doing with your money, in plain figures. No score out of a hundred, no confetti.</p>
+      <a class="btn btn-pulse" href="#" data-i18n="start6">Get started</a>
+    </div>
+    <ul class="feature-list">
+      <li>
+        <h3 data-i18n="f1h">The flat line</h3>
+        <p data-i18n="f1p">What lands every Friday, what it would have been without Keel, and the gap between the two drawn across the year.</p>
+      </li>
+      <li>
+        <h3 data-i18n="f2h">Season warnings</h3>
+        <p data-i18n="f2p">If last year went quiet in August, you hear about it in June — while there is still time to hold more back.</p>
+      </li>
+      <li>
+        <h3 data-i18n="f3h">Invoice watch</h3>
+        <p data-i18n="f3p">Which payments are late, how late they usually are, and which client is the reason your March looks like that.</p>
+      </li>
+      <li>
+        <h3 data-i18n="f4h">One-page year</h3>
+        <p data-i18n="f4p">Income, tax set aside, fees paid, everything on a single sheet your accountant can read without asking questions.</p>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- ОТЗЫВЫ — тёмная сцена -->
+<section class="stage-dark" id="customers">
+  <div class="wrap">
+    <div class="eyebrow" data-i18n="eb4">Our customers</div>
+    <h2 style="color:var(--color-bone-paper)"><span data-i18n="h5a">People who stopped</span> <em data-i18n="h5b">dreading February</em></h2>
+    <div class="quotes">
+      <div class="quote">
+        <p data-i18n="q1">“I earn the same as last year. It just stopped feeling like a gamble every fourth week.”</p>
+        <div class="who" data-i18n="q1w">Marta I. · Stage lighting · March 2026</div>
+      </div>
+      <div class="quote">
+        <p data-i18n="q2">“The tax pot is the whole thing for me. April used to be a small disaster I scheduled around.”</p>
+        <div class="who" data-i18n="q2w">Dato K. · Contract joiner · January 2026</div>
+      </div>
+      <div class="quote">
+        <p data-i18n="q3">“Two thin months in a row and my Friday figure did not move. That was the moment I believed it.”</p>
+        <div class="who" data-i18n="q3w">Nino B. · Session violinist · February 2026</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ФИНАЛЬНЫЙ CTA -->
+<section class="stage-dark final">
+  <div class="wrap">
+    <h1 class="display" style="color:var(--color-bone-paper)"><span data-i18n="h6a">A steadier year</span> <em data-i18n="h6b">starts on a Friday</em></h1>
+    <div class="hero-actions">
+      <a class="btn btn-pulse btn-lg" href="#" data-i18n="start7">Get started</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-top">
+      <div class="foot-brand">
+        <span class="logo">Keel</span>
+        <p data-i18n="fbrand">Income smoothing for people paid in waves. Built in Tbilisi, licensed as an e-money institution.</p>
+        <div class="socials"><i>IG</i><i>X</i><i>YT</i><i>LI</i><i>TT</i></div>
+      </div>
+      <div>
+        <h4 data-i18n="fc1">Products</h4>
+        <ul>
+          <li><a href="#" data-i18n="fl1">Smoothing</a></li>
+          <li><a href="#" data-i18n="fl2">Safety net</a></li>
+          <li><a href="#" data-i18n="fl3">Tax pot</a></li>
+          <li><a href="#" data-i18n="fl4">Pricing</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 data-i18n="fc2">Company</h4>
+        <ul>
+          <li><a href="#" data-i18n="fl5">About</a></li>
+          <li><a href="#" data-i18n="fl6">How it works</a></li>
+          <li><a href="#" data-i18n="fl7">Careers</a></li>
+          <li><a href="#" data-i18n="fl8">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 data-i18n="fc3">Legal</h4>
+        <ul>
+          <li><a href="#" data-i18n="fl9">Terms of service</a></li>
+          <li><a href="#" data-i18n="fl10">Privacy</a></li>
+          <li><a href="#" data-i18n="fl11">Complaints</a></li>
+          <li><a href="#" data-i18n="fl12">Licences</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="fine" data-i18n="fine">The Keel name and logo are trademarks of Keel Financial OÜ. Keel is not a bank and does not lend. Smoothing moves money you have already received between your own accounts; the safety net holds your own funds and is not a credit product. Payout schedules depend on when payments actually clear. Figures shown on this page are illustrative.</div>
+    <div class="foot-bottom">
+      <span data-i18n="copy">© 2026 Keel Financial OÜ</span>
+      <span data-i18n="place">Tbilisi · Tallinn</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ── Шапка: светлое состояние над костяными полосами ── */
+(function () {
+  var head = document.querySelector('header');
+  var stages = Array.prototype.slice.call(document.querySelectorAll('.stage-dark, .stage-bone'))
+    .filter(function (el) { return el !== head; });
+  function sync() {
+    var y = head.getBoundingClientRect().bottom;
+    var onLight = false;
+    stages.forEach(function (s) {
+      var r = s.getBoundingClientRect();
+      if (r.top <= y && r.bottom > y) onLight = s.classList.contains('stage-bone');
+    });
+    head.classList.toggle('light', onLight);
+  }
+  sync();
+  window.addEventListener('scroll', sync, { passive: true });
+})();
+
+/* ── Табы продуктов ── */
+document.querySelectorAll('.tab').forEach(function (t) {
+  t.addEventListener('click', function () {
+    var i = t.dataset.tab;
+    document.querySelectorAll('.tab').forEach(function (x) { x.setAttribute('aria-selected', x === t ? 'true' : 'false'); });
+    document.querySelectorAll('.panel').forEach(function (p) {
+      p.setAttribute('data-active', p.dataset.panel === i ? 'true' : 'false');
+    });
+  });
+});
+
+/* ── RU/EN. Английский — исходный, русский — перевод. Дефолт en, без авто-детекта. ── */
+var RU = {
+  nav1:'Сглаживание', nav2:'Подход', nav3:'Приложение', nav4:'Отзывы',
+  login:'Войти', start:'Начать', start2:'Начать', start3:'Начать', start4:'Начать',
+  start5:'Начать', start6:'Начать', start7:'Начать', login2:'Войти',
+  already:'Уже есть аккаунт?', excellent:'Отлично', reviews:'2 140 отзывов',
+  cap1:'Март, хороший месяц', cap2:'Февраль, тихий',
+  h1a:'Доход рваный —', h1b:'выплата ровная,', h1c:'каждую пятницу™',
+  eb1:'Наши продукты',
+  h2a:'Три способа сделать так, чтобы', h2b:'рваный год', h2c:'читался как ровный',
+  p1:'Подключите счета, на которые деньги уже приходят. Keel читает двенадцать месяцев, находит ваш настоящий средний доход и выплачивает его по выбранному вами графику.',
+  tab1:'Сглаживание', tab2:'Подушка', tab3:'Налоговый карман',
+  pc1h:'Держим пики и платим вам среднее',
+  pc1p:'Сильный месяц уходит в киль, а не на текущий счёт. Тонкий месяц вытягивает его обратно. Каждую пятницу приходит одна и та же сумма — что бы ни случилось со счетами.',
+  pl1a:'День выплаты', pl1b:'Пятница, до полудня',
+  pl2a:'Глубина чтения', pl2b:'12 месяцев',
+  pl3a:'Комиссия', pl3b:'$4 в месяц, без процента',
+  ph1t:'В эту пятницу', ph1n:'Ваше среднее за двенадцать месяцев, ровной суммой',
+  ph1r1:'Придержано в марте', ph1r2:'Вытянуто в феврале', ph1r3:'Сейчас в киле', ph1b:'Сменить день',
+  pc2h:'Месяц ваших же денег, готовый до того, как вы попросите',
+  pc2p:'Подушка тихо наполняется из хороших месяцев, пока не наберёт четыре недели вашего среднего. Всё это время деньги ваши — ни заявки, ни проверки кредитной истории, ни процентов, потому что вам ничего не одалживают.',
+  pl4a:'Цель', pl4b:'4 недели среднего дохода',
+  pl5a:'Доступ', pl5b:'В тот же день, в любой будний',
+  pl6a:'Начисленные проценты', pl6b:'Нет — это ваши деньги',
+  ph2t:'Подушка', ph2n:'Четыре недели вашего среднего, набрано полностью',
+  ph2r1:'Наполняется с', ph2v1:'апреля', ph2r2:'Снятие', ph2v2:'В тот же день',
+  ph2r3:'Долг по процентам', ph2v3:'$0', ph2b:'Снять',
+  pc3h:'Откладывается на входе, а не собирается в апреле',
+  pc3p:'Каждый пришедший платёж делится до того, как вы его увидели. Налоговая доля уходит в карман, который нельзя потратить случайно, остальное идёт в сглаживание. В апреле искать нечего.',
+  pl7a:'Деление', pl7b:'Настроить раз, работает на входе',
+  pl8a:'Карман', pl8b:'Отдельный, с блокировкой трат',
+  pl9a:'Отчёт', pl9b:'Одна страница, готова к подаче',
+  ph3t:'Налоговый карман', ph3n:'Отложено с 34 платежей за год',
+  ph3r1:'Доля с каждого платежа', ph3r2:'Платежей разделено', ph3r3:'Осталось отложить', ph3b:'Скачать отчёт',
+  eb2:'Наш подход',
+  h3a:'Мы читаем последние двенадцать месяцев, а не', h3b:'последние двенадцать дней',
+  p2:'Тонкий февраль — не сигнал риска. Это февраль. Keel сделан для тех, чья работа приходит сезонами, партиями и просроченными счетами, и судит о годе так, как о годе и следует судить.',
+  c1h:'Месяцы, а не недели', c1p:'Среднее берётся за полный год, поэтому тихий отрезок сам по себе никогда не двигает вашу пятничную сумму.',
+  c2h:'Проверок кредитной истории', c2p:'Здесь нет займа. Мы двигаем деньги, которые вы уже заработали, — нечего андеррайтить и нечего скорить.',
+  c3h:'Ровно, ежемесячно', c3p:'Одна комиссия, одинаковая в сильный и в тонкий месяц. Без процента от дохода и без платы за досрочное снятие.',
+  eb3:'Наше приложение',
+  h4a:'Ваш год и то,', h4b:'что он сделает дальше',
+  p3:'Всё, что киль делает с вашими деньгами, простыми цифрами. Без оценки из ста баллов и без конфетти.',
+  f1h:'Ровная линия', f1p:'Что приходит каждую пятницу, сколько было бы без Keel и разрыв между этими двумя линиями за весь год.',
+  f2h:'Предупреждения о сезоне', f2p:'Если в прошлом году август был тихим, вы узнаете об этом в июне — пока ещё можно придержать больше.',
+  f3h:'Наблюдение за счетами', f3p:'Какие платежи опаздывают, насколько они опаздывают обычно и какой клиент виноват в том, что март выглядит вот так.',
+  f4h:'Год на одной странице', f4p:'Доход, отложенный налог, уплаченные комиссии — всё на одном листе, который бухгалтер прочитает без вопросов.',
+  eb4:'Наши клиенты',
+  h5a:'Люди, которые перестали', h5b:'бояться февраля',
+  q1:'«Я зарабатываю столько же, сколько в прошлом году. Просто это перестало быть лотереей каждую четвёртую неделю.»',
+  q1w:'Марта И. · Художник по свету · Март 2026',
+  q2:'«Налоговый карман — для меня главное. Апрель раньше был маленькой катастрофой, вокруг которой я строил планы.»',
+  q2w:'Дато К. · Столяр по подряду · Январь 2026',
+  q3:'«Два тонких месяца подряд, а моя пятничная сумма не сдвинулась. Вот тогда я и поверила.»',
+  q3w:'Нино Б. · Скрипачка на сессиях · Февраль 2026',
+  h6a:'Ровный год', h6b:'начинается в пятницу',
+  fbrand:'Сглаживание дохода для тех, кому платят волнами. Сделано в Тбилиси, лицензия института электронных денег.',
+  fc1:'Продукты', fl1:'Сглаживание', fl2:'Подушка', fl3:'Налоговый карман', fl4:'Тарифы',
+  fc2:'Компания', fl5:'О нас', fl6:'Как это работает', fl7:'Вакансии', fl8:'Контакты',
+  fc3:'Правовое', fl9:'Условия обслуживания', fl10:'Приватность', fl11:'Жалобы', fl12:'Лицензии',
+  fine:'Название и логотип Keel — товарные знаки Keel Financial OÜ. Keel не является банком и не выдаёт займы. Сглаживание перемещает уже полученные вами деньги между вашими же счетами; подушка хранит ваши собственные средства и не является кредитным продуктом. График выплат зависит от того, когда платежи реально зачислены. Цифры на этой странице приведены для примера.',
+  copy:'© 2026 Keel Financial OÜ', place:'Тбилиси · Таллин'
+};
+var EN = {};
+document.querySelectorAll('[data-i18n]').forEach(function (el) { EN[el.dataset.i18n] = el.innerHTML; });
+
+function setLang(l) {
+  var dict = l === 'ru' ? RU : EN;
+  document.querySelectorAll('[data-i18n]').forEach(function (el) {
+    var v = dict[el.dataset.i18n];
+    if (v !== undefined) el.innerHTML = v;
+  });
+  document.documentElement.lang = l;
+  document.documentElement.dataset.lang = l;
+  document.querySelectorAll('.lang button').forEach(function (b) {
+    b.setAttribute('aria-pressed', b.dataset.set === l ? 'true' : 'false');
+  });
+}
+document.querySelectorAll('.lang button').forEach(function (b) {
+  b.addEventListener('click', function () { setLang(b.dataset.set); });
+});
+</script>
+</body>
+</html>

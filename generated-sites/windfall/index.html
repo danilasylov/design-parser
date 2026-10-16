@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Windfall — Cider pressed from forty-one old trees</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ───────── ДИЗАЙН-СИСТЕМА APLÓS — tokens.css ДОСЛОВНО ───────── */
+:root {
+  /* Colors */
+  --color-bone: #f2f1ed;
+  --color-paper-white: #ffffff;
+  --color-cocoa: #3b3429;
+  --color-ink: #000000;
+  --color-stone: #646464;
+  --color-ash: #b4aeac;
+
+  /* Typography — Font Families */
+  --font-goudy-old-style: 'Goudy Old Style', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-system-sans-ui-chrome: 'System Sans (UI chrome)', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* Typography — Scale */
+  --text-caption: 12px;
+  --leading-caption: 1.4;
+  --text-body-sm: 14px;
+  --leading-body-sm: 1.5;
+  --text-body: 16px;
+  --leading-body: 1.5;
+  --text-subheading: 20px;
+  --leading-subheading: 1.3;
+  --tracking-subheading: -0.2px;
+  --text-heading-sm: 26px;
+  --leading-heading-sm: 1.08;
+  --tracking-heading-sm: -0.31px;
+  --text-heading: 40px;
+  --leading-heading: 1.05;
+  --tracking-heading: -0.48px;
+  --text-display: 56px;
+  --leading-display: 1.05;
+  --tracking-display: -0.67px;
+
+  /* Typography — Weights */
+  --font-weight-regular: 400;
+
+  /* Spacing */
+  --spacing-unit: 6px;
+  --spacing-6: 6px;
+  --spacing-12: 12px;
+  --spacing-24: 24px;
+  --spacing-48: 48px;
+  --spacing-96: 96px;
+  --spacing-120: 120px;
+
+  /* Layout */
+  --page-max-width: 1200px;
+  --section-gap: 96-120px;
+  --card-padding: 24px;
+  --element-gap: 12px;
+
+  /* Border Radius */
+  --radius-md: 5px;
+
+  /* Named Radii */
+  --radius-tags: 5px;
+  --radius-cards: 5px;
+  --radius-inputs: 5px;
+  --radius-buttons: 5px;
+
+  /* Surfaces */
+  --surface-bone: #f2f1ed;
+  --surface-paper-white: #ffffff;
+  --surface-cocoa: #3b3429;
+  --surface-ink: #000000;
+}
+
+/* ───────── ПОДСТАНОВКИ ─────────
+   Goudy Old Style → EB Garamond (венецианская антиква с кириллицей; DESIGN.md прямо
+   называет EB Garamond одной из замен). System Sans (UI chrome) → Inter (тоже из списка
+   замен). Хайрлайн-граница карточек #e5e3df задана в компонентах DESIGN.md, но токена
+   для неё в системе нет — заведена как --hairline. --section-gap в tokens.css нечисловой
+   («96-120px»), поэтому ритм задан токенами --spacing-96 / --spacing-120. */
+:root {
+  --font-serif-sub: 'EB Garamond', var(--font-goudy-old-style);
+  --font-sans-sub: 'Inter', var(--font-system-sans-ui-chrome);
+  --hairline: #e5e3df;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--surface-bone);
+  color: var(--color-ink);
+  font-family: var(--font-sans-sub);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap { max-width: var(--page-max-width); margin: 0 auto; padding: 0 var(--spacing-24); }
+
+/* ───────── Типографика: антиква — единственный голос заголовков ───────── */
+h1, h2, h3, .serif {
+  font-family: var(--font-serif-sub);
+  font-weight: var(--font-weight-regular);
+  letter-spacing: -0.012em;
+}
+h1 { font-size: var(--text-display); line-height: var(--leading-display); }
+h2 { font-size: var(--text-heading); line-height: var(--leading-heading); }
+h3 { font-size: var(--text-heading-sm); line-height: var(--leading-heading-sm); }
+p { font-size: var(--text-body); line-height: var(--leading-body); }
+.stone { color: var(--color-stone); }
+.small { font-size: var(--text-body-sm); line-height: var(--leading-body-sm); }
+.cap { font-size: var(--text-caption); line-height: var(--leading-caption); }
+
+section { padding: var(--spacing-120) 0; }
+
+/* ───────── Верхняя полоса объявлений ───────── */
+.announce {
+  background: var(--surface-paper-white);
+  border-bottom: 1px solid var(--hairline);
+  height: 40px; display: flex; align-items: center; justify-content: center;
+  font-size: var(--text-body-sm); color: var(--color-ink);
+}
+
+/* ───────── Навигация ───────── */
+nav {
+  background: var(--surface-paper-white);
+  border-bottom: 1px solid var(--hairline);
+  height: 72px;
+}
+.nav-in { display: flex; align-items: center; justify-content: space-between; height: 100%; }
+.wordmark {
+  font-family: var(--font-serif-sub); font-weight: var(--font-weight-regular);
+  font-size: var(--text-heading-sm); letter-spacing: .08em;
+  color: var(--color-ink); text-decoration: none;
+}
+.nav-links { display: flex; gap: var(--spacing-24); list-style: none; align-items: center; }
+.nav-links a { font-size: var(--text-body-sm); color: var(--color-ink); text-decoration: none; }
+.nav-links a:hover { text-decoration: underline; }
+
+.lang { display: inline-flex; border: 1px solid var(--color-ink); border-radius: var(--radius-tags); overflow: hidden; }
+.lang button {
+  font-family: var(--font-sans-sub); font-size: var(--text-caption);
+  padding: 5px 10px; border: 0; background: transparent; color: var(--color-ink); cursor: pointer;
+}
+.lang button[aria-pressed="true"] { background: var(--color-ink); color: var(--color-paper-white); }
+
+/* ───────── Кнопки: радиус строго 5px, без пилюль ───────── */
+.btn {
+  display: inline-block;
+  font-family: var(--font-sans-sub); font-size: var(--text-body-sm); font-weight: 500;
+  padding: 9px 12px; border-radius: var(--radius-buttons);
+  text-decoration: none; border: 1px solid transparent; cursor: pointer;
+}
+.btn-light { background: var(--color-paper-white); color: var(--color-ink); }
+.btn-light:hover { background: var(--color-bone); }
+.btn-ink { background: var(--color-ink); color: var(--color-paper-white); }
+.btn-ink:hover { background: var(--color-cocoa); }
+.btn-outline { background: transparent; color: var(--color-ink); border-color: var(--color-ink); }
+.btn-outline:hover { background: var(--color-ink); color: var(--color-paper-white); }
+.link-ghost { font-size: var(--text-body-sm); color: var(--color-ink); text-decoration: none; }
+.link-ghost:hover { text-decoration: underline; }
+
+/* ───────── Тёмный герой ───────── */
+.hero { background: var(--surface-ink); color: var(--color-paper-white); padding: 0; }
+.hero-in {
+  display: grid; grid-template-columns: 1fr 1fr; align-items: center;
+  min-height: 620px; gap: var(--spacing-48);
+}
+/* ширину держит колонка сетки: 13ch оставляли сироту «не» в русской версии */
+.hero h1 { color: var(--color-paper-white); }
+.hero p { color: var(--color-paper-white); opacity: .72; max-width: 40ch; margin: var(--spacing-24) 0 var(--spacing-24); }
+.hero-meta {
+  margin-top: var(--spacing-48); display: flex; gap: var(--spacing-48);
+  font-size: var(--text-caption); color: var(--color-paper-white); opacity: .6;
+}
+.hero-meta b { display: block; font-family: var(--font-serif-sub); font-size: var(--text-subheading); font-weight: 400; opacity: 1; margin-bottom: 2px; }
+.hero-art { display: flex; justify-content: center; align-items: flex-end; height: 100%; padding: var(--spacing-48) 0; }
+
+/* Продукт — герой кадра. Фотографий в самодостаточном файле нет,
+   поэтому бутыль и бокал нарисованы штрихом в той же монохромной шкале. */
+svg .stroke { fill: none; stroke: var(--color-paper-white); stroke-width: 1.25; }
+svg .stroke-dim { fill: none; stroke: var(--color-ash); stroke-width: 1; }
+svg .fill-dim { fill: #14120f; }
+svg .stroke-ink { fill: none; stroke: var(--color-ink); stroke-width: 1.25; }
+svg .stroke-ink-dim { fill: none; stroke: var(--color-stone); stroke-width: 1; }
+
+/* ───────── Секции ───────── */
+.center { text-align: center; }
+.center p { max-width: 600px; margin: var(--spacing-24) auto 0; }
+
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-24); margin-top: var(--spacing-48); }
+.card {
+  background: var(--surface-paper-white); border: 1px solid var(--hairline);
+  border-radius: var(--radius-cards); padding: var(--spacing-24);
+  min-height: 260px; display: flex; flex-direction: column; justify-content: space-between;
+}
+.card.cocoa { background: var(--surface-cocoa); border-color: var(--surface-cocoa); color: var(--color-paper-white); }
+.card.cocoa .stone { color: var(--color-paper-white); opacity: .72; }
+.card h3 { margin-bottom: var(--spacing-12); }
+.card .idx { font-size: var(--text-body-sm); color: var(--color-stone); margin-top: var(--spacing-24); }
+.card.cocoa .idx { color: var(--color-paper-white); opacity: .6; }
+
+/* ───────── Бутылки ───────── */
+.bottles { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-24); margin-top: var(--spacing-48); }
+.bottle-card {
+  background: var(--surface-paper-white); border: 1px solid var(--hairline);
+  border-radius: var(--radius-cards); overflow: hidden;
+  display: flex; flex-direction: column;
+}
+.bottle-art { background: var(--surface-ink); height: 300px; display: flex; align-items: center; justify-content: center; }
+/* описания разной длины не должны сбивать базовую линию цен и кнопок */
+.bottle-body { padding: var(--spacing-24); display: flex; flex-direction: column; flex: 1; }
+.bottle-body h3 { margin-bottom: var(--spacing-6); }
+.bottle-body .stone { margin-bottom: var(--spacing-24); flex: 1; }
+.bottle-body .btn { align-self: flex-start; }
+.bottle-row {
+  display: flex; justify-content: space-between; align-items: baseline;
+  border-top: 1px solid var(--hairline); padding-top: var(--spacing-12); margin-bottom: var(--spacing-24);
+  font-size: var(--text-body-sm);
+}
+.bottle-row .price { font-family: var(--font-serif-sub); font-size: var(--text-subheading); }
+
+/* ───────── Тёмная плита: процесс ───────── */
+.slab { background: var(--surface-cocoa); color: var(--color-paper-white); }
+.slab h2 { color: var(--color-paper-white); max-width: 16ch; }
+.slab .steps { list-style: none; margin-top: var(--spacing-48); }
+.slab .steps li {
+  display: grid; grid-template-columns: 64px 1fr 1fr; gap: var(--spacing-24);
+  padding: var(--spacing-24) 0; border-top: 1px solid rgba(255,255,255,.18); align-items: start;
+}
+.slab .steps li:last-child { border-bottom: 1px solid rgba(255,255,255,.18); }
+.slab .steps .n { font-family: var(--font-serif-sub); font-size: var(--text-subheading); opacity: .6; }
+.slab .steps h3 { color: var(--color-paper-white); }
+.slab .steps p { opacity: .72; font-size: var(--text-body-sm); }
+.slab-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-48); align-items: start; }
+
+/* ───────── Магазины ───────── */
+.stock { list-style: none; margin-top: var(--spacing-48); }
+.stock li {
+  display: grid; grid-template-columns: 1fr 2fr 1fr; gap: var(--spacing-24);
+  padding: var(--spacing-24) 0; border-top: 1px solid var(--hairline); align-items: baseline;
+}
+.stock li:last-child { border-bottom: 1px solid var(--hairline); }
+.stock .place { font-family: var(--font-serif-sub); font-size: var(--text-subheading); }
+.stock .who { color: var(--color-stone); font-size: var(--text-body-sm); }
+.stock .what { text-align: right; color: var(--color-stone); font-size: var(--text-caption); }
+
+/* ───────── Подвал ───────── */
+footer { background: var(--surface-ink); color: var(--color-paper-white); padding: var(--spacing-96) 0 var(--spacing-48); }
+.foot-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: var(--spacing-48); margin-bottom: var(--spacing-96); }
+.foot-grid h4 { font-size: var(--text-body-sm); font-weight: 500; margin-bottom: var(--spacing-12); }
+.foot-grid ul { list-style: none; }
+.foot-grid li { margin-bottom: var(--spacing-6); }
+.foot-grid a { color: var(--color-paper-white); opacity: .6; text-decoration: none; font-size: var(--text-body-sm); }
+.foot-grid a:hover { opacity: 1; text-decoration: underline; }
+.foot-brand .wordmark { color: var(--color-paper-white); display: inline-block; margin-bottom: var(--spacing-12); }
+.foot-brand p { opacity: .6; font-size: var(--text-body-sm); max-width: 34ch; }
+.foot-bottom {
+  border-top: 1px solid rgba(255,255,255,.18); padding-top: var(--spacing-24);
+  display: flex; justify-content: space-between; gap: var(--spacing-24);
+  font-size: var(--text-caption); opacity: .6;
+}
+</style>
+</head>
+<body>
+
+<div class="announce" data-i18n="announce">Pressed in November. We ship from the orchard until the last case goes.</div>
+
+<nav>
+  <div class="wrap nav-in">
+    <a class="wordmark" href="#">WINDFALL</a>
+    <ul class="nav-links">
+      <li><a href="#bottles" data-i18n="nav1">Bottles</a></li>
+      <li><a href="#orchard" data-i18n="nav2">Orchard</a></li>
+      <li><a href="#pressing" data-i18n="nav3">Pressing</a></li>
+      <li><a href="#stockists" data-i18n="nav4">Stockists</a></li>
+      <li><a href="#" data-i18n="nav5">Cart</a></li>
+      <li>
+        <span class="lang">
+          <button data-set="en" aria-pressed="true">EN</button>
+          <button data-set="ru" aria-pressed="false">RU</button>
+        </span>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ГЕРОЙ — чернильная плита -->
+<div class="hero">
+  <div class="wrap hero-in">
+    <div>
+      <h1 data-i18n="h1">Cider from forty-one trees nobody replanted.</h1>
+      <p data-i18n="hp">Nine hundred bottles pressed in one November from an orchard planted in 1934. When it is gone there is no second run until the trees decide otherwise.</p>
+      <a class="btn btn-light" href="#bottles" data-i18n="hcta">Shop the pressing</a>
+      <div class="hero-meta">
+        <div><b>41</b><span data-i18n="hm1">trees standing</span></div>
+        <div><b>1934</b><span data-i18n="hm2">orchard planted</span></div>
+        <div><b>900</b><span data-i18n="hm3">bottles this year</span></div>
+      </div>
+    </div>
+    <div class="hero-art">
+      <svg width="330" height="420" viewBox="0 0 330 420" aria-hidden="true">
+        <!-- бутыль -->
+        <path class="stroke" d="M118 46h44v52c0 16 26 34 26 66v226c0 12-8 20-20 20h-56c-12 0-20-8-20-20V164c0-32 26-50 26-66V46z"/>
+        <path class="stroke-dim" d="M118 46h44"/>
+        <rect class="stroke-dim" x="100" y="196" width="80" height="104" rx="2"/>
+        <path class="stroke-dim" d="M112 232h56M112 248h44M112 264h56"/>
+        <path class="stroke-dim" d="M124 22h32v24h-32z"/>
+        <!-- бокал -->
+        <path class="stroke" d="M212 150h96l-48 84-48-84z"/>
+        <path class="stroke" d="M260 234v106M234 340h52"/>
+        <path class="stroke-dim" d="M226 174h68"/>
+        <circle class="stroke-dim" cx="292" cy="163" r="7"/>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<!-- ПРЕИМУЩЕСТВА -->
+<section id="orchard">
+  <div class="wrap">
+    <div class="center">
+      <h2 data-i18n="h2a">What an old orchard gives that a young one cannot</h2>
+      <p class="stone" data-i18n="p2a">Six varieties, none of them planted for eating. Bittersweets with more tannin than a young tree will ever carry, picked when they fall rather than when the calendar says.</p>
+    </div>
+    <div class="grid-3">
+      <div class="card cocoa">
+        <div>
+          <h3 data-i18n="c1h">Windfall, not harvest</h3>
+          <p class="stone" data-i18n="c1p">We take the fruit the tree lets go. It ripens on the branch a fortnight longer than a picked crop, and it presses sweeter for it.</p>
+        </div>
+        <div class="idx">01</div>
+      </div>
+      <div class="card">
+        <div>
+          <h3 data-i18n="c2h">Six varieties, kept apart</h3>
+          <p class="stone" data-i18n="c2p">Kingston Black, Dabinett, Yarlington Mill, Foxwhelp, Browns and one nobody in the parish can name. Each pressed alone, blended only at the end.</p>
+        </div>
+        <div class="idx">02</div>
+      </div>
+      <div class="card">
+        <div>
+          <h3 data-i18n="c3h">Nothing added, nothing hurried</h3>
+          <p class="stone" data-i18n="c3p">Wild yeast, one winter in the barrel, no sugar and no back-sweetening. The only thing we put in the bottle is the year it came from.</p>
+        </div>
+        <div class="idx">03</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- БУТЫЛКИ -->
+<section id="bottles">
+  <div class="wrap">
+    <div class="center">
+      <h2 data-i18n="h2b">This year's three</h2>
+      <p class="stone" data-i18n="p2b">Pressed November 2025, bottled in March, released when each one stopped changing.</p>
+    </div>
+    <div class="bottles">
+      <div class="bottle-card">
+        <div class="bottle-art">
+          <svg width="110" height="200" viewBox="0 0 110 200" aria-hidden="true">
+            <path class="stroke" d="M38 18h34v30c0 12 20 22 20 44v106c0 8-5 12-12 12H40c-7 0-12-4-12-12V92c0-22 20-32 20-44V18z"/>
+            <rect class="stroke-dim" x="26" y="112" width="58" height="56" rx="2"/>
+            <path class="stroke-dim" d="M36 132h38M36 144h26"/>
+            <path class="stroke-dim" d="M42 6h26v12H42z"/>
+          </svg>
+        </div>
+        <div class="bottle-body">
+          <h3 data-i18n="b1n">No. 1 · Keeved Dry</h3>
+          <p class="stone small" data-i18n="b1d">Kingston Black and Browns. Keeved in the cold, stopped before it finished, so a little sweetness stays behind without any being added.</p>
+          <div class="bottle-row"><span data-i18n="b1m">750 ml · 5.4% · 340 bottles</span><span class="price">$18</span></div>
+          <a class="btn btn-outline" href="#" data-i18n="add">Add to cart</a>
+        </div>
+      </div>
+      <div class="bottle-card">
+        <div class="bottle-art">
+          <svg width="110" height="200" viewBox="0 0 110 200" aria-hidden="true">
+            <path class="stroke" d="M34 20h42v26c0 14 18 24 18 46v100c0 8-5 12-12 12H42c-7 0-12-4-12-12V92c0-22 18-32 18-46V20z"/>
+            <rect class="stroke-dim" x="28" y="108" width="54" height="60" rx="2"/>
+            <path class="stroke-dim" d="M38 128h34M38 140h22M38 152h34"/>
+            <path class="stroke-dim" d="M44 8h22v12H44z"/>
+          </svg>
+        </div>
+        <div class="bottle-body">
+          <h3 data-i18n="b2n">No. 2 · Bittersweet</h3>
+          <p class="stone small" data-i18n="b2d">Dabinett and Yarlington Mill, the two that carry the tannin. Dry to the edge of austere, and the one the cheesemonger keeps asking for.</p>
+          <div class="bottle-row"><span data-i18n="b2m">750 ml · 6.1% · 420 bottles</span><span class="price">$21</span></div>
+          <a class="btn btn-outline" href="#" data-i18n="add2">Add to cart</a>
+        </div>
+      </div>
+      <div class="bottle-card">
+        <div class="bottle-art">
+          <svg width="110" height="200" viewBox="0 0 110 200" aria-hidden="true">
+            <path class="stroke" d="M42 30h26v34c0 12 16 20 16 40v76c0 8-5 12-12 12H48c-7 0-12-4-12-12V104c0-20 16-28 16-40V30z"/>
+            <rect class="stroke-dim" x="34" y="120" width="42" height="50" rx="2"/>
+            <path class="stroke-dim" d="M42 138h26M42 150h16"/>
+            <path class="stroke-dim" d="M48 18h14v12H48z"/>
+          </svg>
+        </div>
+        <div class="bottle-body">
+          <h3 data-i18n="b3n">No. 3 · Ice Cider</h3>
+          <p class="stone small" data-i18n="b3d">Left out through three frosts and pressed frozen. It takes nine kilos of fruit to fill one half-bottle, which is why there are only a hundred and forty.</p>
+          <div class="bottle-row"><span data-i18n="b3m">375 ml · 9.0% · 140 bottles</span><span class="price">$34</span></div>
+          <a class="btn btn-outline" href="#" data-i18n="add3">Add to cart</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ПРОЦЕСС — плита какао -->
+<section class="slab" id="pressing">
+  <div class="wrap">
+    <div class="slab-grid">
+      <div>
+        <h2 data-i18n="h2c">Four steps, and three of them are waiting</h2>
+        <p class="small" style="opacity:.72; margin-top:var(--spacing-24)" data-i18n="p2c">The press runs for eleven days a year. Everything else that matters happens slowly, in a cold barn, without anybody standing over it.</p>
+      </div>
+      <div>
+        <ul class="steps">
+          <li>
+            <span class="n">I</span>
+            <h3 data-i18n="s1h">Gather</h3>
+            <p data-i18n="s1p">Fruit is collected off the grass every second morning through November, bruised fruit included — it presses no worse.</p>
+          </li>
+          <li>
+            <span class="n">II</span>
+            <h3 data-i18n="s2h">Mill and rest</h3>
+            <p data-i18n="s2p">Milled, then left in the tub overnight so the tannin has time to come out of the skins before any pressure is applied.</p>
+          </li>
+          <li>
+            <span class="n">III</span>
+            <h3 data-i18n="s3p2">Press</h3>
+            <p data-i18n="s3p">Slow rack-and-cloth, eleven days in total. Nothing is filtered afterwards; what settles is left to settle on its own.</p>
+          </li>
+          <li>
+            <span class="n">IV</span>
+            <h3 data-i18n="s4h">One winter</h3>
+            <p data-i18n="s4p">Wild yeast, an unheated barn and no intervention until March. Bottles are released only when a cask stops changing week to week.</p>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- МАГАЗИНЫ -->
+<section id="stockists">
+  <div class="wrap">
+    <div class="center">
+      <h2 data-i18n="h2d">Where the rest of it goes</h2>
+      <p class="stone" data-i18n="p2d">Half the pressing is sold here. The other half goes to nine places that will pour it by the glass and tell you which tree it came from.</p>
+    </div>
+    <ul class="stock">
+      <li><span class="place">Tbilisi</span><span class="who">Aggregate — Chitaia 6</span><span class="what" data-i18n="w1">All three</span></li>
+      <li><span class="place">Lisbon</span><span class="who">Casa Nove — Rua da Boavista 112</span><span class="what" data-i18n="w2">No. 1 and No. 2</span></li>
+      <li><span class="place">Copenhagen</span><span class="who">Vedbæk Vin — Store Kongensgade 44</span><span class="what" data-i18n="w3">Ice cider only</span></li>
+      <li><span class="place">Bristol</span><span class="who">The Long Bar — Christmas Steps</span><span class="what" data-i18n="w4">By the glass</span></li>
+    </ul>
+    <div class="center" style="margin-top:var(--spacing-48)">
+      <a class="link-ghost" href="#" data-i18n="wall">See all nine stockists</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <span class="wordmark">WINDFALL</span>
+        <p data-i18n="fbrand">Cider pressed once a year from forty-one old trees. Bottled at the orchard, sold until it runs out.</p>
+      </div>
+      <div>
+        <h4 data-i18n="fc1">Bottles</h4>
+        <ul>
+          <li><a href="#" data-i18n="fl1">Keeved Dry</a></li>
+          <li><a href="#" data-i18n="fl2">Bittersweet</a></li>
+          <li><a href="#" data-i18n="fl3">Ice Cider</a></li>
+          <li><a href="#" data-i18n="fl4">Past years</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 data-i18n="fc2">Orchard</h4>
+        <ul>
+          <li><a href="#" data-i18n="fl5">The trees</a></li>
+          <li><a href="#" data-i18n="fl6">Pressing</a></li>
+          <li><a href="#" data-i18n="fl7">Visits</a></li>
+          <li><a href="#" data-i18n="fl8">Journal</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 data-i18n="fc3">Shop</h4>
+        <ul>
+          <li><a href="#" data-i18n="fl9">Shipping</a></li>
+          <li><a href="#" data-i18n="fl10">Stockists</a></li>
+          <li><a href="#" data-i18n="fl11">Returns</a></li>
+          <li><a href="#" data-i18n="fl12">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span data-i18n="copy">© 2026 Windfall Cider</span>
+      <span data-i18n="place">Pressed and bottled at the orchard · Please drink responsibly</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* RU/EN. Английский — исходный, русский — перевод. Дефолт en, без авто-детекта. */
+var RU = {
+  announce:'Отжато в ноябре. Отправляем из сада, пока не уйдёт последний ящик.',
+  nav1:'Бутылки', nav2:'Сад', nav3:'Отжим', nav4:'Где купить', nav5:'Корзина',
+  h1:'Сидр с сорока одного дерева, которые никто не пересаживал.',
+  hp:'Девятьсот бутылок, отжатых за один ноябрь в саду, посаженном в 1934 году. Когда они кончатся, второго тиража не будет, пока деревья не решат иначе.',
+  hcta:'Купить этот отжим',
+  hm1:'дерева стоят', hm2:'сад посажен', hm3:'бутылок в этом году',
+  h2a:'Что даёт старый сад и не может дать молодой',
+  p2a:'Шесть сортов, ни один не посажен на еду. Горько-сладкие, с таким танином, какого молодое дерево не наберёт никогда, снятые тогда, когда упали, а не когда велел календарь.',
+  c1h:'Падалица, а не сбор',
+  c1p:'Мы берём плоды, которые дерево отпустило само. Они дозревают на ветке на две недели дольше снятого урожая — и отжимаются слаще.',
+  c2h:'Шесть сортов, порознь',
+  c2p:'Kingston Black, Dabinett, Yarlington Mill, Foxwhelp, Browns и ещё один, который в округе никто не может назвать. Каждый отжимается отдельно, купаж — только в конце.',
+  c3h:'Ничего не добавлено, ничего не ускорено',
+  c3p:'Дикие дрожжи, одна зима в бочке, ни сахара, ни подслащивания на розливе. Единственное, что мы кладём в бутылку, — год, из которого она пришла.',
+  h2b:'Три бутылки этого года',
+  p2b:'Отжато в ноябре 2025-го, разлито в марте, выпущено тогда, когда каждая перестала меняться.',
+  b1n:'№ 1 · Кевинг, сухой',
+  b1d:'Kingston Black и Browns. Кевинг на холоде, остановлен до конца брожения — немного сладости осталось само, без единого грамма добавленного.',
+  b1m:'750 мл · 5,4% · 340 бутылок', add:'В корзину',
+  b2n:'№ 2 · Горько-сладкий',
+  b2d:'Dabinett и Yarlington Mill — те два, что несут танин. Сухой до предела строгости, и именно его постоянно просит сыровар.',
+  b2m:'750 мл · 6,1% · 420 бутылок', add2:'В корзину',
+  b3n:'№ 3 · Ледяной сидр',
+  b3d:'Оставлен под тремя заморозками и отжат мёрзлым. На одну полубутылку уходит девять килограммов плодов — поэтому их всего сто сорок.',
+  b3m:'375 мл · 9,0% · 140 бутылок', add3:'В корзину',
+  h2c:'Четыре шага, и три из них — ожидание',
+  p2c:'Пресс работает одиннадцать дней в году. Всё остальное, что имеет значение, происходит медленно, в холодном сарае, без чьего-либо присмотра.',
+  s1h:'Собрать',
+  s1p:'Плоды собирают с травы через утро весь ноябрь, побитые в том числе — отжимаются они не хуже.',
+  s2h:'Смолоть и дать постоять',
+  s2p:'Мелют, затем оставляют в чане на ночь, чтобы танин успел выйти из кожуры до того, как приложат давление.',
+  s3p2:'Отжать',
+  s3p:'Медленный отжим на пакетном прессе, одиннадцать дней в сумме. Ничего не фильтруется — что осядет, оседает само.',
+  s4h:'Одна зима',
+  s4p:'Дикие дрожжи, нетопленый сарай и никакого вмешательства до марта. Бутылки выходят только тогда, когда бочка перестаёт меняться от недели к неделе.',
+  h2d:'Куда уходит остальное',
+  p2d:'Половина отжима продаётся здесь. Вторая уходит в девять мест, где нальют по бокалу и скажут, с какого дерева это пришло.',
+  w1:'Все три', w2:'№ 1 и № 2', w3:'Только ледяной', w4:'По бокалу',
+  wall:'Все девять точек',
+  fbrand:'Сидр, отжимаемый раз в год с сорока одного старого дерева. Разлит в саду, продаётся, пока не кончится.',
+  fc1:'Бутылки', fl1:'Кевинг, сухой', fl2:'Горько-сладкий', fl3:'Ледяной сидр', fl4:'Прошлые годы',
+  fc2:'Сад', fl5:'Деревья', fl6:'Отжим', fl7:'Визиты', fl8:'Журнал',
+  fc3:'Магазин', fl9:'Доставка', fl10:'Где купить', fl11:'Возврат', fl12:'Контакты',
+  copy:'© 2026 Windfall Cider',
+  place:'Отжато и разлито в саду · Пожалуйста, пейте ответственно'
+};
+var EN = {};
+document.querySelectorAll('[data-i18n]').forEach(function (el) { EN[el.dataset.i18n] = el.innerHTML; });
+
+function setLang(l) {
+  var dict = l === 'ru' ? RU : EN;
+  document.querySelectorAll('[data-i18n]').forEach(function (el) {
+    var v = dict[el.dataset.i18n];
+    if (v !== undefined) el.innerHTML = v;
+  });
+  document.documentElement.lang = l;
+  document.documentElement.dataset.lang = l;
+  document.querySelectorAll('.lang button').forEach(function (b) {
+    b.setAttribute('aria-pressed', b.dataset.set === l ? 'true' : 'false');
+  });
+}
+document.querySelectorAll('.lang button').forEach(function (b) {
+  b.addEventListener('click', function () { setLang(b.dataset.set); });
+});
+</script>
+</body>
+</html>

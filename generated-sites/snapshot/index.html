@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>Snapshot — masked copies of production, in ninety seconds</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500&family=Source+Code+Pro:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ─────────────────────────────────────────────────────────────
+   Дизайн-система: Supabase (refero 632249f1) — tokens.css дословно
+   ───────────────────────────────────────────────────────────── */
+:root {
+  /* Colors */
+  --color-phosphor-green: #3ecf8e;
+  --color-mint-pulse: #00c573;
+  --color-forest-depth: #1f4b37;
+  --color-midnight-emerald: #006239;
+  --color-snow: #fafafa;
+  --color-silver-mist: #b4b4b4;
+  --color-smoke: #898989;
+  --color-graphite: #4d4d4d;
+  --color-slate: #393939;
+  --color-charcoal: #2e2e2e;
+  --color-ash: #242424;
+  --color-obsidian: #121212;
+
+  /* Typography — Font Families */
+  /* Circular → Manrope: геометрический гуманистический гротеск с кириллицей */
+  --font-circular: 'Manrope', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-source-code-pro: 'Source Code Pro', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Typography — Scale */
+  --text-caption: 12px;
+  --leading-caption: 1.5;
+  --tracking-caption: -0.084px;
+  --text-body-sm: 14px;
+  --leading-body-sm: 1.43;
+  --tracking-body-sm: -0.098px;
+  --text-body: 16px;
+  --leading-body: 1.5;
+  --tracking-body: -0.112px;
+  --text-subheading: 18px;
+  --leading-subheading: 1.38;
+  --tracking-subheading: -0.126px;
+  --text-heading-sm: 24px;
+  --leading-heading-sm: 1.33;
+  --tracking-heading-sm: -0.168px;
+  --text-heading: 36px;
+  --leading-heading: 1.2;
+  --tracking-heading: -0.252px;
+  --text-display: 72px;
+  --leading-display: 1;
+  --tracking-display: -0.504px;
+
+  /* Typography — Weights */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+
+  /* Spacing */
+  --spacing-unit: 8px;
+  --spacing-8: 8px;
+  --spacing-16: 16px;
+  --spacing-24: 24px;
+  --spacing-32: 32px;
+  --spacing-40: 40px;
+  --spacing-48: 48px;
+  --spacing-64: 64px;
+  --spacing-80: 80px;
+  --spacing-96: 96px;
+  --spacing-112: 112px;
+  --spacing-128: 128px;
+  --spacing-224: 224px;
+
+  /* Layout */
+  --page-max-width: 1200px;
+  --card-padding: 24px;
+
+  /* Border Radius */
+  --radius-lg: 8px;
+  --radius-2xl: 16px;
+  --radius-full: 9999px;
+
+  /* Named Radii */
+  --radius-tags: 9999px;
+  --radius-cards: 16px;
+  --radius-inputs: 8px;
+  --radius-buttons: 9999px;
+
+  /* Surfaces */
+  --surface-obsidian-canvas: #121212;
+  --surface-ash-card: #242424;
+  --surface-charcoal-border: #2e2e2e;
+
+  /* Своё: фон иллюстративных областей (design.md: line-art #4d4d4d на #0d0d0d) */
+  --illo-bg: #0d0d0d;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--surface-obsidian-canvas);
+  color: var(--color-snow);
+  font-family: var(--font-circular);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  font-weight: var(--font-weight-regular);
+  letter-spacing: -0.007em;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; text-decoration: none; }
+h1, h2, h3, h4, p, ul, ol { margin: 0; }
+ul { list-style: none; padding: 0; }
+
+.wrap { max-width: var(--page-max-width); margin: 0 auto; padding: 0 var(--spacing-24); }
+section { padding: var(--spacing-96) 0; }
+
+/* ── Навигация ── */
+.nav {
+  position: sticky; top: 0; z-index: 30;
+  height: 64px;
+  background: var(--surface-obsidian-canvas);
+  border-bottom: 1px solid var(--color-charcoal);
+}
+.nav .wrap { height: 100%; display: flex; align-items: center; gap: var(--spacing-32); }
+.logo { display: flex; align-items: center; gap: 10px; font-size: var(--text-subheading); font-weight: var(--font-weight-medium); }
+.logo svg { display: block; }
+.nav-links { display: flex; gap: var(--spacing-24); margin-left: var(--spacing-16); }
+.nav-links a { font-size: var(--text-body-sm); color: var(--color-silver-mist); }
+.nav-links a:hover { color: var(--color-snow); }
+.nav-right { margin-left: auto; display: flex; align-items: center; gap: var(--spacing-8); }
+
+.pill-stars {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--color-ash); border: 1px solid var(--color-charcoal);
+  border-radius: var(--radius-tags); padding: 6px 10px;
+  font-size: var(--text-caption); color: var(--color-snow);
+}
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  border-radius: var(--radius-buttons); padding: 8px 16px;
+  font-size: var(--text-body-sm); line-height: var(--leading-body-sm);
+  font-family: inherit; letter-spacing: inherit; cursor: pointer;
+}
+.btn-primary {
+  background: var(--color-phosphor-green); border: 1px solid var(--color-phosphor-green);
+  color: var(--color-obsidian); font-weight: var(--font-weight-medium);
+}
+.btn-primary:hover { border-color: var(--color-forest-depth); }
+.btn-ghost {
+  background: transparent; border: 1px solid var(--color-slate); color: var(--color-snow);
+  font-weight: var(--font-weight-regular);
+}
+.btn-ghost:hover { border-color: var(--color-graphite); background: rgba(255,255,255,0.04); }
+.btn-lg { padding: 12px 22px; font-size: var(--text-body); }
+
+.switch { display: inline-flex; border: 1px solid var(--color-slate); border-radius: var(--radius-full); overflow: hidden; }
+.switch button {
+  background: transparent; border: 0; color: var(--color-smoke);
+  font-family: inherit; font-size: var(--text-caption); letter-spacing: inherit;
+  padding: 6px 10px; cursor: pointer;
+}
+.switch button[aria-pressed="true"] { color: var(--color-obsidian); background: var(--color-snow); }
+
+/* ── Хиро ── */
+.hero { padding: var(--spacing-112) 0 var(--spacing-80); text-align: center; }
+.announce {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: var(--color-ash); border: 1px solid var(--color-charcoal);
+  border-radius: var(--radius-tags); padding: 6px 16px;
+  font-size: var(--text-caption); color: var(--color-silver-mist);
+  margin-bottom: var(--spacing-40);
+}
+.announce span.dot { width: 6px; height: 6px; border-radius: 50%; background: var(--color-phosphor-green); }
+h1 {
+  font-size: var(--text-display); line-height: var(--leading-display);
+  letter-spacing: var(--tracking-display); font-weight: var(--font-weight-regular);
+}
+h1 .green { color: var(--color-phosphor-green); display: block; }
+.hero p.lead {
+  max-width: 720px; margin: var(--spacing-24) auto 0;
+  color: var(--color-silver-mist); font-size: var(--text-body);
+}
+.hero .actions { display: flex; gap: var(--spacing-16); justify-content: center; margin-top: var(--spacing-40); }
+
+/* ── Полоса совместимости ── */
+.compat { padding: var(--spacing-48) 0 var(--spacing-64); text-align: center; }
+.compat ul { display: flex; justify-content: center; gap: var(--spacing-40); flex-wrap: wrap; }
+.compat li { color: var(--color-smoke); font-size: var(--text-body-sm); font-weight: var(--font-weight-medium); }
+.compat p { color: var(--color-smoke); font-size: var(--text-caption); margin-top: var(--spacing-24); }
+
+/* ── Карточки ── */
+.card {
+  background: var(--surface-obsidian-canvas);
+  border: 1px solid var(--color-charcoal);
+  border-radius: var(--radius-cards);
+  padding: var(--card-padding);
+}
+.card-ash { background: var(--color-ash); }
+
+/* ── Терминал ── */
+.term { padding: 0; overflow: hidden; }
+.term-bar {
+  display: flex; align-items: center; gap: var(--spacing-16);
+  padding: 10px var(--spacing-24); border-bottom: 1px solid var(--color-charcoal);
+  font-size: var(--text-caption); color: var(--color-smoke);
+  font-family: var(--font-source-code-pro);
+}
+.term-bar .tab { color: var(--color-silver-mist); }
+.term-bar .right { margin-left: auto; }
+.term pre {
+  margin: 0; padding: var(--spacing-24);
+  font-family: var(--font-source-code-pro); font-size: var(--text-body-sm);
+  line-height: 1.75; color: var(--color-silver-mist);
+  background: var(--illo-bg); overflow-x: auto;
+}
+.term pre b { color: var(--color-snow); font-weight: var(--font-weight-regular); }
+.term pre i { color: var(--color-phosphor-green); font-style: normal; }
+.term pre u { color: var(--color-smoke); text-decoration: none; }
+
+/* ── Секционные заголовки ── */
+.sec-head { max-width: 720px; margin-bottom: var(--spacing-48); }
+.sec-head .kicker {
+  font-family: var(--font-source-code-pro); font-size: var(--text-caption);
+  color: var(--color-phosphor-green); text-transform: uppercase; letter-spacing: 0.08em;
+  margin-bottom: var(--spacing-16);
+}
+h2 { font-size: var(--text-heading); line-height: var(--leading-heading); letter-spacing: var(--tracking-heading); font-weight: var(--font-weight-regular); }
+.sec-head p { color: var(--color-silver-mist); font-size: var(--text-body); margin-top: var(--spacing-16); }
+
+/* ── Таблица правил ── */
+table { width: 100%; border-collapse: collapse; font-size: var(--text-body-sm); }
+thead th {
+  text-align: left; font-weight: var(--font-weight-medium); color: var(--color-smoke);
+  font-size: var(--text-caption); text-transform: uppercase; letter-spacing: 0.06em;
+  padding: 0 var(--spacing-16) var(--spacing-16); border-bottom: 1px solid var(--color-charcoal);
+}
+tbody td { padding: var(--spacing-16); border-bottom: 1px solid var(--color-charcoal); vertical-align: top; color: var(--color-silver-mist); }
+tbody tr:last-child td { border-bottom: 0; }
+td.col { font-family: var(--font-source-code-pro); color: var(--color-snow); white-space: nowrap; }
+td.rule { font-family: var(--font-source-code-pro); color: var(--color-mint-pulse); white-space: nowrap; }
+td.was { font-family: var(--font-source-code-pro); color: var(--color-smoke); }
+td.now { font-family: var(--font-source-code-pro); color: var(--color-silver-mist); }
+
+/* ── Сетка возможностей ── */
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--spacing-24); }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-24); }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-24); }
+.feature { display: flex; flex-direction: column; }
+.feature h3 { font-size: var(--text-subheading); font-weight: var(--font-weight-medium); margin: var(--spacing-16) 0 var(--spacing-8); }
+.feature p { font-size: var(--text-body-sm); color: var(--color-silver-mist); margin-bottom: var(--spacing-24); }
+.feature .icon { color: var(--color-phosphor-green); }
+.feature .illo {
+  margin-top: auto; background: var(--illo-bg);
+  border: 1px solid var(--color-charcoal); border-radius: var(--radius-lg);
+  height: 120px; display: flex; align-items: center; justify-content: center;
+}
+
+/* ── Числа ── */
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--spacing-24); }
+.stat .n { font-size: var(--text-heading); line-height: 1.1; letter-spacing: var(--tracking-heading); font-weight: var(--font-weight-regular); }
+.stat .n em { font-style: normal; color: var(--color-phosphor-green); }
+.stat p { font-size: var(--text-body-sm); color: var(--color-smoke); margin-top: var(--spacing-8); }
+
+/* ── Схема ── */
+.diagram { background: var(--illo-bg); border: 1px solid var(--color-charcoal); border-radius: var(--radius-cards); padding: var(--spacing-40); }
+.diagram svg { display: block; width: 100%; height: auto; }
+
+/* ── Список проверок ── */
+.checks li { display: flex; gap: var(--spacing-16); padding: var(--spacing-16) 0; border-bottom: 1px solid var(--color-charcoal); font-size: var(--text-body-sm); color: var(--color-silver-mist); }
+.checks li:last-child { border-bottom: 0; }
+.checks li .id { font-family: var(--font-source-code-pro); color: var(--color-smoke); min-width: 64px; }
+.checks li b { color: var(--color-snow); font-weight: var(--font-weight-medium); }
+
+/* ── Журнал ── */
+.log { font-family: var(--font-source-code-pro); font-size: var(--text-caption); }
+.log div { display: grid; grid-template-columns: 84px 104px 1fr; gap: var(--spacing-16); padding: 10px 0; border-bottom: 1px solid var(--color-charcoal); color: var(--color-silver-mist); }
+.log div:last-child { border-bottom: 0; }
+.log .t { color: var(--color-smoke); }
+.log .who { color: var(--color-snow); }
+
+/* ── Тарифы ── */
+.plan { display: flex; flex-direction: column; }
+.plan ul { flex: 1; }
+.plan h3 { font-size: var(--text-heading-sm); font-weight: var(--font-weight-medium); }
+.plan .price { font-size: var(--text-heading); font-weight: var(--font-weight-regular); letter-spacing: var(--tracking-heading); margin: var(--spacing-16) 0; }
+.plan .price small { font-size: var(--text-body-sm); color: var(--color-smoke); letter-spacing: normal; }
+.plan ul { margin-top: var(--spacing-16); }
+.plan ul li { font-size: var(--text-body-sm); color: var(--color-silver-mist); padding: 8px 0; border-top: 1px solid var(--color-charcoal); }
+.plan .btn { margin-top: var(--spacing-24); width: 100%; justify-content: center; }
+
+/* ── Финальный призыв ── */
+.final { text-align: center; }
+.final h2 { font-size: var(--text-heading); }
+.final p { color: var(--color-silver-mist); max-width: 620px; margin: var(--spacing-16) auto 0; font-size: var(--text-body); }
+.final .actions { display: flex; gap: var(--spacing-16); justify-content: center; margin-top: var(--spacing-32); }
+
+/* ── Подвал ── */
+footer { border-top: 1px solid var(--color-charcoal); padding: var(--spacing-64) 0 var(--spacing-48); }
+.foot-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: var(--spacing-40); }
+footer h4 { font-size: var(--text-caption); text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-smoke); font-weight: var(--font-weight-medium); margin-bottom: var(--spacing-16); }
+footer li { font-size: var(--text-body-sm); color: var(--color-silver-mist); padding: 6px 0; }
+footer li a:hover { color: var(--color-snow); }
+.foot-note { color: var(--color-smoke); font-size: var(--text-body-sm); max-width: 320px; margin-top: var(--spacing-16); }
+.foot-bottom { display: flex; align-items: center; gap: var(--spacing-24); margin-top: var(--spacing-48); padding-top: var(--spacing-24); border-top: 1px solid var(--color-charcoal); font-size: var(--text-caption); color: var(--color-smoke); }
+.foot-bottom .right { margin-left: auto; display: flex; gap: var(--spacing-16); align-items: center; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap">
+    <a class="logo" href="#">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+        <path d="M10 1 3 11h6l-1 8 8-10h-6l1-8z" fill="#3ecf8e"/>
+      </svg>
+      Snapshot
+    </a>
+    <div class="nav-links">
+      <a href="#how" data-i18n="n1">How it works</a>
+      <a href="#rules" data-i18n="n2">Masking</a>
+      <a href="#checks" data-i18n="n3">Leak tests</a>
+      <a href="#pricing" data-i18n="n4">Pricing</a>
+      <a href="#" data-i18n="n5">Docs</a>
+    </div>
+    <div class="nav-right">
+      <span class="pill-stars">
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="#fafafa" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38v-1.33C3.8 14.37 3.34 12.8 3.34 12.8c-.36-.92-.88-1.16-.88-1.16-.72-.49.05-.48.05-.48.8.06 1.22.82 1.22.82.71 1.21 1.86.86 2.31.66.07-.51.28-.86.5-1.06-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.03 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+        4.1k
+      </span>
+      <a class="btn btn-ghost" href="#" data-i18n="n6">Sign in</a>
+      <a class="btn btn-primary" href="#" data-i18n="n7">Start a branch</a>
+      <span class="switch">
+        <button type="button" data-set="en" aria-pressed="true">EN</button>
+        <button type="button" data-set="ru" aria-pressed="false">RU</button>
+      </span>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="announce"><span class="dot"></span><span data-i18n="a1">Postgres 17 branches now restore straight from WAL — release note</span></div>
+    <h1>
+      <span data-i18n="h1a">Develop against real data.</span>
+      <span class="green" data-i18n="h1b">Never against real people.</span>
+    </h1>
+    <p class="lead" data-i18n="h2">Snapshot keeps one masked image of production and hands every branch, CI job and new laptop its own database. Forty gigabytes or four terabytes — the copy is ready in about ninety seconds, because nothing is copied until it is written.</p>
+    <div class="actions">
+      <a class="btn btn-primary btn-lg" href="#" data-i18n="h3">Start a branch</a>
+      <a class="btn btn-ghost btn-lg" href="#rules" data-i18n="h4">Read the masking spec</a>
+    </div>
+  </div>
+</header>
+
+<div class="compat">
+  <div class="wrap">
+    <ul>
+      <li>PostgreSQL 14–17</li><li>MySQL 8</li><li>Amazon RDS</li><li>Cloud SQL</li><li>Aurora</li><li>Self-hosted</li>
+    </ul>
+    <p data-i18n="c1">Reads a physical base backup — no logical dump, no downtime on the primary</p>
+  </div>
+</div>
+
+<section id="how" style="padding-top:0">
+  <div class="wrap">
+    <div class="grid-2" style="grid-template-columns: 5fr 7fr; align-items:start; gap: var(--spacing-48)">
+      <div>
+        <div class="sec-head" style="margin-bottom:var(--spacing-24)">
+          <div class="kicker" data-i18n="k1">One command</div>
+          <h2 data-i18n="s1">A branch is a database, not a ticket</h2>
+          <p data-i18n="s1p">No request to the DBA, no restore window, no shared staging box that four teams keep breaking. The engineer runs one command and gets a DSN that behaves exactly like production — same row counts, same indexes, same query plans, different people.</p>
+        </div>
+        <ul class="checks">
+          <li><span class="id">01</span><span><b data-i18n="w1b">Same shape.</b> <span data-i18n="w1">Row counts, index bloat and table statistics are carried over, so a plan that goes sequential here goes sequential there.</span></span></li>
+          <li><span class="id">02</span><span><b data-i18n="w2b">Same keys.</b> <span data-i18n="w2">Masking is deterministic per rule set: the same customer keeps the same fake email across eleven tables, and every foreign key still resolves.</span></span></li>
+          <li><span class="id">03</span><span><b data-i18n="w3b">Not the same people.</b> <span data-i18n="w3">Nothing that identifies a person leaves the vault. The branch is built from the masked image, never from the primary.</span></span></li>
+        </ul>
+      </div>
+      <div class="card term">
+        <div class="term-bar">
+          <span class="tab">zsh</span><span>branch-4821</span>
+          <span class="right">03:12 → 03:13</span>
+        </div>
+        <pre><b>$ snapshot branch create --from prod --rules strict</b>
+
+  <i>✓</i> base image      2026-08-19 03:12 UTC   <u>41.2 GB</u>
+  <i>✓</i> rule set        masking.toml @ 7f21c   <u>118 columns</u>
+  <i>✓</i> masking pass    118/118 columns        <u>26 s</u>
+  <i>✓</i> leak test       2 000 rows, 14 probes  <u>clean</u>
+  <i>✓</i> volume          copy-on-write          <u>1.4 GB written</u>
+
+  dsn   <b>postgres://app@br-4821.snapshot.internal:5432/app</b>
+  ttl   72h  (expires 2026-08-22 03:13 UTC)
+
+  <u>done in 1m 27s</u>
+
+<b>$ psql $DSN -c 'select count(*) from orders'</b>
+   count
+ ---------
+  8 412 097
+</pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="rules">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kicker" data-i18n="k2">Masking</div>
+      <h2 data-i18n="s2">Seven rules, written in the repo, reviewed in the pull request</h2>
+      <p data-i18n="s2p">Rules live in <code style="font-family:var(--font-source-code-pro);color:var(--color-mint-pulse)">masking.toml</code> next to the migrations. A new column without a rule fails the build — the default is refusal, not passthrough.</p>
+    </div>
+    <div class="card" style="padding: var(--spacing-24) var(--spacing-8)">
+      <table>
+        <thead>
+          <tr>
+            <th style="padding-left:var(--spacing-16)" data-i18n="t1">Column</th>
+            <th data-i18n="t2">Rule</th>
+            <th data-i18n="t3">In production</th>
+            <th data-i18n="t4">In the branch</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="col">users.email</td><td class="rule">tokenize</td><td class="was">a.ivanova@northwind.ru</td><td class="now">u4821@example.invalid</td></tr>
+          <tr><td class="col">users.phone</td><td class="rule">format_preserving</td><td class="was">+7 916 402-11-87</td><td class="now">+7 916 550-31-04</td></tr>
+          <tr><td class="col">cards.pan</td><td class="rule">luhn_preserving</td><td class="was">4276 3800 1234 5678</td><td class="now">4276 3800 9930 1042</td></tr>
+          <tr><td class="col">persons.born_on</td><td class="rule">shift(±40d)</td><td class="was">1987-04-02</td><td class="now">1987-03-11</td></tr>
+          <tr><td class="col">addresses.point</td><td class="rule">round(1km)</td><td class="was">55.75104, 37.61842</td><td class="now">55.755, 37.617</td></tr>
+          <tr><td class="col">tickets.body</td><td class="rule">redact_spans</td><td class="was">…звонил Игорь, счёт 40817…</td><td class="now">…звонил [NAME], счёт [ACCT]…</td></tr>
+          <tr><td class="col">audit.client_ip</td><td class="rule">keep(/16)</td><td class="was">95.108.213.44</td><td class="now">95.108.0.117</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="color:var(--color-smoke);font-size:var(--text-body-sm);margin-top:var(--spacing-24)" data-i18n="s2n">Free-text columns are the hard ones. <code style="font-family:var(--font-source-code-pro)">redact_spans</code> runs a span classifier over the text and replaces names, account numbers and addresses in place — the sentence keeps its length and language, which is why parsers downstream keep working.</p>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="grid-4">
+      <div class="card feature">
+        <div class="icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2.5" y="3" width="15" height="5" rx="1"/><rect x="2.5" y="12" width="15" height="5" rx="1"/><path d="M6 8v4"/></svg>
+        </div>
+        <h3 data-i18n="f1h">Copy-on-write</h3>
+        <p data-i18n="f1p">The branch shares blocks with the base image until it changes them. A four-terabyte database and a four-gigabyte one take the same ninety seconds.</p>
+        <div class="illo">
+          <svg width="180" height="76" viewBox="0 0 180 76" fill="none" stroke="#4d4d4d" stroke-width="1.2">
+            <rect x="4" y="26" width="46" height="24" rx="3"/>
+            <path d="M50 38h24M74 38v-22h30M74 38v22h30"/>
+            <rect x="104" y="4" width="46" height="24" rx="3"/>
+            <rect x="104" y="48" width="46" height="24" rx="3"/>
+            <circle cx="152" cy="16" r="2.5" fill="#3ecf8e" stroke="none"/>
+            <circle cx="152" cy="60" r="2.5" fill="#3ecf8e" stroke="none"/>
+          </svg>
+        </div>
+      </div>
+      <div class="card feature">
+        <div class="icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 3h9l3 3v11H4z"/><path d="M7 9h6M7 12.5h4"/></svg>
+        </div>
+        <h3 data-i18n="f2h">Rules in review</h3>
+        <p data-i18n="f2p">Masking is a file in the repository with an owner and a diff. Adding a column that stores a phone number without saying so breaks CI.</p>
+        <div class="illo">
+          <svg width="180" height="76" viewBox="0 0 180 76" fill="none" stroke="#4d4d4d" stroke-width="1.2">
+            <path d="M14 12h152M14 26h120M14 40h140M14 54h96M14 68h64"/>
+            <rect x="8" y="34" width="164" height="12" stroke="#3ecf8e"/>
+          </svg>
+        </div>
+      </div>
+      <div class="card feature">
+        <div class="icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="9" cy="9" r="6"/><path d="M13.5 13.5 17 17"/></svg>
+        </div>
+        <h3 data-i18n="f3h">Leak test on every restore</h3>
+        <p data-i18n="f3p">Two thousand sampled rows go through fourteen detectors — card numbers, passport patterns, e-mail shapes, Russian phone masks. One hit and the branch is destroyed instead of handed over.</p>
+        <div class="illo">
+          <svg width="180" height="76" viewBox="0 0 180 76" fill="none" stroke="#4d4d4d" stroke-width="1.2">
+            <circle cx="90" cy="38" r="28"/><circle cx="90" cy="38" r="16"/>
+            <path d="M62 38h56M90 10v56"/>
+            <circle cx="102" cy="26" r="3" fill="#3ecf8e" stroke="none"/>
+          </svg>
+        </div>
+      </div>
+      <div class="card feature">
+        <div class="icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="10" r="7"/><path d="M10 6v4.5l3 2"/></svg>
+        </div>
+        <h3 data-i18n="f4h">Branches expire</h3>
+        <p data-i18n="f4p">Seventy-two hours by default, and the TTL is printed in the connection string. Nobody discovers a two-year-old copy of the customer table on a laptop.</p>
+        <div class="illo">
+          <svg width="180" height="76" viewBox="0 0 180 76" fill="none" stroke="#4d4d4d" stroke-width="1.2">
+            <path d="M20 60h140"/>
+            <path d="M32 60V22M68 60V32M104 60V44M140 60V56"/>
+            <circle cx="140" cy="56" r="3" fill="#3ecf8e" stroke="none"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="checks" style="padding-top:0">
+  <div class="wrap">
+    <div class="diagram">
+      <svg viewBox="0 0 1100 200" fill="none" stroke="#4d4d4d" stroke-width="1.2" font-family="'Source Code Pro', monospace" font-size="12">
+        <rect x="8" y="70" width="150" height="60" rx="6"/>
+        <text x="83" y="95" fill="#b4b4b4" text-anchor="middle" stroke="none">primary</text>
+        <text x="83" y="113" fill="#898989" text-anchor="middle" stroke="none">read replica</text>
+        <path d="M158 100h70" stroke-dasharray="4 4"/>
+        <rect x="228" y="70" width="170" height="60" rx="6"/>
+        <text x="313" y="95" fill="#b4b4b4" text-anchor="middle" stroke="none">base image 03:12</text>
+        <text x="313" y="113" fill="#898989" text-anchor="middle" stroke="none">41.2 GB · immutable</text>
+        <path d="M398 100h70"/>
+        <rect x="468" y="60" width="180" height="80" rx="6" stroke="#3ecf8e"/>
+        <text x="558" y="88" fill="#fafafa" text-anchor="middle" stroke="none">masking pass</text>
+        <text x="558" y="106" fill="#898989" text-anchor="middle" stroke="none">118 columns · 26 s</text>
+        <text x="558" y="124" fill="#898989" text-anchor="middle" stroke="none">leak test · 14 probes</text>
+        <path d="M648 100h60M708 100V40h60M708 100h60M708 100v60h60"/>
+        <rect x="768" y="20" width="150" height="40" rx="6"/>
+        <text x="843" y="45" fill="#b4b4b4" text-anchor="middle" stroke="none">branch · CI</text>
+        <rect x="768" y="80" width="150" height="40" rx="6"/>
+        <text x="843" y="105" fill="#b4b4b4" text-anchor="middle" stroke="none">branch · laptop</text>
+        <rect x="768" y="140" width="150" height="40" rx="6"/>
+        <text x="843" y="165" fill="#b4b4b4" text-anchor="middle" stroke="none">branch · analytics</text>
+        <path d="M918 40h60M918 100h60M918 160h60" stroke-dasharray="3 5"/>
+        <text x="1040" y="45" fill="#898989" text-anchor="middle" stroke="none">72 h</text>
+        <text x="1040" y="105" fill="#898989" text-anchor="middle" stroke="none">72 h</text>
+        <text x="1040" y="165" fill="#898989" text-anchor="middle" stroke="none">7 d</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="stats">
+      <div class="stat"><div class="n"><em>87 s</em></div><p data-i18n="st1">Median time from command to open connection, measured across 2 941 branches last month</p></div>
+      <div class="stat"><div class="n">1.4 GB</div><p data-i18n="st2">Written per branch on average — the rest is shared with the base image</p></div>
+      <div class="stat"><div class="n">118</div><p data-i18n="st3">Columns under a rule in a mid-size schema; four of them are free text</p></div>
+      <div class="stat"><div class="n">0</div><p data-i18n="st4">Rows that ever leave the vault unmasked. The primary is never a source for a branch</p></div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="grid-2" style="gap:var(--spacing-48)">
+      <div>
+        <div class="sec-head" style="margin-bottom:var(--spacing-24)">
+          <div class="kicker" data-i18n="k3">Audit</div>
+          <h2 data-i18n="s3">Every copy has a name on it</h2>
+          <p data-i18n="s3p">Who asked, which rule set version ran, how long the branch lived, whether the leak test was clean. Streamed to your SIEM as it happens, kept for a year.</p>
+        </div>
+      </div>
+      <div class="card card-ash log">
+        <div><span class="t">03:13:04</span><span class="who">a.orlov</span><span>create br-4821 · rules 7f21c · clean</span></div>
+        <div><span class="t">09:41:22</span><span class="who">ci-runner</span><span>create br-4822 · rules 7f21c · clean</span></div>
+        <div><span class="t">09:44:51</span><span class="who">ci-runner</span><span>destroy br-4822 · 3 m 29 s</span></div>
+        <div><span class="t">11:02:10</span><span class="who">m.tikhonova</span><span>create br-4823 · rules 7f21c · <span style="color:var(--color-phosphor-green)">held 1 hit → destroyed</span></span></div>
+        <div><span class="t">11:06:38</span><span class="who">m.tikhonova</span><span>create br-4824 · rules 8a03d · clean</span></div>
+        <div><span class="t">03:13:00</span><span class="who">system</span><span>expire br-4801 · ttl 72h</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="pricing" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kicker" data-i18n="k4">Pricing</div>
+      <h2 data-i18n="s4">Priced by the base image, not by the branch</h2>
+      <p data-i18n="s4p">Branches are nearly free to make, so charging for them would make people share one — which is the thing we are trying to end.</p>
+    </div>
+    <div class="grid-3">
+      <div class="card plan">
+        <h3 data-i18n="p1h">Single schema</h3>
+        <div class="price">$0 <small data-i18n="p1s">up to 20 GB</small></div>
+        <ul>
+          <li data-i18n="p1a">One base image, refreshed nightly</li>
+          <li data-i18n="p1b">Unlimited branches, 24 h TTL</li>
+          <li data-i18n="p1c">Seven built-in rule types</li>
+        </ul>
+        <a class="btn btn-ghost" href="#" data-i18n="p1c2">Start free</a>
+      </div>
+      <div class="card plan" style="border-color:var(--color-phosphor-green)">
+        <h3 data-i18n="p2h">Team</h3>
+        <div class="price">$420 <small data-i18n="p2s">per TB of base image, monthly</small></div>
+        <ul>
+          <li data-i18n="p2a">Refresh on a schedule or on demand</li>
+          <li data-i18n="p2b">Span classifier for free-text columns</li>
+          <li data-i18n="p2c">Leak test on every restore, SIEM export</li>
+          <li data-i18n="p2d">CI plugin: branch per pull request</li>
+        </ul>
+        <a class="btn btn-primary" href="#" data-i18n="p2c2">Start a branch</a>
+      </div>
+      <div class="card plan">
+        <h3 data-i18n="p3h">In your VPC</h3>
+        <div class="price" data-i18n="p3s">Annual</div>
+        <ul>
+          <li data-i18n="p3a">Control plane runs inside your account</li>
+          <li data-i18n="p3b">Vault never opens an outbound connection</li>
+          <li data-i18n="p3c">Rule sets signed and pinned per environment</li>
+          <li data-i18n="p3d">Review of your masking file twice a year</li>
+        </ul>
+        <a class="btn btn-ghost" href="#" data-i18n="p3c2">Talk to us</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="final" style="padding-top:0">
+  <div class="wrap">
+    <h2 data-i18n="fin1">The staging database is a person, and it is tired</h2>
+    <p data-i18n="fin2">Point Snapshot at a read replica, write seven rules, and by the morning every engineer has their own copy. The one you were all sharing can be turned off.</p>
+    <div class="actions">
+      <a class="btn btn-primary btn-lg" href="#" data-i18n="fin3">Start a branch</a>
+      <a class="btn btn-ghost btn-lg" href="#" data-i18n="fin4">Book a walkthrough</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="logo" style="font-size:var(--text-body)">
+          <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 1 3 11h6l-1 8 8-10h-6l1-8z" fill="#3ecf8e"/></svg>
+          Snapshot
+        </div>
+        <p class="foot-note" data-i18n="ft1">Built by four people who each spent a weekend restoring a dump that turned out to be six weeks old.</p>
+      </div>
+      <div>
+        <h4 data-i18n="fh1">Product</h4>
+        <ul>
+          <li><a href="#" data-i18n="fl1">Branches</a></li>
+          <li><a href="#" data-i18n="fl2">Masking rules</a></li>
+          <li><a href="#" data-i18n="fl3">Leak tests</a></li>
+          <li><a href="#" data-i18n="fl4">CI plugin</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 data-i18n="fh2">Docs</h4>
+        <ul>
+          <li><a href="#" data-i18n="fl5">CLI reference</a></li>
+          <li><a href="#" data-i18n="fl6">masking.toml</a></li>
+          <li><a href="#" data-i18n="fl7">Postgres notes</a></li>
+          <li><a href="#" data-i18n="fl8">MySQL notes</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 data-i18n="fh3">Company</h4>
+        <ul>
+          <li><a href="#" data-i18n="fl9">Security</a></li>
+          <li><a href="#" data-i18n="fl10">Changelog</a></li>
+          <li><a href="#" data-i18n="fl11">Status</a></li>
+          <li><a href="#" data-i18n="fl12">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Snapshot</span>
+      <span class="right">
+        <a href="#" data-i18n="fb1">Privacy</a>
+        <a href="#" data-i18n="fb2">Terms</a>
+        <span style="color:var(--color-phosphor-green)">●</span>
+        <span data-i18n="fb3">All systems normal</span>
+      </span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ── RU/EN. Английский — исходный, русский — перевод под него ── */
+var RU = {
+  n1:'Как устроено', n2:'Маскирование', n3:'Проверка утечек', n4:'Цены', n5:'Документация',
+  n6:'Войти', n7:'Создать ветку',
+  a1:'Ветки Postgres 17 теперь поднимаются прямо из WAL — заметка о релизе',
+  h1a:'Разрабатывайте на настоящих данных.',
+  h1b:'И никогда — на настоящих людях.',
+  h2:'Snapshot держит один замаскированный образ прода и выдаёт каждой ветке, каждому прогону CI и каждому новому ноутбуку свою базу. Сорок гигабайт или четыре терабайта — копия готова примерно за девяносто секунд, потому что ничего не копируется, пока в это место не пишут.',
+  h3:'Создать ветку', h4:'Прочитать спецификацию',
+  c1:'Читает физический бэкап — без логического дампа и без простоя мастера',
+  k1:'Одна команда',
+  s1:'Ветка — это база, а не заявка',
+  s1p:'Ни просьбы к администратору, ни окна на восстановление, ни общего стенда, который ломают четыре команды сразу. Инженер выполняет одну команду и получает DSN, ведущий себя точно как прод: те же количества строк, те же индексы, те же планы запросов — другие люди.',
+  w1b:'Та же форма.', w1:'Количество строк, распухание индексов и статистика таблиц переносятся, поэтому план, который тут уходит в seq scan, уйдёт в него и там.',
+  w2b:'Те же ключи.', w2:'Маскирование детерминировано внутри набора правил: один и тот же клиент сохраняет один и тот же фальшивый адрес в одиннадцати таблицах, и все внешние ключи по-прежнему сходятся.',
+  w3b:'Другие люди.', w3:'Ничто, что опознаёт человека, не покидает хранилище. Ветка собирается из замаскированного образа, а не из мастера.',
+  k2:'Маскирование',
+  s2:'Семь правил, которые лежат в репозитории и проходят ревью',
+  s2p:'Правила живут в <code style="font-family:var(--font-source-code-pro);color:var(--color-mint-pulse)">masking.toml</code> рядом с миграциями. Новая колонка без правила роняет сборку — по умолчанию отказ, а не пропуск.',
+  t1:'Колонка', t2:'Правило', t3:'На проде', t4:'В ветке',
+  s2n:'Свободный текст — самое сложное. <code style="font-family:var(--font-source-code-pro)">redact_spans</code> прогоняет по нему классификатор фрагментов и заменяет имена, номера счетов и адреса на месте: предложение сохраняет длину и язык, поэтому всё, что парсит его дальше, продолжает работать.',
+  f1h:'Копирование при записи',
+  f1p:'Ветка делит блоки с базовым образом, пока не изменит их. База на четыре терабайта и база на четыре гигабайта поднимаются за одни и те же девяносто секунд.',
+  f2h:'Правила проходят ревью',
+  f2p:'Маскирование — файл в репозитории, у которого есть владелец и дифф. Добавить колонку с телефоном, не сказав об этом, значит уронить CI.',
+  f3h:'Проверка утечек при каждом восстановлении',
+  f3p:'Две тысячи выбранных строк проходят через четырнадцать детекторов: номера карт, паспортные шаблоны, формы адресов, российские телефонные маски. Одно совпадение — и ветку уничтожают, а не выдают.',
+  f4h:'У веток есть срок',
+  f4p:'Семьдесят два часа по умолчанию, и срок напечатан прямо в строке подключения. Никто не находит на ноутбуке двухлетнюю копию таблицы клиентов.',
+  st1:'Медиана от команды до открытого соединения — по 2 941 ветке за прошлый месяц',
+  st2:'Пишется на ветку в среднем; остальное разделяется с базовым образом',
+  st3:'Колонок под правилом в схеме среднего размера, четыре из них — свободный текст',
+  st4:'Строк уходит из хранилища незамаскированными. Мастер никогда не бывает источником ветки',
+  k3:'Аудит',
+  s3:'На каждой копии написано имя',
+  s3p:'Кто попросил, какая версия набора правил отработала, сколько ветка прожила, была ли чистой проверка утечек. Уходит в ваш SIEM в момент события и хранится год.',
+  k4:'Цены',
+  s4:'Плата за базовый образ, а не за ветку',
+  s4p:'Ветки почти ничего не стоят, и брать за них деньги значит заставить людей снова пользоваться одной общей — то есть ровно тем, что мы пытаемся прекратить.',
+  p1h:'Одна схема', p1s:'до 20 ГБ',
+  p1a:'Один базовый образ, обновляется ночью',
+  p1b:'Сколько угодно веток, срок жизни 24 часа',
+  p1c:'Семь встроенных типов правил', p1c2:'Начать бесплатно',
+  p2h:'Команда', p2s:'за терабайт базового образа в месяц',
+  p2a:'Обновление по расписанию или по требованию',
+  p2b:'Классификатор фрагментов для свободного текста',
+  p2c:'Проверка утечек при каждом восстановлении, выгрузка в SIEM',
+  p2d:'Плагин для CI: ветка на каждый пул-реквест', p2c2:'Создать ветку',
+  p3h:'В вашем контуре', p3s:'Год',
+  p3a:'Управляющий слой работает внутри вашего аккаунта',
+  p3b:'Хранилище не открывает исходящих соединений',
+  p3c:'Наборы правил подписаны и закреплены за средой',
+  p3d:'Разбор вашего файла маскирования дважды в год', p3c2:'Написать нам',
+  fin1:'Общий стенд — это тоже человек, и он устал',
+  fin2:'Направьте Snapshot на реплику для чтения, напишите семь правил — и к утру у каждого инженера будет своя копия. Ту, которой вы пользовались вместе, можно выключить.',
+  fin3:'Создать ветку', fin4:'Записаться на разбор',
+  ft1:'Сделано вчетвером — каждый из нас однажды потратил выходные на восстановление дампа, которому оказалось шесть недель.',
+  fh1:'Продукт', fl1:'Ветки', fl2:'Правила маскирования', fl3:'Проверка утечек', fl4:'Плагин для CI',
+  fh2:'Документация', fl5:'Справочник CLI', fl6:'masking.toml', fl7:'Заметки по Postgres', fl8:'Заметки по MySQL',
+  fh3:'Компания', fl9:'Безопасность', fl10:'Изменения', fl11:'Статус', fl12:'Контакты',
+  fb1:'Приватность', fb2:'Условия', fb3:'Все системы в норме'
+};
+var EN = {};
+document.querySelectorAll('[data-i18n]').forEach(function (el) { EN[el.dataset.i18n] = el.innerHTML; });
+
+function setLang(l) {
+  var dict = l === 'ru' ? RU : EN;
+  document.querySelectorAll('[data-i18n]').forEach(function (el) {
+    var v = dict[el.dataset.i18n];
+    if (v !== undefined) el.innerHTML = v;
+  });
+  document.documentElement.lang = l;
+  document.documentElement.dataset.lang = l;
+  document.querySelectorAll('.switch button').forEach(function (b) {
+    b.setAttribute('aria-pressed', b.dataset.set === l ? 'true' : 'false');
+  });
+}
+document.querySelectorAll('.switch button').forEach(function (b) {
+  b.addEventListener('click', function () { setLang(b.dataset.set); });
+});
+</script>
+</body>
+</html>

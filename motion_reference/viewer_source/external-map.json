@@ -1,0 +1,152 @@
+{
+  "https://images.unsplash.com/photo-1736606355698-5efdb410fe93?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D": {
+    "status": "saved",
+    "local": "./external/8dab4d057be89fd0d3.jpg",
+    "size_bytes": 398835
+  },
+  "https://avatar.vercel.sh/jack": {
+    "status": "saved",
+    "local": "./external/59848753fef77bf8ec.png",
+    "size_bytes": 4603
+  },
+  "https://avatar.vercel.sh/jill": {
+    "status": "saved",
+    "local": "./external/811e91e5c56f016731.png",
+    "size_bytes": 4930
+  },
+  "https://avatar.vercel.sh/john": {
+    "status": "saved",
+    "local": "./external/adadac67c4d46323d9.png",
+    "size_bytes": 3032
+  },
+  "https://cdn.magicui.design/ocean-small.webm": {
+    "status": "saved",
+    "local": "./external/eea717a52273c2dbf4.webm",
+    "size_bytes": 722190
+  },
+  "https://images.unsplash.com/photo-1730326405863-c6fa7e499a6e?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D": {
+    "status": "saved",
+    "local": "./external/5c35be486972b6ffbb.jpg",
+    "size_bytes": 993780
+  },
+  "https://avatar.vercel.sh/jane": {
+    "status": "saved",
+    "local": "./external/73920b9a6ead16e344.png",
+    "size_bytes": 5449
+  },
+  "https://avatar.vercel.sh/jenny": {
+    "status": "saved",
+    "local": "./external/dd8454031136126432.png",
+    "size_bytes": 2730
+  },
+  "https://avatar.vercel.sh/james": {
+    "status": "saved",
+    "local": "./external/97bf4cca6c4618e55d.png",
+    "size_bytes": 2787
+  },
+  "https://cdn.simpleicons.org/$": {
+    "status": "dynamic"
+  },
+  "https://cdn.simpleicons.org/microsoft/000/fff": {
+    "status": "failed",
+    "error": "HTTP Error 404: Not Found"
+  },
+  "https://cdn.simpleicons.org/apple/000/fff": {
+    "status": "saved",
+    "local": "./external/bf79c3580167cfa37e.svg",
+    "size_bytes": 732
+  },
+  "https://cdn.simpleicons.org/google/000/fff": {
+    "status": "saved",
+    "local": "./external/4584019745fc2eb7b7.svg",
+    "size_bytes": 539
+  },
+  "https://cdn.simpleicons.org/facebook/000/fff": {
+    "status": "saved",
+    "local": "./external/5b83acd1f15cd2a4dd.svg",
+    "size_bytes": 624
+  },
+  "https://cdn.simpleicons.org/linkedin/000/fff": {
+    "status": "failed",
+    "error": "HTTP Error 404: Not Found"
+  },
+  "https://cdn.simpleicons.org/twitter/000/fff": {
+    "status": "failed",
+    "error": "HTTP Error 404: Not Found"
+  },
+  "https://images.unsplash.com/photo-1720048171230-c60d162f93a0?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D": {
+    "status": "saved",
+    "local": "./external/0096a6372b62c27121.jpg",
+    "size_bytes": 828311
+  },
+  "https://images.unsplash.com/photo-1719937050517-68d4e2a1702e?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D": {
+    "status": "saved",
+    "local": "./external/075e9fdc5e1f1c2038.jpg",
+    "size_bytes": 506966
+  },
+  "https://images.unsplash.com/photo-1749738456487-2af715ab65ea?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D": {
+    "status": "saved",
+    "local": "./external/7e048f9d52d9462405.jpg",
+    "size_bytes": 476268
+  },
+  "https://avatars.githubusercontent.com/u/20110627": {
+    "status": "saved",
+    "local": "./external/32897cf3440bbbc55a.jpg",
+    "size_bytes": 37367
+  },
+  "https://avatars.githubusercontent.com/u/59228569": {
+    "status": "saved",
+    "local": "./external/9e72b6fb76c5359b17.jpg",
+    "size_bytes": 20834
+  },
+  "https://videos.pexels.com/video-files/27180348/12091515_2560_1440_50fps.mp4": {
+    "status": "saved",
+    "local": "./external/47f3916bdcafdbb269.mp4",
+    "size_bytes": 43852026
+  },
+  "https://avatars.githubusercontent.com/u/59442788": {
+    "status": "saved",
+    "local": "./external/562fdb4434ff95251d.jpg",
+    "size_bytes": 29764
+  },
+  "https://avatars.githubusercontent.com/u/89768406": {
+    "status": "saved",
+    "local": "./external/4250ab020123ae431c.jpg",
+    "size_bytes": 22080
+  },
+  "https://videos.pexels.com/video-files/8946986/8946986-uhd_1440_2732_25fps.mp4": {
+    "status": "saved",
+    "local": "./external/4d10ff8d1b2da5722b.mp4",
+    "size_bytes": 20929941
+  },
+  "https://videos.pexels.com/video-files/14993748/14993748-uhd_1296_2304_30fps.mp4": {
+    "status": "saved",
+    "local": "./external/18986ded4cb1065802.mp4",
+    "size_bytes": 52160078
+  },
+  "https://avatars.githubusercontent.com/u/81306489": {
+    "status": "saved",
+    "local": "./external/45593b23a2ec22f397.png",
+    "size_bytes": 9487
+  },
+  "https://avatars.githubusercontent.com/u/16860528": {
+    "status": "saved",
+    "local": "./external/c98b9e0532217da200.png",
+    "size_bytes": 174747
+  },
+  "https://avatars.githubusercontent.com/u/106103625": {
+    "status": "saved",
+    "local": "./external/6b55f07431830e91df.png",
+    "size_bytes": 7901
+  },
+  "https://startup-template-sage.vercel.app/hero-light.png": {
+    "status": "saved",
+    "local": "./external/fbbad90b843d9beff7.png",
+    "size_bytes": 199924
+  },
+  "https://startup-template-sage.vercel.app/hero-dark.png": {
+    "status": "saved",
+    "local": "./external/706bd782ebe9cb3c98.png",
+    "size_bytes": 201027
+  }
+}

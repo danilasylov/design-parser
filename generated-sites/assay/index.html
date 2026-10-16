@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>Assay — allocated gold, stored and settled</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+/* ─────────────────────────────────────────────────────────────
+   Дизайн-система: Atlas Card (refero 3f6ef3c1) — tokens.css дословно
+   ───────────────────────────────────────────────────────────── */
+:root {
+  /* Colors */
+  --color-void: #000000;
+  --color-obsidian: #1e1e1e;
+  --color-graphite: #272727;
+  --color-ash: #808080;
+  --color-frost: #cccccc;
+  --color-paper: #f8f8f8;
+  --color-pure-white: #ffffff;
+  --color-sapphire-volt: #001391;
+
+  /* Typography — Font Families */
+  --font-sequel-sans-headline-book: 'Sequel Sans Headline Book', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-sequel-sans-book: 'Sequel Sans Book', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-apercumono-pro: 'ApercuMono Pro', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Typography — Scale */
+  --text-caption: 10px;
+  --leading-caption: 1.5;
+  --text-body: 15px;
+  --leading-body: 1.67;
+  --text-body-lg: 17px;
+  --leading-body-lg: 1.24;
+  --text-subheading: 23px;
+  --leading-subheading: 1.3;
+  --text-heading: 28px;
+  --leading-heading: 1.4;
+
+  /* Typography — Weights */
+  --font-weight-regular: 400;
+  --font-weight-bold: 700;
+
+  /* Spacing */
+  --spacing-unit: 8px;
+  --spacing-8: 8px;
+  --spacing-16: 16px;
+  --spacing-24: 24px;
+  --spacing-32: 32px;
+  --spacing-48: 48px;
+  --spacing-64: 64px;
+  --spacing-88: 88px;
+  --spacing-104: 104px;
+  --spacing-128: 128px;
+  --spacing-144: 144px;
+  --spacing-176: 176px;
+
+  /* Layout */
+  --page-max-width: 640px;
+  --section-gap: 88px;
+  --card-padding: 24px;
+  --element-gap: 8px;
+
+  /* Border Radius */
+  --radius-md: 4px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-2xl: 18px;
+  --radius-3xl: 24px;
+  --radius-full: 128px;
+
+  /* Named Radii */
+  --radius-tags: 4px;
+  --radius-cards: 12px;
+  --radius-pills: 128px;
+  --radius-inputs: 8px;
+  --radius-buttons: 24px;
+
+  /* Surfaces */
+  --surface-void-canvas: #000000;
+  --surface-graphite-layer: #272727;
+}
+
+/* Мои подстановки: Sequel Sans и ApercuMono закрыты лицензией — взяты Inter и
+   IBM Plex Mono, оба с кириллицей. В токенах поверхность --surface-obsidian-panel
+   выгружена как #1e1e1 (пять знаков) — беру полный #1e1e1e из палитры.
+   Фотографии в системе несут всю визуальную нагрузку; снимков у офлайн-сборки нет,
+   поэтому туманный город нарисован SVG в тех же холодных сине-серых тонах. */
+:root {
+  --font-sequel-sans-headline-book: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-sequel-sans-book: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-apercumono-pro: 'IBM Plex Mono', ui-monospace, monospace;
+  --surface-obsidian-panel: #1e1e1e;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--surface-void-canvas);
+  color: var(--color-paper);
+  font-family: var(--font-sequel-sans-book);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--text-body); line-height: var(--leading-body);
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, p, ul, li { margin: 0; padding: 0; list-style: none; font-weight: var(--font-weight-regular); }
+a { color: inherit; }
+.mono { font-family: var(--font-apercumono-pro); font-size: var(--text-caption); line-height: var(--leading-caption); letter-spacing: .08em; text-transform: uppercase; color: var(--color-ash); }
+.col { max-width: var(--page-max-width); margin: 0 auto; padding: 0 var(--spacing-24); text-align: center; }
+.num { font-variant-numeric: tabular-nums; }
+
+/* ── Герой: полноэкранный кадр, переходящий в пустоту градиентом ────── */
+.hero { position: relative; height: 900px; overflow: hidden; }
+.hero svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.hero .fade { position: absolute; left: 0; right: 0; bottom: 0; height: 20%; background: linear-gradient(180deg, rgba(20,20,20,0) 0%, #141414 55%, #000000 100%); }
+.badge {
+  position: absolute; left: 50%; top: var(--spacing-24); transform: translateX(-50%);
+  width: 44px; height: 44px; border-radius: var(--radius-xl); background: var(--color-pure-white);
+  display: grid; place-items: center;
+}
+.scrollline { position: absolute; left: 50%; bottom: 96px; transform: translateX(-50%); width: 140px; height: 1px; background: rgba(204,204,204,.45); }
+.scrollline i { position: absolute; left: 0; top: 0; width: 26px; height: 1px; background: var(--color-frost); }
+.strip { background: var(--surface-void-canvas); padding: var(--spacing-16) 0; text-align: center; }
+
+/* ── Чёрный нарратив ───────────────────────────────────────────────── */
+.narrative { padding: var(--spacing-104) 0 var(--spacing-88); }
+.narrative p { font-size: var(--text-subheading); line-height: var(--leading-subheading); }
+.narrative p + p { margin-top: var(--spacing-48); }
+/* мелкий шрифт остаётся мелким: ApercuMono в системе живёт строго ниже 15px */
+.narrative p.mono, .col p.mono { font-size: var(--text-caption); line-height: var(--leading-caption); }
+.dim { color: var(--color-ash); }
+
+.btn {
+  display: inline-block; border: 0; cursor: pointer; text-decoration: none;
+  background: var(--color-sapphire-volt); color: var(--color-paper);
+  border-radius: var(--radius-pills); padding: var(--spacing-16) var(--spacing-32);
+  font-family: inherit; font-size: var(--text-body-lg); line-height: var(--leading-body-lg);
+}
+.btn.ghost { background: var(--surface-obsidian-panel); color: var(--color-paper); border-radius: var(--radius-buttons); }
+.acts { margin-top: var(--spacing-48); display: flex; gap: var(--spacing-8); justify-content: center; flex-wrap: wrap; }
+.fine { margin-top: var(--spacing-24); }
+
+/* ── Панели ────────────────────────────────────────────────────────── */
+.section { padding: var(--section-gap) 0; }
+.wide { max-width: 960px; margin: 0 auto; padding: 0 var(--spacing-24); }
+h2.head { font-size: var(--text-heading); line-height: var(--leading-heading); text-align: center; }
+.cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-8); margin-top: var(--spacing-48); }
+.card { background: var(--surface-obsidian-panel); border-radius: var(--radius-cards); padding: var(--card-padding); text-align: left; }
+.card .k { font-size: var(--text-body-lg); line-height: var(--leading-body-lg); }
+.card p { margin-top: var(--spacing-8); color: var(--color-ash); }
+
+.ledger { margin-top: var(--spacing-48); background: var(--surface-obsidian-panel); border-radius: var(--radius-cards); overflow: hidden; }
+.ledger .r { display: grid; grid-template-columns: 1.3fr 1fr 1fr 1fr 0.9fr; gap: var(--spacing-16); padding: var(--spacing-16) var(--card-padding); align-items: baseline; }
+.ledger .r + .r { border-top: 1px solid var(--color-graphite); }
+.ledger .r span:not(:first-child) { text-align: right; }
+.tag { display: inline-block; border-radius: var(--radius-tags); background: var(--color-graphite); padding: 2px 6px; }
+
+.steps { margin-top: var(--spacing-48); }
+.steps .s { display: grid; grid-template-columns: 56px 1fr; gap: var(--spacing-16); padding: var(--spacing-24) 0; border-top: 1px solid var(--color-graphite); text-align: left; }
+.steps .s:last-child { border-bottom: 1px solid var(--color-graphite); }
+.steps .s .t { font-size: var(--text-body-lg); line-height: var(--leading-body-lg); }
+.steps .s p { margin-top: var(--spacing-8); color: var(--color-ash); }
+
+.join { display: flex; gap: var(--spacing-8); justify-content: center; margin-top: var(--spacing-48); }
+.join input {
+  background: var(--surface-obsidian-panel); border: 1px solid var(--color-graphite);
+  border-radius: var(--radius-inputs); padding: var(--spacing-16); width: 320px;
+  font-family: inherit; font-size: var(--text-body); color: var(--color-paper);
+}
+.join input::placeholder { color: var(--color-ash); }
+.join input:focus { outline: 0; border-color: var(--color-ash); }
+
+footer { padding: var(--spacing-88) 0 var(--spacing-48); }
+footer .row { display: flex; justify-content: space-between; align-items: center; gap: var(--spacing-16); }
+.switch { display: inline-flex; gap: var(--spacing-8); }
+.switch button { background: transparent; border: 0; cursor: pointer; font-family: var(--font-apercumono-pro); font-size: var(--text-caption); letter-spacing: .08em; text-transform: uppercase; color: var(--color-ash); padding: 4px 8px; border-radius: var(--radius-tags); }
+.switch button[aria-pressed="true"] { color: var(--color-paper); background: var(--color-graphite); }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <svg id="city" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-label="City in fog"></svg>
+  <div class="fade"></div>
+  <div class="badge">
+    <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true">
+      <rect x="1" y="4" width="20" height="14" rx="4" fill="#001391"/>
+      <path d="M11 4v14M1 11h20" stroke="#ffffff" stroke-width="2"/>
+    </svg>
+  </div>
+  <div class="scrollline"><i></i></div>
+</header>
+
+<div class="strip">
+  <span class="mono" data-i18n="k0">Allocated gold, stored and settled in Zurich.†</span>
+</div>
+
+<section class="narrative">
+  <div class="col">
+    <p data-i18n="n1">Most gold you can buy on a screen is a promise. Someone owes you the metal, and the ledger that says so is theirs.</p>
+    <p data-i18n="n2">Assay holds bars. Each one has a serial number, a refiner, a weight measured to the tenth of a gram, and a shelf it does not leave when you sell.</p>
+    <p class="dim" data-i18n="n3">Membership opens twice a year. The waiting list is not a marketing device; the vault has a finite number of shelves.</p>
+    <div class="acts">
+      <a class="btn" href="#join" data-i18n="n4">Request an allocation</a>
+      <a class="btn ghost" href="#how" data-i18n="n5">How it works</a>
+    </div>
+    <p class="mono fine" data-i18n="n6">† Vault: Freilager, Zurich. Insured at 100 % of spot by Lloyd's syndicate 2623.</p>
+  </div>
+</section>
+
+<section class="section" id="how">
+  <div class="wide">
+    <h2 class="head" data-i18n="h1">What you actually own</h2>
+    <div class="cards">
+      <div class="card">
+        <div class="k" data-i18n="c1h">A bar, by serial</div>
+        <p data-i18n="c1p">Allocated, not pooled. Your holding is a list of bars with serial numbers, not a share of somebody's inventory.</p>
+      </div>
+      <div class="card">
+        <div class="k" data-i18n="c2h">A shelf, not a screen</div>
+        <p data-i18n="c2p">The metal sits outside the balance sheet of the custodian. If we close tomorrow, the bars are still yours and still there.</p>
+      </div>
+      <div class="card">
+        <div class="k" data-i18n="c3h">A weight, to 0.1 g</div>
+        <p data-i18n="c3p">Re-weighed on intake and at every quarterly audit. The difference between the two numbers is published even when it is zero.</p>
+      </div>
+    </div>
+
+    <div class="ledger">
+      <div class="r mono">
+        <span data-i18n="t1">Serial</span><span data-i18n="t2">Refiner</span><span data-i18n="t3">Fineness</span><span data-i18n="t4">Weight</span><span data-i18n="t5">Shelf</span>
+      </div>
+      <div class="r">
+        <span class="mono" style="color:var(--color-paper)">MK-884 219</span>
+        <span>Metalor</span><span class="num">999.9</span><span class="num">1 000.4 g</span><span class="mono">B-14</span>
+      </div>
+      <div class="r">
+        <span class="mono" style="color:var(--color-paper)">VA-117 006</span>
+        <span>Valcambi</span><span class="num">999.9</span><span class="num">1 000.1 g</span><span class="mono">B-14</span>
+      </div>
+      <div class="r">
+        <span class="mono" style="color:var(--color-paper)">AR-402 771</span>
+        <span>Argor-Heraeus</span><span class="num">999.9</span><span class="num">500.2 g</span><span class="mono">C-03</span>
+      </div>
+      <div class="r">
+        <span class="mono" style="color:var(--color-paper)">PM-559 130</span>
+        <span>PAMP</span><span class="num">999.9</span><span class="num">250.0 g</span><span class="mono">C-03</span>
+      </div>
+    </div>
+    <p class="mono" style="margin-top:var(--spacing-16);text-align:center" data-i18n="lg">A sample page of a member ledger. Yours is the same, with your serials.</p>
+  </div>
+</section>
+
+<section class="section" style="padding-top:0">
+  <div class="wide">
+    <h2 class="head" data-i18n="h2">Four steps, one of them slow</h2>
+    <div class="steps">
+      <div class="s">
+        <span class="mono">01</span>
+        <div>
+          <div class="t" data-i18n="s1h">You are checked, and it takes a week</div>
+          <p data-i18n="s1p">Source of funds, identity, and the reason you want metal rather than a fund. Nobody is allocated on the same day, including the people who ask twice.</p>
+        </div>
+      </div>
+      <div class="s">
+        <span class="mono">02</span>
+        <div>
+          <div class="t" data-i18n="s2h">Bars are bought at the fix, not at a spread</div>
+          <p data-i18n="s2p">We buy at the London afternoon fix and show you the invoice from the refiner. Our fee is 0.65 % a year and appears nowhere else.</p>
+        </div>
+      </div>
+      <div class="s">
+        <span class="mono">03</span>
+        <div>
+          <div class="t" data-i18n="s3h">The serials land in your ledger</div>
+          <p data-i18n="s3p">Photographed on intake, weighed on the vault's scale, entered under your name. You get the shelf and the weight, not a certificate of participation.</p>
+        </div>
+      </div>
+      <div class="s">
+        <span class="mono">04</span>
+        <div>
+          <div class="t" data-i18n="s4h">You can take it home</div>
+          <p data-i18n="s4p">Withdrawal is a booking, not a request. Bring an ID and something to carry a kilogram in; the customs paperwork is yours from the door onward.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="join" style="padding-top:0">
+  <div class="col">
+    <h2 class="head" data-i18n="h3">The list for spring</h2>
+    <p style="margin-top:var(--spacing-24);color:var(--color-ash)" data-i18n="j1">Fourteen shelves come free in March. The list is read in the order it was written.</p>
+    <form class="join" onsubmit="return false">
+      <input type="email" placeholder="you@example.com" aria-label="email">
+      <button class="btn" data-i18n="j2">Join the list</button>
+    </form>
+    <p class="mono fine" data-i18n="j3">No price alerts, no newsletter. One message when the list moves.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wide">
+    <div class="row">
+      <span class="mono" data-i18n="f1">Assay AG · Freilager, Zurich · founded 2016</span>
+      <span class="switch">
+        <button data-set="en" aria-pressed="true">EN</button>
+        <button data-set="ru" aria-pressed="false">RU</button>
+      </span>
+      <span class="mono">members@assay.gold</span>
+    </div>
+    <p class="mono" style="margin-top:var(--spacing-24)" data-i18n="f2">† Gold is not a deposit and is not covered by any deposit guarantee scheme. Metal held under a custody agreement governed by Swiss law. Past prices say nothing about future ones.</p>
+  </div>
+</footer>
+
+<script>
+/* ── Туманный город: детерминированный силуэт в холодных сине-серых, тремя
+      планами, с полосами тумана поверх каждого. Фотографии в офлайн-сборке нет. ── */
+(function () {
+  var seed = 20260813;
+  function rnd() { seed = (seed * 1103515245 + 12345) % 2147483648; return seed / 2147483648; }
+  var out = '';
+  out += '<defs>' +
+    '<linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">' +
+      '<stop offset="0" stop-color="#dfe6ee"/><stop offset="0.55" stop-color="#c2ceda"/><stop offset="1" stop-color="#9fb0be"/>' +
+    '</linearGradient>' +
+    '<linearGradient id="haze" x1="0" y1="0" x2="0" y2="1">' +
+      '<stop offset="0" stop-color="#c9d4de" stop-opacity="0"/><stop offset="1" stop-color="#c9d4de" stop-opacity="0.85"/>' +
+    '</linearGradient>' +
+  '</defs>';
+  out += '<rect width="1440" height="900" fill="url(#sky)"/>';
+
+  var planes = [
+    { w: [40, 96],  h: [260, 540], fill: '#8497a8', op: 0.5,  haze: [180, 620, 0.8] },
+    { w: [46, 120], h: [210, 430], fill: '#6b8092', op: 0.72, haze: [330, 570, 0.6] },
+    { w: [60, 150], h: [150, 330], fill: '#4c5f70', op: 0.95, haze: [500, 400, 0.4] }
+  ];
+  planes.forEach(function (p) {
+    var x = -40;
+    while (x < 1480) {
+      var w = p.w[0] + rnd() * (p.w[1] - p.w[0]);
+      var h = p.h[0] + rnd() * (p.h[1] - p.h[0]);
+      var y = 900 - h;
+      out += '<rect x="' + x.toFixed(1) + '" y="' + y.toFixed(1) + '" width="' + w.toFixed(1) +
+             '" height="' + h.toFixed(1) + '" fill="' + p.fill + '" opacity="' + p.op + '"/>';
+      if (rnd() > 0.72) {
+        out += '<rect x="' + (x + w * 0.32).toFixed(1) + '" y="' + (y - 40 - rnd() * 70).toFixed(1) +
+               '" width="' + (w * 0.34).toFixed(1) + '" height="80" fill="' + p.fill + '" opacity="' + p.op + '"/>';
+      }
+      x += w + 6 + rnd() * 22;
+    }
+    /* полоса тумана поверх плана — глубина в системе делается воздухом, не тенью */
+    out += '<rect x="0" y="' + p.haze[0] + '" width="1440" height="' + p.haze[1] +
+           '" fill="url(#haze)" opacity="' + p.haze[2] + '"/>';
+  });
+  /* высокая доминанта в центре, как на снимке референса */
+  out += '<path d="M636 900V196l84-46v750z" fill="#5b6e7e" opacity="0.9"/>';
+  out += '<path d="M636 196l84-46v18l-84 46z" fill="#e8eef4" opacity="0.7"/>';
+  out += '<rect x="0" y="430" width="1440" height="470" fill="url(#haze)" opacity="0.5"/>';
+  document.getElementById('city').innerHTML = out;
+})();
+
+/* ── RU/EN. Английский — исходный, русский — перевод под него ── */
+var RU = {
+  k0:'Аллокированное золото, хранение и расчёты в Цюрихе.†',
+  n1:'Почти всё золото, которое можно купить с экрана, — это обещание. Металл вам кто-то должен, и реестр, где это записано, принадлежит ему.',
+  n2:'Assay держит слитки. У каждого есть серийный номер, аффинажный завод, вес с точностью до десятой доли грамма и полка, с которой он не уходит, когда вы продаёте.',
+  n3:'Членство открывается дважды в год. Лист ожидания — не маркетинговый приём: полок в хранилище конечное число.',
+  n4:'Запросить аллокацию', n5:'Как это устроено',
+  n6:'† Хранилище: Freilager, Цюрих. Застраховано на 100 % спота синдикатом Lloyd’s 2623.',
+  h1:'Что у вас на самом деле есть',
+  c1h:'Слиток, по номеру',
+  c1p:'Аллокированный, а не в пуле. Ваша позиция — это список слитков с серийными номерами, а не доля в чьём-то запасе.',
+  c2h:'Полка, а не экран',
+  c2p:'Металл лежит вне баланса хранителя. Если мы закроемся завтра, слитки останутся вашими и останутся на месте.',
+  c3h:'Вес, до 0,1 г',
+  c3p:'Перевешивается при приёмке и на каждом квартальном аудите. Разница между двумя числами публикуется, даже когда она нулевая.',
+  t1:'Серийный', t2:'Аффинаж', t3:'Проба', t4:'Вес', t5:'Полка',
+  lg:'Образец страницы реестра. Ваш такой же, только с вашими номерами.',
+  h2:'Четыре шага, один из них медленный',
+  s1h:'Вас проверяют, и это занимает неделю',
+  s1p:'Происхождение средств, личность и причина, по которой вам нужен металл, а не фонд. В тот же день не аллоцируют никого, включая тех, кто спросил дважды.',
+  s2h:'Слитки покупаются по фиксингу, а не по спреду',
+  s2p:'Мы покупаем по лондонскому дневному фиксингу и показываем счёт от аффинажного завода. Наша комиссия — 0,65 % годовых, и больше она нигде не появляется.',
+  s3h:'Номера попадают в ваш реестр',
+  s3p:'Сфотографированы при приёмке, взвешены на весах хранилища, записаны на ваше имя. Вы получаете полку и вес, а не сертификат участия.',
+  s4h:'Забрать домой можно',
+  s4p:'Выдача — это запись во времени, а не просьба. Возьмите документ и то, в чём унесёте килограмм; таможенные бумаги ваши, начиная от двери.',
+  h3:'Лист на весну',
+  j1:'В марте освобождается четырнадцать полок. Лист читается в том порядке, в каком был написан.',
+  j2:'Встать в лист',
+  j3:'Никаких ценовых алертов и рассылок. Одно сообщение, когда лист сдвинется.',
+  f1:'Assay AG · Freilager, Цюрих · с 2016 года',
+  f2:'† Золото не является вкладом и не покрывается никакой системой страхования вкладов. Металл хранится по договору ответственного хранения по швейцарскому праву. Прошлые цены ничего не говорят о будущих.'
+};
+var EN = {};
+document.querySelectorAll('[data-i18n]').forEach(function (el) { EN[el.dataset.i18n] = el.innerHTML; });
+
+function setLang(l) {
+  var dict = l === 'ru' ? RU : EN;
+  document.querySelectorAll('[data-i18n]').forEach(function (el) {
+    var v = dict[el.dataset.i18n];
+    if (v !== undefined) el.innerHTML = v;
+  });
+  document.documentElement.lang = l;
+  document.documentElement.dataset.lang = l;
+  document.querySelectorAll('.switch button').forEach(function (b) {
+    b.setAttribute('aria-pressed', b.dataset.set === l ? 'true' : 'false');
+  });
+}
+document.querySelectorAll('.switch button').forEach(function (b) {
+  b.addEventListener('click', function () { setLang(b.dataset.set); });
+});
+</script>
+</body>
+</html>

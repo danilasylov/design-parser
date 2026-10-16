@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rondo — Every Play Pays Everyone At Once</title>
+<meta name="description" content="Rondo is a split protocol for music: register the shares once, and every stream, sync and ticket settles to every wallet in the same block.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ─────────────────────────────────────────────────────────────
+   Дизайн-система: Shelby (styles.refero.design/style/c01ccb7b-46c9-487c-8a4e-0e9d6627f0d6)
+   Блок :root — дословно из tokens.css страницы стиля.
+   ───────────────────────────────────────────────────────────── */
+:root {
+  /* Colors */
+  --color-cocoa-husk: #322312;
+  --color-neon-orchid: #ff77c9;
+  --color-petal-wash: #ffdfef;
+  --color-plum-velvet: #470b64;
+  --color-bubblegum-blush: #ffc2e1;
+  --color-lavender-haze: #e2c9f8;
+  --color-magenta-spark: #de8aff;
+  --color-oxblood-rust: #481d2a;
+  --color-lilac-whisper: #eee2ff;
+  --color-walnut-vein: #5b4f41;
+
+  /* Typography — Font Families */
+  --font-times: 'Times', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-gt-planar: 'GT-Planar', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-abcrepromono: 'ABCReproMono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-suisseintl: 'SuisseIntl', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* Typography — Scale */
+  --text-caption: 11px;
+  --leading-caption: 0.79;
+  --text-body: 18px;
+  --leading-body: 1.4;
+  --text-subheading: 22px;
+  --leading-subheading: 1.2;
+  --text-heading-sm: 42px;
+  --leading-heading-sm: 1;
+  --tracking-heading-sm: -0.84px;
+  --text-heading: 48px;
+  --leading-heading: 0.95;
+  --tracking-heading: -0.96px;
+  --text-heading-lg: 59px;
+  --leading-heading-lg: 0.95;
+  --tracking-heading-lg: -1.18px;
+  --text-display: 95px;
+  --leading-display: 0.9;
+  --tracking-display: -3.8px;
+
+  /* Typography — Weights */
+  --font-weight-light: 300;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+
+  /* Spacing */
+  --spacing-unit: 4px;
+  --spacing-4: 4px;
+  --spacing-8: 8px;
+  --spacing-12: 12px;
+  --spacing-20: 20px;
+  --spacing-36: 36px;
+  --spacing-40: 40px;
+  --spacing-116: 116px;
+
+  /* Layout */
+  --page-max-width: 1200px;
+  --section-gap: 80px;
+  --card-padding: 20px;
+  --element-gap: 15px;
+
+  /* Border Radius */
+  --radius-md: 3.95833px;
+  --radius-lg: 9.89583px;
+
+  /* Named Radii */
+  --radius-cards: 10px;
+  --radius-badges: 4px;
+  --radius-inputs: 4px;
+  --radius-buttons: 4px;
+
+  /* Surfaces */
+  --surface-cocoa-husk: #322312;
+  --surface-plum-velvet: #470b64;
+  --surface-bubblegum-blush: #ffc2e1;
+  --surface-petal-wash: #ffdfef;
+}
+
+/* ── Локальные добавления (того, чего нет в системе) ────────────
+   1. Подстановки шрифтов: GT-Planar → Inter Tight (тот же нео-гротеск
+      с тугим трекингом), ABCReproMono → JetBrains Mono. Оба
+      с кириллицей — сайт двуязычный.
+   2. Волосяные линии поверх plum/cocoa: цвета системы с прозрачностью.
+   3. Отступ рамки страницы: у Shelby cocoa-панель лежит на неоновом
+      фоне с полем ~14px (см. скриншот референса).
+   ───────────────────────────────────────────────────────────── */
+:root {
+  --font-display: 'Inter Tight', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --rule-on-plum: rgba(222, 138, 255, 0.38);   /* --color-magenta-spark */
+  --rule-on-light: rgba(91, 79, 65, 0.35);     /* --color-walnut-vein */
+  --frame-inset: 14px;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--color-neon-orchid);
+  color: var(--color-petal-wash);
+  font-family: var(--font-display);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  font-weight: var(--font-weight-regular);
+  padding: var(--frame-inset) 0 var(--frame-inset);
+  overflow-x: hidden;
+}
+h1, h2, h3, p, ul, figure { margin: 0; }
+ul { padding: 0; list-style: none; }
+a { color: inherit; text-decoration: none; }
+::selection { background: var(--color-cocoa-husk); color: var(--color-neon-orchid); }
+
+/* ── Типографические примитивы ───────────────────────────────── */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+  font-weight: var(--font-weight-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.display {
+  font-weight: var(--font-weight-bold);
+  /* система задаёт 95px; clamp — только чтобы дисплей не подпирал края панели
+     на узких экранах (в RU строки длиннее) */
+  font-size: clamp(42px, 7.6vw, var(--text-display));
+  line-height: var(--leading-display);
+  letter-spacing: -0.04em;
+  text-align: center;
+  overflow-wrap: break-word;
+}
+.h2 {
+  font-weight: var(--font-weight-bold);
+  font-size: clamp(32px, 5.2vw, var(--text-heading-lg));
+  line-height: var(--leading-heading-lg);
+  letter-spacing: -0.02em;
+  text-align: center;
+  overflow-wrap: break-word;
+}
+.lede {
+  font-size: var(--text-subheading);
+  line-height: var(--leading-subheading);
+  max-width: 46ch;
+  margin-inline: auto;
+  text-align: center;
+}
+
+/* ── Кнопки ──────────────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-8);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1;
+  font-weight: var(--font-weight-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: var(--spacing-12) var(--spacing-20);
+  border-radius: var(--radius-buttons);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background-color .15s linear, color .15s linear, border-color .15s linear;
+}
+.btn-pill {                       /* Filled Pill Button */
+  background: var(--surface-petal-wash);
+  color: var(--color-cocoa-husk);
+}
+.btn-pill:hover { background: var(--color-neon-orchid); }
+.btn-ghost {                      /* Ghost Button */
+  border-color: var(--color-lilac-whisper);
+  color: var(--color-lilac-whisper);
+  background: transparent;
+}
+.btn-ghost:hover { background: var(--color-lilac-whisper); color: var(--color-cocoa-husk); }
+.btn-ghost.on-light { border-color: var(--color-cocoa-husk); color: var(--color-cocoa-husk); }
+.btn-ghost.on-light:hover { background: var(--color-cocoa-husk); color: var(--color-petal-wash); }
+.btn .arw { font-family: var(--font-display); font-size: 13px; }
+
+/* ── Навигация ───────────────────────────────────────────────── */
+.nav {
+  position: sticky;
+  top: var(--frame-inset);
+  z-index: 20;
+  margin: 0 var(--frame-inset) var(--frame-inset);
+  background: var(--surface-cocoa-husk);
+  border: 1px solid var(--color-walnut-vein);
+  border-radius: var(--radius-cards);
+}
+/* при скролле шапка упирается в верх окна — щели над ней не остаётся.
+   Ширина НЕ меняется: боковые поля рамки те же, что и до скролла; уходит только
+   верхний зазор, а верхние углы становятся прямыми, чтобы в них не проглядывал фон.
+   Высота и рамка неизменны — контент под шапкой не дёргается. */
+.nav.stuck {
+  top: 0;
+  border-radius: 0 0 var(--radius-cards) var(--radius-cards);
+}
+.nav-in {
+  max-width: var(--page-max-width);
+  margin-inline: auto;
+  padding: var(--spacing-12) var(--spacing-20);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-20);
+}
+.wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-8);
+  color: var(--color-neon-orchid);
+  font-size: var(--text-subheading);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: -0.02em;
+  line-height: 1;
+  flex: none;
+}
+.wordmark svg { display: block; }
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: var(--element-gap);
+  margin-left: auto;
+}
+.nav-links a {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-petal-wash);
+  transition: color .15s linear;
+}
+.nav-links a:hover { color: var(--color-neon-orchid); }
+.nav-right { display: flex; align-items: center; gap: var(--spacing-12); flex: none; }
+
+/* переключатель языка */
+.lang {
+  display: inline-flex;
+  border: 1px solid var(--color-walnut-vein);
+  border-radius: var(--radius-badges);
+  overflow: hidden;
+  flex: none;
+}
+.lang button {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1;
+  font-weight: var(--font-weight-medium);
+  letter-spacing: 0.04em;
+  padding: 9px 10px;
+  background: transparent;
+  border: 0;
+  color: var(--color-petal-wash);
+  cursor: pointer;
+  transition: background-color .15s linear, color .15s linear;
+}
+.lang button[aria-pressed="true"] { background: var(--color-neon-orchid); color: var(--color-cocoa-husk); }
+
+/* ── Полосы-секции ───────────────────────────────────────────── */
+main {
+  margin: 0 var(--frame-inset);
+  border-radius: var(--radius-cards);
+  overflow: hidden;
+  background: var(--surface-cocoa-husk);
+}
+.band { padding: var(--section-gap) 0; }
+/* якоря не должны уезжать под липкую шапку */
+section[id], main[id] { scroll-margin-top: 92px; }
+.band-cocoa { background: var(--surface-cocoa-husk); color: var(--color-petal-wash); }
+.band-petal { background: var(--surface-petal-wash); color: var(--color-cocoa-husk); }
+.band-plum  { background: var(--surface-plum-velvet); color: var(--color-lilac-whisper); }
+.band-blush { background: var(--surface-bubblegum-blush); color: var(--color-cocoa-husk); }
+.wrap {
+  max-width: var(--page-max-width);
+  margin-inline: auto;
+  padding: 0 var(--spacing-20);
+}
+.head { display: grid; justify-items: center; gap: var(--spacing-20); }
+.head .eyebrow { color: var(--color-neon-orchid); }
+.band-petal .head .eyebrow,
+.band-blush .head .eyebrow { color: var(--color-cocoa-husk); }
+.band-plum .head .eyebrow { color: var(--color-magenta-spark); }
+.head .h2 { color: inherit; }
+
+/* ── Хиро ────────────────────────────────────────────────────── */
+.hero { padding: var(--spacing-116) 0; text-align: center; }
+.hero .eyebrow { color: var(--color-neon-orchid); display: block; margin-bottom: var(--spacing-40); }
+.hero .display { color: var(--color-neon-orchid); }
+.hero .cta { margin-top: var(--spacing-40); display: flex; justify-content: center; gap: var(--spacing-12); flex-wrap: wrap; }
+.rule { height: 1px; background: var(--color-neon-orchid); border: 0; margin: 0; }
+
+/* ── Строка показателей ──────────────────────────────────────── */
+/* без border-top: разделителем служит полноширинная неоновая линия .rule */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+.stat {
+  padding: var(--spacing-36) var(--spacing-20);
+  border-right: 1px solid var(--color-walnut-vein);
+  display: grid;
+  gap: var(--spacing-12);
+}
+.stat:last-child { border-right: 0; }
+.stat b {
+  font-size: var(--text-heading-sm);
+  line-height: var(--leading-heading-sm);
+  letter-spacing: var(--tracking-heading-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neon-orchid);
+}
+.stat .eyebrow { color: var(--color-petal-wash); }
+
+/* ── Карточки шагов ──────────────────────────────────────────── */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--element-gap);
+  margin-top: var(--spacing-40);
+}
+.card {
+  background: var(--surface-bubblegum-blush);
+  border: 1px solid var(--color-walnut-vein);
+  border-radius: var(--radius-cards);
+  padding: var(--card-padding);
+  display: grid;
+  gap: var(--spacing-12);
+  align-content: start;
+}
+.card .num { color: var(--color-plum-velvet); }
+.card h3 {
+  font-size: var(--text-subheading);
+  line-height: var(--leading-subheading);
+  letter-spacing: -0.02em;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-cocoa-husk);
+}
+.card p { font-size: 16px; line-height: var(--leading-body); color: var(--color-cocoa-husk); }
+
+/* ── Сплит-лист ──────────────────────────────────────────────── */
+.sheet { margin-top: var(--spacing-40); border-top: 1px solid var(--rule-on-plum); }
+.row {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: var(--spacing-20);
+  padding: var(--spacing-20) 0;
+  border-bottom: 1px solid var(--rule-on-plum);
+}
+.row .role {
+  font-size: var(--text-subheading);
+  line-height: var(--leading-subheading);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: -0.02em;
+  color: var(--color-petal-wash);
+}
+.row .addr {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  color: var(--color-lavender-haze);
+}
+.row .pct {
+  font-size: var(--text-heading-sm);
+  line-height: var(--leading-heading-sm);
+  letter-spacing: var(--tracking-heading-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-magenta-spark);
+  min-width: 3.4ch;
+  text-align: right;
+}
+
+/* ── Применение ──────────────────────────────────────────────── */
+.uses {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0 var(--spacing-40);
+  margin-top: var(--spacing-40);
+}
+.use {
+  padding: var(--spacing-20) 0;
+  border-top: 1px solid var(--rule-on-light);
+  display: grid;
+  gap: var(--spacing-12);
+}
+.use .eyebrow { color: var(--color-plum-velvet); }
+.use p { font-size: 16px; }
+
+/* ── Калькулятор ─────────────────────────────────────────────── */
+.calc {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-40);
+  margin-top: var(--spacing-40);
+  align-items: start;
+}
+.field { display: grid; gap: var(--spacing-12); margin-bottom: var(--spacing-36); }
+.field label.eyebrow { color: var(--color-petal-wash); }
+.money {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-8);
+  border: 1px solid var(--color-walnut-vein);
+  border-radius: var(--radius-inputs);
+  padding: var(--spacing-12) var(--spacing-20);
+}
+.money span { font-family: var(--font-mono); font-size: var(--text-body); color: var(--color-neon-orchid); }
+.money input {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: 0;
+  outline: none;
+  color: var(--color-petal-wash);
+  font-family: var(--font-mono);
+  font-size: var(--text-body);
+  letter-spacing: 0.02em;
+}
+.slider { display: grid; gap: var(--spacing-8); margin-bottom: var(--spacing-20); }
+.slider .top { display: flex; justify-content: space-between; align-items: baseline; gap: var(--spacing-12); }
+.slider .top .eyebrow { color: var(--color-petal-wash); }
+.slider .val { font-family: var(--font-mono); font-size: 12px; color: var(--color-neon-orchid); }
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 16px;
+  background: transparent;
+  cursor: pointer;
+}
+input[type="range"]::-webkit-slider-runnable-track { height: 2px; background: var(--color-walnut-vein); border-radius: 0; }
+input[type="range"]::-moz-range-track { height: 2px; background: var(--color-walnut-vein); }
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px; height: 14px;
+  margin-top: -6px;
+  background: var(--color-neon-orchid);
+  border: 0;
+  border-radius: var(--radius-badges);
+}
+input[type="range"]::-moz-range-thumb {
+  width: 14px; height: 14px;
+  background: var(--color-neon-orchid);
+  border: 0;
+  border-radius: var(--radius-badges);
+}
+input[type="range"]:focus-visible { outline: 1px solid var(--color-neon-orchid); outline-offset: 4px; }
+.payouts { border-top: 1px solid var(--color-walnut-vein); }
+.payout {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: baseline;
+  gap: var(--spacing-20);
+  padding: var(--spacing-20) 0;
+  border-bottom: 1px solid var(--color-walnut-vein);
+}
+.payout .who { font-size: var(--text-body); font-weight: var(--font-weight-medium); color: var(--color-petal-wash); }
+.payout .amt {
+  font-family: var(--font-mono);
+  font-size: var(--text-subheading);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-neon-orchid);
+  font-variant-numeric: tabular-nums;
+}
+.payout.residual .who, .payout.residual .amt { color: var(--color-lavender-haze); }
+.total { display: flex; justify-content: space-between; gap: var(--spacing-20); padding-top: var(--spacing-20); }
+.total .eyebrow { color: var(--color-lavender-haze); }
+.total .eyebrow.warn { color: var(--color-neon-orchid); }
+
+/* ── Вопросы ─────────────────────────────────────────────────── */
+.faq { margin-top: var(--spacing-40); border-top: 1px solid var(--rule-on-light); }
+.qa {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+  gap: var(--spacing-20) var(--spacing-40);
+  padding: var(--spacing-36) 0;
+  border-bottom: 1px solid var(--rule-on-light);
+}
+.qa h3 {
+  font-size: var(--text-subheading);
+  line-height: var(--leading-subheading);
+  letter-spacing: -0.02em;
+  font-weight: var(--font-weight-bold);
+}
+.qa p { font-size: 16px; }
+
+/* ── Финальный призыв и подвал ───────────────────────────────── */
+.final { padding: var(--spacing-116) 0; text-align: center; }
+.final .display { color: var(--color-neon-orchid); }
+.final .cta { margin-top: var(--spacing-40); display: flex; justify-content: center; }
+.final .note { margin-top: var(--spacing-20); color: var(--color-lavender-haze); }
+.foot {
+  border-top: 1px solid var(--color-walnut-vein);
+  padding: var(--spacing-36) 0;
+}
+.foot-in {
+  max-width: var(--page-max-width);
+  margin-inline: auto;
+  padding: 0 var(--spacing-20);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-20);
+  flex-wrap: wrap;
+}
+.foot-links { display: flex; gap: var(--element-gap); flex-wrap: wrap; margin-left: auto; }
+.foot-links a, .foot .eyebrow { color: var(--color-petal-wash); }
+.foot-links a { font-family: var(--font-mono); font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; }
+.foot-links a:hover { color: var(--color-neon-orchid); }
+
+/* ── Адаптив ─────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .stats { grid-template-columns: repeat(2, 1fr); }
+  .stat:nth-child(2n) { border-right: 0; }
+  .stat:nth-child(n+3) { border-top: 1px solid var(--color-walnut-vein); }
+  .cards, .uses, .calc { grid-template-columns: 1fr; }
+  .uses { gap: 0; }
+  .qa { grid-template-columns: 1fr; }
+  .nav-links { display: none; }
+  .nav-right { margin-left: auto; }   /* ссылки скрыты — группу справа держит она */
+}
+@media (max-width: 620px) {
+  :root { --frame-inset: 8px; --section-gap: 56px; }
+  .hero, .final { padding: 72px 0; }
+  .wrap, .nav-in, .foot-in { padding-left: var(--spacing-12); padding-right: var(--spacing-12); }
+  .row { grid-template-columns: 1fr auto; }
+  .row .addr { grid-column: 1 / -1; grid-row: 2; }
+  .wordmark { font-size: var(--text-body); }
+  .nav-right .btn-pill { display: none; }
+}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-in">
+    <a class="wordmark" href="#top" aria-label="Rondo">
+      <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
+        <rect x="9" y="1.6" width="10.4" height="10.4" transform="rotate(45 9 1.6)" fill="none" stroke="currentColor" stroke-width="1.8"/>
+      </svg>
+      <span>Rondo</span>
+    </a>
+    <nav class="nav-links">
+      <a href="#how" data-i18n="nav.how">PROTOCOL</a>
+      <a href="#sheet" data-i18n="nav.splits">SPLITS</a>
+      <a href="#calc" data-i18n="nav.payouts">PAYOUTS</a>
+      <a href="#cases" data-i18n="nav.cases">USE CASES</a>
+    </nav>
+    <div class="nav-right">
+      <div class="lang" role="group" aria-label="Language">
+        <button type="button" data-set="en" aria-pressed="true">EN</button>
+        <button type="button" data-set="ru" aria-pressed="false">RU</button>
+      </div>
+      <a class="btn btn-pill" href="#final"><span data-i18n="nav.cta">READ DOCS</span><span class="arw">↗</span></a>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- Хиро: cocoa -->
+  <section class="band band-cocoa hero">
+    <div class="wrap">
+      <span class="eyebrow" data-i18n="hero.eyebrow">SPLIT PROTOCOL — LIVE ON MAINNET</span>
+      <h1 class="display" data-i18n="hero.h1">Every Play Pays<br>Everyone At Once.</h1>
+      <div class="cta">
+        <a class="btn btn-pill" href="#calc"><span data-i18n="hero.cta1">OPEN CALCULATOR</span><span class="arw">↗</span></a>
+        <a class="btn btn-ghost" href="#how"><span data-i18n="hero.cta2">READ DOCS</span><span class="arw">↗</span></a>
+      </div>
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <!-- Показатели: cocoa -->
+  <section class="band band-cocoa" style="padding-top:0;padding-bottom:0">
+    <div class="wrap" style="padding-left:0;padding-right:0">
+      <div class="stats">
+        <div class="stat"><b>41,208</b><span class="eyebrow" data-i18n="stat.1">TRACKS REGISTERED</span></div>
+        <div class="stat"><b>$6.2M</b><span class="eyebrow" data-i18n="stat.2">PAID OUT IN 2026</span></div>
+        <div class="stat"><b>1.4s</b><span class="eyebrow" data-i18n="stat.3">AVERAGE SETTLEMENT</span></div>
+        <div class="stat"><b>0.3%</b><span class="eyebrow" data-i18n="stat.4">PROTOCOL FEE</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Как это работает: petal wash -->
+  <section class="band band-petal" id="how">
+    <div class="wrap">
+      <div class="head">
+        <span class="eyebrow" data-i18n="how.eyebrow">HOW IT WORKS</span>
+        <h2 class="h2" data-i18n="how.h2">Three steps. No quarterly statements.</h2>
+      </div>
+      <div class="cards">
+        <article class="card">
+          <span class="eyebrow num">01 — <span data-i18n="how.c1.tag">REGISTER</span></span>
+          <h3 data-i18n="how.c1.h">Mint the split sheet</h3>
+          <p data-i18n="how.c1.p">Every collaborator signs once, and the shares live inside the contract instead of a spreadsheet nobody remembered to update.</p>
+        </article>
+        <article class="card">
+          <span class="eyebrow num">02 — <span data-i18n="how.c2.tag">COLLECT</span></span>
+          <h3 data-i18n="how.c2.h">Point the revenue at it</h3>
+          <p data-i18n="how.c2.p">Streaming, sync licensing, merch, door money — every rail sends to one address the contract controls.</p>
+        </article>
+        <article class="card">
+          <span class="eyebrow num">03 — <span data-i18n="how.c3.tag">SETTLE</span></span>
+          <h3 data-i18n="how.c3.h">Money leaves the same block</h3>
+          <p data-i18n="how.c3.p">Funds fan out to every wallet as they land. No escrow account, no ninety-day hold, no chasing an invoice.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Сплит-лист: plum -->
+  <section class="band band-plum" id="sheet">
+    <div class="wrap">
+      <div class="head">
+        <span class="eyebrow" data-i18n="sheet.eyebrow">THE SPLIT SHEET</span>
+        <h2 class="h2" data-i18n="sheet.h2">The contract is the paperwork.</h2>
+        <p class="lede" data-i18n="sheet.lede">One track, four wallets, four shares — readable by anyone, changeable only by the signers together.</p>
+      </div>
+      <div class="sheet">
+        <div class="row"><span class="role" data-i18n="sheet.r1">Artist</span><span class="addr">0x4f21…a91c</span><span class="pct">45%</span></div>
+        <div class="row"><span class="role" data-i18n="sheet.r2">Producer</span><span class="addr">0x9be0…2d70</span><span class="pct">25%</span></div>
+        <div class="row"><span class="role" data-i18n="sheet.r3">Label</span><span class="addr">0x1c85…8fe4</span><span class="pct">20%</span></div>
+        <div class="row"><span class="role" data-i18n="sheet.r4">Session players</span><span class="addr">0xd7a3…5b03</span><span class="pct">10%</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Применение: bubblegum blush -->
+  <section class="band band-blush" id="cases">
+    <div class="wrap">
+      <div class="head">
+        <span class="eyebrow" data-i18n="cases.eyebrow">USE CASES</span>
+        <h2 class="h2" data-i18n="cases.h2">Built for the people who get paid last.</h2>
+      </div>
+      <div class="uses">
+        <div class="use">
+          <span class="eyebrow" data-i18n="cases.u1.t">INDEPENDENT ARTISTS</span>
+          <p data-i18n="cases.u1.p">Release without a label and still split fairly with everyone who was in the room.</p>
+        </div>
+        <div class="use">
+          <span class="eyebrow" data-i18n="cases.u2.t">PRODUCERS & CO-WRITERS</span>
+          <p data-i18n="cases.u2.p">Your points are held by code, not by a promise made at three in the morning.</p>
+        </div>
+        <div class="use">
+          <span class="eyebrow" data-i18n="cases.u3.t">LABELS & DISTRIBUTORS</span>
+          <p data-i18n="cases.u3.p">Close the books continuously instead of reconciling four platforms every quarter.</p>
+        </div>
+        <div class="use">
+          <span class="eyebrow" data-i18n="cases.u4.t">VENUES & PROMOTERS</span>
+          <p data-i18n="cases.u4.p">Door money reaches the support act before the house lights come back up.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Калькулятор: cocoa -->
+  <section class="band band-cocoa" id="calc">
+    <div class="wrap">
+      <div class="head">
+        <span class="eyebrow" data-i18n="calc.eyebrow">PAYOUT CALCULATOR</span>
+        <h2 class="h2" data-i18n="calc.h2">Move the shares. Watch the money move.</h2>
+      </div>
+      <div class="calc">
+        <div>
+          <div class="field">
+            <label class="eyebrow" for="rev" data-i18n="calc.rev">MONTHLY REVENUE</label>
+            <div class="money">
+              <span>$</span>
+              <input id="rev" type="number" min="0" step="100" value="18400" inputmode="numeric">
+            </div>
+          </div>
+          <div class="slider">
+            <div class="top"><span class="eyebrow" data-i18n="sheet.r1">Artist</span><span class="val" data-out="s1">45%</span></div>
+            <input type="range" id="s1" min="0" max="100" step="1" value="45" aria-label="Artist share">
+          </div>
+          <div class="slider">
+            <div class="top"><span class="eyebrow" data-i18n="sheet.r2">Producer</span><span class="val" data-out="s2">25%</span></div>
+            <input type="range" id="s2" min="0" max="100" step="1" value="25" aria-label="Producer share">
+          </div>
+          <div class="slider">
+            <div class="top"><span class="eyebrow" data-i18n="sheet.r3">Label</span><span class="val" data-out="s3">20%</span></div>
+            <input type="range" id="s3" min="0" max="100" step="1" value="20" aria-label="Label share">
+          </div>
+          <div class="slider">
+            <div class="top"><span class="eyebrow" data-i18n="sheet.r4">Session players</span><span class="val" data-out="s4">10%</span></div>
+            <input type="range" id="s4" min="0" max="100" step="1" value="10" aria-label="Session players share">
+          </div>
+        </div>
+        <div>
+          <div class="payouts">
+            <div class="payout"><span class="who" data-i18n="sheet.r1">Artist</span><span class="amt" data-pay="s1">$8,280</span></div>
+            <div class="payout"><span class="who" data-i18n="sheet.r2">Producer</span><span class="amt" data-pay="s2">$4,600</span></div>
+            <div class="payout"><span class="who" data-i18n="sheet.r3">Label</span><span class="amt" data-pay="s3">$3,680</span></div>
+            <div class="payout"><span class="who" data-i18n="sheet.r4">Session players</span><span class="amt" data-pay="s4">$1,840</span></div>
+            <div class="payout residual"><span class="who" data-i18n="calc.residual">Unallocated</span><span class="amt" data-pay="res">$0</span></div>
+          </div>
+          <div class="total">
+            <span class="eyebrow" data-i18n="calc.total">SHARES TOTAL</span>
+            <span class="eyebrow" id="totalOut">100%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Вопросы: petal wash -->
+  <section class="band band-petal">
+    <div class="wrap">
+      <div class="head">
+        <span class="eyebrow" data-i18n="faq.eyebrow">QUESTIONS</span>
+        <h2 class="h2" data-i18n="faq.h2">Short answers.</h2>
+      </div>
+      <div class="faq">
+        <div class="qa">
+          <h3 data-i18n="faq.q1">What currency do people receive?</h3>
+          <p data-i18n="faq.a1">Payouts settle in stablecoins by default. Each signer can attach an off-ramp so the share arrives as local currency in a bank account the same day.</p>
+        </div>
+        <div class="qa">
+          <h3 data-i18n="faq.q2">Can a split be changed later?</h3>
+          <p data-i18n="faq.a2">Yes, but only by all current signers together. Every version is kept, so an old statement can always be traced to the sheet that produced it.</p>
+        </div>
+        <div class="qa">
+          <h3 data-i18n="faq.q3">What if someone loses their wallet?</h3>
+          <p data-i18n="faq.a3">A share is a seat, not a key. Signers can rotate the receiving address by consensus without touching the percentages.</p>
+        </div>
+        <div class="qa">
+          <h3 data-i18n="faq.q4">Do listeners need a wallet?</h3>
+          <p data-i18n="faq.a4">No. Rondo sits behind the platforms your audience already uses — the protocol only changes what happens after the money arrives.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Финал: cocoa -->
+  <section class="band band-cocoa final" id="final">
+    <div class="wrap">
+      <h2 class="display" data-i18n="final.h">Register your first split.</h2>
+      <div class="cta">
+        <a class="btn btn-pill" href="#top"><span data-i18n="final.cta">GET EARLY ACCESS</span><span class="arw">↗</span></a>
+      </div>
+      <p class="eyebrow note" data-i18n="final.note">OPEN BETA — 40 SEATS LEFT</p>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <div class="foot-in">
+      <span class="eyebrow" data-i18n="foot.c">© 2026 RONDO PROTOCOL</span>
+      <div class="foot-links">
+        <a href="#how" data-i18n="foot.l1">DOCS</a>
+        <a href="#sheet" data-i18n="foot.l2">AUDIT</a>
+        <a href="#calc" data-i18n="foot.l3">STATUS</a>
+        <a href="#final" data-i18n="foot.l4">CONTACT</a>
+      </div>
+    </div>
+  </footer>
+
+</main>
+
+<script>
+(function () {
+  // Английский — исходный язык страницы; словарь содержит только русские строки.
+  var RU = {
+    'nav.how': 'ПРОТОКОЛ',
+    'nav.splits': 'ДОЛИ',
+    'nav.payouts': 'ВЫПЛАТЫ',
+    'nav.cases': 'ПРИМЕНЕНИЕ',
+    'nav.cta': 'ДОКУМЕНТАЦИЯ',
+
+    'hero.eyebrow': 'ПРОТОКОЛ ДОЛЕЙ — РАБОТАЕТ В МЕЙННЕТЕ',
+    'hero.h1': 'Одно прослушивание —<br>выплата всем сразу.',
+    'hero.cta1': 'КАЛЬКУЛЯТОР',
+    'hero.cta2': 'ДОКУМЕНТАЦИЯ',
+
+    'stat.1': 'ТРЕКОВ ЗАРЕГИСТРИРОВАНО',
+    'stat.2': 'ВЫПЛАЧЕНО В 2026-М',
+    'stat.3': 'СРЕДНИЙ РАСЧЁТ',
+    'stat.4': 'КОМИССИЯ ПРОТОКОЛА',
+
+    'how.eyebrow': 'КАК ЭТО РАБОТАЕТ',
+    'how.h2': 'Три шага. Никаких квартальных отчётов.',
+    'how.c1.tag': 'ЗАПИСЬ',
+    'how.c1.h': 'Выпустить сплит-лист',
+    'how.c1.p': 'Соавторы подписывают его один раз, и доли живут внутри контракта, а не в таблице, которую все забыли обновить.',
+    'how.c2.tag': 'СБОР',
+    'how.c2.h': 'Направить туда деньги',
+    'how.c2.p': 'Стриминг, синхронизация, мерч, сборы с двери — каждый источник платит на один адрес, которым управляет контракт.',
+    'how.c3.tag': 'РАСЧЁТ',
+    'how.c3.h': 'Выплата в том же блоке',
+    'how.c3.p': 'Деньги расходятся по кошелькам сразу, как пришли. Без эскроу, без девяноста дней ожидания и напоминаний об оплате.',
+
+    'sheet.eyebrow': 'СПЛИТ-ЛИСТ',
+    'sheet.h2': 'Контракт и есть документы.',
+    'sheet.lede': 'Один трек, четыре кошелька, четыре доли — читает кто угодно, меняют только подписанты вместе.',
+    'sheet.r1': 'Артист',
+    'sheet.r2': 'Продюсер',
+    'sheet.r3': 'Лейбл',
+    'sheet.r4': 'Сессионные',
+
+    'cases.eyebrow': 'ПРИМЕНЕНИЕ',
+    'cases.h2': 'Для тех, кому платят последними.',
+    'cases.u1.t': 'НЕЗАВИСИМЫЕ АРТИСТЫ',
+    'cases.u1.p': 'Выпускать музыку без лейбла и честно делиться со всеми, кто был в студии.',
+    'cases.u2.t': 'ПРОДЮСЕРЫ И СОАВТОРЫ',
+    'cases.u2.p': 'Ваши проценты держит код, а не обещание, данное в три часа ночи.',
+    'cases.u3.t': 'ЛЕЙБЛЫ И ДИСТРИБЬЮТОРЫ',
+    'cases.u3.p': 'Закрывать отчётность непрерывно, а не сверять четыре платформы каждый квартал.',
+    'cases.u4.t': 'ПЛОЩАДКИ И ПРОМОУТЕРЫ',
+    'cases.u4.p': 'Сборы с двери доходят до разогрева раньше, чем в зале включат свет.',
+
+    'calc.eyebrow': 'КАЛЬКУЛЯТОР ВЫПЛАТ',
+    'calc.h2': 'Двигайте доли — деньги двигаются следом.',
+    'calc.rev': 'ВЫРУЧКА ЗА МЕСЯЦ',
+    'calc.residual': 'Нераспределено',
+    'calc.total': 'СУММА ДОЛЕЙ',
+
+    'faq.eyebrow': 'ВОПРОСЫ',
+    'faq.h2': 'Короткие ответы.',
+    'faq.q1': 'В какой валюте приходят деньги?',
+    'faq.a1': 'По умолчанию расчёт идёт в стейблкоинах. Каждый подписант может подключить вывод, и доля придёт на банковский счёт в местной валюте в тот же день.',
+    'faq.q2': 'Можно ли изменить доли потом?',
+    'faq.a2': 'Да, но только всеми подписантами вместе. Все версии сохраняются, поэтому любую старую выплату можно свести с тем сплит-листом, по которому её посчитали.',
+    'faq.q3': 'Что если кошелёк утерян?',
+    'faq.a3': 'Доля — это место, а не ключ. Подписанты могут сменить адрес получателя по согласию, не трогая проценты.',
+    'faq.q4': 'Нужен ли кошелёк слушателю?',
+    'faq.a4': 'Нет. Rondo стоит за платформами, которыми ваша аудитория уже пользуется: протокол меняет только то, что происходит после прихода денег.',
+
+    'final.h': 'Зарегистрируйте первый сплит.',
+    'final.cta': 'РАННИЙ ДОСТУП',
+    'final.note': 'ОТКРЫТАЯ БЕТА — ОСТАЛОСЬ 40 МЕСТ',
+
+    'foot.c': '© 2026 ПРОТОКОЛ RONDO',
+    'foot.l1': 'ДОКУМЕНТАЦИЯ',
+    'foot.l2': 'АУДИТ',
+    'foot.l3': 'СТАТУС',
+    'foot.l4': 'КОНТАКТЫ'
+  };
+
+  var nodes = document.querySelectorAll('[data-i18n]');
+  var EN = {};
+  nodes.forEach(function (n) { EN[n.getAttribute('data-i18n')] = n.innerHTML; });
+
+  var lang = 'en';
+  var langBtns = document.querySelectorAll('.lang [data-set]');
+
+  function setLang(next) {
+    lang = next === 'ru' ? 'ru' : 'en';
+    var dict = lang === 'ru' ? RU : EN;
+    nodes.forEach(function (n) {
+      var key = n.getAttribute('data-i18n');
+      var val = dict[key];
+      if (val !== undefined) n.innerHTML = val;
+    });
+    document.documentElement.lang = lang;
+    document.documentElement.setAttribute('data-lang', lang);
+    langBtns.forEach(function (b) {
+      b.setAttribute('aria-pressed', String(b.getAttribute('data-set') === lang));
+    });
+    calc();
+  }
+  langBtns.forEach(function (b) {
+    b.addEventListener('click', function () { setLang(b.getAttribute('data-set')); });
+  });
+
+  // ── Липкая шапка: прижать к верху, как только страница сдвинулась ──
+  var nav = document.querySelector('.nav');
+  var ticking = false;
+  function syncNav() {
+    nav.classList.toggle('stuck', window.pageYOffset > 2);
+    ticking = false;
+  }
+  window.addEventListener('scroll', function () {
+    if (!ticking) { ticking = true; window.requestAnimationFrame(syncNav); }
+  }, { passive: true });
+  syncNav();
+
+  // ── Калькулятор выплат ──
+  var rev = document.getElementById('rev');
+  var ids = ['s1', 's2', 's3', 's4'];
+  var sliders = ids.map(function (id) { return document.getElementById(id); });
+  var totalOut = document.getElementById('totalOut');
+
+  function money(v) {
+    return new Intl.NumberFormat(lang === 'ru' ? 'ru-RU' : 'en-US', {
+      style: 'currency', currency: 'USD', maximumFractionDigits: 0
+    }).format(Math.round(v));
+  }
+
+  function calc() {
+    var base = Math.max(0, Number(rev.value) || 0);
+    var total = 0;
+    sliders.forEach(function (s) { total += Number(s.value); });
+
+    ids.forEach(function (id, i) {
+      var pct = Number(sliders[i].value);
+      document.querySelector('[data-out="' + id + '"]').textContent = pct + '%';
+      document.querySelector('[data-pay="' + id + '"]').textContent = money(base * pct / 100);
+    });
+
+    var residual = Math.max(0, 100 - total);
+    document.querySelector('[data-pay="res"]').textContent = money(base * residual / 100);
+    totalOut.textContent = total + '%';
+    totalOut.classList.toggle('warn', total !== 100);
+  }
+
+  rev.addEventListener('input', calc);
+  sliders.forEach(function (s) { s.addEventListener('input', calc); });
+  calc();
+})();
+</script>
+</body>
+</html>

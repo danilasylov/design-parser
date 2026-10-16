@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Almanac — a repository for research interviews</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ─────────────────────────────────────────────────────────────────────────────
+   Дизайн-система Felt (styles.refero.design/style/127a4efb-685c-42c3-83eb-72bb410a8429)
+   :root вставлен ДОСЛОВНО со страницы стиля. Единственная правка — ниже, своим блоком:
+   подстановки шрифтов с кириллицей (GT Alpina Standard → Playfair Display,
+   Atlas Grotesk → Inter; обе замены названы самой системой в DESIGN.md).
+   Внимание: --surface-fern в исходных токенах приходит битым (#3d521, 5 знаков) —
+   оставлен как есть для верности источнику, в вёрстке не используется; вместо него
+   везде --color-fern.
+   ───────────────────────────────────────────────────────────────────────────── */
+:root {
+  /* Colors */
+  --color-moss-canvas: #314218;
+  --color-fern: #3d521e;
+  --color-lichen: #64754b;
+  --color-forest-floor: #212f0c;
+  --color-deep-bog: #18210c;
+  --color-amber-compass: #dc8c46;
+  --color-bone-white: #ffffff;
+  --color-parchment: #eeeeee;
+  --color-charcoal: #333333;
+  --color-limestone: #d8dcd2;
+  --color-ink: #000000;
+
+  /* Typography — Font Families */
+  --font-arial: 'Arial', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-gt-alpina-standard: 'GT Alpina Standard', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-atlas-grotesk: 'Atlas Grotesk', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-times-new-roman: 'Times New Roman', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* Typography — Scale */
+  --text-caption: 12px;
+  --leading-caption: 1.43;
+  --tracking-caption: 0.4px;
+  --text-body-sm: 14px;
+  --leading-body-sm: 1.43;
+  --tracking-body-sm: 0.46px;
+  --text-body: 16px;
+  --leading-body: 1.5;
+  --tracking-body: 0.53px;
+  --text-subheading: 19px;
+  --leading-subheading: 1.33;
+  --text-heading-sm: 28px;
+  --leading-heading-sm: 1.11;
+  --tracking-heading-sm: -0.92px;
+  --text-heading: 36px;
+  --leading-heading: 1;
+  --tracking-heading: -1.19px;
+  --text-heading-lg: 50px;
+  --leading-heading-lg: 0.96;
+  --tracking-heading-lg: -1.65px;
+  --text-display: 86px;
+  --leading-display: 0.88;
+  --tracking-display: -3.44px;
+
+  /* Typography — Weights */
+  --font-weight-light: 300;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+
+  /* Spacing */
+  --spacing-unit: 4px;
+  --spacing-4: 4px;
+  --spacing-8: 8px;
+  --spacing-12: 12px;
+  --spacing-16: 16px;
+  --spacing-20: 20px;
+  --spacing-24: 24px;
+  --spacing-32: 32px;
+  --spacing-36: 36px;
+  --spacing-48: 48px;
+  --spacing-64: 64px;
+  --spacing-72: 72px;
+  --spacing-80: 80px;
+  --spacing-120: 120px;
+  --spacing-144: 144px;
+  --spacing-160: 160px;
+
+  /* Layout */
+  --page-max-width: 1200px;
+  --section-gap: 80px;
+  --card-padding: 24px;
+  --element-gap: 12px;
+
+  /* Border Radius */
+  --radius-md: 6px;
+  --radius-lg: 10px;
+  --radius-2xl: 20px;
+
+  /* Named Radii */
+  --radius-cards: 6px;
+  --radius-badges: 6px;
+  --radius-images: 6px;
+  --radius-inputs: 6px;
+  --radius-buttons: 20px;
+
+  /* Shadows */
+  --shadow-sm: rgba(0, 0, 0, 0.2) 0px 2px 5px 0px;
+
+  /* Surfaces */
+  --surface-moss-canvas: #314218;
+  --surface-fern: #3d521;
+  --surface-lichen: #64754b;
+  --surface-bone-white: #ffffff;
+}
+
+/* Подстановки шрифтов: обе взяты из списка Substitute в DESIGN.md системы, обе с кириллицей
+   (Fraunces, первый в списке замен серифа, кириллицы не имеет — отпал на проверке). */
+:root{
+  --font-display: 'Playfair Display', 'Times New Roman', Georgia, serif;   /* ← GT Alpina Standard */
+  --font-ui: 'Inter', 'Helvetica Neue', Arial, sans-serif;                 /* ← Atlas Grotesk      */
+  --tracking-ui: 0.033em;                                                  /* трекинг Atlas Grotesk */
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:var(--color-moss-canvas);
+  color:var(--color-bone-white);
+  font-family:var(--font-ui);
+  font-size:var(--text-body);
+  line-height:var(--leading-body);
+  letter-spacing:var(--tracking-body);
+  font-weight:var(--font-weight-regular);
+  -webkit-font-smoothing:antialiased;
+}
+a{color:inherit;text-decoration:none}
+h1,h2,h3{margin:0;font-family:var(--font-display);font-weight:var(--font-weight-regular)}
+p{margin:0}
+
+.wrap{max-width:var(--page-max-width);margin:0 auto;padding:0 var(--spacing-24)}
+.wide{max-width:1360px;margin:0 auto;padding:0 var(--spacing-24)}
+
+/* ─── типографика по шкале системы ─── */
+.display{font-size:var(--text-display);line-height:var(--leading-display);letter-spacing:var(--tracking-display)}
+.h-lg{font-size:var(--text-heading-lg);line-height:var(--leading-heading-lg);letter-spacing:var(--tracking-heading-lg)}
+.h{font-size:var(--text-heading);line-height:var(--leading-heading);letter-spacing:var(--tracking-heading)}
+.h-sm{font-size:var(--text-heading-sm);line-height:var(--leading-heading-sm);letter-spacing:var(--tracking-heading-sm)}
+.sub{font-size:var(--text-subheading);line-height:var(--leading-subheading);letter-spacing:normal;color:var(--color-parchment);font-family:var(--font-ui)}
+.body-sm{font-size:var(--text-body-sm);line-height:var(--leading-body-sm);letter-spacing:var(--tracking-body-sm)}
+.caption{font-size:var(--text-caption);line-height:var(--leading-caption);letter-spacing:var(--tracking-caption)}
+.eyebrow{
+  font-size:var(--text-caption);line-height:var(--leading-caption);
+  letter-spacing:var(--tracking-ui);text-transform:uppercase;
+  font-weight:var(--font-weight-medium);color:var(--color-limestone);
+}
+
+/* ─── кнопки: pill 20px только у кнопок, остальное 6px ─── */
+.btn{
+  display:inline-flex;align-items:center;gap:var(--spacing-8);
+  font-family:var(--font-ui);font-size:var(--text-body);font-weight:var(--font-weight-medium);
+  letter-spacing:var(--tracking-ui);border-radius:var(--radius-buttons);
+  padding:var(--spacing-12) var(--spacing-24);border:0;cursor:pointer;
+  transition:background .18s ease,color .18s ease,border-color .18s ease;
+}
+.btn-amber{background:var(--color-amber-compass);color:var(--color-bone-white)}
+.btn-amber:hover{background:#c97c38}
+.btn-white{background:var(--color-bone-white);color:var(--color-charcoal)}
+.btn-white:hover{background:var(--color-parchment)}
+.btn-surface{background:var(--color-lichen);color:var(--color-bone-white)}
+.btn-surface:hover{background:#71835a}
+.btn .arrow{width:0;height:0;border-left:7px solid currentColor;border-top:5px solid transparent;border-bottom:5px solid transparent}
+.ghost{
+  display:inline-block;font-size:var(--text-body);letter-spacing:var(--tracking-ui);
+  border-bottom:1px solid var(--color-bone-white);padding-bottom:2px;
+}
+.ghost:hover{border-bottom-color:var(--color-amber-compass);color:var(--color-amber-compass)}
+
+/* ─── тикер ─── */
+.ticker{background:var(--color-forest-floor);overflow:hidden;white-space:nowrap;padding:var(--spacing-8) 0}
+.ticker-track{display:inline-block;animation:slide 38s linear infinite}
+.ticker span{
+  font-size:var(--text-caption);letter-spacing:var(--tracking-ui);text-transform:uppercase;
+  font-weight:var(--font-weight-medium);color:var(--color-parchment);padding:0 var(--spacing-16);
+}
+.ticker b{color:var(--color-amber-compass);font-weight:var(--font-weight-medium)}
+@keyframes slide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ─── навигация ─── */
+header{
+  position:sticky;top:0;z-index:40;background:var(--color-moss-canvas);
+  border-bottom:1px solid transparent;transition:border-color .2s ease;
+}
+header.stuck{border-bottom-color:var(--color-fern)}
+.nav{display:flex;align-items:center;gap:var(--spacing-32);padding:var(--spacing-20) var(--spacing-24);max-width:1360px;margin:0 auto}
+.wordmark{font-family:var(--font-display);font-size:26px;letter-spacing:-0.02em;line-height:1}
+.nav-links{display:flex;gap:var(--spacing-24);margin-left:var(--spacing-24)}
+.nav-links a{
+  font-size:var(--text-caption);text-transform:uppercase;letter-spacing:var(--tracking-ui);
+  font-weight:var(--font-weight-medium);color:var(--color-bone-white);opacity:.9;
+}
+.nav-links a:hover{color:var(--color-amber-compass);opacity:1}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:var(--spacing-20)}
+.nav-right .ghost{font-size:var(--text-caption);text-transform:uppercase;letter-spacing:var(--tracking-ui);font-weight:var(--font-weight-medium)}
+.lang{display:flex;border:1px solid var(--color-lichen);border-radius:var(--radius-badges);overflow:hidden}
+.lang button{
+  background:none;border:0;color:var(--color-parchment);cursor:pointer;font-family:var(--font-ui);
+  font-size:var(--text-caption);font-weight:var(--font-weight-medium);letter-spacing:var(--tracking-ui);
+  padding:5px 9px;
+}
+.lang button[aria-pressed="true"]{background:var(--color-bone-white);color:var(--color-charcoal)}
+.btn-sm{padding:var(--spacing-8) var(--spacing-20);font-size:var(--text-body-sm)}
+
+/* ─── секции ─── */
+section{padding:var(--section-gap) 0}
+.center{text-align:center}
+.sec-head{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:var(--spacing-16);align-items:center}
+
+/* топографическая текстура: контурные линии Lichen — единственный декор, разрешённый системой */
+.topo{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+.topo svg{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:1700px;height:900px}
+.topo path{fill:none;stroke:var(--color-lichen);stroke-width:1.25;opacity:.5}
+
+/* ─── герой ─── */
+.hero{position:relative;padding:var(--spacing-120) 0 var(--spacing-80);overflow:hidden}
+.hero .wrap{position:relative;z-index:1}
+.hero .display{max-width:960px;margin:0 auto}
+.hero .sub{max-width:640px;margin:var(--spacing-24) auto 0}
+.hero-cta{display:flex;gap:var(--spacing-24);justify-content:center;align-items:center;margin-top:var(--spacing-36)}
+.hero-note{margin-top:var(--spacing-20);color:var(--color-limestone)}
+
+/* ─── светлая продуктовая панель: единственное место, где система разрешает тень ─── */
+.panel{
+  background:var(--color-bone-white);color:var(--color-charcoal);
+  border-radius:var(--radius-images);box-shadow:var(--shadow-sm);overflow:hidden;
+  font-size:var(--text-body-sm);line-height:var(--leading-body-sm);letter-spacing:var(--tracking-body-sm);
+}
+.panel-bar{
+  display:flex;align-items:center;gap:var(--spacing-12);
+  padding:var(--spacing-12) var(--spacing-16);border-bottom:1px solid var(--color-limestone);
+}
+.panel-bar .dot{width:9px;height:9px;border-radius:50%;background:var(--color-limestone)}
+.panel-bar .crumb{color:var(--color-charcoal);font-weight:var(--font-weight-medium)}
+.panel-bar .crumb span{color:#7b7b7b;font-weight:var(--font-weight-regular)}
+.panel-bar .spacer{margin-left:auto}
+.chip{
+  display:inline-flex;align-items:center;gap:6px;background:var(--color-limestone);color:var(--color-charcoal);
+  border-radius:var(--radius-badges);padding:2px 6px;
+  font-size:var(--text-caption);font-weight:var(--font-weight-medium);letter-spacing:var(--tracking-ui);
+}
+.chip.amber{background:var(--color-amber-compass);color:var(--color-bone-white)}
+.panel-body{display:grid}
+.panel-3{grid-template-columns:232px 1fr 268px}
+.panel-2{grid-template-columns:1fr 300px}
+.pane{padding:var(--spacing-16)}
+.pane + .pane{border-left:1px solid var(--color-limestone)}
+.pane-title{
+  font-size:var(--text-caption);letter-spacing:var(--tracking-ui);text-transform:uppercase;
+  color:#7b7b7b;font-weight:var(--font-weight-medium);margin-bottom:var(--spacing-12);
+}
+.study{display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:var(--radius-cards);color:#4a4a4a}
+.study.on{background:var(--color-parchment);color:var(--color-charcoal);font-weight:var(--font-weight-medium)}
+.study .n{margin-left:auto;color:#8a8a8a;font-size:var(--text-caption)}
+.pin{width:10px;height:10px;border-radius:50%;background:var(--color-amber-compass);border:2px solid var(--color-bone-white);box-shadow:var(--shadow-sm);flex:0 0 auto}
+.speaker{color:#8a8a8a;font-size:var(--text-caption);letter-spacing:var(--tracking-ui);text-transform:uppercase;margin-bottom:4px}
+.line{margin-bottom:var(--spacing-16);color:#4a4a4a}
+.mark{background:rgba(220,140,70,.22);border-bottom:2px solid var(--color-amber-compass);padding:1px 2px;color:var(--color-charcoal)}
+.insight{border:1px solid var(--color-limestone);border-radius:var(--radius-cards);padding:var(--spacing-12);margin-bottom:var(--spacing-12)}
+.insight .t{font-weight:var(--font-weight-medium);margin-bottom:4px}
+.insight .m{color:#7b7b7b;font-size:var(--text-caption)}
+.meter{height:6px;border-radius:3px;background:var(--color-parchment);margin-top:8px;overflow:hidden}
+.meter i{display:block;height:100%;background:var(--color-amber-compass)}
+
+/* доска инсайтов */
+.board{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--spacing-12);padding:var(--spacing-16)}
+.col-title{
+  font-size:var(--text-caption);text-transform:uppercase;letter-spacing:var(--tracking-ui);
+  color:#7b7b7b;font-weight:var(--font-weight-medium);margin-bottom:var(--spacing-8);
+  display:flex;justify-content:space-between;
+}
+.note{background:var(--color-parchment);border-radius:var(--radius-cards);padding:10px;margin-bottom:8px;color:#4a4a4a;font-size:var(--text-caption);line-height:1.4}
+.note b{display:block;color:var(--color-charcoal);font-weight:var(--font-weight-medium);margin-bottom:3px}
+
+/* строка загрузки */
+.rows{padding:var(--spacing-8) var(--spacing-16) var(--spacing-16)}
+.row{display:flex;align-items:center;gap:var(--spacing-12);padding:11px 0;border-bottom:1px solid var(--color-limestone)}
+.row:last-child{border-bottom:0}
+.row .nm{font-weight:var(--font-weight-medium);color:var(--color-charcoal);min-width:230px}
+.row .sz{color:#8a8a8a;font-size:var(--text-caption);min-width:74px}
+.row .bar{flex:1;height:6px;border-radius:3px;background:var(--color-parchment);overflow:hidden}
+.row .bar i{display:block;height:100%;background:var(--color-lichen)}
+.row .st{min-width:96px;text-align:right;color:#7b7b7b;font-size:var(--text-caption);letter-spacing:var(--tracking-ui)}
+
+/* ─── логотипы ─── */
+.logos{display:flex;justify-content:center;align-items:center;gap:var(--spacing-48);flex-wrap:wrap;margin-top:var(--spacing-48)}
+.logos span{
+  font-family:var(--font-display);font-size:22px;letter-spacing:.02em;color:var(--color-bone-white);
+  opacity:.72;white-space:nowrap;
+}
+
+/* ─── карточки (elevation цветом, не тенью) ─── */
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--spacing-24);margin-top:var(--spacing-48)}
+.card{
+  background:var(--color-fern);border:1px solid var(--color-lichen);
+  border-radius:var(--radius-cards);padding:var(--card-padding);
+  display:flex;flex-direction:column;gap:var(--element-gap);
+}
+.card .k{color:var(--color-amber-compass);font-family:var(--font-display);font-size:var(--text-heading-sm);line-height:1}
+.card h3{font-size:var(--text-subheading);line-height:var(--leading-subheading);letter-spacing:normal;font-family:var(--font-ui);font-weight:var(--font-weight-medium)}
+.card p{color:var(--color-parchment);font-size:var(--text-body-sm);line-height:var(--leading-body-sm);letter-spacing:var(--tracking-body-sm)}
+
+/* ─── полоса цифр ─── */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--color-lichen);border-bottom:1px solid var(--color-lichen)}
+.stat{padding:var(--spacing-32) var(--spacing-24);border-left:1px solid var(--color-lichen)}
+.stat:first-child{border-left:0}
+.stat .v{font-family:var(--font-display);font-size:var(--text-heading);line-height:var(--leading-heading);letter-spacing:var(--tracking-heading)}
+.stat .l{margin-top:var(--spacing-8);color:var(--color-limestone);font-size:var(--text-body-sm);letter-spacing:var(--tracking-body-sm)}
+
+/* ─── две колонки: текст + панель ─── */
+.split{display:grid;grid-template-columns:420px 1fr;gap:var(--spacing-64);align-items:center}
+.split .t{display:flex;flex-direction:column;gap:var(--spacing-16);align-items:flex-start}
+.list{display:flex;flex-direction:column;gap:var(--spacing-12);margin-top:var(--spacing-8)}
+.list div{display:flex;gap:var(--spacing-12);color:var(--color-parchment);font-size:var(--text-body-sm);letter-spacing:var(--tracking-body-sm)}
+.list em{font-style:normal;color:var(--color-amber-compass);font-family:var(--font-display);font-size:var(--text-body)}
+
+/* ─── безопасность ─── */
+.quiet{background:var(--color-forest-floor)}
+.quiet .wrap{display:grid;grid-template-columns:1fr 1fr;gap:var(--spacing-64);align-items:start}
+.terms{display:flex;flex-direction:column;gap:var(--spacing-16)}
+.term{border-top:1px solid var(--color-lichen);padding-top:var(--spacing-16);display:flex;gap:var(--spacing-16)}
+.term .lbl{min-width:120px;color:var(--color-limestone);font-size:var(--text-caption);text-transform:uppercase;letter-spacing:var(--tracking-ui);font-weight:var(--font-weight-medium);padding-top:3px}
+.term p{color:var(--color-parchment);font-size:var(--text-body-sm);line-height:var(--leading-body-sm);letter-spacing:var(--tracking-body-sm)}
+
+/* ─── финальный экран ─── */
+.finale{position:relative;overflow:hidden;padding:var(--spacing-144) 0}
+.finale .wrap{position:relative;z-index:1}
+
+/* ─── подвал ─── */
+footer{background:var(--color-deep-bog);padding:var(--spacing-64) 0 var(--spacing-32)}
+.foot{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:var(--spacing-48)}
+.foot h4{
+  font-size:var(--text-caption);text-transform:uppercase;letter-spacing:var(--tracking-ui);
+  color:var(--color-limestone);font-weight:var(--font-weight-medium);margin:0 0 var(--spacing-16);
+}
+.foot a{display:block;color:var(--color-parchment);font-size:var(--text-body-sm);letter-spacing:var(--tracking-body-sm);margin-bottom:var(--spacing-8)}
+.foot a:hover{color:var(--color-amber-compass)}
+.foot .about p{color:var(--color-limestone);font-size:var(--text-body-sm);line-height:var(--leading-body-sm);letter-spacing:var(--tracking-body-sm);margin-top:var(--spacing-12);max-width:320px}
+.foot-bottom{
+  display:flex;justify-content:space-between;gap:var(--spacing-24);
+  border-top:1px solid var(--color-fern);margin-top:var(--spacing-48);padding-top:var(--spacing-24);
+  color:var(--color-limestone);font-size:var(--text-caption);letter-spacing:var(--tracking-caption);
+}
+</style>
+</head>
+<body>
+
+<!-- ─── тикер ─── -->
+<div class="ticker">
+  <div class="ticker-track" id="ticker"></div>
+</div>
+
+<!-- ─── навигация ─── -->
+<header id="hdr">
+  <nav class="nav">
+    <a class="wordmark" href="#top">Almanac</a>
+    <div class="nav-links">
+      <a href="#repository" data-i18n="nav1">Repository</a>
+      <a href="#boards" data-i18n="nav2">Boards</a>
+      <a href="#practice" data-i18n="nav3">Practice</a>
+      <a href="#pricing" data-i18n="nav4">Pricing</a>
+    </div>
+    <div class="nav-right">
+      <div class="lang">
+        <button data-set="en" aria-pressed="true">EN</button>
+        <button data-set="ru" aria-pressed="false">RU</button>
+      </div>
+      <a class="ghost" href="#finale" data-i18n="navDemo">Book a demo</a>
+      <a class="ghost" href="#finale" data-i18n="navLogin">Log in</a>
+      <a class="btn btn-white btn-sm" href="#finale"><span data-i18n="navSignup">Sign up</span><i class="arrow"></i></a>
+    </div>
+  </nav>
+</header>
+
+<!-- ─── герой ─── -->
+<section class="hero center" id="top">
+  <div class="topo" aria-hidden="true">
+    <svg viewBox="0 0 1700 900" preserveAspectRatio="xMidYMid meet">
+      <g id="contours" transform="translate(850 450)">
+        <path transform="scale(1)" d="M -420 -30 C -400 -220 -180 -330 40 -320 C 260 -310 470 -210 520 -40 C 570 130 430 290 200 330 C -30 370 -280 300 -380 160 C -450 60 -440 20 -420 -30 Z"/>
+        <path transform="scale(0.86)" d="M -420 -30 C -400 -220 -180 -330 40 -320 C 260 -310 470 -210 520 -40 C 570 130 430 290 200 330 C -30 370 -280 300 -380 160 C -450 60 -440 20 -420 -30 Z"/>
+        <path transform="scale(0.73)" d="M -420 -30 C -400 -220 -180 -330 40 -320 C 260 -310 470 -210 520 -40 C 570 130 430 290 200 330 C -30 370 -280 300 -380 160 C -450 60 -440 20 -420 -30 Z"/>
+        <path transform="scale(0.61)" d="M -420 -30 C -400 -220 -180 -330 40 -320 C 260 -310 470 -210 520 -40 C 570 130 430 290 200 330 C -30 370 -280 300 -380 160 C -450 60 -440 20 -420 -30 Z"/>
+        <path transform="scale(0.5)" d="M -420 -30 C -400 -220 -180 -330 40 -320 C 260 -310 470 -210 520 -40 C 570 130 430 290 200 330 C -30 370 -280 300 -380 160 C -450 60 -440 20 -420 -30 Z"/>
+        <path transform="scale(0.4)" d="M -420 -30 C -400 -220 -180 -330 40 -320 C 260 -310 470 -210 520 -40 C 570 130 430 290 200 330 C -30 370 -280 300 -380 160 C -450 60 -440 20 -420 -30 Z"/>
+        <path transform="scale(0.31)" d="M -420 -30 C -400 -220 -180 -330 40 -320 C 260 -310 470 -210 520 -40 C 570 130 430 290 200 330 C -30 370 -280 300 -380 160 C -450 60 -440 20 -420 -30 Z"/>
+        <path transform="scale(0.22)" d="M -420 -30 C -400 -220 -180 -330 40 -320 C 260 -310 470 -210 520 -40 C 570 130 430 290 200 330 C -30 370 -280 300 -380 160 C -450 60 -440 20 -420 -30 Z"/>
+      </g>
+    </svg>
+  </div>
+  <div class="wrap">
+    <h1 class="display"><span data-i18n="h1a">Your research, bound</span><br><span data-i18n="h1b">into one almanac</span></h1>
+    <p class="sub" data-i18n="heroSub">A repository for interviews, transcripts and the findings buried inside them — searchable by meaning, not by keyword.</p>
+    <div class="hero-cta">
+      <a class="btn btn-amber" href="#finale"><span data-i18n="ctaStart">Start a workspace</span><i class="arrow"></i></a>
+      <a class="ghost" href="#repository" data-i18n="ctaTour">See the repository</a>
+    </div>
+    <p class="body-sm hero-note" data-i18n="heroNote">Free for the first three studies · No recording ever leaves your workspace</p>
+  </div>
+</section>
+
+<!-- ─── разворот продукта ─── -->
+<section id="repository" style="padding-top:0">
+  <div class="wide">
+    <div class="panel">
+      <div class="panel-bar">
+        <span class="dot"></span>
+        <span class="crumb">Almanac <span data-i18n="crumb1">/ Onboarding friction · 2026</span></span>
+        <span class="spacer"></span>
+        <span class="chip" data-i18n="chipInt">28 interviews</span>
+        <span class="chip amber" data-i18n="chipSearch">Semantic search</span>
+      </div>
+      <div class="panel-body panel-3">
+        <div class="pane">
+          <div class="pane-title" data-i18n="paneStudies">Studies</div>
+          <div class="study on"><span class="pin"></span><span data-i18n="st1">Onboarding friction</span><span class="n">28</span></div>
+          <div class="study"><span data-i18n="st2">Pricing objections</span><span class="n">14</span></div>
+          <div class="study"><span data-i18n="st3">Admin handover</span><span class="n">9</span></div>
+          <div class="study"><span data-i18n="st4">Churn exit calls</span><span class="n">31</span></div>
+          <div class="study"><span data-i18n="st5">Field trial · Q1</span><span class="n">12</span></div>
+          <div class="pane-title" style="margin-top:20px" data-i18n="paneTags">Recurring tags</div>
+          <div class="study"><span data-i18n="tg1">setup takes days</span><span class="n">19</span></div>
+          <div class="study"><span data-i18n="tg2">asks a colleague</span><span class="n">11</span></div>
+          <div class="study"><span data-i18n="tg3">gives up on import</span><span class="n">7</span></div>
+        </div>
+        <div class="pane">
+          <div class="pane-title" data-i18n="paneTr">Transcript · 00:12:04</div>
+          <div class="speaker" data-i18n="sp1">Participant 07 — ops lead</div>
+          <p class="line" data-i18n="tr1">We had the account on a Monday. <span class="mark">Nobody touched it until Thursday, because the person who knew the old system was on leave.</span> By then the trial was a third gone.</p>
+          <div class="speaker" data-i18n="sp2">Researcher</div>
+          <p class="line" data-i18n="tr2">What would have helped in those three days?</p>
+          <div class="speaker" data-i18n="sp3">Participant 07 — ops lead</div>
+          <p class="line" data-i18n="tr3"><span class="mark">Honestly, one page telling me what to import first.</span> I opened the docs, saw fourteen sections, closed the tab and asked a colleague instead.</p>
+        </div>
+        <div class="pane">
+          <div class="pane-title" data-i18n="paneIn">Findings</div>
+          <div class="insight">
+            <div class="t" data-i18n="in1t">Setup stalls on absent colleagues</div>
+            <div class="m"><span data-i18n="in1m">Seen in 19 of 28 interviews</span></div>
+            <div class="meter"><i style="width:68%"></i></div>
+          </div>
+          <div class="insight">
+            <div class="t" data-i18n="in2t">Docs read as a wall, not a path</div>
+            <div class="m"><span data-i18n="in2m">Seen in 11 of 28 interviews</span></div>
+            <div class="meter"><i style="width:39%"></i></div>
+          </div>
+          <div class="insight">
+            <div class="t" data-i18n="in3t">Import is the first real drop-off</div>
+            <div class="m"><span data-i18n="in3m">Seen in 7 of 28 interviews</span></div>
+            <div class="meter"><i style="width:25%"></i></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── логотипы ─── -->
+<section class="center">
+  <div class="wrap">
+    <h2 class="h" data-i18n="logosH">Leading a calmer research practice</h2>
+    <div class="logos">
+      <span>Northwind</span><span>Lumen Labs</span><span>Kestrel</span><span>Arbor Health</span><span>Pont</span>
+    </div>
+  </div>
+</section>
+
+<!-- ─── загрузка ─── -->
+<section>
+  <div class="wrap">
+    <div class="sec-head center">
+      <p class="eyebrow" data-i18n="ebIntake">Intake</p>
+      <h2 class="h-lg" data-i18n="upH">Drop in any recording, get a readable page</h2>
+      <p class="sub" data-i18n="upP">Zoom, Meet, a phone memo from a shop floor. Almanac transcribes it, splits the speakers and files it under the right study before you are back from lunch.</p>
+    </div>
+  </div>
+  <div class="wide" style="margin-top:var(--spacing-48)">
+    <div class="panel">
+      <div class="panel-bar">
+        <span class="dot"></span>
+        <span class="crumb">Intake <span>/ 5 files</span></span>
+        <span class="spacer"></span>
+        <span class="chip" data-i18n="chipAuto">Auto-filed</span>
+      </div>
+      <div class="rows">
+        <div class="row"><span class="nm">P07-ops-lead.m4a</span><span class="sz">48 min</span><span class="bar"><i style="width:100%"></i></span><span class="st" data-i18n="stDone">Filed</span></div>
+        <div class="row"><span class="nm">P08-warehouse.mp4</span><span class="sz">31 min</span><span class="bar"><i style="width:100%"></i></span><span class="st" data-i18n="stDone2">Filed</span></div>
+        <div class="row"><span class="nm">P09-finance.m4a</span><span class="sz">55 min</span><span class="bar"><i style="width:72%"></i></span><span class="st" data-i18n="stWork">Splitting speakers</span></div>
+        <div class="row"><span class="nm">field-notes-mar-14.txt</span><span class="sz">4 KB</span><span class="bar"><i style="width:100%"></i></span><span class="st" data-i18n="stDone3">Filed</span></div>
+        <div class="row"><span class="nm">P10-shop-floor.m4a</span><span class="sz">22 min</span><span class="bar"><i style="width:34%"></i></span><span class="st" data-i18n="stUp">Transcribing</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── доска инсайтов ─── -->
+<section id="boards">
+  <div class="wrap">
+    <div class="split">
+      <div class="t">
+        <p class="eyebrow" data-i18n="ebBoards">Boards</p>
+        <h2 class="h" data-i18n="bH">Every finding on one spread</h2>
+        <p class="sub" data-i18n="bP">Highlights become notes, notes cluster into findings. The board is the page you actually present — no slide export, no second document to keep in sync.</p>
+        <div class="list">
+          <div><em>01</em><span data-i18n="bl1">Pull a quote and it keeps its timestamp and speaker</span></div>
+          <div><em>02</em><span data-i18n="bl2">Clusters count themselves as new interviews land</span></div>
+          <div><em>03</em><span data-i18n="bl3">Anything on the board links back to the recording</span></div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-bar">
+          <span class="dot"></span>
+          <span class="crumb"><span data-i18n="crumbB">Board</span> <span data-i18n="crumb2">/ Onboarding friction</span></span>
+          <span class="spacer"></span>
+          <span class="chip" data-i18n="chipUpd">Updated 2 min ago</span>
+        </div>
+        <div class="board">
+          <div>
+            <div class="col-title"><span data-i18n="colA">Before setup</span><span>9</span></div>
+            <div class="note"><b>P02</b><span data-i18n="nA1">“I inherited the account with no notes.”</span></div>
+            <div class="note"><b>P07</b><span data-i18n="nA2">“Waited three days for a colleague.”</span></div>
+            <div class="note"><b>P11</b><span data-i18n="nA3">“Nobody told me who owns it.”</span></div>
+          </div>
+          <div>
+            <div class="col-title"><span data-i18n="colB">First hour</span><span>12</span></div>
+            <div class="note"><b>P07</b><span data-i18n="nB1">“Fourteen sections, closed the tab.”</span></div>
+            <div class="note"><b>P04</b><span data-i18n="nB2">“Wanted one page, not a manual.”</span></div>
+          </div>
+          <div>
+            <div class="col-title"><span data-i18n="colC">Import</span><span>7</span></div>
+            <div class="note"><b>P09</b><span data-i18n="nC1">“The file went in, the columns didn't.”</span></div>
+            <div class="note"><b>P03</b><span data-i18n="nC2">“Gave up, sent it to support.”</span></div>
+          </div>
+          <div>
+            <div class="col-title"><span data-i18n="colD">Week two</span><span>5</span></div>
+            <div class="note"><b>P10</b><span data-i18n="nD1">“By then it just worked.”</span></div>
+            <div class="note"><b>P08</b><span data-i18n="nD2">“Now I onboard others myself.”</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── практика: три карточки ─── -->
+<section id="practice">
+  <div class="wrap">
+    <div class="sec-head center">
+      <p class="eyebrow" data-i18n="ebCraft">Practice</p>
+      <h2 class="h-lg" data-i18n="cH">Built for people who read carefully</h2>
+      <p class="sub" data-i18n="cP">Almanac does not summarise your work away. It keeps the sentence a person actually said and makes it easy to find again two years later.</p>
+    </div>
+    <div class="cards">
+      <div class="card">
+        <span class="k">01</span>
+        <h3 data-i18n="c1h">Search by meaning</h3>
+        <p data-i18n="c1p">Ask “where did people give up?” and get the passages, not a keyword count. Every hit opens at the right second of audio.</p>
+      </div>
+      <div class="card">
+        <span class="k">02</span>
+        <h3 data-i18n="c2h">Tags that stay honest</h3>
+        <p data-i18n="c2p">Suggested tags arrive as drafts. Nothing is applied to a transcript until a researcher accepts it — the record stays yours.</p>
+      </div>
+      <div class="card">
+        <span class="k">03</span>
+        <h3 data-i18n="c3h">A page per study</h3>
+        <p data-i18n="c3p">Method, participants, findings and raw quotes live on one addressable page that stays readable long after the team has moved on.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── цифры ─── -->
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="stats">
+      <div class="stat"><div class="v">41,900</div><div class="l" data-i18n="s1">interviews indexed</div></div>
+      <div class="stat"><div class="v">1.4s</div><div class="l" data-i18n="s2">median search</div></div>
+      <div class="stat"><div class="v">17</div><div class="l" data-i18n="s3">transcription languages</div></div>
+      <div class="stat"><div class="v">0</div><div class="l" data-i18n="s4">recordings used for training</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── хранение ─── -->
+<section class="quiet" id="pricing">
+  <div class="wrap">
+    <div>
+      <p class="eyebrow" data-i18n="ebTerms">Terms</p>
+      <h2 class="h" style="margin-top:var(--spacing-16)" data-i18n="qH">You own the recordings, we keep them quiet</h2>
+      <p class="sub" style="margin-top:var(--spacing-16);max-width:460px" data-i18n="qP">Research is other people's trust. The terms below are the product, not a footnote — they do not change when the plan does.</p>
+      <a class="btn btn-surface" style="margin-top:var(--spacing-24)" href="#finale"><span data-i18n="qBtn">Read the data terms</span><i class="arrow"></i></a>
+    </div>
+    <div class="terms">
+      <div class="term"><span class="lbl" data-i18n="t1l">Storage</span><p data-i18n="t1p">Your region, your bucket. Frankfurt, Virginia or your own S3 — the choice is per workspace, not per plan.</p></div>
+      <div class="term"><span class="lbl" data-i18n="t2l">Models</span><p data-i18n="t2p">Transcription and tagging run on hosted models with no training on customer audio. Ever, on any tier.</p></div>
+      <div class="term"><span class="lbl" data-i18n="t3l">Export</span><p data-i18n="t3p">Every study exports as plain Markdown plus the original files. Leaving takes one click and no email.</p></div>
+      <div class="term"><span class="lbl" data-i18n="t4l">Retention</span><p data-i18n="t4p">Delete a participant and every quote, clip and note goes with them across all boards within the hour.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── финал ─── -->
+<section class="finale center" id="finale">
+  <div class="topo" aria-hidden="true">
+    <svg viewBox="0 0 1700 900" preserveAspectRatio="xMidYMid meet">
+      <g transform="translate(850 450)">
+        <path transform="scale(1)" d="M -420 -30 C -400 -220 -180 -330 40 -320 C 260 -310 470 -210 520 -40 C 570 130 430 290 200 330 C -30 370 -280 300 -380 160 C -450 60 -440 20 -420 -30 Z"/>
+        <path transform="scale(0.78)" d="M -420 -30 C -400 -220 -180 -330 40 -320 C 260 -310 470 -210 520 -40 C 570 130 430 290 200 330 C -30 370 -280 300 -380 160 C -450 60 -440 20 -420 -30 Z"/>
+        <path transform="scale(0.58)" d="M -420 -30 C -400 -220 -180 -330 40 -320 C 260 -310 470 -210 520 -40 C 570 130 430 290 200 330 C -30 370 -280 300 -380 160 C -450 60 -440 20 -420 -30 Z"/>
+        <path transform="scale(0.4)" d="M -420 -30 C -400 -220 -180 -330 40 -320 C 260 -310 470 -210 520 -40 C 570 130 430 290 200 330 C -30 370 -280 300 -380 160 C -450 60 -440 20 -420 -30 Z"/>
+        <path transform="scale(0.24)" d="M -420 -30 C -400 -220 -180 -330 40 -320 C 260 -310 470 -210 520 -40 C 570 130 430 290 200 330 C -30 370 -280 300 -380 160 C -450 60 -440 20 -420 -30 Z"/>
+      </g>
+    </svg>
+  </div>
+  <div class="wrap">
+    <h2 class="display" data-i18n="fH">Start the first page</h2>
+    <p class="sub" style="max-width:520px;margin:var(--spacing-24) auto 0" data-i18n="fP">Three studies free, no card. Bring one old recording and see whether it finally becomes findable.</p>
+    <div class="hero-cta">
+      <a class="btn btn-amber" href="#top"><span data-i18n="fBtn">Start a workspace</span><i class="arrow"></i></a>
+      <a class="ghost" href="#top" data-i18n="fLink">Talk to a researcher</a>
+    </div>
+  </div>
+</section>
+
+<!-- ─── подвал ─── -->
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div class="about">
+        <div class="wordmark">Almanac</div>
+        <p data-i18n="fAbout">A repository for research interviews. Built in Tbilisi and Lisbon by people who used to lose their own transcripts.</p>
+      </div>
+      <div>
+        <h4 data-i18n="fc1">Product</h4>
+        <a href="#repository" data-i18n="fl1">Repository</a>
+        <a href="#boards" data-i18n="fl2">Boards</a>
+        <a href="#practice" data-i18n="fl3">Search</a>
+        <a href="#pricing" data-i18n="fl4">Data terms</a>
+      </div>
+      <div>
+        <h4 data-i18n="fc2">Practice</h4>
+        <a href="#" data-i18n="fl5">Interview guides</a>
+        <a href="#" data-i18n="fl6">Field notes</a>
+        <a href="#" data-i18n="fl7">Method library</a>
+        <a href="#" data-i18n="fl8">Changelog</a>
+      </div>
+      <div>
+        <h4 data-i18n="fc3">Company</h4>
+        <a href="#" data-i18n="fl9">About</a>
+        <a href="#" data-i18n="fl10">Careers</a>
+        <a href="#" data-i18n="fl11">Security</a>
+        <a href="#" data-i18n="fl12">Contact</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span data-i18n="fCopy">© 2026 Almanac Research Tools</span>
+      <span data-i18n="fLegal">Privacy · Terms · Status</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* Двуязычность: английский — исходный, дефолт при загрузке; авто-детекта нет. */
+const I18N = {
+  en: {
+    ticker: 'SEMANTIC SEARCH ACROSS EVERY INTERVIEW YOU HAVE EVER RUN',
+    tickerB: 'ALMANAC 2.1',
+    nav1:'Repository', nav2:'Boards', nav3:'Practice', nav4:'Pricing',
+    navDemo:'Book a demo', navLogin:'Log in', navSignup:'Sign up',
+    h1a:'Your research, bound', h1b:'into one almanac',
+    heroSub:'A repository for interviews, transcripts and the findings buried inside them — searchable by meaning, not by keyword.',
+    ctaStart:'Start a workspace', ctaTour:'See the repository',
+    heroNote:'Free for the first three studies · No recording ever leaves your workspace',
+    chipInt:'28 interviews', chipSearch:'Semantic search',
+    crumb1:'/ Onboarding friction · 2026', crumb2:'/ Onboarding friction', crumbB:'Board',
+    sp1:'Participant 07 — ops lead', sp2:'Researcher', sp3:'Participant 07 — ops lead',
+    paneStudies:'Studies', paneTags:'Recurring tags', paneTr:'Transcript · 00:12:04', paneIn:'Findings',
+    st1:'Onboarding friction', st2:'Pricing objections', st3:'Admin handover', st4:'Churn exit calls', st5:'Field trial · Q1',
+    tg1:'setup takes days', tg2:'asks a colleague', tg3:'gives up on import',
+    tr1:'We had the account on a Monday. <span class="mark">Nobody touched it until Thursday, because the person who knew the old system was on leave.</span> By then the trial was a third gone.',
+    tr2:'What would have helped in those three days?',
+    tr3:'<span class="mark">Honestly, one page telling me what to import first.</span> I opened the docs, saw fourteen sections, closed the tab and asked a colleague instead.',
+    in1t:'Setup stalls on absent colleagues', in1m:'Seen in 19 of 28 interviews',
+    in2t:'Docs read as a wall, not a path', in2m:'Seen in 11 of 28 interviews',
+    in3t:'Import is the first real drop-off', in3m:'Seen in 7 of 28 interviews',
+    logosH:'Leading a calmer research practice',
+    ebIntake:'Intake', upH:'Drop in any recording, get a readable page',
+    upP:'Zoom, Meet, a phone memo from a shop floor. Almanac transcribes it, splits the speakers and files it under the right study before you are back from lunch.',
+    chipAuto:'Auto-filed', stDone:'Filed', stDone2:'Filed', stDone3:'Filed', stWork:'Splitting speakers', stUp:'Transcribing',
+    ebBoards:'Boards', bH:'Every finding on one spread',
+    bP:'Highlights become notes, notes cluster into findings. The board is the page you actually present — no slide export, no second document to keep in sync.',
+    bl1:'Pull a quote and it keeps its timestamp and speaker',
+    bl2:'Clusters count themselves as new interviews land',
+    bl3:'Anything on the board links back to the recording',
+    chipUpd:'Updated 2 min ago',
+    colA:'Before setup', colB:'First hour', colC:'Import', colD:'Week two',
+    nA1:'“I inherited the account with no notes.”', nA2:'“Waited three days for a colleague.”', nA3:'“Nobody told me who owns it.”',
+    nB1:'“Fourteen sections, closed the tab.”', nB2:'“Wanted one page, not a manual.”',
+    nC1:'“The file went in, the columns didn’t.”', nC2:'“Gave up, sent it to support.”',
+    nD1:'“By then it just worked.”', nD2:'“Now I onboard others myself.”',
+    ebCraft:'Practice', cH:'Built for people who read carefully',
+    cP:'Almanac does not summarise your work away. It keeps the sentence a person actually said and makes it easy to find again two years later.',
+    c1h:'Search by meaning', c1p:'Ask “where did people give up?” and get the passages, not a keyword count. Every hit opens at the right second of audio.',
+    c2h:'Tags that stay honest', c2p:'Suggested tags arrive as drafts. Nothing is applied to a transcript until a researcher accepts it — the record stays yours.',
+    c3h:'A page per study', c3p:'Method, participants, findings and raw quotes live on one addressable page that stays readable long after the team has moved on.',
+    s1:'interviews indexed', s2:'median search', s3:'transcription languages', s4:'recordings used for training',
+    ebTerms:'Terms', qH:'You own the recordings, we keep them quiet',
+    qP:'Research is other people’s trust. The terms below are the product, not a footnote — they do not change when the plan does.',
+    qBtn:'Read the data terms',
+    t1l:'Storage', t1p:'Your region, your bucket. Frankfurt, Virginia or your own S3 — the choice is per workspace, not per plan.',
+    t2l:'Models', t2p:'Transcription and tagging run on hosted models with no training on customer audio. Ever, on any tier.',
+    t3l:'Export', t3p:'Every study exports as plain Markdown plus the original files. Leaving takes one click and no email.',
+    t4l:'Retention', t4p:'Delete a participant and every quote, clip and note goes with them across all boards within the hour.',
+    fH:'Start the first page',
+    fP:'Three studies free, no card. Bring one old recording and see whether it finally becomes findable.',
+    fBtn:'Start a workspace', fLink:'Talk to a researcher',
+    fAbout:'A repository for research interviews. Built in Tbilisi and Lisbon by people who used to lose their own transcripts.',
+    fc1:'Product', fl1:'Repository', fl2:'Boards', fl3:'Search', fl4:'Data terms',
+    fc2:'Practice', fl5:'Interview guides', fl6:'Field notes', fl7:'Method library', fl8:'Changelog',
+    fc3:'Company', fl9:'About', fl10:'Careers', fl11:'Security', fl12:'Contact',
+    fCopy:'© 2026 Almanac Research Tools', fLegal:'Privacy · Terms · Status'
+  },
+  ru: {
+    ticker: 'ПОИСК ПО СМЫСЛУ ВО ВСЕХ ИНТЕРВЬЮ, КОТОРЫЕ ВЫ КОГДА-ЛИБО ПРОВЕЛИ',
+    tickerB: 'ALMANAC 2.1',
+    nav1:'Хранилище', nav2:'Доски', nav3:'Практика', nav4:'Условия',
+    navDemo:'Заказать демо', navLogin:'Войти', navSignup:'Начать',
+    h1a:'Все исследования —', h1b:'в одном альманахе',
+    heroSub:'Хранилище интервью, расшифровок и выводов, которые в них спрятаны: поиск по смыслу, а не по ключевым словам.',
+    ctaStart:'Создать пространство', ctaTour:'Посмотреть хранилище',
+    heroNote:'Первые три исследования бесплатно · Записи не покидают ваше пространство',
+    chipInt:'28 интервью', chipSearch:'Поиск по смыслу',
+    crumb1:'/ Трение в онбординге · 2026', crumb2:'/ Трение в онбординге', crumbB:'Доска',
+    sp1:'Участник 07 — руководитель операций', sp2:'Исследователь', sp3:'Участник 07 — руководитель операций',
+    paneStudies:'Исследования', paneTags:'Повторяющиеся теги', paneTr:'Расшифровка · 00:12:04', paneIn:'Выводы',
+    st1:'Трение в онбординге', st2:'Возражения по цене', st3:'Передача админки', st4:'Звонки на отток', st5:'Полевой тест · Q1',
+    tg1:'настройка тянется днями', tg2:'идёт к коллеге', tg3:'бросает на импорте',
+    tr1:'Аккаунт у нас был с понедельника. <span class="mark">До четверга к нему никто не притронулся: человек, знавший старую систему, был в отпуске.</span> К тому моменту треть триала уже прошла.',
+    tr2:'Что помогло бы в эти три дня?',
+    tr3:'<span class="mark">Честно — одна страница с тем, что импортировать первым.</span> Я открыл документацию, увидел четырнадцать разделов, закрыл вкладку и пошёл к коллеге.',
+    in1t:'Настройка встаёт из-за отсутствующих коллег', in1m:'Встречается в 19 интервью из 28',
+    in2t:'Документация читается как стена, а не маршрут', in2m:'Встречается в 11 интервью из 28',
+    in3t:'Импорт — первый настоящий обрыв', in3m:'Встречается в 7 интервью из 28',
+    logosH:'Спокойная исследовательская практика',
+    ebIntake:'Приём', upH:'Загрузите любую запись — получите читаемую страницу',
+    upP:'Zoom, Meet, диктофон из цеха. Almanac расшифрует, разведёт говорящих и положит в нужное исследование раньше, чем вы вернётесь с обеда.',
+    chipAuto:'Разложено само', stDone:'В деле', stDone2:'В деле', stDone3:'В деле', stWork:'Разводим говорящих', stUp:'Расшифровка',
+    ebBoards:'Доски', bH:'Все выводы на одном развороте',
+    bP:'Выделения становятся заметками, заметки собираются в выводы. Доска — это и есть то, что вы показываете: без выгрузки в слайды и второго документа, который надо синхронизировать.',
+    bl1:'Цитата уносит с собой тайм-код и говорящего',
+    bl2:'Кластеры пересчитываются сами, когда приходят новые интервью',
+    bl3:'Любая карточка на доске ведёт обратно к записи',
+    chipUpd:'Обновлено 2 мин назад',
+    colA:'До настройки', colB:'Первый час', colC:'Импорт', colD:'Вторая неделя',
+    nA1:'«Аккаунт достался мне без единой заметки».', nA2:'«Три дня ждал коллегу».', nA3:'«Никто не сказал, чей он вообще».',
+    nB1:'«Четырнадцать разделов — закрыл вкладку».', nB2:'«Нужна была страница, а не мануал».',
+    nC1:'«Файл зашёл, а колонки нет».', nC2:'«Бросил, отправил в поддержку».',
+    nD1:'«К тому моменту всё просто работало».', nD2:'«Теперь сам завожу новых».',
+    ebCraft:'Практика', cH:'Для тех, кто читает внимательно',
+    cP:'Almanac не пересказывает вашу работу вместо вас. Он хранит фразу так, как её произнёс человек, и делает её находимой даже через два года.',
+    c1h:'Поиск по смыслу', c1p:'Спросите «где люди сдавались» — вернутся куски разговора, а не счётчик слов. Каждое попадание открывается на нужной секунде записи.',
+    c2h:'Честные теги', c2p:'Подсказанные теги приходят черновиком. Ничто не попадает в расшифровку, пока исследователь не примет — материал остаётся вашим.',
+    c3h:'Страница на исследование', c3p:'Метод, участники, выводы и живые цитаты живут на одной ссылке, которая читается и после того, как команда сменилась.',
+    s1:'интервью в индексе', s2:'медианный поиск', s3:'языка расшифровки', s4:'записей ушло на обучение моделей',
+    ebTerms:'Условия', qH:'Записи ваши, мы храним их тихо',
+    qP:'Исследование — это чужое доверие. Условия ниже и есть продукт, а не сноска: они не меняются вместе с тарифом.',
+    qBtn:'Прочитать условия по данным',
+    t1l:'Хранение', t1p:'Ваш регион, ваш бакет. Франкфурт, Вирджиния или собственный S3 — выбор на уровне пространства, а не тарифа.',
+    t2l:'Модели', t2p:'Расшифровка и теги работают на размещённых моделях, обучения на клиентском аудио нет. Ни на одном тарифе.',
+    t3l:'Экспорт', t3p:'Любое исследование выгружается в обычный Markdown вместе с исходными файлами. Уйти — один клик и ни одного письма.',
+    t4l:'Удаление', t4p:'Удалили участника — в течение часа с ним уходят все его цитаты, клипы и заметки со всех досок.',
+    fH:'Открыть первую страницу',
+    fP:'Три исследования бесплатно, без карты. Принесите одну старую запись и проверьте, станет ли она наконец находимой.',
+    fBtn:'Создать пространство', fLink:'Поговорить с исследователем',
+    fAbout:'Хранилище исследовательских интервью. Сделано в Тбилиси и Лиссабоне людьми, которые сами теряли свои расшифровки.',
+    fc1:'Продукт', fl1:'Хранилище', fl2:'Доски', fl3:'Поиск', fl4:'Условия по данным',
+    fc2:'Практика', fl5:'Гайды по интервью', fl6:'Полевые заметки', fl7:'Библиотека методов', fl8:'Изменения',
+    fc3:'Компания', fl9:'О нас', fl10:'Вакансии', fl11:'Безопасность', fl12:'Контакты',
+    fCopy:'© 2026 Almanac Research Tools', fLegal:'Приватность · Условия · Статус'
+  }
+};
+
+const HTML_KEYS = new Set(['tr1','tr3']);
+
+function setLang(lang){
+  const d = I18N[lang];
+  document.documentElement.setAttribute('lang', lang);
+  document.documentElement.setAttribute('data-lang', lang);
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const k = el.getAttribute('data-i18n');
+    if(!(k in d)) return;
+    if(HTML_KEYS.has(k)) el.innerHTML = d[k]; else el.textContent = d[k];
+  });
+  document.querySelectorAll('.lang button').forEach(b =>
+    b.setAttribute('aria-pressed', String(b.dataset.set === lang)));
+  // тикер собирается заново: текст меняется вместе с языком
+  const t = document.getElementById('ticker');
+  const one = '<span><b>' + d.tickerB + '</b></span><span>' + d.ticker + '</span>';
+  t.innerHTML = new Array(12).fill(one).join('');
+}
+document.querySelectorAll('.lang button').forEach(b =>
+  b.addEventListener('click', () => setLang(b.dataset.set)));
+setLang('en');
+
+/* Липкая шапка: на скролле убираем только верхний зазор — ширина и поля не меняются. */
+const hdr = document.getElementById('hdr');
+const onScroll = () => hdr.classList.toggle('stuck', window.scrollY > 8);
+window.addEventListener('scroll', onScroll, {passive:true});
+onScroll();
+</script>
+</body>
+</html>

@@ -1,0 +1,1367 @@
+[
+  {
+    "name": "animated-theme-toggler-diamond-demo",
+    "status": "mounted",
+    "text": "Toggle theme",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "animated-theme-toggler-next-themes-demo",
+    "status": "mounted",
+    "text": "Toggle theme",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "number-ticker-decimal-demo",
+    "status": "mounted",
+    "text": "3.30",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "grid-pattern-linear-gradient",
+    "status": "mounted",
+    "text": "",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "animated-theme-toggler-demo",
+    "status": "mounted",
+    "text": "Toggle theme",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "glare-hover-demo-alert",
+    "status": "mounted",
+    "text": "Action required\nYour plan expires in 3 days. Renew to keep access.\nPayment declined\nCheck your card details and try again.\nSubscription confirmed\nYou have full Pro access until April 5, 2027.",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "magic-card-demo2",
+    "status": "mounted",
+    "text": "Yeom JinHo\nFrontend Developer\n\nFrontend Developer focused on Interactive UI & Performance\n\nI'm passionate about visual presentation and currently focusing on interactive UI.\n\nView on GitHub",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "text-animate-demo-6",
+    "status": "mounted",
+    "text": "Slide left by character\nSlide left by character",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "border-beam-demo-4",
+    "status": "mounted",
+    "text": "Buy Now",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "glare-hover-demo",
+    "status": "mounted",
+    "text": "Pro\nPopular\nFor teams that need more.\n$49\n/mo\nUnlimited projects\nTeam collaboration\nAdvanced analytics\nSSO (coming soon)\nGet started",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "noise-texture-demo-3",
+    "status": "mounted",
+    "text": "Subscribe",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "dot-pattern-with-glow-effect",
+    "status": "mounted",
+    "text": "",
+    "children": 1,
+    "animations": 1728,
+    "errors": []
+  },
+  {
+    "name": "striped-pattern-dashed",
+    "status": "mounted",
+    "text": "",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "number-ticker-demo-2",
+    "status": "mounted",
+    "text": "92",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "safari-demo-2",
+    "status": "mounted",
+    "text": "magicui.design",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "animated-list-demo",
+    "status": "mounted",
+    "text": "💸\nPayment received\n·\n15m ago\n\nMagic UI",
+    "children": 1,
+    "animations": 1,
+    "errors": []
+  },
+  {
+    "name": "marquee-3d",
+    "status": "mounted",
+    "text": "Jack\n\n@jack\n\nI've never seen anything like this before. It's amazing. I love it.\nJack\n\n@jack\n\nI've never seen anything like this before. It's amazing. I love it.\nJack\n\n@jack\n\nI've never seen anything like this before. It's amazing. I love it.\nJack\n\n@jack\n\nI've never seen anything like this before. It's amazing. I love it.\nJill\n\n@jill\n\nI don't know what to say. I'm speechless. This is amazing.\nJohn\n\n@john\n\nI'm at a loss for words. This is amazing. I love it.\nJill\n\n@jill\n\nI don't know what to say.",
+    "children": 1,
+    "animations": 16,
+    "errors": []
+  },
+  {
+    "name": "lens-demo",
+    "status": "mounted",
+    "text": "Your next camp\nSee our latest and best camp destinations all across the five continents of the globe.\nLet's go\nAnother time",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "animated-beam-unidirectional",
+    "status": "mounted",
+    "text": "",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "noise-texture-demo",
+    "status": "mounted",
+    "text": "",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "noise-texture-demo-2",
+    "status": "mounted",
+    "text": "The weekly digest\nOne email on Sundays—new components, tips, and changelog highlights. No spam, unsubscribe anytime.\nEmail\nSubscribe",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "confetti-emoji",
+    "status": "mounted",
+    "text": "Trigger Emoji",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "pixel-image-demo",
+    "status": "mounted",
+    "text": "",
+    "children": 1,
+    "animations": 24,
+    "errors": []
+  },
+  {
+    "name": "hero-video-dialog-demo-top-in-bottom-out",
+    "status": "mounted",
+    "text": "",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "striped-pattern-demo",
+    "status": "mounted",
+    "text": "",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "terminal-demo",
+    "status": "mounted",
+    "text": "> pnpm d\n✔ Preflight checks.\n✔ Verifying framework. Found Next.js.\n✔ Validating Tailwind CSS.\n✔ Validating import alias.\n✔ Writing components.json.\n✔ Checking registry.\n✔ Updating tailwind.config.ts\n✔ Updating app/globals.css\n✔ Installing dependencies.\nℹ Updated 1 file:\n- lib/utils.ts",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "animated-theme-toggler-star-demo",
+    "status": "mounted",
+    "text": "Toggle theme",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "shimmer-button-demo",
+    "status": "mounted",
+    "text": "Shimmer Button",
+    "children": 1,
+    "animations": 2,
+    "errors": []
+  },
+  {
+    "name": "confetti-fireworks",
+    "status": "mounted",
+    "text": "Trigger Fireworks",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "glare-hover-demo-cta",
+    "status": "mounted",
+    "text": "14-DAY FREE TRIAL · NO CARD REQUIRED\n\nReady to get started?\nJoin 4,000+ teams already using our platform to ship faster.\nStart free trial\nView demo",
+    "children": 1,
+    "animations": 2,
+    "errors": []
+  },
+  {
+    "name": "text-animate-demo-3",
+    "status": "mounted",
+    "text": "Slide up by word\nSlide up by word",
+    "children": 1,
+    "animations": 1,
+    "errors": []
+  },
+  {
+    "name": "hyper-text-demo",
+    "status": "mounted",
+    "text": "HOVER MNT",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "lens-demo-2",
+    "status": "mounted",
+    "text": "Your next camp\nSee our latest and best camp destinations all across the five continents of the globe.\nLet's go\nAnother time",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "pulsating-button-demo",
+    "status": "mounted",
+    "text": "Join Affiliate Program",
+    "children": 1,
+    "animations": 1,
+    "errors": []
+  },
+  {
+    "name": "pointer-demo-1",
+    "status": "mounted",
+    "text": "Animated Pointer\n\nAnimated pointer\n\nColored Pointer\n\nA custom pointer with different color\n\nCustom Shape\n\nA pointer with a custom SVG shape\n\nEmoji Pointer\n\nUsing an emoji as a custom pointer",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "animated-theme-toggler-triangle-demo",
+    "status": "mounted",
+    "text": "Toggle theme",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "text-3d-flip-demo-2",
+    "status": "mounted",
+    "text": "Design for failure\nD\nD\ne\ne\ns\ns\ni\ni\ng\ng\nn\nn\n \nf\nf\no\no\nr\nr\n \nf\nf\na\na\ni\ni\nl\nl\nu\nu\nr\nr\ne\ne",
+    "children": 1,
+    "animations": 13,
+    "errors": []
+  },
+  {
+    "name": "sparkles-text-demo",
+    "status": "mounted",
+    "text": "Magic UI",
+    "children": 1,
+    "animations": 10,
+    "errors": []
+  },
+  {
+    "name": "text-animate-demo-2",
+    "status": "mounted",
+    "text": "Blur in text\nBlur in text",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "grid-pattern-demo",
+    "status": "mounted",
+    "text": "",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "glyph-matrix-demo",
+    "status": "mounted",
+    "text": "",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "blur-fade-demo",
+    "status": "mounted",
+    "text": "",
+    "children": 1,
+    "animations": 9,
+    "errors": []
+  },
+  {
+    "name": "interactive-grid-pattern-demo-2",
+    "status": "mounted",
+    "text": "",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "animated-shiny-text-demo",
+    "status": "mounted",
+    "text": "✨ Introducing Magic UI",
+    "children": 1,
+    "animations": 1,
+    "errors": []
+  },
+  {
+    "name": "hexagon-pattern-dashed",
+    "status": "mounted",
+    "text": "",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "text-animate-demo-5",
+    "status": "mounted",
+    "text": "Fade in by line as paragraph Fade in by line as paragraph Fade in by line as paragraph\nFade in by line as paragraph\nFade in by line as paragraph\nFade in by line as paragraph",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "hero-video-dialog-demo",
+    "status": "mounted",
+    "text": "",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "dia-text-reveal-demo-3",
+    "status": "mounted",
+    "text": "Learn to build faster",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "typing-animation-demo-3",
+    "status": "mounted",
+    "text": "Fast typin|",
+    "children": 1,
+    "animations": 1,
+    "errors": []
+  },
+  {
+    "name": "text-3d-flip-demo",
+    "status": "mounted",
+    "text": "Stay hungry, stay foolish\nS\nS\nt\nt\na\na\ny\ny\n \nh\nh\nu\nu\nn\nn\ng\ng\nr\nr\ny\ny\n,\n,\n \ns\ns\nt\nt\na\na\ny\ny\n \nf\nf\no\no\no\no\nl\nl\ni\ni\ns\ns\nh\nh",
+    "children": 1,
+    "animations": 22,
+    "errors": []
+  },
+  {
+    "name": "animated-theme-toggler-hexagon-demo",
+    "status": "mounted",
+    "text": "Toggle theme",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "backlight-image-demo",
+    "status": "mounted",
+    "text": "",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "spinning-text-demo-2",
+    "status": "mounted",
+    "text": "l\ne\na\nr\nn\nm\no\nr\ne\n•\ne\na\nr\nn\nm\no\nr\ne\n•\ng\nr\no\nw\nm\no\nr\ne\n•\nlearn more • earn more • grow more •",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "bento-demo-vertical",
+    "status": "mounted",
+    "text": "Save your files\n\nWe automatically save your files as you type.\n\nLearn more\nFull text search\n\nSearch through all your files in one place.\n\nLearn more\nMultilingual\n\nSupports 100+ languages and counting.\n\nLearn more\nCalendar\n\nUse the calendar to filter your files by date.\n\nLearn more\nNotifications\n\nGet notified when someone shares a file or mentions you in a comment.\n\nLearn more",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "typing-animation-demo-6",
+    "status": "mounted",
+    "text": "First|",
+    "children": 1,
+    "animations": 1,
+    "errors": []
+  },
+  {
+    "name": "striped-pattern-right",
+    "status": "mounted",
+    "text": "",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "typing-animation-demo-2",
+    "status": "mounted",
+    "text": "Desig|",
+    "children": 1,
+    "animations": 1,
+    "errors": []
+  },
+  {
+    "name": "video-text-demo",
+    "status": "mounted",
+    "text": "OCEAN",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "code-comparison-demo",
+    "status": "mounted",
+    "text": "middleware.ts\nbefore\nimport { NextRequest } from 'next/server';\n\nexport const middleware = async (req: NextRequest) => {\n  let user = undefined;\n  let team = undefined;\n  const token = req.headers.get('token'); \n\n  if(req.nextUrl.pathname.startsWith('/auth')) {\n    user = await getUserByToken(token);\n\n    if(!user) {\n      return NextResponse.redirect('/login');\n    }\n  }\n\n  if(req.nextUrl.pathname.startsWith('/team')) {\n    user = await getUserByToken(token);\n\n    if(!user) {\n      return NextR",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "android-demo-3",
+    "status": "mounted",
+    "text": "",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "shiny-button-demo",
+    "status": "mounted",
+    "text": "SHINY BUTTON",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "rainbow-button-demo",
+    "status": "mounted",
+    "text": "Get Unlimited Access",
+    "children": 1,
+    "animations": 2,
+    "errors": []
+  },
+  {
+    "name": "warp-background-demo",
+    "status": "mounted",
+    "text": "Congratulations on Your Promotion!\nYour hard work and dedication have paid off. We're thrilled to see you take this next step in your career. Keep up the fantastic work!",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "dotted-map-demo-3",
+    "status": "mounted",
+    "text": "Загрузка оригинального примера…",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "particles-demo",
+    "status": "mounted",
+    "text": "Particles",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "border-beam-demo",
+    "status": "mounted",
+    "text": "Login\nEnter your credentials to access your account.\nEmail\nPassword\nRegister\nLogin",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "animated-gradient-text-demo",
+    "status": "mounted",
+    "text": "🎉\nIntroducing Magic UI",
+    "children": 1,
+    "animations": 2,
+    "errors": []
+  },
+  {
+    "name": "animated-beam-multiple-outputs",
+    "status": "mounted",
+    "text": "",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "text-reveal-demo",
+    "status": "mounted",
+    "text": "Magic\nMagic\nUI\nUI\nwill\nwill\nchange\nchange\nthe\nthe\nway\nway\nyou\nyou\ndesign.\ndesign.",
+    "children": 1,
+    "animations": 8,
+    "errors": []
+  },
+  {
+    "name": "text-animate-demo-8",
+    "status": "mounted",
+    "text": "Blur in by character\nBlur in by character",
+    "children": 1,
+    "animations": 37,
+    "errors": []
+  },
+  {
+    "name": "scroll-based-velocity-demo",
+    "status": "mounted",
+    "text": "Velocity Scroll\nVelocity Scroll\nVelocity Scroll\nVelocity Scroll\nVelocity Scroll\nVelocity Scroll\nVelocity Scroll\nVelocity Scroll",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "morphing-text-demo",
+    "status": "mounted",
+    "text": "Hello\nMorphing",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "progressive-blur-demo",
+    "status": "mounted",
+    "text": "0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "neon-gradient-card-demo",
+    "status": "mounted",
+    "text": "Neon Gradient Card",
+    "children": 1,
+    "animations": 2,
+    "errors": []
+  },
+  {
+    "name": "meteors-demo",
+    "status": "mounted",
+    "text": "Meteors",
+    "children": 1,
+    "animations": 30,
+    "errors": []
+  },
+  {
+    "name": "android-demo-2",
+    "status": "mounted",
+    "text": "",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "marquee-demo",
+    "status": "mounted",
+    "text": "Jack\n\n@jack\n\nI've never seen anything like this before. It's amazing. I love it.\nJill\n\n@jill\n\nI don't know what to say. I'm speechless. This is amazing.\nJohn\n\n@john\n\nI'm at a loss for words. This is amazing. I love it.\nJack\n\n@jack\n\nI've never seen anything like this before. It's amazing. I love it.\nJill\n\n@jill\n\nI don't know what to say. I'm speechless. This is amazing.\nJohn\n\n@john\n\nI'm at a loss for words. This is amazing. I love it.\nJack\n\n@jack\n\nI've never seen anything like this before. It's a",
+    "children": 1,
+    "animations": 8,
+    "errors": []
+  },
+  {
+    "name": "interactive-hover-button-demo",
+    "status": "mounted",
+    "text": "Hover Me\nHover Me",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "confetti-custom-shapes",
+    "status": "mounted",
+    "text": "Trigger Shapes",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "floating-3d-particles-demo-2",
+    "status": "mounted",
+    "text": "",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "tweet-card-demo",
+    "status": "mounted",
+    "text": "Tweet not found",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "hexagon-pattern-spacing",
+    "status": "mounted",
+    "text": "",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "animated-beam-multiple-inputs",
+    "status": "mounted",
+    "text": "",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "dia-text-reveal-demo",
+    "status": "mounted",
+    "text": "Magic UI",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "icon-cloud-demo",
+    "status": "mounted",
+    "text": "",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "confetti-demo",
+    "status": "mounted",
+    "text": "Confetti",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "line-shadow-text-demo",
+    "status": "mounted",
+    "text": "ShipFast",
+    "children": 1,
+    "animations": 1,
+    "errors": []
+  },
+  {
+    "name": "text-animate-demo-4",
+    "status": "mounted",
+    "text": "Scale up by text\nScale up by text",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "marquee-demo-vertical",
+    "status": "mounted",
+    "text": "Jack\n\n@jack\n\nI've never seen anything like this before. It's amazing. I love it.\nJack\n\n@jack\n\nI've never seen anything like this before. It's amazing. I love it.\nJack\n\n@jack\n\nI've never seen anything like this before. It's amazing. I love it.\nJack\n\n@jack\n\nI've never seen anything like this before. It's amazing. I love it.\nJill\n\n@jill\n\nI don't know what to say. I'm speechless. This is amazing.\nJohn\n\n@john\n\nI'm at a loss for words. This is amazing. I love it.\nJill\n\n@jill\n\nI don't know what to say.",
+    "children": 1,
+    "animations": 8,
+    "errors": []
+  },
+  {
+    "name": "marquee-logos",
+    "status": "mounted",
+    "text": "",
+    "children": 1,
+    "animations": 4,
+    "errors": []
+  },
+  {
+    "name": "dia-text-reveal-demo-4",
+    "status": "mounted",
+    "text": "Made with care",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "android-demo",
+    "status": "mounted",
+    "text": "",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "typing-animation-demo",
+    "status": "mounted",
+    "text": "Hello|",
+    "children": 1,
+    "animations": 1,
+    "errors": []
+  },
+  {
+    "name": "word-rotate-demo",
+    "status": "mounted",
+    "text": "Word",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "file-tree-demo",
+    "status": "mounted",
+    "text": "src\napp\nlayout.tsx\npage.tsx\ncomponents\nui\nbutton.tsx\nfooter.tsx\nheader.tsx\nlib\nutils.ts",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "backlight-svg-demo",
+    "status": "mounted",
+    "text": "",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "ripple-button-demo",
+    "status": "mounted",
+    "text": "Click me",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "flickering-grid-rounded-demo",
+    "status": "mounted",
+    "text": "",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "kinetic-text-demo",
+    "status": "mounted",
+    "text": "N\no\ns\nt\na\nl\ng\ni\na\nNostalgia",
+    "children": 1,
+    "animations": 12,
+    "errors": []
+  },
+  {
+    "name": "text-animate-demo",
+    "status": "mounted",
+    "text": "Blur in by character\nBlur in by character",
+    "children": 1,
+    "animations": 13,
+    "errors": []
+  },
+  {
+    "name": "animated-theme-toggler-square-demo",
+    "status": "mounted",
+    "text": "Toggle theme",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "animated-grid-pattern-demo",
+    "status": "mounted",
+    "text": "",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "iphone-demo-3",
+    "status": "mounted",
+    "text": "",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "dia-text-reveal-demo-2",
+    "status": "mounted",
+    "text": "Design systems",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "shine-border-demo",
+    "status": "mounted",
+    "text": "Login\nEnter your credentials to access your account\nEmail\nPassword\nSign In",
+    "children": 1,
+    "animations": 1,
+    "errors": []
+  },
+  {
+    "name": "bento-demo",
+    "status": "mounted",
+    "text": "bitcoin.pdf\nBitcoin is a cryptocurrency invented in 2008 by an unknown person or group of people using the name Satoshi Nakamoto.\nfinances.xlsx\nA spreadsheet or worksheet is a file made of rows and columns that help sort data, arrange data easily, and calculate numerical data.\nlogo.svg\nScalable Vector Graphics is an Extensible Markup Language-based vector image format for two-dimensional graphics with support for interactivity and animation.\nkeys.gpg\nGPG keys are used to encrypt and decrypt emai",
+    "children": 1,
+    "animations": 8,
+    "errors": []
+  },
+  {
+    "name": "flickering-grid-demo",
+    "status": "mounted",
+    "text": "",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "safari-demo-4",
+    "status": "mounted",
+    "text": "magicui.design",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "lens-demo-3",
+    "status": "mounted",
+    "text": "Your next camp\nSee our latest and best camp destinations all across the five continents of the globe.\nLet's go\nAnother time",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "confetti-random-direction",
+    "status": "mounted",
+    "text": "Random Confetti 🎉",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "typing-animation-demo-7",
+    "status": "mounted",
+    "text": "With blinking cursor (default) - watch during pause\n\nType|\n\nWithout blinking cursor - static during pause\n\nType|",
+    "children": 1,
+    "animations": 1,
+    "errors": []
+  },
+  {
+    "name": "cool-mode-demo",
+    "status": "mounted",
+    "text": "Click Me!",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "dock-demo-2",
+    "status": "mounted",
+    "text": "",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "highlighter-demo",
+    "status": "mounted",
+    "text": "The Magic UI Highlighter\n makes important \ntext stand out effortlessly.",
+    "children": 1,
+    "animations": 4,
+    "errors": []
+  },
+  {
+    "name": "dock-demo",
+    "status": "mounted",
+    "text": "Dock",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "iphone-demo-2",
+    "status": "mounted",
+    "text": "",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "tweet-card-meta-preview",
+    "status": "mounted",
+    "text": "Tweet not found",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "orbiting-circles-demo",
+    "status": "mounted",
+    "text": "",
+    "children": 1,
+    "animations": 9,
+    "errors": []
+  },
+  {
+    "name": "text-animate-demo-7",
+    "status": "mounted",
+    "text": "Blur in by character\nBlur in by character",
+    "children": 1,
+    "animations": 40,
+    "errors": []
+  },
+  {
+    "name": "icon-cloud-demo-3",
+    "status": "mounted",
+    "text": "",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "terminal-demo-2",
+    "status": "mounted",
+    "text": "$ ls\nDocuments Downloads Pictures\n/home/user/Documents",
+    "children": 1,
+    "animations": 1,
+    "errors": []
+  },
+  {
+    "name": "border-beam-demo-2",
+    "status": "mounted",
+    "text": "Now Playing\nStairway to Heaven - Led Zeppelin\n2:45\n8:02",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "animated-theme-toggler-rectangle-demo",
+    "status": "mounted",
+    "text": "Toggle theme",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "magic-card-demo",
+    "status": "mounted",
+    "text": "Login\nEnter your credentials to access your account\nEmail\nPassword\nSign In",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "aurora-text-demo",
+    "status": "mounted",
+    "text": "Ship \nbeautiful\nbeautiful",
+    "children": 1,
+    "animations": 1,
+    "errors": []
+  },
+  {
+    "name": "dot-pattern-demo",
+    "status": "mounted",
+    "text": "",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "icon-cloud-demo-2",
+    "status": "mounted",
+    "text": "",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "typing-animation-demo-4",
+    "status": "mounted",
+    "text": "Start|",
+    "children": 1,
+    "animations": 1,
+    "errors": []
+  },
+  {
+    "name": "floating-3d-particles-demo",
+    "status": "mounted",
+    "text": "Build something magical\n\nA pseudo-3D particle background that stays behind your content with continuous rotation and buoyant drift.\n\nGet Started",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "ripple-demo",
+    "status": "mounted",
+    "text": "Ripple",
+    "children": 1,
+    "animations": 8,
+    "errors": []
+  },
+  {
+    "name": "hexagon-pattern-demo",
+    "status": "mounted",
+    "text": "",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "pulsating-button-demo-2",
+    "status": "mounted",
+    "text": "Join Affiliate Program",
+    "children": 1,
+    "animations": 1,
+    "errors": []
+  },
+  {
+    "name": "interactive-grid-pattern-demo",
+    "status": "mounted",
+    "text": "",
+    "children": 1,
+    "animations": 1,
+    "errors": []
+  },
+  {
+    "name": "animated-beam-demo",
+    "status": "mounted",
+    "text": "",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "border-beam-demo-3",
+    "status": "mounted",
+    "text": "Login\nEnter your credentials to access your account.\nEmail\nPassword\nRegister\nLogin",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "tweet-card-images",
+    "status": "mounted",
+    "text": "Tweet not found",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "typing-animation-demo-8",
+    "status": "mounted",
+    "text": "Line cursor (default)\n\nLine|\n\nBlock cursor (VSCode style)\n\nBloc▌\n\nUnderscore cursor\n\nUnde_",
+    "children": 1,
+    "animations": 3,
+    "errors": []
+  },
+  {
+    "name": "animated-gradient-text-demo-2",
+    "status": "mounted",
+    "text": "Fast Gradient",
+    "children": 1,
+    "animations": 1,
+    "errors": []
+  },
+  {
+    "name": "safari-demo",
+    "status": "mounted",
+    "text": "magicui.design",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "rainbow-button-demo-2",
+    "status": "mounted",
+    "text": "Get Unlimited Access",
+    "children": 1,
+    "animations": 2,
+    "errors": []
+  },
+  {
+    "name": "text-animate-demo-9",
+    "status": "mounted",
+    "text": "Wavy Motion!\nWavy Motion!",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "spinning-text-demo",
+    "status": "mounted",
+    "text": "l\ne\na\nr\nn\nm\no\nr\ne\n•\ne\na\nr\nn\nm\no\nr\ne\n•\ng\nr\no\nw\nm\no\nr\ne\n•\nlearn more • earn more • grow more •",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "typing-animation-demo-5",
+    "status": "mounted",
+    "text": "No cu",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "backlight-video-demo",
+    "status": "mounted",
+    "text": "",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "dock-demo-3",
+    "status": "mounted",
+    "text": "",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "confetti-side-cannons",
+    "status": "mounted",
+    "text": "Trigger Side Cannons",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "hexagon-pattern-linear-gradient",
+    "status": "mounted",
+    "text": "",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "confetti-basic-cannon",
+    "status": "mounted",
+    "text": "Confetti 🎉",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "retro-grid-demo",
+    "status": "mounted",
+    "text": "Retro Grid",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "safari-demo-3",
+    "status": "mounted",
+    "text": "magicui.design",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "grid-pattern-dashed",
+    "status": "mounted",
+    "text": "",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "animated-beam-bidirectional",
+    "status": "mounted",
+    "text": "",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "scroll-progress-demo",
+    "status": "mounted",
+    "text": "Note: The scroll progress is shown below the navbar of the page.",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "light-rays-demo",
+    "status": "mounted",
+    "text": "AMBIENT GLOW\nLight Rays\n\nDrop this component into any container and it will fill the space with softly animated light rays shining from above.",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "dotted-map-demo-2",
+    "status": "mounted",
+    "text": "",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "comic-text-demo",
+    "status": "mounted",
+    "text": "BOOM!",
+    "children": 1,
+    "animations": 1,
+    "errors": []
+  },
+  {
+    "name": "animated-circular-progress-bar-demo",
+    "status": "mounted",
+    "text": "10",
+    "children": 1,
+    "animations": 3,
+    "errors": []
+  },
+  {
+    "name": "dot-pattern-linear-gradient",
+    "status": "mounted",
+    "text": "",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "confetti-stars",
+    "status": "mounted",
+    "text": "Trigger Stars",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "smooth-cursor-demo",
+    "status": "mounted",
+    "text": "Move your mouse around",
+    "children": 3,
+    "animations": 1,
+    "errors": []
+  },
+  {
+    "name": "blur-fade-text-demo",
+    "status": "mounted",
+    "text": "Hello World 👋\nNice to meet you",
+    "children": 1,
+    "animations": 2,
+    "errors": []
+  },
+  {
+    "name": "scroll-based-velocity-images-demo",
+    "status": "mounted",
+    "text": "",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "number-ticker-demo",
+    "status": "mounted",
+    "text": "60",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "shine-border-demo-2",
+    "status": "mounted",
+    "text": "Login\nEnter your credentials to access your account\nEmail\nPassword\nSign In",
+    "children": 1,
+    "animations": 1,
+    "errors": []
+  },
+  {
+    "name": "avatar-circles-demo",
+    "status": "mounted",
+    "text": "+99",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "iphone-demo",
+    "status": "mounted",
+    "text": "",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "noise-texture-demo-4",
+    "status": "mounted",
+    "text": "Search with texture",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "cool-mode-custom",
+    "status": "mounted",
+    "text": "Click Me!",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "dotted-map-demo",
+    "status": "mounted",
+    "text": "Seoul\nNYC",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "globe-demo",
+    "status": "mounted",
+    "text": "Globe",
+    "children": 1,
+    "animations": 0,
+    "errors": []
+  },
+  {
+    "name": "reactbits-flux-lines",
+    "status": "mounted",
+    "errors": []
+  }
+]

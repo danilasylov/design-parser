@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>Buckle — hardware for bags and harnesses</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ─────────────────────────────────────────────────────────────
+   Дизайн-система: 099 SUPPLY (refero e4a7b5f3) — tokens.css дословно
+   ───────────────────────────────────────────────────────────── */
+:root {
+  /* Colors */
+  --color-canvas-white: #ffffff;
+  --color-ink: #101010;
+  --color-charcoal: #000000;
+  --color-muted-hard: #222222;
+  --color-muted: #555555;
+  --color-muted-soft: #999999;
+  --color-border-soft: #c8c8c8;
+  --color-border-subtle: #e0e0e0;
+
+  /* Typography — Font Families */
+  --font-soehne-mono: 'Soehne Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Typography — Scale */
+  --text-caption: 10px;
+  --leading-caption: 1.2;
+  --tracking-caption: 0.8px;
+  --text-label: 26px;
+  --leading-label: 1.2;
+  --tracking-label: 4.68px;
+  --text-display: 54px;
+  --leading-display: 1;
+  --tracking-display: 1.35px;
+
+  /* Typography — Weights */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+
+  /* Spacing */
+  --spacing-4: 4px;
+  --spacing-5: 5px;
+  --spacing-6: 6px;
+  --spacing-8: 8px;
+  --spacing-10: 10px;
+  --spacing-11: 11px;
+  --spacing-12: 12px;
+  --spacing-16: 16px;
+  --spacing-40: 40px;
+  --spacing-80: 80px;
+
+  /* Layout */
+  --section-gap: 80px;
+  --element-gap: 12px;
+
+  /* Border Radius */
+  --radius-cards: 8px;
+  --radius-badges: 0px;
+  --radius-inputs: 4px;
+  --radius-buttons: 9999px;
+
+  /* Surfaces */
+  --surface-canvas: #ffffff;
+  --surface-card: #ffffff;
+  --surface-elevated-dark: #222222;
+}
+
+/* Мои подстановки: Soehne Mono закрыт — взят JetBrains Mono, первая замена из
+   DESIGN.md, и он знает кириллицу. Второго шрифта в системе нет и здесь тоже нет. */
+:root {
+  --font-soehne-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --text-body: 11px;      /* тело каталога в системе — 11–12px */
+  --text-meta: 12px;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--surface-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-soehne-mono);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--text-body); line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, p, ul, li, table { margin: 0; padding: 0; list-style: none; font-weight: var(--font-weight-regular); }
+a { color: inherit; text-decoration: none; }
+.up { text-transform: uppercase; letter-spacing: 0.08em; }
+.cap { font-size: var(--text-caption); line-height: var(--leading-caption); letter-spacing: var(--tracking-caption); text-transform: uppercase; }
+.mut { color: var(--color-muted); }
+.soft { color: var(--color-muted-soft); }
+.pad { padding: 0 var(--spacing-40); }
+
+/* ── Верхняя строка ────────────────────────────────────────────────── */
+.top { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: var(--spacing-16) var(--spacing-40); gap: var(--spacing-12); }
+.top .left { display: flex; gap: var(--spacing-8); }
+.top .right { display: flex; gap: var(--spacing-8); justify-content: flex-end; }
+.pill {
+  display: inline-block; background: var(--surface-card); border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-buttons); padding: var(--spacing-10) var(--spacing-16);
+  font-family: inherit; font-size: var(--text-meta); text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--color-muted); cursor: pointer;
+}
+.pill:hover { border-color: var(--color-muted-soft); }
+.pill.on { border-color: var(--color-ink); color: var(--color-ink); }
+.pill.fill { background: var(--color-ink); color: var(--color-canvas-white); border-color: var(--color-ink); }
+.counter { font-size: var(--text-meta); letter-spacing: 0.08em; }
+
+/* ── Заголовок секции ──────────────────────────────────────────────── */
+h2.sec {
+  font-size: var(--text-label); line-height: var(--leading-label); letter-spacing: var(--tracking-label);
+  font-weight: var(--font-weight-medium); text-transform: uppercase; color: var(--color-muted-soft);
+  margin: var(--spacing-40) 0 var(--spacing-12);
+}
+
+/* ── Сетка витрин ──────────────────────────────────────────────────── */
+.grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: var(--spacing-12); }
+.tile { border: 1px solid var(--color-border-subtle); border-radius: var(--radius-cards); background: var(--surface-card); overflow: hidden; }
+.tile:hover { border-color: var(--color-muted-soft); }
+.tile .obj { height: 186px; display: grid; place-items: center; padding: var(--spacing-16); }
+.tile .obj svg { width: 118px; height: 118px; display: block; }
+.tile .meta { border-top: 1px solid var(--color-border-subtle); display: flex; justify-content: space-between; gap: var(--spacing-8); padding: var(--spacing-10) var(--spacing-12); }
+.tile .meta span { font-size: var(--text-meta); text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-muted); }
+
+/* ── Таблица спецификации ──────────────────────────────────────────── */
+table.spec { width: 100%; border-collapse: collapse; margin-top: var(--spacing-12); }
+table.spec th { text-align: left; font-size: var(--text-meta); font-weight: var(--font-weight-regular); text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-muted-soft); padding: var(--spacing-10) var(--spacing-12); border-bottom: 1px solid var(--color-border-subtle); }
+table.spec td { font-size: var(--text-meta); color: var(--color-ink); padding: var(--spacing-10) var(--spacing-12); border-bottom: 1px solid var(--color-border-subtle); }
+table.spec td.r, table.spec th.r { text-align: right; }
+
+/* ── Панель ────────────────────────────────────────────────────────── */
+.panel { border: 1px solid var(--color-border-subtle); border-radius: var(--radius-cards); padding: var(--spacing-16); margin-top: var(--spacing-12); display: grid; grid-template-columns: 1fr auto; gap: var(--spacing-16); align-items: center; }
+.panel h3 { font-size: 16px; line-height: 1.5; }
+.panel p { margin-top: var(--spacing-6); color: var(--color-muted); max-width: 640px; }
+.panel .acts { display: flex; gap: var(--spacing-8); }
+
+/* ── Ряд компонентов ───────────────────────────────────────────────── */
+.strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-12); margin-top: var(--spacing-12); }
+.strip .box { border: 1px solid var(--color-border-subtle); border-radius: var(--radius-cards); padding: var(--spacing-16); }
+.strip .box .lbl { display: flex; justify-content: space-between; margin-top: var(--spacing-12); }
+.bar { height: 8px; background: var(--color-border-subtle); border-radius: var(--radius-buttons); overflow: hidden; }
+.bar i { display: block; height: 100%; background: var(--color-ink); }
+.check { display: inline-grid; place-items: center; width: 16px; height: 16px; border-radius: var(--radius-inputs); border: 1px solid var(--color-border-subtle); }
+.check.on { background: var(--color-ink); border-color: var(--color-ink); }
+.rows2 { display: grid; gap: var(--spacing-8); }
+.rows2 .r { display: flex; align-items: center; gap: var(--spacing-8); font-size: var(--text-meta); }
+
+footer { padding: var(--spacing-80) var(--spacing-40) var(--spacing-40); display: flex; justify-content: space-between; gap: var(--spacing-16); }
+</style>
+</head>
+<body>
+
+<div class="top">
+  <span class="left">
+    <a class="pill on" href="#hardware" data-i18n="n1">Hardware</a>
+    <a class="pill" href="#webbing" data-i18n="n2">Webbing</a>
+  </span>
+  <span class="counter">112</span>
+  <span class="right">
+    <button class="pill" data-set="en" aria-pressed="true">EN</button>
+    <button class="pill" data-set="ru" aria-pressed="false">RU</button>
+    <a class="pill" href="#info" data-i18n="n3">Info</a>
+  </span>
+</div>
+
+<div class="pad">
+
+  <h2 class="sec" id="hardware" data-i18n="s1">Hardware</h2>
+  <div class="grid">
+
+    <article class="tile">
+      <div class="obj"><svg viewBox="0 0 120 120" aria-hidden="true">
+        <path d="M14 40h44v40H14z" fill="#101010"/><path d="M22 48h12v24H22z" fill="#fff"/>
+        <path d="M58 44h20l24 16-24 16H58z" fill="#101010"/><path d="M66 54h10v12H66z" fill="#fff"/>
+      </svg></div>
+      <div class="meta"><span>B 005</span><span data-i18n="m1">Side-release 25</span></div>
+    </article>
+
+    <article class="tile">
+      <div class="obj"><svg viewBox="0 0 120 120" aria-hidden="true">
+        <rect x="16" y="34" width="88" height="52" rx="6" fill="#101010"/>
+        <rect x="26" y="44" width="68" height="12" fill="#fff"/><rect x="26" y="64" width="68" height="12" fill="#fff"/>
+      </svg></div>
+      <div class="meta"><span>B 011</span><span data-i18n="m2">Ladder lock 25</span></div>
+    </article>
+
+    <article class="tile">
+      <div class="obj"><svg viewBox="0 0 120 120" aria-hidden="true">
+        <rect x="30" y="30" width="60" height="60" rx="14" fill="#101010"/>
+        <circle cx="60" cy="52" r="9" fill="#fff"/><rect x="52" y="60" width="16" height="26" fill="#fff"/>
+      </svg></div>
+      <div class="meta"><span>B 018</span><span data-i18n="m3">Cord lock</span></div>
+    </article>
+
+    <article class="tile">
+      <div class="obj"><svg viewBox="0 0 120 120" aria-hidden="true">
+        <path d="M28 26h20v68H28z" fill="#101010"/>
+        <path d="M48 26h14a32 34 0 010 68H48z" fill="#101010"/>
+        <path d="M48 40h12a20 20 0 010 40H48z" fill="#fff"/>
+      </svg></div>
+      <div class="meta"><span>B 020</span><span data-i18n="m4">D-ring 25</span></div>
+    </article>
+
+    <article class="tile">
+      <div class="obj"><svg viewBox="0 0 120 120" aria-hidden="true">
+        <rect x="18" y="36" width="84" height="48" rx="4" fill="#101010"/>
+        <rect x="28" y="46" width="64" height="8" fill="#fff"/><rect x="28" y="66" width="64" height="8" fill="#fff"/>
+        <rect x="54" y="36" width="12" height="48" fill="#101010"/>
+      </svg></div>
+      <div class="meta"><span>B 024</span><span data-i18n="m5">Triglide 25</span></div>
+    </article>
+
+    <article class="tile">
+      <div class="obj"><svg viewBox="0 0 120 120" aria-hidden="true">
+        <path d="M52 22h16l6 22-14 12-14-12z" fill="#101010"/>
+        <path d="M50 58h20l8 40H42z" fill="#101010"/><rect x="56" y="66" width="8" height="22" fill="#fff"/>
+      </svg></div>
+      <div class="meta"><span>B 029</span><span data-i18n="m6">Zip pull</span></div>
+    </article>
+
+    <article class="tile">
+      <div class="obj"><svg viewBox="0 0 120 120" aria-hidden="true">
+        <circle cx="60" cy="60" r="38" fill="#101010"/><circle cx="60" cy="60" r="20" fill="#fff"/>
+        <circle cx="60" cy="60" r="30" fill="none" stroke="#fff" stroke-width="2"/>
+      </svg></div>
+      <div class="meta"><span>B 033</span><span data-i18n="m7">Eyelet 12</span></div>
+    </article>
+
+    <article class="tile">
+      <div class="obj"><svg viewBox="0 0 120 120" aria-hidden="true">
+        <path d="M34 20h16v40H34z" fill="#101010"/>
+        <path d="M34 56c0 30 52 30 52 4 0-14-16-18-16-4" fill="none" stroke="#101010" stroke-width="14"/>
+      </svg></div>
+      <div class="meta"><span>B 041</span><span data-i18n="m8">Gear hook</span></div>
+    </article>
+
+    <article class="tile">
+      <div class="obj"><svg viewBox="0 0 120 120" aria-hidden="true">
+        <circle cx="60" cy="60" r="34" fill="#101010"/><circle cx="60" cy="60" r="12" fill="#fff"/>
+        <path d="M60 26v10M60 84v10M26 60h10M84 60h10" stroke="#fff" stroke-width="4"/>
+      </svg></div>
+      <div class="meta"><span>B 047</span><span data-i18n="m9">Snap button</span></div>
+    </article>
+
+    <article class="tile">
+      <div class="obj"><svg viewBox="0 0 120 120" aria-hidden="true">
+        <path d="M24 30h72v22H24z" fill="#101010"/>
+        <path d="M40 52h40v18H40z" fill="#101010"/>
+        <path d="M52 70h16v22H52z" fill="#101010"/>
+      </svg></div>
+      <div class="meta"><span>B 052</span><span data-i18n="m10">Strap keeper</span></div>
+    </article>
+
+    <article class="tile">
+      <div class="obj"><svg viewBox="0 0 120 120" aria-hidden="true">
+        <path d="M60 20l34 20v40L60 100 26 80V40z" fill="#101010"/>
+        <path d="M60 40l16 10v20L60 80 44 70V50z" fill="#fff"/>
+      </svg></div>
+      <div class="meta"><span>B 058</span><span data-i18n="m11">Hex spacer</span></div>
+    </article>
+
+    <article class="tile">
+      <div class="obj"><svg viewBox="0 0 120 120" aria-hidden="true">
+        <rect x="20" y="50" width="80" height="20" fill="#101010"/>
+        <path d="M20 50l14-24h52l14 24z" fill="#101010"/>
+        <rect x="36" y="70" width="48" height="26" rx="4" fill="#101010"/>
+        <rect x="52" y="78" width="16" height="10" fill="#fff"/>
+      </svg></div>
+      <div class="meta"><span>B 063</span><span data-i18n="m12">Cam buckle</span></div>
+    </article>
+  </div>
+
+  <h2 class="sec" id="webbing" data-i18n="s2">Webbing &amp; cord</h2>
+  <div class="grid">
+    <article class="tile">
+      <div class="obj"><svg viewBox="0 0 120 120" aria-hidden="true">
+        <rect x="14" y="42" width="92" height="36" fill="#101010"/>
+        <path d="M14 50h92M14 60h92M14 70h92" stroke="#fff" stroke-width="2"/>
+      </svg></div>
+      <div class="meta"><span>W 002</span><span data-i18n="w1">Flat 25 mm</span></div>
+    </article>
+    <article class="tile">
+      <div class="obj"><svg viewBox="0 0 120 120" aria-hidden="true">
+        <rect x="14" y="38" width="92" height="44" rx="22" fill="#101010"/>
+        <rect x="26" y="52" width="68" height="16" rx="8" fill="#fff"/>
+      </svg></div>
+      <div class="meta"><span>W 006</span><span data-i18n="w2">Tubular 19 mm</span></div>
+    </article>
+    <article class="tile">
+      <div class="obj"><svg viewBox="0 0 120 120" aria-hidden="true">
+        <path d="M12 60c12-26 24 26 36 0s24 26 36 0 12 14 24 0" fill="none" stroke="#101010" stroke-width="14"/>
+      </svg></div>
+      <div class="meta"><span>W 010</span><span data-i18n="w3">Bungee 8 mm</span></div>
+    </article>
+    <article class="tile">
+      <div class="obj"><svg viewBox="0 0 120 120" aria-hidden="true">
+        <rect x="14" y="48" width="92" height="24" rx="12" fill="#101010"/>
+        <path d="M26 48l10 24M46 48l10 24M66 48l10 24M86 48l10 24" stroke="#fff" stroke-width="3"/>
+      </svg></div>
+      <div class="meta"><span>W 014</span><span data-i18n="w4">Paracord 550</span></div>
+    </article>
+    <article class="tile">
+      <div class="obj"><svg viewBox="0 0 120 120" aria-hidden="true">
+        <rect x="14" y="44" width="92" height="32" fill="#101010"/>
+        <path d="M22 44v32M38 44v32M54 44v32M70 44v32M86 44v32M98 44v32" stroke="#fff" stroke-width="4"/>
+      </svg></div>
+      <div class="meta"><span>W 019</span><span data-i18n="w5">Elastic 20 mm</span></div>
+    </article>
+    <article class="tile">
+      <div class="obj"><svg viewBox="0 0 120 120" aria-hidden="true">
+        <path d="M16 74c18 0 18-28 36-28s18 28 36 28 16-10 16-10" fill="none" stroke="#101010" stroke-width="12"/>
+        <circle cx="102" cy="62" r="8" fill="#101010"/>
+      </svg></div>
+      <div class="meta"><span>W 023</span><span data-i18n="w6">Shock cord kit</span></div>
+    </article>
+  </div>
+
+  <h2 class="sec" id="specs" data-i18n="s3">Specification</h2>
+  <table class="spec">
+    <thead>
+      <tr>
+        <th data-i18n="t1">Code</th>
+        <th data-i18n="t2">Item</th>
+        <th data-i18n="t3">Material</th>
+        <th class="r" data-i18n="t4">Width</th>
+        <th class="r" data-i18n="t5">Break load</th>
+        <th class="r" data-i18n="t6">Per piece</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>B 005</td><td data-i18n="r1">Side-release buckle</td><td data-i18n="r1m">Acetal</td><td class="r">25 mm</td><td class="r">180 kg</td><td class="r">1.20 €</td></tr>
+      <tr><td>B 020</td><td data-i18n="r2">D-ring, welded</td><td data-i18n="r2m">Steel, powder-coated</td><td class="r">25 mm</td><td class="r">420 kg</td><td class="r">0.90 €</td></tr>
+      <tr><td>B 063</td><td data-i18n="r3">Cam buckle</td><td data-i18n="r3m">Aluminium</td><td class="r">25 mm</td><td class="r">340 kg</td><td class="r">3.40 €</td></tr>
+      <tr><td>W 002</td><td data-i18n="r4">Flat webbing</td><td data-i18n="r4m">Polyester</td><td class="r">25 mm</td><td class="r">750 kg</td><td class="r">0.65 €/m</td></tr>
+      <tr><td>W 014</td><td data-i18n="r5">Paracord 550</td><td data-i18n="r5m">Nylon, 7-core</td><td class="r">4 mm</td><td class="r">250 kg</td><td class="r">0.45 €/m</td></tr>
+    </tbody>
+  </table>
+
+  <div class="panel" id="info">
+    <div>
+      <h3 data-i18n="i1">Everything is black</h3>
+      <p data-i18n="i2">Not a styling decision. Black is the only finish that comes out of the same batch twice, so a strap repaired in four years still matches the one next to it. Anything dyed is sold as a seconds line and marked as such.</p>
+    </div>
+    <div class="acts">
+      <a class="pill" href="#specs" data-i18n="i3">Spec sheet</a>
+      <a class="pill fill" href="#specs" data-i18n="i4">Order a sample card</a>
+    </div>
+  </div>
+
+  <h2 class="sec" data-i18n="s4">Stock</h2>
+  <div class="strip">
+    <div class="box">
+      <div class="bar"><i style="width:82%"></i></div>
+      <div class="lbl cap mut"><span data-i18n="b1">Side-release 25</span><span>82 %</span></div>
+    </div>
+    <div class="box">
+      <div class="bar"><i style="width:34%"></i></div>
+      <div class="lbl cap mut"><span data-i18n="b2">Cam buckle 25</span><span>34 %</span></div>
+    </div>
+    <div class="box">
+      <div class="rows2">
+        <span class="r"><span class="check on"><svg width="10" height="10" viewBox="0 0 10 10"><path d="M1 5l3 3 5-6" fill="none" stroke="#fff" stroke-width="2"/></svg></span><span data-i18n="b3">Cut to length, free</span></span>
+        <span class="r"><span class="check on"><svg width="10" height="10" viewBox="0 0 10 10"><path d="M1 5l3 3 5-6" fill="none" stroke="#fff" stroke-width="2"/></svg></span><span data-i18n="b4">Hot-cut ends on request</span></span>
+        <span class="r"><span class="check"></span><span class="mut" data-i18n="b5">Custom moulding — from 2 000 pcs</span></span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer class="cap mut">
+  <span data-i18n="f1">Buckle · hardware for bags, harnesses and repairs</span>
+  <span data-i18n="f2">Shipped from Vilnius · Tue and Fri</span>
+  <span>orders@buckle.supply</span>
+</footer>
+
+<script>
+/* ── RU/EN. Английский — исходный, русский — перевод под него ── */
+var RU = {
+  n1:'Фурнитура', n2:'Стропы', n3:'Инфо',
+  s1:'Фурнитура', s2:'Стропы и шнуры', s3:'Спецификация', s4:'Наличие',
+  m1:'Фастекс 25', m2:'Регулятор 25', m3:'Стопор шнура', m4:'Полукольцо 25',
+  m5:'Трёхщелевая 25', m6:'Пуллер молнии', m7:'Люверс 12', m8:'Крюк-зацеп',
+  m9:'Кнопка', m10:'Держатель ленты', m11:'Втулка 6-гран.', m12:'Зажимная пряжка',
+  w1:'Плоская 25 мм', w2:'Трубчатая 19 мм', w3:'Резинка 8 мм', w4:'Паракорд 550',
+  w5:'Эластичная 20 мм', w6:'Набор шок-корда',
+  t1:'Код', t2:'Позиция', t3:'Материал', t4:'Ширина', t5:'Разрывная', t6:'За штуку',
+  r1:'Фастекс', r1m:'Ацеталь',
+  r2:'Полукольцо, сварное', r2m:'Сталь, порошковая окраска',
+  r3:'Зажимная пряжка', r3m:'Алюминий',
+  r4:'Плоская стропа', r4m:'Полиэстер',
+  r5:'Паракорд 550', r5m:'Нейлон, 7 нитей',
+  i1:'Всё чёрное',
+  i2:'Это не про стиль. Чёрный — единственный цвет, который дважды выходит из одной партии одинаковым, поэтому лямка, починенная через четыре года, всё ещё совпадает с соседней. Всё крашеное продаётся как вторая линия и помечено именно так.',
+  i3:'Спецификация', i4:'Заказать карту образцов',
+  b1:'Фастекс 25', b2:'Зажимная пряжка 25',
+  b3:'Резка в размер, бесплатно', b4:'Оплавленные концы по запросу',
+  b5:'Своя пресс-форма — от 2 000 шт',
+  f1:'Buckle · фурнитура для сумок, обвязок и починок',
+  f2:'Отгрузка из Вильнюса · вторник и пятница'
+};
+var EN = {};
+document.querySelectorAll('[data-i18n]').forEach(function (el) { EN[el.dataset.i18n] = el.innerHTML; });
+
+function setLang(l) {
+  var dict = l === 'ru' ? RU : EN;
+  document.querySelectorAll('[data-i18n]').forEach(function (el) {
+    var v = dict[el.dataset.i18n];
+    if (v !== undefined) el.innerHTML = v;
+  });
+  document.documentElement.lang = l;
+  document.documentElement.dataset.lang = l;
+  document.querySelectorAll('[data-set]').forEach(function (b) {
+    var on = b.dataset.set === l;
+    b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    b.classList.toggle('on', on);
+  });
+}
+document.querySelectorAll('[data-set]').forEach(function (b) {
+  b.addEventListener('click', function () { setLang(b.dataset.set); });
+  if (b.dataset.set === 'en') b.classList.add('on');
+});
+</script>
+</body>
+</html>

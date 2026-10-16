@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>Plot — an open seed trial</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Prata&display=swap" rel="stylesheet">
+<style>
+/* ─────────────────────────────────────────────────────────────
+   Дизайн-система: SuperHi Basic Income (refero e57d9536) — tokens.css дословно
+   ───────────────────────────────────────────────────────────── */
+:root {
+  /* Colors */
+  --color-electric-iris: #2727e6;
+  --color-paper-white: #ffffff;
+
+  /* Typography — Font Families */
+  --font-basis-grotesque: 'Basis Grotesque', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-ddc: 'DDC', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* Typography — Scale */
+  --text-caption: 13px;
+  --leading-caption: 1.46;
+  --text-body: 16px;
+  --leading-body: 1.67;
+  --text-subheading: 21px;
+  --leading-subheading: 1.33;
+  --text-heading-sm: 24px;
+  --leading-heading-sm: 1.25;
+  --text-heading: 32px;
+  --leading-heading: 1.17;
+  --text-display: 48px;
+  --leading-display: 1.14;
+
+  /* Typography — Weights */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+
+  /* Spacing */
+  --spacing-unit: 8px;
+  --spacing-4: 4px;
+  --spacing-8: 8px;
+  --spacing-16: 16px;
+  --spacing-24: 24px;
+  --spacing-32: 32px;
+
+  /* Layout */
+  --section-gap: 64px;
+  --card-padding: 32px;
+
+  /* Border Radius */
+  --radius-2xl: 16px;
+  --radius-full: 50px;
+
+  /* Named Radii */
+  --radius-tags: 50px;
+  --radius-cards: 0px;
+  --radius-buttons: 16px;
+
+  /* Surfaces */
+  --surface-violet-column: #2727e6;
+  --surface-paper-canvas: #ffffff;
+}
+
+/* Мои подстановки: Basis Grotesque → Inter (первая замена из DESIGN.md, с кириллицей).
+   DDC в прозе разбора подменяют гротесками, но на скриншоте это дидон в капители —
+   пиксели главнее прозы, поэтому дисплейный голос держит Prata, дидон с кириллицей. */
+:root {
+  --font-basis-grotesque: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-ddc: 'Prata', Georgia, serif;
+  --col: 33%;                /* постоянная фиолетовая колонка */
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--surface-paper-canvas);
+  color: var(--color-electric-iris);
+  font-family: var(--font-basis-grotesque);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--text-body); line-height: var(--leading-body);
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, p, ul, ol, li, table { margin: 0; padding: 0; list-style: none; font-weight: var(--font-weight-regular); }
+a { color: inherit; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; font-weight: var(--font-weight-medium); }
+.ddc { font-family: var(--font-ddc); text-transform: uppercase; }
+.cap { font-size: var(--text-caption); line-height: var(--leading-caption); }
+.num { font-variant-numeric: tabular-nums; }
+.mid { text-align: center; }
+.dash { width: 48px; height: 1px; background: currentColor; margin: var(--spacing-16) auto; }
+
+/* ── Постоянная фиолетовая колонка ─────────────────────────────────── */
+.col {
+  position: fixed; left: 0; top: 0; bottom: 0; width: var(--col);
+  background: var(--surface-violet-column); color: var(--color-paper-white);
+  display: flex; flex-direction: column; align-items: center; justify-content: space-between;
+  padding: var(--spacing-32) var(--spacing-24);
+}
+.col .mark { font-size: var(--text-subheading); letter-spacing: 0.02em; }
+.col .globe { width: 100%; max-width: 420px; }
+.col .globe svg { width: 100%; height: auto; display: block; }
+
+/* ── Белая полоса справа ───────────────────────────────────────────── */
+main { margin-left: var(--col); padding: var(--spacing-32) 64px 96px; }
+.inner { max-width: 760px; margin: 0 auto; }
+.eyebrow { font-size: var(--text-subheading); line-height: var(--leading-subheading); }
+h1.display { font-size: var(--text-display); line-height: var(--leading-display); font-weight: var(--font-weight-regular); }
+.sub { font-size: var(--text-subheading); line-height: var(--leading-subheading); font-weight: var(--font-weight-medium); margin-top: var(--spacing-32); }
+
+.three { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-32); margin-top: var(--spacing-32); }
+.three svg { display: block; margin: 0 auto var(--spacing-16); height: 96px; }
+.three p { font-size: var(--text-subheading); line-height: var(--leading-subheading); }
+
+.dotrule { border-top: 1px dotted var(--color-electric-iris); margin: var(--section-gap) 0; }
+
+.two { display: grid; grid-template-columns: 40% 60%; gap: 48px; margin-bottom: var(--section-gap); }
+.two h2 { font-size: var(--text-heading); line-height: var(--leading-heading); }
+.two p + p { margin-top: var(--spacing-16); }
+
+ol.steps li { display: grid; grid-template-columns: 32px 1fr; gap: var(--spacing-8); margin-top: var(--spacing-24); }
+ol.steps .h { font-weight: var(--font-weight-medium); }
+
+table.res { width: 100%; border-collapse: collapse; margin-top: var(--spacing-24); }
+table.res th { text-align: left; font-size: var(--text-caption); line-height: var(--leading-caption); font-weight: var(--font-weight-medium); padding-bottom: var(--spacing-8); border-bottom: 1px solid var(--color-electric-iris); }
+table.res td { padding: var(--spacing-8) 0; border-bottom: 1px dotted var(--color-electric-iris); }
+table.res td.r, table.res th.r { text-align: right; }
+
+.tag { display: inline-block; background: var(--color-electric-iris); color: var(--color-paper-white); border-radius: var(--radius-tags); padding: var(--spacing-4) var(--spacing-8); font-size: var(--text-caption); font-weight: var(--font-weight-medium); }
+.btn {
+  display: inline-block; background: var(--surface-paper-canvas); color: var(--color-electric-iris);
+  border: 1.5px solid var(--color-electric-iris); border-radius: var(--radius-buttons);
+  padding: var(--spacing-8) var(--spacing-16); font-family: inherit; font-size: 14px; font-weight: var(--font-weight-medium);
+  text-decoration: none; cursor: pointer;
+}
+.acts { display: flex; gap: var(--spacing-8); justify-content: center; margin-top: var(--spacing-32); flex-wrap: wrap; }
+.switch { display: inline-flex; gap: var(--spacing-4); }
+.switch .btn[aria-pressed="true"] { background: var(--color-electric-iris); color: var(--color-paper-white); }
+footer { margin-top: var(--section-gap); padding-top: var(--spacing-24); border-top: 1px solid var(--color-electric-iris); display: flex; justify-content: space-between; }
+</style>
+</head>
+<body>
+
+<aside class="col">
+  <div class="mid">
+    <div class="mark ddc" data-i18n="a1">Plot — an open seed trial</div>
+    <div class="dash"></div>
+  </div>
+
+  <div class="globe">
+    <svg viewBox="0 0 420 420" role="img" aria-label="Two hundred plots">
+      <defs>
+        <pattern id="d1" width="7" height="7" patternUnits="userSpaceOnUse">
+          <circle cx="1.6" cy="1.6" r="1.1" fill="#ffffff" opacity=".38"/>
+        </pattern>
+        <pattern id="d2" width="5" height="5" patternUnits="userSpaceOnUse">
+          <circle cx="1.3" cy="1.3" r="1.15" fill="#ffffff"/>
+        </pattern>
+        <!-- тот же точечный растр, но ирисом: на белом холсте белые точки не видны -->
+        <pattern id="d3" width="5" height="5" patternUnits="userSpaceOnUse">
+          <circle cx="1.3" cy="1.3" r="1.05" fill="#2727e6"/>
+        </pattern>
+        <clipPath id="ball"><circle cx="210" cy="210" r="196"/></clipPath>
+      </defs>
+      <circle cx="210" cy="210" r="196" fill="url(#d1)"/>
+      <g clip-path="url(#ball)" fill="url(#d2)">
+        <path d="M42 120c40-26 78-6 116-22s76-30 108-6 46 60 20 78-84 6-118 24-64 40-96 24-56-72-30-98z"/>
+        <path d="M96 268c34-14 60 8 96 2s58-22 86-6 30 56 2 72-92 22-128 10-90-64-56-78z"/>
+        <path d="M268 322c26-10 58-2 70 16s-8 40-34 42-58-12-58-30 6-24 22-28z"/>
+      </g>
+      <g fill="#ffffff">
+        <circle cx="150" cy="96" r="6"/><circle cx="196" cy="120" r="7"/><circle cx="126" cy="176" r="6"/>
+        <circle cx="30" cy="292" r="6"/><circle cx="238" cy="342" r="7"/><circle cx="318" cy="228" r="6"/>
+        <path d="M150 62l9 16h-18z"/>
+      </g>
+    </svg>
+  </div>
+
+  <div class="mid">
+    <div class="dash"></div>
+    <div class="mark ddc" data-i18n="a2">Sowing closed · season 3</div>
+  </div>
+</aside>
+
+<main>
+  <div class="inner">
+
+    <div class="mid">
+      <div class="eyebrow ddc" data-i18n="h0">What is Plot?</div>
+      <div class="dash"></div>
+      <h1 class="display" data-i18n="h1">A trial to find out which old varieties still grow in the gardens people actually have.</h1>
+      <p class="sub" data-i18n="h2">Two hundred gardeners have received…</p>
+    </div>
+
+    <div class="three mid">
+      <div>
+        <svg viewBox="0 0 120 120" aria-hidden="true">
+          <rect x="30" y="16" width="60" height="88" fill="url(#d3)" stroke="#2727e6" stroke-width="2"/>
+          <path d="M30 34h60M46 60h28M46 74h28" stroke="#2727e6" stroke-width="2"/>
+        </svg>
+        <p data-i18n="t1">Twelve packets,<br>twelve varieties</p>
+      </div>
+      <div>
+        <svg viewBox="0 0 120 120" aria-hidden="true">
+          <path d="M22 26h50l26 22v56H22z" fill="url(#d3)" stroke="#2727e6" stroke-width="2"/>
+          <path d="M72 26v22h26M36 66h48M36 80h32" stroke="#2727e6" stroke-width="2" fill="none"/>
+        </svg>
+        <p data-i18n="t2">A logbook<br>and a soil card</p>
+      </div>
+      <div>
+        <svg viewBox="0 0 120 120" aria-hidden="true">
+          <path d="M20 100V22M20 100h82" stroke="#2727e6" stroke-width="2"/>
+          <rect x="32" y="64" width="14" height="36" fill="url(#d3)" stroke="#2727e6" stroke-width="2"/>
+          <rect x="54" y="44" width="14" height="56" fill="url(#d3)" stroke="#2727e6" stroke-width="2"/>
+          <rect x="76" y="30" width="14" height="70" fill="url(#d3)" stroke="#2727e6" stroke-width="2"/>
+        </svg>
+        <p data-i18n="t3">The whole dataset,<br>every autumn</p>
+      </div>
+    </div>
+
+    <p class="mid" style="margin-top:var(--spacing-32)" data-i18n="h3">Sowing is closed for 2026. The season is logged in <a href="#updates">Updates</a>, and last year's numbers are in the <a href="#results">open dataset</a>.</p>
+
+    <div class="dotrule"></div>
+
+    <div class="two" id="updates">
+      <h2 data-i18n="u0">Updates</h2>
+      <div>
+        <p data-i18n="u1">Sowing is closed for season 3. Nine hundred and forty people asked for a box and two hundred got one, which is a worse ratio than last year and the reason we are writing down every rejection.</p>
+        <p data-i18n="u2">The packets went out on 14 March, two weeks earlier than in 2025, after eleven gardeners in the north told us the soil was ready before the boxes were. That note is the whole point of the logbook.</p>
+        <p data-i18n="u3">Four varieties from season 2 are not in the boxes this year. Three of them failed on clay in more than half the plots, and one turned out to be the same cultivar under two names — which we only found because forty people photographed the same leaf.</p>
+      </div>
+    </div>
+
+    <div class="two">
+      <h2 data-i18n="p0">How the trial works</h2>
+      <ol class="steps">
+        <li><span>①</span><span><span class="h" data-i18n="s1h">A box in March.</span> <span data-i18n="s1p">Twelve packets, a soil card, and a logbook with a page per variety. Nothing digital is required until autumn.</span></span></li>
+        <li><span>②</span><span><span class="h" data-i18n="s2h">Four entries per variety.</span> <span data-i18n="s2p">Date sown, date of first true leaf, how many of the ten came up, and one sentence in your own words.</span></span></li>
+        <li><span>③</span><span><span class="h" data-i18n="s3h">A photograph in July.</span> <span data-i18n="s3p">One frame per plot, from standing height, with the logbook page in it. That is how a variety gets identified when the name on the packet is wrong.</span></span></li>
+        <li><span>④</span><span><span class="h" data-i18n="s4h">The dataset in October.</span> <span data-i18n="s4p">Everything published, including the plots where nothing came up. A trial that only reports its successes is a catalogue.</span></span></li>
+      </ol>
+    </div>
+
+    <div class="two" id="results">
+      <h2 data-i18n="r0">Season 2,<br>in numbers</h2>
+      <div>
+        <p data-i18n="r1">Two hundred plots, twelve varieties, ten seeds each. Germination is counted at day 21 and is the share of seeds that made a true leaf, not the share that split.</p>
+        <table class="res">
+          <thead>
+            <tr>
+              <th data-i18n="th1">Variety</th>
+              <th class="r" data-i18n="th2">Plots</th>
+              <th class="r" data-i18n="th3">Germination</th>
+              <th class="r" data-i18n="th4">To true leaf</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td data-i18n="v1">Kalnapėdė bean</td><td class="r num">186</td><td class="r num">91 %</td><td class="r num" data-i18n="dd1">9 d</td></tr>
+            <tr><td data-i18n="v2">Grey pea, Latgale</td><td class="r num">191</td><td class="r num">88 %</td><td class="r num" data-i18n="dd2">11 d</td></tr>
+            <tr><td data-i18n="v3">Sun turnip</td><td class="r num">178</td><td class="r num">74 %</td><td class="r num" data-i18n="dd3">7 d</td></tr>
+            <tr><td data-i18n="v4">Winter radish, black</td><td class="r num">183</td><td class="r num">69 %</td><td class="r num" data-i18n="dd4">6 d</td></tr>
+            <tr><td data-i18n="v5">Marrow squash, ribbed</td><td class="r num">164</td><td class="r num">52 %</td><td class="r num" data-i18n="dd5">14 d</td></tr>
+            <tr><td data-i18n="v6">Field cucumber, spined</td><td class="r num">172</td><td class="r num">38 %</td><td class="r num" data-i18n="dd6">18 d</td></tr>
+          </tbody>
+        </table>
+        <p class="cap" style="margin-top:var(--spacing-16)" data-i18n="r2">Two varieties below 40 % were dropped from season 3. Both failed on clay and both did fine on sand, which is a result, not a defect.</p>
+      </div>
+    </div>
+
+    <div class="mid">
+      <span class="tag" data-i18n="g1">Season 3</span>
+      <span class="tag" data-i18n="g2">Open data</span>
+      <span class="tag" data-i18n="g3">200 plots</span>
+      <div class="acts">
+        <a class="btn" href="#results" data-i18n="b1">Read the protocol</a>
+        <a class="btn" href="#results" data-i18n="b2">Download the 2025 dataset</a>
+        <a class="btn" href="#updates" data-i18n="b3">Ask to be on the list for season 4</a>
+      </div>
+    </div>
+
+    <footer class="cap">
+      <span data-i18n="f1">Plot is run by four people and a shed near Sigulda</span>
+      <span class="switch">
+        <button class="btn" data-set="en" aria-pressed="true">EN</button>
+        <button class="btn" data-set="ru" aria-pressed="false">RU</button>
+      </span>
+      <span>seeds@plot.garden</span>
+    </footer>
+
+  </div>
+</main>
+
+<script>
+/* ── RU/EN. Английский — исходный, русский — перевод под него ── */
+var RU = {
+  a1:'Plot — открытое семенное испытание', a2:'Посев закрыт · сезон 3',
+  h0:'Что такое Plot?',
+  h1:'Испытание, чтобы выяснить, какие старые сорта всё ещё растут в тех огородах, которые у людей есть на самом деле.',
+  h2:'Двести огородников получили…',
+  t1:'Двенадцать пакетов,<br>двенадцать сортов',
+  t2:'Дневник<br>и карточку почвы',
+  t3:'Весь массив данных,<br>каждую осень',
+  h3:'Посев на 2026 год закрыт. Ход сезона пишется в <a href="#updates">хронике</a>, а прошлогодние числа лежат в <a href="#results">открытых данных</a>.',
+  u0:'Хроника',
+  u1:'Посев третьего сезона закрыт. Коробку попросили девятьсот сорок человек, получили двести — это хуже прошлогоднего соотношения и причина, по которой мы записываем каждый отказ.',
+  u2:'Пакеты ушли 14 марта, на две недели раньше, чем в 2025-м: одиннадцать огородников с севера сказали, что почва готова раньше, чем коробки. Ради таких заметок дневник и существует.',
+  u3:'Четырёх сортов второго сезона в коробках больше нет. Три провалились на глине больше чем в половине участков, а один оказался тем же сортом под двумя именами — и это выяснилось только потому, что сорок человек сфотографировали один и тот же лист.',
+  p0:'Как устроено испытание',
+  s1h:'Коробка в марте.', s1p:'Двенадцать пакетов, карточка почвы и дневник со страницей на сорт. До осени ничего цифрового не требуется.',
+  s2h:'Четыре записи на сорт.', s2p:'Дата посева, дата первого настоящего листа, сколько из десяти взошло и одна фраза своими словами.',
+  s3h:'Фотография в июле.', s3p:'Один кадр с участка, с высоты роста, чтобы в кадр попала страница дневника. Так сорт опознают, когда имя на пакете написано неверно.',
+  s4h:'Массив данных в октябре.', s4p:'Публикуется всё, включая участки, где не взошло ничего. Испытание, которое сообщает только про удачи, — это каталог.',
+  r0:'Второй сезон<br>в числах',
+  r1:'Двести участков, двенадцать сортов, по десять семян. Всхожесть считается на 21-й день и означает долю семян, давших настоящий лист, а не долю проклюнувшихся.',
+  th1:'Сорт', th2:'Участков', th3:'Всхожесть', th4:'До листа',
+  v1:'Фасоль калнапеде', v2:'Горох серый, латгальский', v3:'Репа солнечная',
+  v4:'Редька зимняя чёрная', v5:'Кабачок ребристый', v6:'Огурец грунтовой, шипастый',
+  r2:'Два сорта ниже 40 % выведены из третьего сезона. Оба провалились на глине и оба нормально пошли на песке — это результат, а не брак.',
+  dd1:'9 дн', dd2:'11 дн', dd3:'7 дн', dd4:'6 дн', dd5:'14 дн', dd6:'18 дн',
+  g1:'Сезон 3', g2:'Открытые данные', g3:'200 участков',
+  b1:'Прочитать протокол', b2:'Скачать данные 2025 года', b3:'Записаться в лист на сезон 4',
+  f1:'Plot ведут четыре человека и сарай под Сигулдой'
+};
+var EN = {};
+document.querySelectorAll('[data-i18n]').forEach(function (el) { EN[el.dataset.i18n] = el.innerHTML; });
+
+function setLang(l) {
+  var dict = l === 'ru' ? RU : EN;
+  document.querySelectorAll('[data-i18n]').forEach(function (el) {
+    var v = dict[el.dataset.i18n];
+    if (v !== undefined) el.innerHTML = v;
+  });
+  document.documentElement.lang = l;
+  document.documentElement.dataset.lang = l;
+  document.querySelectorAll('.switch button').forEach(function (b) {
+    b.setAttribute('aria-pressed', b.dataset.set === l ? 'true' : 'false');
+  });
+}
+document.querySelectorAll('.switch button').forEach(function (b) {
+  b.addEventListener('click', function () { setLang(b.dataset.set); });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,1 @@
+import{j as t}from"./index-WM7-nNXq.js";import{T as n}from"./typing-animation-DeQgNHt8.js";import"./use-in-view-CknktuZ9.js";function e(){return t.jsx(n,{startOnView:!0,children:"Starts typing when in view"})}export{e as default};

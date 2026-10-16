@@ -1,0 +1,1 @@
+import{j as o}from"./index-WM7-nNXq.js";import{T as r}from"./typing-animation-DeQgNHt8.js";import"./use-in-view-CknktuZ9.js";function i(){return o.jsx(r,{showCursor:!1,children:"No cursor shown"})}export{i as default};

@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>Dub — a game speaks fourteen languages</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Playfair+Display:wght@400&display=swap" rel="stylesheet">
+<style>
+/* ─────────────────────────────────────────────────────────────
+   Дизайн-система: OFFFICE : (refero 190d4a0b) — tokens.css дословно
+   ───────────────────────────────────────────────────────────── */
+:root {
+  /* Colors */
+  --color-onyx: #0e0e0e;
+  --color-paper-white: #fefefe;
+  --color-faint-white: #2a2a2a;
+
+  /* Typography — Font Families */
+  /* ak → Inter (замена из DESIGN.md); gs → Playfair Display (замена из DESIGN.md, кириллица) */
+  --font-ak: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-gs: 'Playfair Display', Georgia, 'Times New Roman', serif;
+
+  /* Typography — Scale */
+  --text-caption: 12px;
+  --leading-caption: 1.5;
+  --text-body-sm: 14px;
+  --leading-body-sm: 1.4;
+  --text-body: 18px;
+  --leading-body: 1.33;
+  --text-subheading: 20px;
+  --leading-subheading: 1.1;
+  --text-heading: 58px;
+  --leading-heading: 1;
+  --text-heading-lg: 72px;
+  --leading-heading-lg: 0.9;
+  --text-display: 216px;
+  --leading-display: 0.8;
+
+  /* Typography — Weights */
+  --font-weight-regular: 400;
+  --font-weight-bold: 700;
+
+  /* Spacing */
+  --spacing-8: 8px;
+  --spacing-16: 16px;
+  --spacing-32: 32px;
+  --spacing-96: 96px;
+  --spacing-128: 128px;
+
+  /* Radii — система разрешает только 0 */
+  --radius-tags: 0px;
+  --radius-cards: 0px;
+  --radius-buttons: 0px;
+
+  /* Surfaces */
+  --surface-onyx-canvas: #0e0e0e;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--surface-onyx-canvas);
+  color: var(--color-paper-white);
+  font-family: var(--font-ak);
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+  font-weight: var(--font-weight-regular);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; text-decoration: none; }
+h1, h2, h3, h4, p, ul, ol, figure { margin: 0; }
+ul { list-style: none; padding: 0; }
+
+.pad { padding-left: var(--spacing-16); padding-right: var(--spacing-16); }
+section { padding: var(--spacing-128) 0; }
+.cap { font-size: var(--text-caption); line-height: var(--leading-caption); text-transform: uppercase; letter-spacing: 0.02em; }
+.serif { font-family: var(--font-gs); font-weight: var(--font-weight-regular); }
+
+/* ── Навигация ── */
+.nav { display: flex; align-items: baseline; padding: var(--spacing-16); position: relative; z-index: 5; }
+.nav .brand { font-size: var(--text-caption); }
+.nav .touch { margin-left: auto; font-size: var(--text-caption); font-weight: var(--font-weight-bold); text-transform: uppercase; }
+
+/* ── Хиро ── */
+.hero { position: relative; padding-bottom: var(--spacing-128); }
+.display {
+  font-size: var(--text-display); line-height: var(--leading-display);
+  font-weight: var(--font-weight-regular); letter-spacing: -0.02em;
+  white-space: nowrap; position: relative; z-index: 2; pointer-events: none;
+}
+.display .l1 { margin-left: -18px; }
+.display .l2 { margin-left: 180px; }
+.display .l3 { margin-left: -60px; }
+.sculpture { position: absolute; left: 50%; top: 90px; transform: translateX(-50%); z-index: 3; width: 560px; }
+.sculpture svg { display: block; width: 100%; height: auto; }
+.hero-side { position: absolute; right: var(--spacing-16); top: 300px; width: 300px; z-index: 4; }
+.hero-side p { line-height: 1.56; }
+.hero-side p b { font-weight: var(--font-weight-bold); }
+.hero-side p i { font-style: italic; }
+.locale { position: absolute; right: var(--spacing-16); top: 56px; z-index: 6; display: flex; gap: 8px; }
+.locale button { background: none; border: 0; color: var(--color-paper-white); font-family: inherit; font-size: var(--text-caption); padding: 0; cursor: pointer; opacity: 0.55; }
+.locale button[aria-pressed="true"] { opacity: 1; }
+.locale span { opacity: 0.55; }
+
+/* ── Архив ── */
+.archive { padding-top: var(--spacing-96); padding-bottom: var(--spacing-128); }
+.archive .lbl { text-align: center; font-family: var(--font-gs); font-style: italic; font-size: var(--text-subheading); margin-bottom: var(--spacing-32); }
+.entry { display: grid; grid-template-columns: 1fr 120px 150px 160px 120px; align-items: baseline; gap: var(--spacing-32); margin-bottom: var(--spacing-32); }
+.entry .title { font-family: var(--font-gs); font-size: var(--text-heading-lg); line-height: var(--leading-heading-lg); }
+.entry .meta { font-size: var(--text-caption); text-transform: uppercase; }
+.entry .meta.dim { color: #8a8a8a; }
+
+/* ── Текстовые секции ── */
+.statement { font-size: var(--text-heading); line-height: var(--leading-heading); max-width: 1100px; }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-96); }
+.list-row { display: grid; grid-template-columns: 48px 1fr 300px; gap: var(--spacing-32); padding: var(--spacing-32) 0; }
+.list-row + .list-row { border-top: 0; }
+.list-row .n { font-size: var(--text-caption); }
+.list-row h3 { font-size: var(--text-subheading); line-height: var(--leading-subheading); font-weight: var(--font-weight-regular); }
+.list-row p { font-size: var(--text-body-sm); line-height: var(--leading-body-sm); margin-top: var(--spacing-8); max-width: 560px; color: #b8b8b8; }
+.list-row .side { font-size: var(--text-caption); text-transform: uppercase; color: #8a8a8a; }
+
+/* ── Языки ── */
+.langs { display: grid; grid-template-columns: repeat(7, 1fr); gap: var(--spacing-32) var(--spacing-16); }
+.langs div { font-size: var(--text-body); line-height: var(--leading-body); }
+.langs div span { display: block; font-size: var(--text-caption); color: #8a8a8a; margin-top: var(--spacing-8); }
+
+/* ── Цифры ── */
+.figs { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--spacing-32); }
+.figs .n { font-size: var(--text-heading); line-height: var(--leading-heading); }
+.figs p { font-size: var(--text-caption); line-height: var(--leading-caption); margin-top: var(--spacing-16); color: #8a8a8a; text-transform: uppercase; }
+
+/* ── Контакт ── */
+.contact .big { font-size: var(--text-heading-lg); line-height: var(--leading-heading-lg); }
+.contact .rows { margin-top: var(--spacing-96); display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--spacing-32); }
+.contact .rows div span { display: block; font-size: var(--text-caption); color: #8a8a8a; text-transform: uppercase; margin-bottom: var(--spacing-8); }
+.contact .rows div a, .contact .rows div p { font-size: var(--text-body-sm); line-height: var(--leading-body-sm); }
+
+footer { padding: var(--spacing-96) var(--spacing-16) var(--spacing-32); display: flex; font-size: var(--text-caption); color: #8a8a8a; text-transform: uppercase; }
+footer .right { margin-left: auto; display: flex; gap: var(--spacing-32); }
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <span class="brand" data-i18n="n0">dub studio</span>
+  <a class="touch" href="#contact" data-i18n="n1">Get in touch</a>
+</div>
+
+<header class="hero">
+  <div class="locale">
+    <button type="button" data-set="en" aria-pressed="true">EN</button><span>/</span><button type="button" data-set="ru" aria-pressed="false">RU</button>
+  </div>
+
+  <div class="sculpture" aria-hidden="true">
+    <svg viewBox="0 0 560 560">
+      <defs>
+        <radialGradient id="s1" cx="42%" cy="34%">
+          <stop offset="0" stop-color="#4a4a4a"/><stop offset="0.55" stop-color="#242424"/><stop offset="1" stop-color="#101010"/>
+        </radialGradient>
+        <linearGradient id="s2" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#3a3a3a"/><stop offset="1" stop-color="#141414"/>
+        </linearGradient>
+      </defs>
+      <ellipse cx="280" cy="270" rx="196" ry="230" fill="url(#s1)"/>
+      <ellipse cx="280" cy="270" rx="196" ry="230" fill="none" stroke="#3d3d3d" stroke-width="1"/>
+      <g stroke="#5a5a5a" stroke-width="2" stroke-linecap="round" opacity="0.85">
+        <path d="M280 120v300M244 150v240M316 150v240M208 176v188M352 176v188M172 214v112M388 214v112M136 246v48M424 246v48"/>
+      </g>
+      <g stroke="#2c2c2c" stroke-width="1">
+        <path d="M110 270h340"/>
+      </g>
+      <ellipse cx="280" cy="470" rx="90" ry="26" fill="url(#s2)"/>
+      <path d="M280 424v22" stroke="#3d3d3d" stroke-width="10"/>
+    </svg>
+  </div>
+
+  <h1 class="display">
+    <div class="l1" data-i18n="h1a">A GAME THAT</div>
+    <div class="l2" data-i18n="h1b">SPEAKS</div>
+    <div class="l3" data-i18n="h1c">FOURTEEN</div>
+  </h1>
+
+  <div class="hero-side">
+    <p class="cap" data-i18n="h2"><i>Localisation</i> and <b>voice</b> studio for games. Script, cast, record, mix, and every line back in the build the same week.</p>
+  </div>
+</header>
+
+<section class="archive pad" style="padding-top:0">
+  <div class="lbl" data-i18n="a0">Archive</div>
+  <div class="entry">
+    <div class="title">Northwind Hollow</div>
+    <div class="meta">2026</div>
+    <div class="meta dim" data-i18n="e1a">Full voice</div>
+    <div class="meta dim" data-i18n="e1b">14 languages</div>
+    <div class="meta dim">41 200 <span data-i18n="e1c">lines</span></div>
+  </div>
+  <div class="entry">
+    <div class="title">Соль и порох</div>
+    <div class="meta">2025</div>
+    <div class="meta dim" data-i18n="e2a">Text and subtitles</div>
+    <div class="meta dim" data-i18n="e2b">9 languages</div>
+    <div class="meta dim">610 000 <span data-i18n="e2c">words</span></div>
+  </div>
+  <div class="entry">
+    <div class="title">Ashfall Protocol</div>
+    <div class="meta">2025</div>
+    <div class="meta dim" data-i18n="e3a">Voice and mix</div>
+    <div class="meta dim" data-i18n="e3b">6 languages</div>
+    <div class="meta dim">18 900 <span data-i18n="e3c">lines</span></div>
+  </div>
+  <div class="entry">
+    <div class="title">Тихий отсек</div>
+    <div class="meta">2024</div>
+    <div class="meta dim" data-i18n="e4a">Full voice</div>
+    <div class="meta dim" data-i18n="e4b">11 languages</div>
+    <div class="meta dim">27 400 <span data-i18n="e4c">lines</span></div>
+  </div>
+  <div class="entry">
+    <div class="title">Paper Lantern</div>
+    <div class="meta">2024</div>
+    <div class="meta dim" data-i18n="e5a">Text, LQA</div>
+    <div class="meta dim" data-i18n="e5b">13 languages</div>
+    <div class="meta dim">240 000 <span data-i18n="e5c">words</span></div>
+  </div>
+  <div class="entry">
+    <div class="title">Kestrel Down</div>
+    <div class="meta">2023</div>
+    <div class="meta dim" data-i18n="e6a">Voice, casting</div>
+    <div class="meta dim" data-i18n="e6b">4 languages</div>
+    <div class="meta dim">9 100 <span data-i18n="e6c">lines</span></div>
+  </div>
+</section>
+
+<section class="pad">
+  <p class="statement" data-i18n="st1">A translated line that does not fit the mouth is not a translated line. We write to timing, cast to the character, and send back the ones that cannot work — before the studio time is booked, not after.</p>
+</section>
+
+<section class="pad" style="padding-top:0">
+  <div class="list-row">
+    <span class="n">01</span>
+    <div>
+      <h3 data-i18n="w1h">Script pass before anyone books a booth</h3>
+      <p data-i18n="w1p">Every string is read against its context: who says it, to whom, over what animation, with how many frames of mouth. Lines that will not fit are rewritten with the writer, in the writer's language, while changing them is still cheap.</p>
+    </div>
+    <div class="side" data-i18n="w1s">Week 1–2 · with your narrative lead</div>
+  </div>
+  <div class="list-row">
+    <span class="n">02</span>
+    <div>
+      <h3 data-i18n="w2h">Casting you can hear before you agree</h3>
+      <p data-i18n="w2p">Three voices per role, recorded on the actual lines rather than a demo reel, delivered as one file you can drop into the build. You pick, and the actor is held for the whole project — nobody's captain changes voice in act three.</p>
+    </div>
+    <div class="side" data-i18n="w2s">Week 2–3 · 3 options per role</div>
+  </div>
+  <div class="list-row">
+    <span class="n">03</span>
+    <div>
+      <h3 data-i18n="w3h">Recording with the game running</h3>
+      <p data-i18n="w3p">The director sees the scene, not a spreadsheet. Actors get the previous line in their headphones so a conversation sounds like a conversation, and pick-ups are recorded in the same session instead of three weeks later at a different room tone.</p>
+    </div>
+    <div class="side" data-i18n="w3s">Weeks 4–9 · two rooms, one director</div>
+  </div>
+  <div class="list-row">
+    <span class="n">04</span>
+    <div>
+      <h3 data-i18n="w4h">Back in the build the same week</h3>
+      <p data-i18n="w4p">Files come named the way your engine wants them, loudness-matched per platform, with a report of every line that changed since the last drop. Integration is our problem until it plays correctly on your machine.</p>
+    </div>
+    <div class="side" data-i18n="w4s">Continuous · Wwise, FMOD, or raw</div>
+  </div>
+  <div class="list-row">
+    <span class="n">05</span>
+    <div>
+      <h3 data-i18n="w5h">Linguistic QA on the real build</h3>
+      <p data-i18n="w5p">Native players play your game, not a text file: clipped subtitles, a joke that died, an honorific that turned a soldier into a stranger. Each report has a screenshot, a string id, and a suggested fix that fits the box.</p>
+    </div>
+    <div class="side" data-i18n="w5s">Two passes · before and after release</div>
+  </div>
+</section>
+
+<section class="pad" style="padding-top:0">
+  <div class="cap" style="margin-bottom:var(--spacing-32)" data-i18n="lg0">Languages we keep a standing cast for</div>
+  <div class="langs">
+    <div>Русский<span>ru-RU</span></div>
+    <div>English<span>en-US / en-GB</span></div>
+    <div>Deutsch<span>de-DE</span></div>
+    <div>Français<span>fr-FR</span></div>
+    <div>Español<span>es-ES / es-419</span></div>
+    <div>Português<span>pt-BR</span></div>
+    <div>Italiano<span>it-IT</span></div>
+    <div>Polski<span>pl-PL</span></div>
+    <div>Türkçe<span>tr-TR</span></div>
+    <div>日本語<span>ja-JP</span></div>
+    <div>한국어<span>ko-KR</span></div>
+    <div>简体中文<span>zh-CN</span></div>
+    <div>繁體中文<span>zh-TW</span></div>
+    <div>العربية<span>ar-SA</span></div>
+  </div>
+</section>
+
+<section class="pad" style="padding-top:0">
+  <div class="figs">
+    <div><div class="n">14</div><p data-i18n="fg1">languages with a cast we can book this month</p></div>
+    <div><div class="n">2</div><p data-i18n="fg2">recording rooms, one director, no subcontracted studios</p></div>
+    <div><div class="n">6 <span style="font-size:20px" data-i18n="fg3u">days</span></div><p data-i18n="fg3">median turnaround from a pick-up request to files in the build</p></div>
+    <div><div class="n">0</div><p data-i18n="fg4">machine-generated voices, and we will put that in the contract</p></div>
+  </div>
+</section>
+
+<section class="pad" style="padding-top:0">
+  <div class="two-col">
+    <p class="statement" style="font-size:var(--text-heading-lg);line-height:var(--leading-heading-lg)" data-i18n="ai0">We do not synthesise voices.</p>
+    <div>
+      <p style="font-size:var(--text-body);line-height:var(--leading-body)" data-i18n="ai1">Not because a model cannot read a line — it can, and cheaply. Because a performance is a decision made by a person who understood what the scene was about, and because the actor whose voice trained the model did not agree to be in your game.</p>
+      <p style="font-size:var(--text-body-sm);line-height:var(--leading-body-sm);margin-top:var(--spacing-32);color:#b8b8b8" data-i18n="ai2">We use models for the boring half: aligning takes to timecode, catching a clipped consonant, spotting the four hundred strings that changed since the last build. Nothing that speaks is generated.</p>
+    </div>
+  </div>
+</section>
+
+<section class="pad contact" id="contact" style="padding-top:0">
+  <p class="big" data-i18n="ct0">Send us a hundred lines and the build. We will send back three voices and an honest schedule.</p>
+  <div class="rows">
+    <div><span data-i18n="ct1">Work</span><a href="#">hello@dub.studio</a></div>
+    <div><span data-i18n="ct2">Casting</span><a href="#">cast@dub.studio</a></div>
+    <div><span data-i18n="ct3">Studios</span><p data-i18n="ct3v">Belgrade, room A and B · Almaty, partner room</p></div>
+    <div><span data-i18n="ct4">Next opening</span><p data-i18n="ct4v">Two projects, from November</p></div>
+  </div>
+</section>
+
+<footer>
+  <span>© 2026 dub studio</span>
+  <span class="right">
+    <a href="#" data-i18n="fb1">Rates</a>
+    <a href="#" data-i18n="fb2">Actors</a>
+    <a href="#" data-i18n="fb3">Terms</a>
+  </span>
+</footer>
+
+<script>
+/* ── RU/EN. Английский — исходный, русский — перевод под него ── */
+var RU = {
+  n0:'dub studio', n1:'Написать нам',
+  h1a:'ИГРА, КОТОРАЯ', h1b:'ГОВОРИТ НА', h1c:'ЧЕТЫРНАДЦАТИ',
+  h2:'Студия <i>локализации</i> и <b>озвучки</b> для игр. Сценарий, кастинг, запись, сведение — и каждая реплика возвращается в билд на той же неделе.',
+  a0:'Архив',
+  e1a:'Полная озвучка', e1b:'14 языков', e1c:'реплик',
+  e2a:'Текст и субтитры', e2b:'9 языков', e2c:'слов',
+  e3a:'Озвучка и сведение', e3b:'6 языков', e3c:'реплик',
+  e4a:'Полная озвучка', e4b:'11 языков', e4c:'реплик',
+  e5a:'Текст, LQA', e5b:'13 языков', e5c:'слов',
+  e6a:'Озвучка, кастинг', e6b:'4 языка', e6c:'реплик',
+  st1:'Переведённая реплика, которая не ложится в рот, — это не переведённая реплика. Мы пишем под тайминг, подбираем голос под персонажа и возвращаем те строки, которые работать не будут, — до того как оплачено студийное время, а не после.',
+  w1h:'Проход по сценарию до того, как кто-то забронировал кабину',
+  w1p:'Каждую строку читают в контексте: кто говорит, кому, поверх какой анимации и на сколько кадров открыт рот. Реплики, которые не влезут, переписываются вместе с автором и на его языке — пока менять их ещё дёшево.',
+  w1s:'Недели 1–2 · с вашим нарративным лидом',
+  w2h:'Кастинг, который слышно до того, как вы согласились',
+  w2p:'Три голоса на роль, записанные на настоящих репликах, а не на демо-ролике, и отданные одним файлом, который можно сразу положить в билд. Вы выбираете — и актёр закреплён за проектом целиком: ни у кого капитан не меняет голос в третьем акте.',
+  w2s:'Недели 2–3 · по 3 варианта на роль',
+  w3h:'Запись с запущенной игрой',
+  w3p:'Режиссёр видит сцену, а не таблицу. Актёру в наушники дают предыдущую реплику, чтобы разговор звучал разговором, а подхваты пишутся в той же смене, а не через три недели в другой акустике.',
+  w3s:'Недели 4–9 · две комнаты, один режиссёр',
+  w4h:'Обратно в билд на той же неделе',
+  w4p:'Файлы приходят названными так, как хочет ваш движок, с выровненной по платформе громкостью и отчётом о каждой реплике, изменившейся с прошлой поставки. Интеграция — наша забота, пока это не заиграет правильно на вашей машине.',
+  w4s:'Непрерывно · Wwise, FMOD или сырые файлы',
+  w5h:'Лингвистическое тестирование на живом билде',
+  w5p:'Носители играют в вашу игру, а не читают текстовый файл: обрезанные субтитры, умершая шутка, обращение, превратившее солдата в незнакомца. В каждом отчёте — скриншот, идентификатор строки и предложенная замена, которая влезает в поле.',
+  w5s:'Два прохода · до релиза и после',
+  lg0:'Языки, на которых у нас есть постоянный состав',
+  fg1:'языков, на которых состав можно занять в этом месяце',
+  fg2:'комнаты записи, один режиссёр, без субподрядных студий',
+  fg3u:'дней', fg3:'медиана от заявки на подхват до файлов в билде',
+  fg4:'синтезированных голосов, и мы готовы вписать это в договор',
+  ai0:'Мы не синтезируем голоса.',
+  ai1:'Не потому, что модель не прочитает реплику, — прочитает, и дёшево. А потому, что игра голосом — это решение человека, понявшего, о чём сцена, и потому что актёр, на чьём голосе модель училась, не соглашался участвовать в вашей игре.',
+  ai2:'Модели мы используем для скучной половины: выровнять дубли по таймкоду, поймать щелчок на согласной, найти четыреста строк, изменившихся с прошлого билда. Ничего, что говорит, не сгенерировано.',
+  ct0:'Пришлите сотню реплик и билд. Мы вернём три голоса и честный график.',
+  ct1:'Работа', ct2:'Кастинг', ct3:'Студии', ct3v:'Белград, комнаты A и B · Алматы, партнёрская комната',
+  ct4:'Ближайшее окно', ct4v:'Два проекта, с ноября',
+  fb1:'Ставки', fb2:'Актёры', fb3:'Условия'
+};
+var EN = {};
+document.querySelectorAll('[data-i18n]').forEach(function (el) { EN[el.dataset.i18n] = el.innerHTML; });
+
+function setLang(l) {
+  var dict = l === 'ru' ? RU : EN;
+  document.querySelectorAll('[data-i18n]').forEach(function (el) {
+    var v = dict[el.dataset.i18n];
+    if (v !== undefined) el.innerHTML = v;
+  });
+  document.documentElement.lang = l;
+  document.documentElement.dataset.lang = l;
+  document.querySelectorAll('.locale button').forEach(function (b) {
+    b.setAttribute('aria-pressed', b.dataset.set === l ? 'true' : 'false');
+  });
+}
+document.querySelectorAll('.locale button').forEach(function (b) {
+  b.addEventListener('click', function () { setLang(b.dataset.set); });
+});
+</script>
+</body>
+</html>

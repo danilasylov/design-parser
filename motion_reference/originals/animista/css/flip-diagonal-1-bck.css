@@ -1,0 +1,3 @@
+/* Original keyframes: Animista, Ana Travas. https://animista.net/play/basic/flip/flip-diagonal-1-bck */
+.flip-diagonal-1-bck{animation:flip-diagonal-1-bck 0.4s cubic-bezier(.455,.03,.515,.955) 0s 1 normal both;}
+@keyframes flip-diagonal-1-bck{0%{-webkit-transform:translateZ(0) rotate3d(1,1,0,0deg);transform:translateZ(0) rotate3d(1,1,0,0deg)}to{-webkit-transform:translateZ(-260px) rotate3d(1,1,0,-180deg);transform:translateZ(-260px) rotate3d(1,1,0,-180deg)}}

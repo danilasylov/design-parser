@@ -1,0 +1,14 @@
+import fs from 'node:fs';
+import vm from 'node:vm';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
+const context={window:{}};
+for(const file of ['catalog_data.js','pattern-catalog.js'])vm.runInNewContext(fs.readFileSync(path.join(root,file),'utf8'),context);
+const {patterns,source}=context.window.MOTION_PATTERN_CATALOG;
+const exported={schema_version:1,description_ru:'Визуальные паттерны; направления, настройки и реализации хранятся внутри паттерна.',source_date:source.date,counts:{patterns:patterns.length,variants:source.examples.length},patterns:patterns.map(p=>({...p,variants:p.variants.map(e=>({id:e.id,name:e.name,provider:e.provider,source_class_id:e.class_id,source_url:e.demo_url,live_preview:e.live_preview||null}))}))};
+fs.writeFileSync(path.join(root,'pattern_catalog.json'),JSON.stringify(exported,null,2)+'\n');
+const quote=value=>'"'+String(value).replaceAll('"','""')+'"';
+const csv=[['id','pattern','type','providers','variant_count','example_ids'],...patterns.map(p=>[p.id,p.name,p.type_id,p.providers.join('|'),p.variants.length,p.variants.map(e=>e.id).join('|')])].map(row=>row.map(quote).join(',')).join('\n');
+fs.writeFileSync(path.join(root,'animation_patterns.csv'),'\uFEFF'+csv+'\n');
+console.log(`${patterns.length} patterns; ${source.examples.length} original variants preserved`);

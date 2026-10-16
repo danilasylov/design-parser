@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Encore — find tonight's gig</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+/* ─── Токены дизайн-системы Wizz — вставлены дословно ─────────────────── */
+:root {
+  /* Colors */
+  --color-volt-pink: #ff3d9e;
+  --color-obsidian: #000000;
+  --color-paper-white: #ffffff;
+  --color-ash: #dadada;
+  --color-charcoal: #444444;
+  --color-onyx: #292929;
+  --color-mist: #eeeeee;
+
+  /* Typography — Font Families */
+  --font-sans-serif: 'sans-serif', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-polysans-bulky: 'PolySans Bulky', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-polysans-median: 'PolySans Median', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-polysans-neutral: 'PolySans Neutral', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-polysans-slim: 'PolySans Slim', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-inter: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* Typography — Scale */
+  --text-caption: 10px;
+  --leading-caption: 1.5;
+  --tracking-caption: 0.05px;
+  --text-body-sm: 14px;
+  --leading-body-sm: 1.4;
+  --text-subheading: 18px;
+  --leading-subheading: 1.4;
+  --text-display-xl: 72px;
+  --leading-display-xl: 1;
+  --text-display: 86px;
+  --leading-display: 0.85;
+  --tracking-display: -0.86px;
+
+  /* Typography — Weights */
+  --font-weight-light: 300;
+  --font-weight-regular: 400;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Spacing */
+  --spacing-unit: 4px;
+  --spacing-4: 4px;
+  --spacing-8: 8px;
+  --spacing-12: 12px;
+  --spacing-16: 16px;
+  --spacing-20: 20px;
+  --spacing-24: 24px;
+  --spacing-32: 32px;
+  --spacing-48: 48px;
+  --spacing-56: 56px;
+  --spacing-64: 64px;
+  --spacing-80: 80px;
+  --spacing-88: 88px;
+
+  /* Layout */
+  --page-max-width: 1200px;
+  --section-gap: 80px;
+  --card-padding: 16px;
+  --element-gap: 10px;
+
+  /* Border Radius */
+  --radius-md: 5px;
+  --radius-xl: 12px;
+  --radius-2xl: 20px;
+  --radius-3xl: 24px;
+  --radius-3xl-2: 45px;
+  --radius-full: 999px;
+
+  /* Named Radii */
+  --radius-cards: 12px;
+  --radius-icons: 5px;
+  --radius-pills: 999px;
+  --radius-images: 24px;
+  --radius-inputs: 12px;
+  --radius-buttons: 12px;
+
+  /* Shadows */
+  --shadow-md: rgba(0, 0, 0, 0.05) 0px 1px 10px 0px;
+  --shadow-xl: rgba(0, 0, 0, 0.3) 0px 1px 30px 0px;
+  --shadow-subtle: rgb(218, 218, 218) 0px 0px 0px 1px inset;
+
+  /* Surfaces */
+  --surface-page-canvas: #ffffff;
+  --surface-input-fill: #eeeeee;
+  --surface-input-border: #444444;
+  --surface-hairline-surface: #dadada;
+  --surface-elevated-surface: #292929;
+  --surface-dark-surface: #000000;
+  --surface-accent-surface: #ff3d9;
+}
+
+/* В выгрузке --surface-accent-surface записан пятью символами (#ff3d9) —
+   опечатка источника. Строка оставлена дословно, в работе --color-volt-pink.
+   Подстановки шрифтов: PolySans — кастомный, в четырёх начертаниях. DESIGN.md
+   предлагает для дисплея Druk Wide / Archivo Black (кириллицы нет), а как
+   явный фолбэк системы названы Inter и Manrope — оба с кириллицей. Дисплей
+   берёт Manrope 800 (ближе к «bulky»), текст — Inter. */
+:root {
+  --font-display: 'Manrope', var(--font-polysans-bulky);
+  --font-ui: 'Inter', var(--font-polysans-neutral);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: var(--font-ui);
+  font-weight: var(--font-weight-regular);
+  font-size: 16px;
+  line-height: 1.5;
+  background: var(--surface-page-canvas);
+  color: var(--color-obsidian);
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap { max-width: var(--page-max-width); margin: 0 auto; padding: 0 var(--spacing-24); }
+section { padding: var(--spacing-80) 0; }
+
+/* ─── Типографика ─────────────────────────────────────────────────────── */
+.display {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: var(--text-display); line-height: var(--leading-display);
+  letter-spacing: var(--tracking-display); text-transform: uppercase;
+}
+.display--sm { font-size: var(--text-display-xl); line-height: var(--leading-display-xl); }
+.h { font-family: var(--font-display); font-weight: 800; font-size: 34px; line-height: 1.1; text-transform: uppercase; }
+.sub { font-size: var(--text-subheading); line-height: var(--leading-subheading); }
+.body-sm { font-size: var(--text-body-sm); line-height: var(--leading-body-sm); }
+.muted { color: var(--color-charcoal); }
+/* Микро-метка: капслок, 0.05em, розовым — «поставлена штампом» */
+.eyebrow {
+  display: inline-block; font-size: var(--text-body-sm); line-height: var(--leading-body-sm);
+  letter-spacing: 0.05em; text-transform: uppercase;
+  font-weight: var(--font-weight-semibold); color: var(--color-volt-pink);
+}
+
+/* ─── Кнопки: 12px или пилюля, острых кромок в системе нет ────────────── */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--spacing-8);
+  font-family: var(--font-ui); font-size: 16px; font-weight: var(--font-weight-semibold);
+  padding: 13px var(--spacing-24); border-radius: var(--radius-buttons);
+  border: 1px solid transparent; text-decoration: none; cursor: pointer;
+  transition: background-color .15s linear, color .15s linear, border-color .15s linear;
+}
+/* Единственное основное действие на экран — только оно берёт розовый и тень 30px */
+.btn--pink { background: var(--color-volt-pink); color: var(--color-paper-white); box-shadow: var(--shadow-xl); }
+.btn--pink:hover { background: #f02a8e; }
+.btn--black { background: var(--color-obsidian); color: var(--color-paper-white); }
+.btn--black:hover { background: var(--color-onyx); }
+.btn--outline { background: var(--color-paper-white); border-color: var(--color-ash); color: var(--color-obsidian); }
+.btn--outline:hover { border-color: var(--color-obsidian); }
+.btn--pill { border-radius: var(--radius-pills); }
+.btn--sm { padding: 10px var(--spacing-20); font-size: var(--text-body-sm); }
+
+/* ─── Навигация ───────────────────────────────────────────────────────── */
+.nav {
+  position: relative; z-index: 3;
+  max-width: var(--page-max-width); margin: 0 auto;
+  padding: var(--spacing-20) var(--spacing-24);
+  display: flex; align-items: center; gap: var(--spacing-24);
+}
+/* Чёрная плитка знака — структурный костяк системы «чёрное на белом» */
+.wordmark {
+  font-family: var(--font-display); font-weight: 800; font-size: 20px; line-height: 1;
+  letter-spacing: 0.02em; text-transform: uppercase;
+  background: var(--surface-dark-surface); color: var(--color-paper-white);
+  padding: 9px var(--spacing-12); border-radius: var(--radius-icons); text-decoration: none;
+}
+.nav__links { display: flex; gap: var(--spacing-24); list-style: none; margin: 0 auto; }
+.nav__links a { color: var(--color-obsidian); text-decoration: none; font-size: var(--text-body-sm); font-weight: var(--font-weight-semibold); }
+.nav__links a:hover { color: var(--color-volt-pink); }
+.nav__right { display: flex; align-items: center; gap: var(--spacing-8); }
+.lang { display: inline-flex; border: 1px solid var(--color-ash); border-radius: var(--radius-pills); overflow: hidden; background: var(--color-paper-white); }
+.lang button {
+  font-family: var(--font-ui); font-size: var(--text-body-sm); font-weight: var(--font-weight-semibold);
+  padding: 8px var(--spacing-12); border: none; background: transparent; color: var(--color-charcoal); cursor: pointer;
+}
+.lang button[aria-pressed="true"] { background: var(--color-obsidian); color: var(--color-paper-white); }
+
+/* ─── Герой: градиент — единственная многоцветная поверхность в системе ─ */
+.hero {
+  position: relative; text-align: center; padding-bottom: var(--spacing-88);
+  margin-top: -84px; padding-top: 104px;
+}
+.hero::before {
+  content: ""; position: absolute; inset: 0; z-index: 0;
+  background:
+    radial-gradient(60% 55% at 12% 10%, #c8b8f2 0%, rgba(200,184,242,0) 62%),
+    radial-gradient(55% 50% at 88% 6%, #f6a97e 0%, rgba(246,169,126,0) 60%),
+    radial-gradient(58% 60% at 6% 62%, #a9c2ef 0%, rgba(169,194,239,0) 64%),
+    linear-gradient(180deg, #f3eff8 0%, #ffffff 78%);
+}
+.hero > * { position: relative; z-index: 1; }
+.news {
+  display: inline-flex; align-items: center; gap: var(--spacing-12);
+  background: var(--surface-dark-surface); color: var(--color-paper-white);
+  border-radius: var(--radius-pills); padding: 7px var(--spacing-16) 7px var(--spacing-8);
+  font-size: var(--text-body-sm); margin-bottom: var(--spacing-32);
+}
+/* На референсе метка внутри чёрной пилюли нейтральная — розовый там не тратится,
+   он остаётся на одном действии и на надзаголовках секций. */
+.news b {
+  background: var(--surface-elevated-surface); color: var(--color-paper-white);
+  border-radius: var(--radius-pills); padding: 2px var(--spacing-12);
+  font-size: var(--text-caption); letter-spacing: 0.05em; text-transform: uppercase; font-weight: var(--font-weight-semibold);
+}
+.hero .display { max-width: 15ch; margin: 0 auto var(--spacing-32); }
+.hero__stores { display: flex; gap: var(--spacing-12); justify-content: center; margin-bottom: var(--spacing-64); }
+/* Ряд статов: белые пилюли с иконкой в скруглённом квадрате */
+.stats { display: flex; gap: var(--spacing-32); justify-content: center; flex-wrap: wrap; }
+.stat {
+  display: flex; align-items: center; gap: var(--spacing-12);
+  background: var(--color-paper-white); border-radius: var(--radius-pills);
+  padding: var(--spacing-12) var(--spacing-24) var(--spacing-12) var(--spacing-12);
+  box-shadow: var(--shadow-md);
+}
+.stat__ico {
+  width: 38px; height: 38px; border-radius: var(--radius-pills);
+  background: var(--surface-input-fill); display: flex; align-items: center; justify-content: center; flex: none;
+}
+.stat__ico svg { width: 19px; height: 19px; color: var(--color-obsidian); }
+.stat b { display: block; font-size: var(--text-body-sm); font-weight: var(--font-weight-semibold); }
+.stat span { display: block; font-size: var(--text-body-sm); color: var(--color-charcoal); }
+
+/* ─── Список концертов ────────────────────────────────────────────────── */
+.sec-head { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--spacing-24); margin-bottom: var(--spacing-32); }
+.gigs { display: flex; flex-direction: column; gap: var(--spacing-12); }
+.gig {
+  display: grid; grid-template-columns: 92px 1fr 200px 130px 120px;
+  gap: var(--spacing-24); align-items: center;
+  background: var(--color-paper-white); border-radius: var(--radius-cards);
+  box-shadow: var(--shadow-md); padding: var(--spacing-16) var(--spacing-24);
+}
+.gig__when {
+  background: var(--surface-input-fill); border-radius: var(--radius-icons);
+  padding: var(--spacing-8); text-align: center;
+}
+.gig__when b { display: block; font-family: var(--font-display); font-weight: 800; font-size: 20px; line-height: 1; }
+.gig__when span { display: block; font-size: var(--text-caption); letter-spacing: 0.05em; text-transform: uppercase; color: var(--color-charcoal); margin-top: 3px; }
+.gig__name { font-size: var(--text-subheading); font-weight: var(--font-weight-semibold); }
+.gig__meta { font-size: var(--text-body-sm); color: var(--color-charcoal); }
+.gig__price { font-family: var(--font-display); font-weight: 800; font-size: 20px; }
+.chip {
+  display: inline-block; border-radius: var(--radius-pills);
+  border: 1px solid var(--color-ash); padding: 4px var(--spacing-12);
+  font-size: var(--text-caption); letter-spacing: 0.05em; text-transform: uppercase; font-weight: var(--font-weight-semibold);
+}
+
+/* ─── Чёрная полоса ───────────────────────────────────────────────────── */
+.band {
+  background: var(--surface-dark-surface); color: var(--color-paper-white);
+  border-radius: var(--radius-images); padding: var(--spacing-64);
+  display: grid; grid-template-columns: 1.1fr .9fr; gap: var(--spacing-56); align-items: center;
+}
+.band .display--sm { margin-bottom: var(--spacing-24); }
+.band p { color: #b9b9b9; max-width: 46ch; }
+.band .eyebrow { margin-bottom: var(--spacing-16); }
+.steps { display: flex; flex-direction: column; gap: var(--spacing-16); }
+.step { display: grid; grid-template-columns: 34px 1fr; gap: var(--spacing-16); align-items: start; }
+.step i {
+  width: 34px; height: 34px; border-radius: var(--radius-pills);
+  background: var(--surface-elevated-surface); color: var(--color-paper-white);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display); font-weight: 800; font-size: var(--text-body-sm); font-style: normal;
+}
+.step b { display: block; font-weight: var(--font-weight-semibold); }
+.step span { display: block; font-size: var(--text-body-sm); color: #a5a5a5; }
+
+/* ─── Города ──────────────────────────────────────────────────────────── */
+.cities { display: flex; gap: var(--spacing-8); flex-wrap: wrap; }
+.city {
+  border-radius: var(--radius-pills); border: 1px solid var(--color-ash);
+  padding: var(--spacing-8) var(--spacing-20); font-size: var(--text-body-sm); font-weight: var(--font-weight-semibold);
+}
+
+/* ─── Финал ───────────────────────────────────────────────────────────── */
+.final { text-align: center; }
+.final .display--sm { max-width: 16ch; margin: var(--spacing-16) auto var(--spacing-24); }
+.final p { max-width: 48ch; margin: 0 auto; color: var(--color-charcoal); }
+.final__actions { display: flex; gap: var(--spacing-12); justify-content: center; margin-top: var(--spacing-32); }
+
+/* ─── Подвал ──────────────────────────────────────────────────────────── */
+.footer { border-top: 1px solid var(--color-ash); padding: var(--spacing-48) 0 var(--spacing-24); }
+.footer__grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: var(--spacing-32); }
+.footer__grid h4 { font-size: var(--text-body-sm); font-weight: var(--font-weight-semibold); margin-bottom: var(--spacing-16); }
+.footer__grid ul { list-style: none; display: flex; flex-direction: column; gap: var(--spacing-8); }
+.footer__grid a { color: var(--color-charcoal); text-decoration: none; font-size: var(--text-body-sm); }
+.footer__grid a:hover { color: var(--color-obsidian); }
+.footer__note { font-size: var(--text-body-sm); color: var(--color-charcoal); margin-top: var(--spacing-12); max-width: 34ch; }
+.footer__bottom { margin-top: var(--spacing-48); padding-top: var(--spacing-20); border-top: 1px solid var(--color-ash); display: flex; justify-content: space-between; font-size: var(--text-body-sm); color: var(--color-charcoal); }
+</style>
+</head>
+<body>
+
+<!-- ─── Герой (навигация лежит на градиенте) ──────────────────────────── -->
+<div class="hero" id="top">
+  <nav class="nav">
+    <a class="wordmark" href="#top">Encore</a>
+    <ul class="nav__links">
+      <li><a href="#tonight" data-i18n="nav.1">Tonight</a></li>
+      <li><a href="#how" data-i18n="nav.2">How it works</a></li>
+      <li><a href="#cities" data-i18n="nav.3">Cities</a></li>
+      <li><a href="#final" data-i18n="nav.4">For venues</a></li>
+    </ul>
+    <div class="nav__right">
+      <div class="lang">
+        <button type="button" data-set="en" aria-pressed="true">EN</button>
+        <button type="button" data-set="ru" aria-pressed="false">RU</button>
+      </div>
+      <a class="btn btn--pink btn--pill btn--sm" href="#final" data-i18n="nav.cta">Get the app</a>
+    </div>
+  </nav>
+
+  <div class="wrap">
+    <span class="news">
+      <b data-i18n="news.tag">News</b>
+      <span data-i18n="news.txt">Encore is now open in Tbilisi, Yerevan and Batumi</span>
+    </span>
+    <h1 class="display" data-i18n="hero.title">Find tonight's gig</h1>
+    <div class="hero__stores">
+      <a class="btn btn--black" href="#final" data-i18n="hero.s1">Download for iPhone</a>
+      <a class="btn btn--outline" href="#final" data-i18n="hero.s2">Download for Android</a>
+    </div>
+    <div class="stats">
+      <div class="stat">
+        <span class="stat__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 18V6l10-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="16.5" cy="16" r="2.5"/></svg></span>
+        <span><b data-i18n="st.1b">1,940 gigs this month</b><span data-i18n="st.1s">across fourteen cities</span></span>
+      </div>
+      <div class="stat">
+        <span class="stat__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="9" r="3.2"/><path d="M5 20a7 7 0 0 1 14 0"/></svg></span>
+        <span><b data-i18n="st.2b">240,000 people</b><span data-i18n="st.2s">going out on a weeknight</span></span>
+      </div>
+      <div class="stat">
+        <span class="stat__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 9V6h16v3a2.5 2.5 0 0 0 0 5v3H4v-3a2.5 2.5 0 0 0 0-5z"/><path d="M12 6v12"/></svg></span>
+        <span><b data-i18n="st.3b">Median ticket €11</b><span data-i18n="st.3s">no booking fee, ever</span></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── Сегодня ───────────────────────────────────────────────────────── -->
+<section id="tonight">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <span class="eyebrow" data-i18n="tn.eyebrow">Tonight in Tbilisi</span>
+        <h2 class="h" style="margin-top:var(--spacing-12)" data-i18n="tn.title">Doors in a few hours</h2>
+      </div>
+      <a class="btn btn--outline btn--pill btn--sm" href="#cities" data-i18n="tn.all">See all 61</a>
+    </div>
+    <div class="gigs">
+      <div class="gig">
+        <div class="gig__when"><b>20:00</b><span data-i18n="g1.w">Tonight</span></div>
+        <div class="gig__name" data-i18n="g1.n">Mtkvari Tape Club</div>
+        <div class="gig__meta" data-i18n="g1.m">Post-punk · three local bands</div>
+        <div><span class="chip" data-i18n="g1.c">12 left</span></div>
+        <div class="gig__price">€9</div>
+      </div>
+      <div class="gig">
+        <div class="gig__when"><b>21:30</b><span data-i18n="g2.w">Tonight</span></div>
+        <div class="gig__name" data-i18n="g2.n">Basement at Fabrika</div>
+        <div class="gig__meta" data-i18n="g2.m">Modular and tape loops · standing</div>
+        <div><span class="chip" data-i18n="g2.c">Free</span></div>
+        <div class="gig__price">€0</div>
+      </div>
+      <div class="gig">
+        <div class="gig__when"><b>19:00</b><span data-i18n="g3.w">Tomorrow</span></div>
+        <div class="gig__name" data-i18n="g3.n">Nino & the Quartet</div>
+        <div class="gig__meta" data-i18n="g3.m">Chamber jazz · seated, one set</div>
+        <div><span class="chip" data-i18n="g3.c">Nearly out</span></div>
+        <div class="gig__price">€14</div>
+      </div>
+      <div class="gig">
+        <div class="gig__when"><b>23:00</b><span data-i18n="g4.w">Friday</span></div>
+        <div class="gig__name" data-i18n="g4.n">Kestrel Sound System</div>
+        <div class="gig__meta" data-i18n="g4.m">Dub · until the neighbours call</div>
+        <div><span class="chip" data-i18n="g4.c">Selling</span></div>
+        <div class="gig__price">€12</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Чёрная полоса ─────────────────────────────────────────────────── -->
+<section id="how" style="padding-top:0">
+  <div class="wrap">
+    <div class="band">
+      <div>
+        <span class="eyebrow" data-i18n="hw.eyebrow">How it works</span>
+        <h2 class="display display--sm" data-i18n="hw.title">Three taps, no queue</h2>
+        <p data-i18n="hw.p">Encore only lists rooms under four hundred capacity. If a gig needs a stadium and a presale, it is somebody else's app.</p>
+      </div>
+      <div class="steps">
+        <div class="step"><i>1</i><span><b data-i18n="hw.1b">Open it after work</b><span data-i18n="hw.1s">Everything within a half-hour walk, sorted by door time rather than by hype.</span></span></div>
+        <div class="step"><i>2</i><span><b data-i18n="hw.2b">Tap once to hold</b><span data-i18n="hw.2s">A place is held for twenty minutes. No account until you actually decide to go.</span></span></div>
+        <div class="step"><i>3</i><span><b data-i18n="hw.3b">Show the door your phone</b><span data-i18n="hw.3s">The ticket is a code, works offline, and refunds itself if the gig is cancelled.</span></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Города ────────────────────────────────────────────────────────── -->
+<section id="cities" style="padding-top:0">
+  <div class="wrap">
+    <span class="eyebrow" data-i18n="ct.eyebrow">Fourteen cities</span>
+    <h2 class="h" style="margin:var(--spacing-12) 0 var(--spacing-24)" data-i18n="ct.title">Where the doors are open</h2>
+    <div class="cities">
+      <span class="city">Tbilisi</span><span class="city">Yerevan</span><span class="city">Batumi</span>
+      <span class="city">Lisbon</span><span class="city">Porto</span><span class="city">Belgrade</span>
+      <span class="city">Sofia</span><span class="city">Tallinn</span><span class="city">Riga</span>
+      <span class="city">Vilnius</span><span class="city">Kraków</span><span class="city">Wrocław</span>
+      <span class="city">Ljubljana</span><span class="city">Thessaloniki</span>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Финал ─────────────────────────────────────────────────────────── -->
+<section class="final" id="final" style="padding-top:0">
+  <div class="wrap">
+    <span class="eyebrow" data-i18n="fn.eyebrow">Tonight</span>
+    <h2 class="display display--sm" data-i18n="fn.title">Something is on within a mile of you</h2>
+    <p data-i18n="fn.p">Free to use, free to list, and the door price is the price. Venues keep everything except the card fee.</p>
+    <div class="final__actions">
+      <a class="btn btn--pink btn--pill" href="#final" data-i18n="fn.cta1">Get the app</a>
+      <a class="btn btn--outline btn--pill" href="#final" data-i18n="fn.cta2">List a venue</a>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Подвал ────────────────────────────────────────────────────────── -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__grid">
+      <div>
+        <a class="wordmark" href="#top">Encore</a>
+        <p class="footer__note" data-i18n="f.note">Small rooms, short notice, no booking fee. Built in Tbilisi by people who kept missing things.</p>
+      </div>
+      <div>
+        <h4 data-i18n="f.c1">Going out</h4>
+        <ul>
+          <li><a href="#tonight" data-i18n="f.c1.1">Tonight</a></li>
+          <li><a href="#cities" data-i18n="f.c1.2">Cities</a></li>
+          <li><a href="#tonight" data-i18n="f.c1.3">Genres</a></li>
+          <li><a href="#final" data-i18n="f.c1.4">Gift a ticket</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 data-i18n="f.c2">Venues</h4>
+        <ul>
+          <li><a href="#final" data-i18n="f.c2.1">List a room</a></li>
+          <li><a href="#final" data-i18n="f.c2.2">Payouts</a></li>
+          <li><a href="#final" data-i18n="f.c2.3">Door app</a></li>
+          <li><a href="#final" data-i18n="f.c2.4">Support</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 data-i18n="f.c3">Encore</h4>
+        <ul>
+          <li><a href="#top" data-i18n="f.c3.1">About</a></li>
+          <li><a href="#top" data-i18n="f.c3.2">Jobs</a></li>
+          <li><a href="#top" data-i18n="f.c3.3">Press</a></li>
+          <li><a href="#top" data-i18n="f.c3.4">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span data-i18n="f.copy">© 2026 Encore</span>
+      <span data-i18n="f.legal">Terms · Privacy · Refunds</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* Английский — исходный; русский — перевод. Дефолт EN, без автодетекта. */
+var I18N = {
+  ru: {
+    "nav.1": "Сегодня", "nav.2": "Как это работает", "nav.3": "Города", "nav.4": "Площадкам",
+    "nav.cta": "Скачать",
+
+    "news.tag": "Новость",
+    "news.txt": "Encore открылся в Тбилиси, Ереване и Батуми",
+    "hero.title": "Найди концерт на сегодня",
+    "hero.s1": "Скачать для iPhone",
+    "hero.s2": "Скачать для Android",
+    "st.1b": "1 940 концертов за месяц", "st.1s": "в четырнадцати городах",
+    "st.2b": "240 000 человек", "st.2s": "выходят из дома в будни",
+    "st.3b": "Медианный билет €11", "st.3s": "без сервисного сбора",
+
+    "tn.eyebrow": "Сегодня в Тбилиси",
+    "tn.title": "Двери — через пару часов",
+    "tn.all": "Смотреть все 61",
+    "g1.w": "Сегодня", "g1.n": "Mtkvari Tape Club", "g1.m": "Пост-панк · три местные группы", "g1.c": "12 мест",
+    "g2.w": "Сегодня", "g2.n": "Подвал на «Фабрике»", "g2.m": "Модульный и плёночные петли · стоя", "g2.c": "Бесплатно",
+    "g3.w": "Завтра", "g3.n": "Нино и квартет", "g3.m": "Камерный джаз · сидя, одно отделение", "g3.c": "Почти всё",
+    "g4.w": "Пятница", "g4.n": "Kestrel Sound System", "g4.m": "Даб · пока не позвонят соседи", "g4.c": "Разбирают",
+
+    "hw.eyebrow": "Как это работает",
+    "hw.title": "Три касания, без очереди",
+    "hw.p": "Encore берёт только залы меньше четырёхсот мест. Если концерту нужен стадион и предпродажа — это чьё-то другое приложение.",
+    "hw.1b": "Откройте после работы",
+    "hw.1s": "Всё в получасе пешком, отсортировано по времени дверей, а не по хайпу.",
+    "hw.2b": "Одно касание — держим",
+    "hw.2s": "Место держится двадцать минут. Аккаунт нужен, только когда вы решили идти.",
+    "hw.3b": "Покажите телефон на входе",
+    "hw.3s": "Билет — это код, работает офлайн и сам возвращает деньги, если концерт отменили.",
+
+    "ct.eyebrow": "Четырнадцать городов",
+    "ct.title": "Где двери открыты",
+
+    "fn.eyebrow": "Сегодня",
+    "fn.title": "Что-то играет в километре от вас",
+    "fn.p": "Пользоваться бесплатно, размещаться бесплатно, а цена на двери — это и есть цена. Площадки забирают всё, кроме комиссии карты.",
+    "fn.cta1": "Скачать приложение",
+    "fn.cta2": "Добавить площадку",
+
+    "f.note": "Маленькие залы, короткий срок, без сервисного сбора. Сделано в Тбилиси теми, кто вечно всё пропускал.",
+    "f.c1": "Куда пойти",
+    "f.c1.1": "Сегодня", "f.c1.2": "Города", "f.c1.3": "Жанры", "f.c1.4": "Подарить билет",
+    "f.c2": "Площадкам",
+    "f.c2.1": "Добавить зал", "f.c2.2": "Выплаты", "f.c2.3": "Приложение на входе", "f.c2.4": "Поддержка",
+    "f.c3": "Encore",
+    "f.c3.1": "О нас", "f.c3.2": "Вакансии", "f.c3.3": "Пресса", "f.c3.4": "Контакты",
+    "f.copy": "© 2026 Encore",
+    "f.legal": "Условия · Приватность · Возвраты"
+  }
+};
+
+(function () {
+  var nodes = document.querySelectorAll('[data-i18n]');
+  var EN = {};
+  nodes.forEach(function (n) { EN[n.getAttribute('data-i18n')] = n.textContent; });
+
+  function apply(lang) {
+    nodes.forEach(function (n) {
+      var k = n.getAttribute('data-i18n');
+      var v = lang === 'ru' ? I18N.ru[k] : EN[k];
+      if (v) n.textContent = v;
+    });
+    document.documentElement.lang = lang;
+    document.documentElement.setAttribute('data-lang', lang);
+    document.querySelectorAll('.lang [data-set]').forEach(function (b) {
+      b.setAttribute('aria-pressed', String(b.getAttribute('data-set') === lang));
+    });
+  }
+  document.querySelectorAll('.lang [data-set]').forEach(function (b) {
+    b.addEventListener('click', function () { apply(b.getAttribute('data-set')); });
+  });
+})();
+</script>
+</body>
+</html>

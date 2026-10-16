@@ -1,0 +1,3 @@
+/* Original keyframes: Animista, Ana Travas. https://animista.net/play/exits/scale-out/scale-out-ver-top */
+.scale-out-ver-top{animation:scale-out-ver-top 0.5s cubic-bezier(.55,.085,.68,.53) 0s 1 normal both;}
+@keyframes scale-out-ver-top{0%{-webkit-transform:scaleY(1);transform:scaleY(1);-webkit-transform-origin:100% 0%;transform-origin:100% 0%;opacity:1}to{-webkit-transform:scaleY(0);transform:scaleY(0);-webkit-transform-origin:100% 0%;transform-origin:100% 0%;opacity:1}}

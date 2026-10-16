@@ -1,0 +1,1 @@
+import{j as o}from"./index-WM7-nNXq.js";import{I as t}from"./iphone-B-xwwkwq.js";function s(){return o.jsx("div",{className:"w-[434px]",children:o.jsx(t,{src:"https://placehold.co/900x1600?text=Hello+World"})})}export{s as default};

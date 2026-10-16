@@ -1,0 +1,92 @@
+import { r as i, j as w, c as N, u as W } from "./inline-Mcm4wFdg.js";
+function I({
+  glyphs: r = "01·•+*/\\<>=",
+  cellSize: o = 14,
+  mutationRate: u = 0.04,
+  interval: v = 90,
+  className: T,
+  fadeBottom: g = 0.6,
+  color: R = "#6B7280",
+  style: B,
+  ...q
+}) {
+  const y = i.useRef(null), A = i.useRef({ r: 107, g: 114, b: 128, a: 1 });
+  return i.useEffect(() => {
+    const e = document.createElement("canvas");
+    e.width = 1, e.height = 1;
+    const t = e.getContext("2d");
+    if (!t) return;
+    t.fillStyle = "#6B7280", t.fillStyle = R, t.fillRect(0, 0, 1, 1);
+    const [a, s, f, d] = t.getImageData(0, 0, 1, 1).data;
+    A.current = { r: a, g: s, b: f, a: d / 255 };
+  }, [R]), i.useEffect(() => {
+    const e = y.current;
+    if (!e) return;
+    const t = e.getContext("2d");
+    if (!t) return;
+    let a = 0, s = 0, f = [], d = [], M = 0, E = 0, j = !1;
+    const $ = () => {
+      const n = window.devicePixelRatio || 1, { clientWidth: c, clientHeight: l } = e;
+      e.width = c * n, e.height = l * n, t.setTransform(n, 0, 0, n, 0, 0), a = Math.ceil(c / o), s = Math.ceil(l / o), f = new Array(a * s).fill(0).map(() => r[Math.floor(Math.random() * r.length)]), d = new Array(a * s).fill(0).map(() => 0.05 + Math.random() * 0.35);
+    }, b = () => {
+      const { clientWidth: n, clientHeight: c } = e;
+      t.clearRect(0, 0, n, c), t.font = `${o - 2}px ui-monospace, SFMono-Regular, Menlo, monospace`, t.textBaseline = "top";
+      const { r: l, g: m, b: x, a: D } = A.current;
+      for (let h = 0; h < s; h++) {
+        const G = g > 0 ? 1 - h / s * g : 1;
+        for (let p = 0; p < a; p++) {
+          const F = h * a + p, H = d[F] * G * D;
+          t.fillStyle = `rgba(${l}, ${m}, ${x}, ${H})`, t.fillText(f[F], p * o, h * o);
+        }
+      }
+    }, k = (n) => {
+      if (!j) {
+        if (n - E >= v) {
+          E = n;
+          const c = a * s, l = Math.max(1, Math.floor(c * u));
+          for (let m = 0; m < l; m++) {
+            const x = Math.floor(Math.random() * c);
+            f[x] = r[Math.floor(Math.random() * r.length)], d[x] = 0.05 + Math.random() * 0.45;
+          }
+          b();
+        }
+        M = requestAnimationFrame(k);
+      }
+    };
+    $(), b(), M = requestAnimationFrame(k);
+    const C = new ResizeObserver(() => {
+      $(), b();
+    });
+    return C.observe(e), () => {
+      j = !0, cancelAnimationFrame(M), C.disconnect();
+    };
+  }, [r, o, u, v, g]), /* @__PURE__ */ w.jsx(
+    "canvas",
+    {
+      ref: y,
+      className: N("pointer-events-none", T),
+      style: { width: "100%", height: "100%", display: "block", ...B },
+      "aria-hidden": "true",
+      ...q
+    }
+  );
+}
+function P() {
+  const { resolvedTheme: r } = W(), [o, u] = i.useState("#6B7280");
+  return i.useEffect(() => {
+    r && u(r === "dark" ? "#ffffff" : "#000000");
+  }, [r]), /* @__PURE__ */ w.jsx("div", { className: "border-border bg-background relative h-[400px] w-full overflow-hidden rounded-lg border", children: /* @__PURE__ */ w.jsx(
+    I,
+    {
+      glyphs: "01·•+*/\\<>=",
+      cellSize: 14,
+      mutationRate: 0.04,
+      interval: 90,
+      fadeBottom: 0.6,
+      color: o
+    }
+  ) });
+}
+export {
+  P as default
+};

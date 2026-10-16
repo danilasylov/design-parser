@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>Gel Library — 212 gels, measured</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ─────────────────────────────────────────────────────────────
+   Дизайн-система: Endlesstools (refero 667c59e3) — tokens.css дословно
+   ───────────────────────────────────────────────────────────── */
+:root {
+  /* Colors */
+  --color-obsidian-canvas: #080808;
+  --color-onyx-card: #181818;
+  --color-graphite-layer: #1e1e1e;
+  --color-slate-border: #373737;
+  --color-iron-border: #505050;
+  --color-ash-mute: #959595;
+  --color-paper-white: #ffffff;
+  --color-signal-blue: #1d9bf0;
+  --color-prism-gradient: #ff00b8;
+  --gradient-prism-gradient: linear-gradient(97.25deg, rgb(184, 255, 69) 3%, rgb(255, 203, 69) 22%, rgb(255, 0, 184) 100%);
+
+  /* Typography — Font Families */
+  --font-inter: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* Typography — Scale */
+  --text-caption: 12px;
+  --leading-caption: 1.17;
+  --tracking-caption: -0.033px;
+  --text-body-sm: 14px;
+  --leading-body-sm: 1.25;
+  --tracking-body-sm: -0.03px;
+  --text-body: 16px;
+  --leading-body: 1.29;
+  --tracking-body: -0.03px;
+  --text-subheading: 18px;
+  --leading-subheading: 1.5;
+  --tracking-subheading: -0.03px;
+  --text-heading-sm: 24px;
+  --leading-heading-sm: 1.08;
+  --tracking-heading-sm: -0.025px;
+  --text-display: 42px;
+  --leading-display: 1.1;
+  --tracking-display: -0.025px;
+
+  /* Typography — Weights */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+
+  /* Spacing */
+  --spacing-unit: 4px;
+  --spacing-8: 8px;
+  --spacing-20: 20px;
+  --spacing-40: 40px;
+  --spacing-100: 100px;
+  --spacing-140: 140px;
+
+  /* Layout */
+  --page-max-width: 1280px;
+
+  /* Border Radius */
+  --radius-md: 7px;
+  --radius-lg: 10px;
+
+  /* Named Radii */
+  --radius-tags: 7px;
+  --radius-cards: 10px;
+  --radius-links: 7px;
+  --radius-inputs: 10px;
+  --radius-buttons: 10px;
+
+  /* Shadows */
+  --shadow-subtle: rgb(55, 55, 55) 0px 0px 0px 1px;
+  --shadow-subtle-2: rgb(55, 55, 55) 0px 0px 0px 1px inset;
+  --shadow-subtle-3: rgb(80, 80, 80) 0px 0px 0px 1px inset;
+  --shadow-subtle-4: rgb(149, 149, 149) 0px 0px 0px 1px inset;
+
+  /* Surfaces */
+  --surface-obsidian-canvas: #080808;
+  --surface-onyx-card: #181818;
+  --surface-graphite-layer: #1e1e1e;
+  --surface-slate-edge: #373737;
+}
+
+/* Мои подстановки. Трекинг в tokens.css выгружен в px там, где DESIGN.md называет em
+   (-0.025em на дисплее, -0.030em в теле, -0.033em в капшене) — беру em, как в прозе. */
+:root {
+  --track-display: -0.025em;
+  --track-body: -0.030em;
+  --track-caption: -0.033em;
+  --gap-5: 5px;            /* «element gap 5–10px» из системы */
+  --gap-10: 10px;
+  --pad-card: 15px;        /* «card padding 15–20px» */
+  --sec-gap: 100px;        /* «section gap 80–100px» */
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--surface-obsidian-canvas);
+  color: var(--color-paper-white);
+  font-family: var(--font-inter);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--text-body); line-height: var(--leading-body); letter-spacing: var(--track-body);
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, p, figure { margin: 0; font-weight: var(--font-weight-regular); }
+a { color: inherit; text-decoration: none; }
+.mute { color: var(--color-ash-mute); }
+.cap { font-size: var(--text-caption); line-height: var(--leading-caption); letter-spacing: var(--track-caption); }
+.sm  { font-size: var(--text-body-sm); line-height: var(--leading-body-sm); }
+.med { font-weight: var(--font-weight-medium); }
+.wrap { max-width: var(--page-max-width); margin: 0 auto; padding: 0 var(--spacing-40); }
+
+/* ── Навигация: без границы, без тени — плавает на обсидиане ────────── */
+.nav {
+  position: sticky; top: 0; z-index: 40;
+  background: var(--surface-obsidian-canvas);
+  display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
+  padding: var(--spacing-20) var(--spacing-40);
+}
+.brand { display: flex; align-items: center; gap: var(--gap-10); }
+.glyph { display: grid; grid-template-columns: repeat(4, 3px); gap: 2px; }
+.glyph i { width: 3px; height: 3px; border-radius: 50%; background: var(--color-paper-white); display: block; }
+.brand .wm { font-size: var(--text-body); line-height: 1.05; font-weight: var(--font-weight-medium); }
+.navmid { display: flex; gap: var(--spacing-20); }
+.navmid a { font-size: var(--text-body-sm); font-weight: var(--font-weight-medium); color: var(--color-ash-mute); }
+.navmid a:hover { color: var(--color-paper-white); }
+.navright { display: flex; justify-content: flex-end; align-items: center; gap: var(--gap-10); }
+
+.pill {
+  display: inline-flex; align-items: center; gap: var(--gap-5);
+  background: var(--color-paper-white); color: var(--color-obsidian-canvas);
+  border: 0; border-radius: 9999px; padding: 9px 18px;
+  font-family: inherit; font-size: var(--text-body-sm); font-weight: var(--font-weight-medium);
+  letter-spacing: var(--track-body); cursor: pointer;
+}
+.pill.ghost {
+  background: transparent; color: var(--color-paper-white);
+  box-shadow: var(--shadow-subtle-2);
+}
+.pill.lg { font-size: var(--text-body); padding: 13px 26px; }
+
+/* переключатель языка — тем же «графитовым» жестом, что и Sign in */
+.switch { display: inline-flex; align-items: center; gap: var(--gap-5); border-radius: 9999px; box-shadow: var(--shadow-subtle-2); padding: 7px 12px; }
+.switch button { background: none; border: 0; padding: 0 2px; cursor: pointer; font-family: inherit; font-size: var(--text-caption); letter-spacing: var(--track-caption); color: var(--color-ash-mute); }
+.switch button[aria-pressed="true"] { color: var(--color-paper-white); }
+
+/* ── Герой ─────────────────────────────────────────────────────────── */
+.hero { text-align: center; padding: 46px 0 34px; }
+.hero h1 { font-size: var(--text-display); line-height: var(--leading-display); letter-spacing: var(--track-display); font-weight: var(--font-weight-medium); }
+.hero p.sub { margin: 14px auto 0; max-width: 560px; font-size: var(--text-subheading); line-height: var(--leading-subheading); color: var(--color-ash-mute); }
+.hero .act { margin-top: var(--spacing-20); }
+.hero .fine { margin-top: var(--gap-10); }
+
+/* ── Стена образцов: масонри в колонках, цвет только из контента ────── */
+.wall { columns: 6; column-gap: var(--spacing-8); padding: 0 var(--gap-5); }
+.sw {
+  position: relative; break-inside: avoid; margin-bottom: 8px;
+  border-radius: var(--radius-cards); overflow: hidden;
+  background: var(--gel);
+}
+.sw .film {
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(112deg, rgba(255,255,255,.22) 0%, rgba(255,255,255,0) 38%),
+    radial-gradient(120% 80% at 80% 0%, rgba(255,255,255,.14) 0%, rgba(255,255,255,0) 60%),
+    linear-gradient(180deg, rgba(0,0,0,0) 45%, rgba(0,0,0,.62) 100%);
+}
+.sw .meta { position: absolute; left: var(--spacing-20); right: var(--spacing-20); bottom: var(--spacing-20); }
+.sw .t { font-size: var(--text-body); font-weight: var(--font-weight-medium); color: var(--color-paper-white); }
+.chips { display: flex; flex-wrap: wrap; gap: var(--gap-5); margin-top: 6px; }
+.chips span {
+  border: 1px solid rgba(255,255,255,.4); border-radius: var(--radius-tags);
+  padding: 3px 6px; font-size: var(--text-caption); letter-spacing: var(--track-caption);
+  color: var(--color-paper-white); white-space: nowrap;
+}
+
+/* ── Блок-заголовок секции ─────────────────────────────────────────── */
+.sechead { text-align: center; padding: var(--sec-gap) 0 var(--spacing-40); }
+.sechead h2 { font-size: var(--text-display); line-height: var(--leading-display); letter-spacing: var(--track-display); font-weight: var(--font-weight-medium); }
+.sechead p { margin: 14px auto 0; max-width: 560px; font-size: var(--text-subheading); line-height: var(--leading-subheading); color: var(--color-ash-mute); }
+
+/* ── Карточки спектров ─────────────────────────────────────────────── */
+.curves { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--gap-10); }
+.card { border-radius: var(--radius-cards); box-shadow: var(--shadow-subtle-2); padding: var(--spacing-20); }
+.card.filled { background: var(--surface-onyx-card); }
+.card h3 { font-size: var(--text-body); font-weight: var(--font-weight-medium); }
+.card .k { display: flex; justify-content: space-between; margin-top: 4px; }
+.plot { margin-top: 15px; display: block; width: 100%; height: auto; }
+.legend { display: flex; justify-content: space-between; margin-top: var(--gap-5); }
+
+/* ── Лист раскроя ──────────────────────────────────────────────────── */
+.sheet { border-radius: var(--radius-cards); box-shadow: var(--shadow-subtle-2); overflow: hidden; }
+.sheet .row { display: grid; grid-template-columns: 1.5fr 1.9fr 0.9fr 0.7fr 0.6fr; gap: var(--spacing-20); padding: 15px var(--spacing-20); align-items: center; }
+.sheet .row + .row { border-top: 1px solid var(--color-slate-border); }
+.sheet .head { color: var(--color-ash-mute); }
+.sheet .g { display: inline-flex; align-items: center; gap: var(--spacing-8); }
+.sheet .dot { width: 12px; height: 12px; border-radius: 3px; box-shadow: var(--shadow-subtle-4); }
+.num { font-variant-numeric: tabular-nums; }
+.right { text-align: right; }
+
+/* ── Отзывы ────────────────────────────────────────────────────────── */
+.quotes { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--gap-10); }
+.q .top { display: flex; align-items: center; gap: var(--gap-10); }
+.q .av { width: 32px; height: 32px; border-radius: 50%; flex: none; display: grid; place-items: center; font-size: var(--text-caption); color: var(--color-obsidian-canvas); font-weight: var(--font-weight-medium); }
+.q .body { margin-top: 15px; }
+.dots { display: flex; justify-content: center; gap: var(--spacing-8); margin-top: var(--spacing-40); }
+.dots i { width: 4px; height: 4px; border-radius: 50%; background: var(--color-ash-mute); opacity: .3; }
+.dots i.on { background: var(--color-paper-white); opacity: 1; }
+
+/* ── Ссылка-мяш: единственный хроматический функциональный акцент ───── */
+.slink { color: var(--color-signal-blue); border: 1px solid var(--color-signal-blue); border-radius: var(--radius-links); padding: 2px 6px; font-size: var(--text-body-sm); }
+
+/* ── Финальный блок с полем ────────────────────────────────────────── */
+.join { display: flex; justify-content: center; gap: var(--gap-10); margin-top: var(--spacing-20); }
+.join input {
+  background: var(--surface-graphite-layer); border: 1px solid var(--color-slate-border);
+  border-radius: var(--radius-inputs); padding: 13px 15px; width: 320px;
+  font-family: inherit; font-size: var(--text-body-sm); color: var(--color-paper-white);
+}
+.join input::placeholder { color: var(--color-ash-mute); }
+.join input:focus { outline: 0; border-color: var(--color-iron-border); }
+
+/* ── Подвал ────────────────────────────────────────────────────────── */
+footer { padding: 150px 0 75px; }
+.fgrid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: var(--spacing-40); }
+.fgrid h4 { margin: 0 0 var(--gap-10); font-size: var(--text-caption); letter-spacing: var(--track-caption); color: var(--color-ash-mute); font-weight: var(--font-weight-regular); }
+.fgrid a, .fgrid span { display: block; font-size: var(--text-body-sm); line-height: 1.9; }
+.fgrid a:hover { color: var(--color-signal-blue); }
+.markline { margin-top: 60px; padding-top: var(--spacing-20); border-top: 1px solid var(--color-slate-border); display: flex; justify-content: space-between; }
+.prism { background: var(--gradient-prism-gradient); -webkit-background-clip: text; background-clip: text; color: transparent; font-weight: var(--font-weight-medium); }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="brand">
+    <span class="glyph"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+    <span class="wm">Gel<br>Library</span>
+  </div>
+  <div class="navmid">
+    <a href="#wall" data-i18n="n1">Swatches</a>
+    <a href="#curves" data-i18n="n2">Curves</a>
+    <a href="#sheet" data-i18n="n3">Cut list</a>
+    <a href="#join" data-i18n="n4">Rigs</a>
+  </div>
+  <div class="navright">
+    <span class="switch"><button data-set="en" aria-pressed="true">EN</button><span class="mute">/</span><button data-set="ru" aria-pressed="false">RU</button></span>
+    <button class="pill ghost" data-i18n="n5">Sign in</button>
+    <button class="pill" data-i18n="n6">Open the library</button>
+  </div>
+</nav>
+
+<header class="hero">
+  <h1 data-i18n="h1">Every colour<br>costs light.</h1>
+  <p class="sub" data-i18n="h2">212 theatre and film gels, measured on a spectrometer. Transmission curves, exposure loss in stops, and the fixtures each one survives.</p>
+  <div class="act"><button class="pill lg" data-i18n="h3">Open the library</button></div>
+  <p class="cap mute fine" data-i18n="h4">Free to browse · updated after every burn test</p>
+</header>
+
+<section class="wall" id="wall">
+  <article class="sw" style="--gel:#b8121b; height:300px"><div class="film"></div><div class="meta"><div class="t">L106 Primary Red</div><div class="chips"><span data-i18n="c1">DEEP</span><span>−2.3 EV</span></div></div></article>
+  <article class="sw" style="--gel:#f0a24b; height:230px"><div class="film"></div><div class="meta"><div class="t">L204 Full C.T. Orange</div><div class="chips"><span>CTO</span><span>5700→3200 K</span></div></div></article>
+  <article class="sw" style="--gel:#0f6b3d; height:270px"><div class="film"></div><div class="meta"><div class="t">L124 Dark Green</div><div class="chips"><span data-i18n="c2">DEEP</span><span>−2.8 EV</span></div></div></article>
+
+  <article class="sw" style="--gel:#93c6e8; height:250px"><div class="film"></div><div class="meta"><div class="t">L201 Full C.T. Blue</div><div class="chips"><span>CTB</span><span>3200→5700 K</span><span>−1.4 EV</span></div></div></article>
+  <article class="sw" style="--gel:#ff9a1f; height:300px"><div class="film"></div><div class="meta"><div class="t">L021 Gold Amber</div><div class="chips"><span data-i18n="c3">WARM</span><span>−0.8 EV</span></div></div></article>
+  <article class="sw" style="--gel:#a8cfe0; height:250px"><div class="film"></div><div class="meta"><div class="t">L117 Steel Blue</div><div class="chips"><span data-i18n="c4">COOL</span><span>−0.6 EV</span></div></div></article>
+
+  <article class="sw" style="--gel:#2b0a6e; height:340px"><div class="film"></div><div class="meta"><div class="t">L181 Congo Blue</div><div class="chips"><span data-i18n="c5">EXTREME</span><span>−4.4 EV</span></div></div></article>
+  <article class="sw" style="--gel:#efe9dd; height:210px"><div class="film"></div><div class="meta"><div class="t">L216 White Diffusion</div><div class="chips"><span data-i18n="c6">DIFFUSION</span><span>−1.5 EV</span></div></div></article>
+  <article class="sw" style="--gel:#ef7f9b; height:270px"><div class="film"></div><div class="meta"><div class="t">L790 Moroccan Pink</div><div class="chips"><span data-i18n="c7">TINT</span><span>−1.1 EV</span></div></div></article>
+
+  <article class="sw" style="--gel:#9a9a9a; height:230px"><div class="film"></div><div class="meta"><div class="t">L209 0.3 ND</div><div class="chips"><span data-i18n="c8">NEUTRAL</span><span>−1.0 EV</span></div></div></article>
+  <article class="sw" style="--gel:#f26a1b; height:290px"><div class="film"></div><div class="meta"><div class="t">L179 Chrome Orange</div><div class="chips"><span data-i18n="c9">SODIUM</span><span>−1.9 EV</span></div></div></article>
+  <article class="sw" style="--gel:#b9a7d8; height:250px"><div class="film"></div><div class="meta"><div class="t">L058 Lavender</div><div class="chips"><span data-i18n="c10">TINT</span><span>−0.9 EV</span></div></div></article>
+
+  <article class="sw" style="--gel:#1b3f8f; height:280px"><div class="film"></div><div class="meta"><div class="t">L119 Dark Blue</div><div class="chips"><span data-i18n="c11">NIGHT</span><span>−3.1 EV</span></div></div></article>
+  <article class="sw" style="--gel:#ffd98a; height:240px"><div class="film"></div><div class="meta"><div class="t">L764 Sun Colour Straw</div><div class="chips"><span data-i18n="c12">DAYLIGHT</span><span>−0.4 EV</span></div></div></article>
+  <article class="sw" style="--gel:#a4d65e; height:290px"><div class="film"></div><div class="meta"><div class="t">L219 Fluorescent Green</div><div class="chips"><span>PLUSGREEN</span><span>−0.6 EV</span></div></div></article>
+
+  <article class="sw" style="--gel:#6d6d6d; height:260px"><div class="film"></div><div class="meta"><div class="t">L210 0.6 ND</div><div class="chips"><span data-i18n="c13">NEUTRAL</span><span>−2.0 EV</span></div></div></article>
+  <article class="sw" style="--gel:#e8453c; height:230px"><div class="film"></div><div class="meta"><div class="t">R26 Light Red</div><div class="chips"><span data-i18n="c14">WARM</span><span>−1.7 EV</span></div></div></article>
+  <article class="sw" style="--gel:#2f7d4f; height:300px"><div class="film"></div><div class="meta"><div class="t">L089 Moss Green</div><div class="chips"><span data-i18n="c15">FOLIAGE</span><span>−2.2 EV</span></div></div></article>
+
+  <article class="sw" style="--gel:#d7cfe8; height:250px"><div class="film"></div><div class="meta"><div class="t">L136 Pale Lavender</div><div class="chips"><span data-i18n="c16">SKIN</span><span>−0.3 EV</span></div></div></article>
+  <article class="sw" style="--gel:#1a3d9c; height:270px"><div class="film"></div><div class="meta"><div class="t">R383 Sapphire Blue</div><div class="chips"><span data-i18n="c17">NIGHT</span><span>−2.9 EV</span></div></div></article>
+  <article class="sw" style="--gel:#ffb03b; height:280px"><div class="film"></div><div class="meta"><div class="t">L015 Deep Straw</div><div class="chips"><span data-i18n="c18">CANDLE</span><span>−1.2 EV</span></div></div></article>
+
+  <article class="sw" style="--gel:#0d2f8f; height:240px"><div class="film"></div><div class="meta"><div class="t">L120 Deep Blue</div><div class="chips"><span data-i18n="c19">NIGHT</span><span>−3.4 EV</span></div></div></article>
+  <article class="sw" style="--gel:#ff8a00; height:260px"><div class="film"></div><div class="meta"><div class="t">L104 Deep Amber</div><div class="chips"><span data-i18n="c20">FIRE</span><span>−1.6 EV</span></div></div></article>
+  <article class="sw" style="--gel:#e6e2d4; height:220px"><div class="film"></div><div class="meta"><div class="t">L248 Half White Diffusion</div><div class="chips"><span data-i18n="c21">DIFFUSION</span><span>−0.8 EV</span></div></div></article>
+</section>
+
+<div class="wrap">
+
+  <div class="sechead" id="curves">
+    <h2 data-i18n="s1">A gel is a filter,<br>not a paint.</h2>
+    <p data-i18n="s2">It only subtracts. The line below is what reaches the lens — everything above it stayed in the lamp as heat.</p>
+  </div>
+
+  <div class="curves">
+    <figure class="card filled">
+      <h3>L201 Full C.T. Blue</h3>
+      <div class="k sm"><span class="mute" data-i18n="k1">Transmission</span><span class="num">36%</span></div>
+      <svg class="plot" viewBox="0 0 340 150" role="img" aria-label="Transmission curve L201">
+        <g stroke="#373737" stroke-width="1">
+          <line x1="0" y1="120" x2="340" y2="120"/><line x1="0" y1="80" x2="340" y2="80"/><line x1="0" y1="40" x2="340" y2="40"/>
+        </g>
+        <path d="M0 30 L60 26 L110 34 L160 62 L210 92 L260 108 L300 114 L340 116" fill="none" stroke="#93c6e8" stroke-width="2"/>
+      </svg>
+      <div class="legend cap mute"><span>380 nm</span><span>560</span><span>780 nm</span></div>
+    </figure>
+    <figure class="card filled">
+      <h3>L106 Primary Red</h3>
+      <div class="k sm"><span class="mute" data-i18n="k2">Transmission</span><span class="num">20%</span></div>
+      <svg class="plot" viewBox="0 0 340 150" role="img" aria-label="Transmission curve L106">
+        <g stroke="#373737" stroke-width="1">
+          <line x1="0" y1="120" x2="340" y2="120"/><line x1="0" y1="80" x2="340" y2="80"/><line x1="0" y1="40" x2="340" y2="40"/>
+        </g>
+        <path d="M0 132 L80 133 L150 132 L195 126 L225 92 L250 44 L280 20 L340 16" fill="none" stroke="#b8121b" stroke-width="2"/>
+      </svg>
+      <div class="legend cap mute"><span>380 nm</span><span>560</span><span>780 nm</span></div>
+    </figure>
+    <figure class="card filled">
+      <h3>L209 0.3 ND</h3>
+      <div class="k sm"><span class="mute" data-i18n="k3">Transmission</span><span class="num">50%</span></div>
+      <svg class="plot" viewBox="0 0 340 150" role="img" aria-label="Transmission curve L209">
+        <g stroke="#373737" stroke-width="1">
+          <line x1="0" y1="120" x2="340" y2="120"/><line x1="0" y1="80" x2="340" y2="80"/><line x1="0" y1="40" x2="340" y2="40"/>
+        </g>
+        <path d="M0 72 L60 71 L120 70 L180 70 L240 69 L300 69 L340 68" fill="none" stroke="#959595" stroke-width="2"/>
+      </svg>
+      <div class="legend cap mute"><span>380 nm</span><span>560</span><span>780 nm</span></div>
+    </figure>
+  </div>
+
+  <div class="sechead" id="sheet">
+    <h2 data-i18n="s3">The cut list, not<br>the mood board.</h2>
+    <p data-i18n="s4">Every sheet is 1.22 × 0.53 m. Tell the library the fixture and it returns frame sizes, cut counts and what the rig loses in stops.</p>
+  </div>
+
+  <div class="sheet">
+    <div class="row head cap">
+      <span data-i18n="t1">Fixture</span><span data-i18n="t2">Gel</span><span data-i18n="t3">Frame</span><span class="right" data-i18n="t4">Loss</span><span class="right" data-i18n="t5">Cuts</span>
+    </div>
+    <div class="row sm">
+      <span>ETC Source Four 26°</span>
+      <span class="g"><i class="dot" style="background:#1b3f8f"></i>L119 Dark Blue</span>
+      <span class="num">159 × 159</span><span class="num right">−3.1 EV</span><span class="num right">12</span>
+    </div>
+    <div class="row sm">
+      <span>ARRI L7-C</span>
+      <span class="g"><i class="dot" style="background:#efe9dd"></i>L216 White Diffusion</span>
+      <span class="num">200 × 200</span><span class="num right">−1.5 EV</span><span class="num right">8</span>
+    </div>
+    <div class="row sm">
+      <span>Fresnel 2 kW</span>
+      <span class="g"><i class="dot" style="background:#93c6e8"></i>L201 Full C.T. Blue</span>
+      <span class="num">254 × 254</span><span class="num right">−1.4 EV</span><span class="num right">6</span>
+    </div>
+    <div class="row sm">
+      <span>Cyc flood, 4-cell</span>
+      <span class="g"><i class="dot" style="background:#b8121b"></i>L106 Primary Red</span>
+      <span class="num">305 × 305</span><span class="num right">−2.3 EV</span><span class="num right">16</span>
+    </div>
+    <div class="row sm">
+      <span data-i18n="t6">Window, house left</span>
+      <span class="g"><i class="dot" style="background:#f0a24b"></i>L204 Full C.T. Orange</span>
+      <span class="num">1220 × 530</span><span class="num right">−0.9 EV</span><span class="num right">2</span>
+    </div>
+    <div class="row sm">
+      <span data-i18n="t7">Practicals, 6 pcs</span>
+      <span class="g"><i class="dot" style="background:#ffb03b"></i>L015 Deep Straw</span>
+      <span class="num">90 × 90</span><span class="num right">−1.2 EV</span><span class="num right">24</span>
+    </div>
+  </div>
+
+  <div class="sechead">
+    <h2 data-i18n="s5">Used on tour,<br>in the dark.</h2>
+    <p data-i18n="s6">The library was started as one lighting designer's notebook. It is now checked by the people who hang the frames.</p>
+  </div>
+
+  <div class="quotes">
+    <div class="card q">
+      <div class="top">
+        <span class="av" style="background:#f0a24b">МК</span>
+        <span><span class="sm med" data-i18n="q1n">Marta Kern</span><br><span class="cap mute">@kern.light</span></span>
+      </div>
+      <p class="sm body" data-i18n="q1">Four hundred frames for a touring set, and the only number I need is the stop loss. The library prints it next to the cut size.</p>
+    </div>
+    <div class="card q">
+      <div class="top">
+        <span class="av" style="background:#93c6e8">ИД</span>
+        <span><span class="sm med" data-i18n="q2n">Ivan Dorn</span><br><span class="cap mute">@rigsheet</span></span>
+      </div>
+      <p class="sm body" data-i18n="q2">We stopped arguing about “which blue”. The curve settles it in ten seconds: one of them eats four stops, the other one and a half.</p>
+    </div>
+    <div class="card q">
+      <div class="top">
+        <span class="av" style="background:#a4d65e">SL</span>
+        <span><span class="sm med" data-i18n="q3n">Sara Lindqvist</span><br><span class="cap mute">@sl.gaffer</span></span>
+      </div>
+      <p class="sm body" data-i18n="q3">Half our stock is legacy numbers nobody makes any more. Their measurements are still here, marked discontinued, which is exactly what I wanted.</p>
+    </div>
+  </div>
+  <div class="dots"><i class="on"></i><i></i><i></i></div>
+
+  <div class="sechead" id="join">
+    <h2 data-i18n="s7">Bring your own rig.</h2>
+    <p data-i18n="s8">Send a plot, get back the cut list for it. <a class="slink" href="#sheet" data-i18n="s9">see a sample sheet</a></p>
+    <form class="join" onsubmit="return false">
+      <input type="email" placeholder="you@theatre.org" data-i18n-ph="ph1" aria-label="email">
+      <button class="pill" data-i18n="s10">Send the plot</button>
+    </form>
+  </div>
+
+  <footer>
+    <div class="fgrid">
+      <div>
+        <span class="med prism">Gel Library</span>
+        <span class="sm mute" data-i18n="f0">212 measured gels · 41 discontinued · one spectrometer</span>
+      </div>
+      <div>
+        <h4 data-i18n="fh1">Library</h4>
+        <a href="#wall" data-i18n="fl1">All swatches</a>
+        <a href="#curves" data-i18n="fl2">Transmission curves</a>
+        <a href="#wall" data-i18n="fl3">Discontinued</a>
+      </div>
+      <div>
+        <h4 data-i18n="fh2">Tools</h4>
+        <a href="#sheet" data-i18n="fl4">Cut list</a>
+        <a href="#sheet" data-i18n="fl5">Frame sizes</a>
+        <a href="#sheet" data-i18n="fl6">Stop calculator</a>
+      </div>
+      <div>
+        <h4 data-i18n="fh3">Contact</h4>
+        <a href="#join">bench@gel.library</a>
+        <span class="mute" data-i18n="fl7">Measurements, Tue &amp; Thu</span>
+      </div>
+    </div>
+    <div class="markline cap mute">
+      <span data-i18n="f1">Measured at 3200 K, 1 m, quartz halogen</span>
+      <span data-i18n="f2">Lee and Rosco numbers belong to their makers</span>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+/* ── RU/EN. Английский — исходный, русский — перевод под него ── */
+var RU = {
+  n1:'Образцы', n2:'Спектры', n3:'Раскрой', n4:'Схемы', n5:'Войти', n6:'Открыть библиотеку',
+  h1:'Любой цвет<br>стоит света.',
+  h2:'212 театральных и киношных фильтров, померенных спектрометром. Кривые пропускания, потери в ступенях экспозиции и приборы, на которых плёнка доживает до конца прогона.',
+  h3:'Открыть библиотеку',
+  h4:'Смотреть бесплатно · обновляется после каждого прожига',
+  c1:'ГЛУБОКИЙ', c2:'ГЛУБОКИЙ', c3:'ТЁПЛЫЙ', c4:'ХОЛОДНЫЙ', c5:'КРАЙНИЙ', c6:'РАССЕИВАТЕЛЬ',
+  c7:'ОТТЕНОК', c8:'НЕЙТРАЛЬНЫЙ', c9:'НАТРИЙ', c10:'ОТТЕНОК', c11:'НОЧЬ', c12:'ДНЕВНОЙ',
+  c13:'НЕЙТРАЛЬНЫЙ', c14:'ТЁПЛЫЙ', c15:'ЛИСТВА', c16:'КОЖА', c17:'НОЧЬ', c18:'СВЕЧА',
+  c19:'НОЧЬ', c20:'ОГОНЬ', c21:'РАССЕИВАТЕЛЬ',
+  s1:'Фильтр не красит,<br>он вычитает.',
+  s2:'Линия ниже — это то, что дошло до объектива. Всё, что над ней, осталось в приборе теплом.',
+  k1:'Пропускание', k2:'Пропускание', k3:'Пропускание',
+  s3:'Лист раскроя,<br>а не мудборд.',
+  s4:'Лист фильтра — 1,22 × 0,53 м. Скажите библиотеке прибор, и она вернёт размер рамки, число резов и то, сколько ступеней теряет схема.',
+  t1:'Прибор', t2:'Фильтр', t3:'Рамка', t4:'Потеря', t5:'Резов',
+  t6:'Окно, слева от зала', t7:'Практикалы, 6 шт',
+  s5:'Проверено в туре,<br>в темноте.',
+  s6:'Библиотека началась как тетрадь одного художника по свету. Сейчас её сверяют те, кто вешает рамки.',
+  q1n:'Марта Керн',
+  q1:'Четыреста рамок на гастрольную декорацию, и единственное число, которое мне нужно, — потеря в ступенях. Библиотека печатает его рядом с размером реза.',
+  q2n:'Иван Дорн',
+  q2:'Мы перестали спорить, «какой синий». Кривая решает за десять секунд: один съедает четыре ступени, другой — полторы.',
+  q3n:'Сара Линдквист',
+  q3:'Половина нашего склада — снятые с производства номера. Их замеры всё ещё здесь, с пометкой «снят», а это ровно то, что мне было нужно.',
+  s7:'Приходите со своей схемой.',
+  s8:'Пришлите план света — получите лист раскроя под него. ',
+  s9:'посмотреть образец листа',
+  s10:'Отправить план', ph1:'you@theatre.org',
+  f0:'212 померенных фильтров · 41 снят с производства · один спектрометр',
+  fh1:'Библиотека', fl1:'Все образцы', fl2:'Кривые пропускания', fl3:'Снятые с производства',
+  fh2:'Инструменты', fl4:'Лист раскроя', fl5:'Размеры рамок', fl6:'Калькулятор ступеней',
+  fh3:'Связь', fl7:'Замеры по вторникам и четвергам',
+  f1:'Замер при 3200 K, 1 м, галоген', f2:'Номера Lee и Rosco принадлежат их производителям'
+};
+var EN = {};
+document.querySelectorAll('[data-i18n]').forEach(function (el) { EN[el.dataset.i18n] = el.innerHTML; });
+var ENPH = {};
+document.querySelectorAll('[data-i18n-ph]').forEach(function (el) { ENPH[el.dataset.i18nPh] = el.placeholder; });
+
+function setLang(l) {
+  var dict = l === 'ru' ? RU : EN;
+  document.querySelectorAll('[data-i18n]').forEach(function (el) {
+    var v = dict[el.dataset.i18n];
+    if (v !== undefined) el.innerHTML = v;
+  });
+  document.querySelectorAll('[data-i18n-ph]').forEach(function (el) {
+    var v = (l === 'ru' ? RU : ENPH)[el.dataset.i18nPh];
+    if (v !== undefined) el.placeholder = v;
+  });
+  document.documentElement.lang = l;
+  document.documentElement.dataset.lang = l;
+  document.querySelectorAll('.switch button').forEach(function (b) {
+    b.setAttribute('aria-pressed', b.dataset.set === l ? 'true' : 'false');
+  });
+}
+document.querySelectorAll('.switch button').forEach(function (b) {
+  b.addEventListener('click', function () { setLang(b.dataset.set); });
+});
+</script>
+</body>
+</html>

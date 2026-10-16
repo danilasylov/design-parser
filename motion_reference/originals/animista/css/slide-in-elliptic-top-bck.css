@@ -1,0 +1,3 @@
+/* Original keyframes: Animista, Ana Travas. https://animista.net/play/entrances/slide-in-elliptic/slide-in-elliptic-top-bck */
+.slide-in-elliptic-top-bck{animation:slide-in-elliptic-top-bck 0.7s cubic-bezier(.25,.46,.45,.94) 0s 1 normal both;}
+@keyframes slide-in-elliptic-top-bck{0%{-webkit-transform:translateY(-600px) rotateX(30deg) scale(6.5);transform:translateY(-600px) rotateX(30deg) scale(6.5);-webkit-transform-origin:50% 200%;transform-origin:50% 200%;opacity:0}to{-webkit-transform:translateY(0) rotateX(0) scale(1);transform:translateY(0) rotateX(0) scale(1);-webkit-transform-origin:50% -500px;transform-origin:50% -500px;opacity:1}}

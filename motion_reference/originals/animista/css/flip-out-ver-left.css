@@ -1,0 +1,3 @@
+/* Original keyframes: Animista, Ana Travas. https://animista.net/play/exits/flip-out/flip-out-ver-left */
+.flip-out-ver-left{animation:flip-out-ver-left 0.45s cubic-bezier(.55,.085,.68,.53) 0s 1 normal both;}
+@keyframes flip-out-ver-left{0%{-webkit-transform:rotateY(0);transform:rotateY(0);opacity:1}to{-webkit-transform:rotateY(-70deg);transform:rotateY(-70deg);opacity:0}}

@@ -1,0 +1,3 @@
+/* Original keyframes: Animista, Ana Travas. https://animista.net/play/basic/rotate-scale/rotate-scale-up-diag-2 */
+.rotate-scale-up-diag-2{animation:rotate-scale-up-diag-2 0.7s linear 0s 1 normal both;}
+@keyframes rotate-scale-up-diag-2{0%{-webkit-transform:scale(1) rotate3d(-1,1,0,0deg);transform:scale(1) rotate3d(-1,1,0,0deg)}50%{-webkit-transform:scale(2) rotate3d(-1,1,0,180deg);transform:scale(2) rotate3d(-1,1,0,180deg)}to{-webkit-transform:scale(1) rotate3d(-1,1,0,360deg);transform:scale(1) rotate3d(-1,1,0,360deg)}}

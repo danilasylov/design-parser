@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mutual — Neighbourhood lending libraries and repair workshops</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400&family=Onest:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ─── Токены дизайн-системы CQCM — вставлены дословно ─────────────────── */
+:root {
+  /* Colors */
+  --color-cooperative-green: #44d991;
+  --color-civic-blue: #4c92e9;
+  --color-sunset-coral: #ff6a51;
+  --color-mint-whisper: #eaf9f2;
+  --color-ink-black: #000000;
+  --color-paper-white: #ffffff;
+  --color-steel-gray: #666666;
+
+  /* Typography — Font Families */
+  --font-athletics: 'Athletics', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-manrope: 'Manrope', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* Typography — Scale */
+  --text-caption: 12px;
+  --leading-caption: 1.3;
+  --tracking-caption: 0.12px;
+  --text-body-sm: 14px;
+  --leading-body-sm: 1.3;
+  --tracking-body-sm: 0.14px;
+  --text-body: 16px;
+  --leading-body: 1.4;
+  --tracking-body: 0.16px;
+  --text-subheading: 18px;
+  --leading-subheading: 1.3;
+  --tracking-subheading: 0.18px;
+  --text-subheading-lg: 20px;
+  --leading-subheading-lg: 1.3;
+  --tracking-subheading-lg: 0.22px;
+  --text-heading-sm: 22px;
+  --leading-heading-sm: 1;
+  --tracking-heading-sm: 0.88px;
+  --text-heading: 48px;
+  --leading-heading: 1;
+  --tracking-heading: 1.92px;
+  --text-heading-lg: 59px;
+  --leading-heading-lg: 1;
+  --tracking-heading-lg: 2.36px;
+  --text-display: 78px;
+  --leading-display: 1;
+  --tracking-display: 3.12px;
+
+  /* Typography — Weights */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+
+  /* Spacing */
+  --spacing-unit: 4px;
+  --spacing-8: 8px;
+  --spacing-20: 20px;
+  --spacing-40: 40px;
+  --spacing-60: 60px;
+  --spacing-80: 80px;
+  --spacing-100: 100px;
+  --spacing-120: 120px;
+  --spacing-200: 200px;
+
+  /* Layout */
+  --page-max-width: 1280px;
+  --section-gap: 80px;
+  --card-padding: 20px;
+  --element-gap: 20px;
+
+  /* Border Radius */
+  --radius-md: 4px;
+  --radius-lg: 8px;
+  --radius-3xl: 30px;
+  --radius-full: 100px;
+
+  /* Named Radii */
+  --radius-cards: 8px;
+  --radius-badges: 4px;
+  --radius-images: 4px;
+  --radius-buttons: 100px;
+
+  /* Shadows */
+  --shadow-lg: rgba(0, 0, 0, 0.1) 0px 0px 20px 0px;
+
+  /* Surfaces */
+  --surface-paper: #ffffff;
+  --surface-mint: #eaf9f2;
+  --surface-civic-blue: #4c92e9;
+  --surface-cooperative-green: #44d991;
+  --surface-sunset-coral: #ff6a51;
+}
+
+/* Подстановки шрифтов: Athletics — кастомный, в Google Fonts нет.
+   DESIGN.md предлагает Archivo Black / Anton / Druk — у всех нет кириллицы,
+   поэтому дисплей = Onest (нейтральный геометрический гротеск с кириллицей),
+   трекинг 0.04em делает «гражданскую декларацию» ровно как в системе. */
+:root {
+  --font-display: 'Onest', var(--font-athletics);
+  --font-body: 'Manrope', var(--font-manrope);
+  --dot-size: 34px;   /* Dot Pattern Overlay: ~30px круги, регулярная сетка */
+  --dot-step: 78px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--text-subheading);
+  line-height: var(--leading-subheading);
+  letter-spacing: var(--tracking-subheading);
+  color: var(--color-ink-black);
+  background: var(--surface-paper);
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap { max-width: var(--page-max-width); margin: 0 auto; padding: 0 var(--spacing-40); }
+
+/* ─── Типографика ─────────────────────────────────────────────────────── */
+.display {
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--text-display);
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-display);
+  text-transform: uppercase;
+}
+.heading {
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--text-heading);
+  line-height: var(--leading-heading);
+  letter-spacing: var(--tracking-heading);
+  text-transform: uppercase;
+}
+/* Section Heading: Manrope 22, mixed case, без декора */
+.section-title {
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--text-heading-sm);
+  line-height: var(--leading-heading-sm);
+  letter-spacing: var(--tracking-heading-sm);
+}
+.tag {
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--text-caption);
+  line-height: 1;
+  letter-spacing: 0.48px;
+  text-transform: uppercase;
+}
+.body-sm { font-size: var(--text-body-sm); line-height: var(--leading-body-sm); letter-spacing: var(--tracking-body-sm); }
+.body    { font-size: var(--text-body);    line-height: var(--leading-body);    letter-spacing: var(--tracking-body); }
+.muted   { color: var(--color-steel-gray); }
+
+/* ─── Кнопки: только чёрная заливка или белый гост, радиус 100px ──────── */
+.pill {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--text-body-sm);
+  letter-spacing: var(--tracking-body-sm);
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 10px 20px;
+  border-radius: var(--radius-buttons);
+  border: 1px solid var(--color-ink-black);
+  background: var(--color-ink-black);
+  color: var(--color-paper-white);
+  cursor: pointer;
+  transition: background .15s linear, color .15s linear;
+}
+.pill:hover { background: var(--color-paper-white); color: var(--color-ink-black); }
+.pill--ghost { background: var(--color-paper-white); color: var(--color-ink-black); }
+.pill--ghost:hover { background: var(--color-ink-black); color: var(--color-paper-white); }
+.pill--lg { font-size: var(--text-body); letter-spacing: var(--tracking-body); }
+
+/* ─── Навигация: белая полоса, НЕ липкая, единственная тень в системе ─── */
+.nav {
+  background: var(--color-paper-white);
+  box-shadow: var(--shadow-lg);
+  position: relative;
+  z-index: 5;
+}
+.nav__inner {
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+  padding: 15px var(--spacing-40);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-40);
+}
+.logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--color-ink-black); }
+.logo__mark {
+  width: 26px; height: 26px;
+  background: var(--color-cooperative-green);
+  border-radius: var(--radius-md);
+  position: relative;
+}
+.logo__mark::after {
+  content: ""; position: absolute; inset: 8px;
+  background: var(--color-ink-black); border-radius: 50%;
+}
+.logo__word {
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--text-heading-sm);
+  line-height: 1;
+  letter-spacing: 0.88px;
+  text-transform: uppercase;
+}
+.nav__group { display: flex; align-items: center; gap: 25px; }
+.nav__group--main { gap: 30px; }
+.nav__link {
+  font-size: var(--text-body-sm);
+  letter-spacing: var(--tracking-body-sm);
+  color: var(--color-ink-black);
+  text-decoration: none;
+  padding-bottom: 2px;
+  border-bottom: 1px solid transparent;
+}
+.nav__link:hover { border-bottom-color: var(--color-ink-black); }
+.nav__link--caps { text-transform: uppercase; }
+.nav__spacer { margin-left: auto; }
+
+/* Переключатель языка */
+.lang { display: flex; border: 1px solid var(--color-ink-black); border-radius: var(--radius-buttons); overflow: hidden; }
+.lang button {
+  font-family: var(--font-body);
+  font-size: var(--text-caption);
+  letter-spacing: var(--tracking-caption);
+  padding: 7px 14px;
+  border: none;
+  background: var(--color-paper-white);
+  color: var(--color-ink-black);
+  cursor: pointer;
+}
+.lang button[aria-pressed="true"] { background: var(--color-ink-black); color: var(--color-paper-white); }
+
+/* ─── Герой: сплит — панель с точечной сеткой слева, зелёный слэб справа ─ */
+.hero { display: grid; grid-template-columns: 1fr 1fr; min-height: 620px; }
+.hero__dots {
+  background-color: var(--surface-mint);
+  background-image: radial-gradient(
+    circle,
+    var(--color-cooperative-green) calc(var(--dot-size) / 2),
+    transparent calc(var(--dot-size) / 2 + 1px)
+  );
+  background-size: var(--dot-step) var(--dot-step);
+  background-position: -18px -22px;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  padding: var(--spacing-40);
+}
+.hero__badge {
+  background: var(--color-ink-black);
+  color: var(--color-paper-white);
+  padding: 10px 20px;
+  border-radius: var(--radius-buttons);
+}
+.hero__panel {
+  background: var(--surface-cooperative-green);
+  padding: var(--spacing-60) var(--spacing-40);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--spacing-40);
+}
+.hero__panel .display { max-width: 12ch; }
+.hero__lede { max-width: 46ch; }
+.hero__actions { display: flex; align-items: center; gap: var(--element-gap); }
+
+/* ─── Лестница статистики: 5 блоков со сдвигом ~30px ──────────────────── */
+.stairs { padding: var(--spacing-100) 0 var(--spacing-120); }
+.stairs__grid { display: flex; align-items: flex-start; }
+.stat {
+  flex: 1;
+  border-radius: var(--radius-cards);
+  padding: var(--spacing-20);
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  min-height: 220px;
+}
+.stat:nth-child(1) { margin-top: 0px;   background: var(--surface-cooperative-green); }
+.stat:nth-child(2) { margin-top: 30px;  background: var(--surface-mint); }
+.stat:nth-child(3) { margin-top: 60px;  background: var(--surface-civic-blue); }
+.stat:nth-child(4) { margin-top: 90px;  background: var(--surface-paper); border: 1px solid var(--color-ink-black); }
+.stat:nth-child(5) { margin-top: 120px; background: var(--surface-sunset-coral); }
+.stat__num {
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--text-heading);
+  line-height: var(--leading-heading);
+  letter-spacing: var(--tracking-heading);
+  white-space: nowrap;
+}
+.stat__label {
+  writing-mode: vertical-rl;
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--text-caption);
+  line-height: 1;
+  letter-spacing: 0.48px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* ─── Шапка секции + ссылка «Смотреть все» ────────────────────────────── */
+.sec-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: var(--spacing-40); margin-bottom: var(--spacing-40);
+}
+.see-all {
+  display: inline-flex; align-items: center; gap: 10px;
+  text-decoration: none; color: var(--color-ink-black);
+}
+.see-all::before {
+  content: ""; width: 8px; height: 8px; border-radius: 50%;
+  background: var(--color-ink-black); flex: none;
+}
+
+/* ─── Карточки новостей ───────────────────────────────────────────────── */
+.cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--element-gap); }
+.card {
+  background: var(--color-paper-white);
+  border-radius: var(--radius-cards);
+  overflow: hidden;
+  display: flex; flex-direction: column;
+}
+.card__media {
+  background: var(--surface-civic-blue);
+  height: 230px;
+  display: flex; align-items: center; justify-content: center;
+}
+.card__circle {
+  width: 160px; height: 160px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--text-heading);
+  line-height: 1;
+  letter-spacing: var(--tracking-heading);
+  color: var(--color-ink-black);
+}
+.card:nth-child(1) .card__circle { background: var(--color-mint-whisper); }
+.card:nth-child(2) .card__circle { background: var(--color-cooperative-green); }
+.card:nth-child(3) .card__circle { background: var(--color-paper-white); }
+.card__body { padding: var(--card-padding); display: flex; flex-direction: column; gap: 10px; flex: 1; }
+.card__meta { display: flex; align-items: center; gap: 10px; }
+.card__title { font-size: var(--text-subheading); line-height: var(--leading-subheading); letter-spacing: var(--tracking-subheading); }
+.card__desc { flex: 1; }
+.card__foot { margin-top: 10px; }
+
+/* ─── Мятная полоса «что это» ─────────────────────────────────────────── */
+.band-mint { background: var(--surface-mint); padding: var(--spacing-100) 0; }
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-80); align-items: start; }
+.split .heading { max-width: 14ch; }
+.prose { display: flex; flex-direction: column; gap: var(--spacing-20); max-width: 52ch; }
+
+/* ─── Шаги ────────────────────────────────────────────────────────────── */
+.steps { padding: var(--spacing-100) 0; }
+.step {
+  display: grid;
+  grid-template-columns: 120px 1fr 1fr;
+  gap: var(--spacing-40);
+  padding: var(--spacing-40) 0;
+  border-top: 1px solid var(--color-ink-black);
+  align-items: start;
+}
+.step:last-child { border-bottom: 1px solid var(--color-ink-black); }
+.step__num {
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--text-heading);
+  line-height: var(--leading-heading);
+  letter-spacing: var(--tracking-heading);
+}
+.step__title { font-size: var(--text-subheading-lg); line-height: var(--leading-subheading-lg); letter-spacing: var(--tracking-subheading-lg); }
+
+/* ─── Зелёная полоса-призыв ───────────────────────────────────────────── */
+.band-green { background: var(--surface-cooperative-green); padding: var(--spacing-100) 0; }
+.band-green .display { max-width: 16ch; margin-bottom: var(--spacing-40); }
+.band-green .hero__lede { margin-bottom: var(--spacing-40); }
+
+/* ─── Подвал ──────────────────────────────────────────────────────────── */
+.footer { background: var(--surface-mint); padding: var(--spacing-80) 0 var(--spacing-40); }
+.footer__grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: var(--spacing-40); }
+.footer__col h4 { margin-bottom: var(--spacing-20); }
+.footer__col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.footer__col a { color: var(--color-ink-black); text-decoration: none; font-size: var(--text-body-sm); letter-spacing: var(--tracking-body-sm); }
+.footer__col a:hover { text-decoration: underline; }
+.footer__note { max-width: 34ch; margin-top: var(--spacing-20); }
+.footer__bottom {
+  margin-top: var(--spacing-60);
+  padding-top: var(--spacing-20);
+  border-top: 1px solid var(--color-ink-black);
+  display: flex; justify-content: space-between; gap: var(--spacing-20);
+}
+</style>
+</head>
+<body>
+
+<!-- ─── Навигация ─────────────────────────────────────────────────────── -->
+<header class="nav">
+  <div class="nav__inner">
+    <a class="logo" href="#top">
+      <span class="logo__mark"></span>
+      <span class="logo__word">Mutual</span>
+    </a>
+    <nav class="nav__group nav__group--main">
+      <a class="nav__link nav__link--caps" href="#libraries" data-i18n="nav.libraries">Libraries</a>
+      <a class="nav__link nav__link--caps" href="#repair" data-i18n="nav.repair">Repair</a>
+    </nav>
+    <div class="nav__group nav__spacer">
+      <a class="nav__link" href="#about" data-i18n="nav.about">About us</a>
+      <a class="nav__link" href="#movement" data-i18n="nav.movement">The movement</a>
+      <a class="nav__link" href="#join" data-i18n="nav.join">Become a member</a>
+      <div class="lang">
+        <button type="button" data-set="en" aria-pressed="true">EN</button>
+        <button type="button" data-set="ru" aria-pressed="false">RU</button>
+      </div>
+      <a class="pill pill--ghost" href="#join" data-i18n="nav.more">More</a>
+    </div>
+  </div>
+</header>
+
+<!-- ─── Герой ─────────────────────────────────────────────────────────── -->
+<section class="hero" id="top">
+  <div class="hero__dots">
+    <span class="hero__badge tag" data-i18n="hero.badge">Since 2019 · 12 cities</span>
+  </div>
+  <div class="hero__panel">
+    <h1 class="display" data-i18n="hero.title">Lend everything. Buy almost nothing.</h1>
+    <div>
+      <p class="hero__lede body" data-i18n="hero.lede">Mutual runs neighbourhood libraries of things and repair workshops. A membership costs nothing, and the drill you need twice a year lives four minutes from your door.</p>
+      <div class="hero__actions" style="margin-top: var(--spacing-20)">
+        <a class="pill pill--lg" href="#about" data-i18n="hero.cta1">Who we are</a>
+        <a class="pill pill--ghost pill--lg" href="#libraries" data-i18n="hero.cta2">Find a library</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Лестница статистики ───────────────────────────────────────────── -->
+<section class="stairs" id="movement">
+  <div class="wrap">
+    <div class="stairs__grid">
+      <div class="stat">
+        <span class="stat__num">148</span>
+        <span class="stat__label" data-i18n="stat.1">Libraries open</span>
+      </div>
+      <div class="stat">
+        <span class="stat__num">61K</span>
+        <span class="stat__label" data-i18n="stat.2">Things on shelves</span>
+      </div>
+      <div class="stat">
+        <span class="stat__num">92,4K</span>
+        <span class="stat__label" data-i18n="stat.3">Loans last year</span>
+      </div>
+      <div class="stat">
+        <span class="stat__num">4 200</span>
+        <span class="stat__label" data-i18n="stat.4">Tonnes not bought</span>
+      </div>
+      <div class="stat">
+        <span class="stat__num">0</span>
+        <span class="stat__label" data-i18n="stat.5">Membership cost</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Новости ───────────────────────────────────────────────────────── -->
+<section class="wrap" id="libraries">
+  <div class="sec-head">
+    <h2 class="section-title" data-i18n="news.title">In focus</h2>
+    <a class="see-all tag" href="#movement" data-i18n="news.all">See all</a>
+  </div>
+  <div class="cards">
+    <article class="card">
+      <div class="card__media"><div class="card__circle">148</div></div>
+      <div class="card__body">
+        <div class="card__meta">
+          <span class="tag" data-i18n="news.1.tag">Statement</span>
+          <span class="body-sm muted" data-i18n="news.1.date">24 April 2026</span>
+        </div>
+        <h3 class="card__title" data-i18n="news.1.title">The hundred and forty-eighth library opens in Vyborg</h3>
+        <p class="card__desc body-sm" data-i18n="news.1.desc">Two rooms above a bakery, 640 items on day one, and a waiting list of neighbours who want a shift behind the counter.</p>
+        <div class="card__foot"><a class="pill" href="#libraries" data-i18n="news.read">Read</a></div>
+      </div>
+    </article>
+    <article class="card">
+      <div class="card__media"><div class="card__circle">7</div></div>
+      <div class="card__body">
+        <div class="card__meta">
+          <span class="tag" data-i18n="news.2.tag">Report</span>
+          <span class="body-sm muted" data-i18n="news.2.date">11 April 2026</span>
+        </div>
+        <h3 class="card__title" data-i18n="news.2.title">Seven years of repair cafés, counted honestly</h3>
+        <p class="card__desc body-sm" data-i18n="news.2.desc">Of the things brought in for repair, 68% left working. We publish the other 32% too, with the reasons they could not be saved.</p>
+        <div class="card__foot"><a class="pill" href="#repair" data-i18n="news.read">Read</a></div>
+      </div>
+    </article>
+    <article class="card">
+      <div class="card__media"><div class="card__circle">01</div></div>
+      <div class="card__body">
+        <div class="card__meta">
+          <span class="tag" data-i18n="news.3.tag">News</span>
+          <span class="body-sm muted" data-i18n="news.3.date">2 April 2026</span>
+        </div>
+        <h3 class="card__title" data-i18n="news.3.title">A city library card that borrows drills, not only books</h3>
+        <p class="card__desc body-sm" data-i18n="news.3.desc">The first municipal agreement of its kind: one card, two catalogues, no separate membership and no separate queue.</p>
+        <div class="card__foot"><a class="pill" href="#join" data-i18n="news.read">Read</a></div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ─── Что такое библиотека вещей ────────────────────────────────────── -->
+<section class="band-mint" id="about" style="margin-top: var(--spacing-100)">
+  <div class="wrap split">
+    <h2 class="heading" data-i18n="about.title">A shelf is cheaper than a shop</h2>
+    <div class="prose">
+      <p class="body" data-i18n="about.p1">A carpet cleaner is used for roughly forty minutes a year. A pressure washer, twice a summer. A projector, once. Every one of them sits in a cupboard on a street where thirty households own the same thing and none of them can find the manual.</p>
+      <p class="body" data-i18n="about.p2">A library of things is the ordinary answer. One shelf, one catalogue, one set of keys held by people who live on that street. You borrow it, you bring it back, and the next person finds it clean.</p>
+      <p class="body" data-i18n="about.p3">Every library is run by its own members and owns what stands on its shelves. Mutual writes the rules nobody wants to write twice — insurance, deposits, opening hours, what to do when something breaks — and then gets out of the way.</p>
+      <div><a class="pill pill--lg" href="#join" data-i18n="about.cta">Open one on your street</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Шаги ──────────────────────────────────────────────────────────── -->
+<section class="steps" id="repair">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 class="section-title" data-i18n="steps.title">How borrowing works</h2>
+      <a class="see-all tag" href="#join" data-i18n="steps.all">All the rules</a>
+    </div>
+    <div class="step">
+      <span class="step__num">01</span>
+      <h3 class="step__title" data-i18n="steps.1.title">Join in four minutes</h3>
+      <p class="body" data-i18n="steps.1.desc">One form, one neighbour who vouches for you, no fee and no card. Membership is for a person, not a household — everyone signs their own name.</p>
+    </div>
+    <div class="step">
+      <span class="step__num">02</span>
+      <h3 class="step__title" data-i18n="steps.2.title">Reserve what you need</h3>
+      <p class="body" data-i18n="steps.2.desc">The catalogue shows the shelf, not a warehouse: if it says the tile cutter is in, it is in, and it is a two-minute walk from where you are standing.</p>
+    </div>
+    <div class="step">
+      <span class="step__num">03</span>
+      <h3 class="step__title" data-i18n="steps.3.title">Borrow it for a week</h3>
+      <p class="body" data-i18n="steps.3.desc">A week is the default and nobody chases you on day eight. Deposits exist only for the six most expensive items, and they are returned in full.</p>
+    </div>
+    <div class="step">
+      <span class="step__num">04</span>
+      <h3 class="step__title" data-i18n="steps.4.title">Break it, and we fix it together</h3>
+      <p class="body" data-i18n="steps.4.desc">Nothing is charged for ordinary wear. Bring the broken thing to Saturday's repair café and you will leave knowing why it failed.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Призыв ────────────────────────────────────────────────────────── -->
+<section class="band-green" id="join">
+  <div class="wrap">
+    <h2 class="display" data-i18n="cta.title">Your street already owns enough.</h2>
+    <p class="hero__lede body" data-i18n="cta.lede">Thirty households, one shelf, and a set of keys. We will send you the founding kit — the rules, the insurance template and the catalogue — and a member from the nearest library to sit through your first meeting.</p>
+    <div class="hero__actions">
+      <a class="pill pill--lg" href="#join" data-i18n="cta.btn1">Request the founding kit</a>
+      <a class="pill pill--ghost pill--lg" href="#libraries" data-i18n="cta.btn2">Visit a library first</a>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Подвал ────────────────────────────────────────────────────────── -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__grid">
+      <div class="footer__col">
+        <a class="logo" href="#top">
+          <span class="logo__mark"></span>
+          <span class="logo__word">Mutual</span>
+        </a>
+        <p class="footer__note body-sm" data-i18n="footer.note">A federation of neighbourhood lending libraries and repair workshops. Founded in Tbilisi, run from wherever the shelves are.</p>
+      </div>
+      <div class="footer__col">
+        <h4 class="tag" data-i18n="footer.c1">Libraries</h4>
+        <ul>
+          <li><a href="#libraries" data-i18n="footer.c1.1">Find a shelf</a></li>
+          <li><a href="#libraries" data-i18n="footer.c1.2">Catalogue</a></li>
+          <li><a href="#join" data-i18n="footer.c1.3">Open a library</a></li>
+          <li><a href="#movement" data-i18n="footer.c1.4">Numbers</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h4 class="tag" data-i18n="footer.c2">Repair</h4>
+        <ul>
+          <li><a href="#repair" data-i18n="footer.c2.1">Repair cafés</a></li>
+          <li><a href="#repair" data-i18n="footer.c2.2">Spare parts</a></li>
+          <li><a href="#repair" data-i18n="footer.c2.3">Manuals</a></li>
+          <li><a href="#repair" data-i18n="footer.c2.4">Volunteer</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h4 class="tag" data-i18n="footer.c3">Movement</h4>
+        <ul>
+          <li><a href="#about" data-i18n="footer.c3.1">About us</a></li>
+          <li><a href="#movement" data-i18n="footer.c3.2">Charter</a></li>
+          <li><a href="#movement" data-i18n="footer.c3.3">Finances</a></li>
+          <li><a href="#join" data-i18n="footer.c3.4">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span class="body-sm" data-i18n="footer.copy">© 2026 Mutual — a members' federation</span>
+      <span class="body-sm" data-i18n="footer.legal">Charter · Privacy · Insurance</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* Английский — исходный; русский — перевод. Дефолт EN, без автодетекта. */
+var I18N = {
+  ru: {
+    "nav.libraries": "Библиотеки",
+    "nav.repair": "Ремонт",
+    "nav.about": "О нас",
+    "nav.movement": "Движение",
+    "nav.join": "Стать участником",
+    "nav.more": "Ещё",
+
+    "hero.badge": "С 2019 года · 12 городов",
+    "hero.title": "Одалживай всё. Покупай почти ничего.",
+    "hero.lede": "Mutual держит соседские библиотеки вещей и мастерские ремонта. Участие бесплатное, а дрель, которая нужна дважды в год, живёт в четырёх минутах от вашей двери.",
+    "hero.cta1": "Кто мы",
+    "hero.cta2": "Найти библиотеку",
+
+    "stat.1": "Открытых библиотек",
+    "stat.2": "Вещей на полках",
+    "stat.3": "Выдач за год",
+    "stat.4": "Тонн не куплено",
+    "stat.5": "Стоимость участия",
+
+    "news.title": "Главное",
+    "news.all": "Смотреть все",
+    "news.read": "Читать",
+    "news.1.tag": "Заявление",
+    "news.1.date": "24 апреля 2026",
+    "news.1.title": "Сто сорок восьмая библиотека открылась в Выборге",
+    "news.1.desc": "Две комнаты над пекарней, 640 предметов в первый день и очередь соседей, которые хотят взять смену за стойкой.",
+    "news.2.tag": "Отчёт",
+    "news.2.date": "11 апреля 2026",
+    "news.2.title": "Семь лет мастерских ремонта, посчитанные честно",
+    "news.2.desc": "Из вещей, принесённых в ремонт, 68% ушли рабочими. Оставшиеся 32% мы публикуем тоже — с причинами, по которым спасти не вышло.",
+    "news.3.tag": "Новость",
+    "news.3.date": "2 апреля 2026",
+    "news.3.title": "Городской читательский билет, по которому выдают дрели",
+    "news.3.desc": "Первое муниципальное соглашение такого рода: одна карта, два каталога, без отдельного членства и отдельной очереди.",
+
+    "about.title": "Полка дешевле магазина",
+    "about.p1": "Моющий пылесос работает примерно сорок минут в год. Мойка высокого давления — дважды за лето. Проектор — один раз. И каждый из них стоит в шкафу на улице, где тридцать семей владеют тем же самым и никто не может найти инструкцию.",
+    "about.p2": "Библиотека вещей — обычный ответ на это. Одна полка, один каталог, один комплект ключей у людей, которые живут на этой улице. Вы берёте, возвращаете, и следующий находит вещь чистой.",
+    "about.p3": "Каждая библиотека управляется своими участниками и владеет тем, что стоит на её полках. Mutual пишет правила, которые никто не хочет писать дважды, — страховка, залоги, часы работы, что делать, когда что-то сломалось, — и дальше не мешает.",
+    "about.cta": "Открыть библиотеку на своей улице",
+
+    "steps.title": "Как взять вещь",
+    "steps.all": "Все правила",
+    "steps.1.title": "Вступить за четыре минуты",
+    "steps.1.desc": "Одна анкета, один сосед, который за вас ручается, ни взноса, ни карточки. Участие — у человека, а не у квартиры: каждый расписывается сам.",
+    "steps.2.title": "Забронировать нужное",
+    "steps.2.desc": "Каталог показывает полку, а не склад: если написано, что плиткорез на месте, значит он на месте и в двух минутах от того места, где вы стоите.",
+    "steps.3.title": "Взять на неделю",
+    "steps.3.desc": "Неделя — срок по умолчанию, и на восьмой день вас никто не преследует. Залог есть только у шести самых дорогих позиций, и он возвращается целиком.",
+    "steps.4.title": "Сломать — и починить вместе",
+    "steps.4.desc": "За обычный износ денег не берут. Принесите сломанное в субботнюю мастерскую — уйдёте, зная, почему оно вышло из строя.",
+
+    "cta.title": "На вашей улице уже всего хватает.",
+    "cta.lede": "Тридцать семей, одна полка и комплект ключей. Мы пришлём стартовый набор — правила, шаблон страховки и каталог — и участника из ближайшей библиотеки, чтобы он высидел с вами первое собрание.",
+    "cta.btn1": "Запросить стартовый набор",
+    "cta.btn2": "Сначала зайти в библиотеку",
+
+    "footer.note": "Федерация соседских библиотек вещей и мастерских ремонта. Основана в Тбилиси, управляется оттуда, где стоят полки.",
+    "footer.c1": "Библиотеки",
+    "footer.c1.1": "Найти полку",
+    "footer.c1.2": "Каталог",
+    "footer.c1.3": "Открыть библиотеку",
+    "footer.c1.4": "Цифры",
+    "footer.c2": "Ремонт",
+    "footer.c2.1": "Мастерские",
+    "footer.c2.2": "Запчасти",
+    "footer.c2.3": "Инструкции",
+    "footer.c2.4": "Волонтёрство",
+    "footer.c3": "Движение",
+    "footer.c3.1": "О нас",
+    "footer.c3.2": "Устав",
+    "footer.c3.3": "Финансы",
+    "footer.c3.4": "Контакты",
+    "footer.copy": "© 2026 Mutual — федерация участников",
+    "footer.legal": "Устав · Приватность · Страхование"
+  }
+};
+
+(function () {
+  var nodes = document.querySelectorAll('[data-i18n]');
+  var EN = {};
+  nodes.forEach(function (n) { EN[n.getAttribute('data-i18n')] = n.textContent; });
+
+  function apply(lang) {
+    var dict = lang === 'ru' ? I18N.ru : EN;
+    nodes.forEach(function (n) {
+      var k = n.getAttribute('data-i18n');
+      var v = (lang === 'ru' ? dict[k] : EN[k]);
+      if (v) n.textContent = v;
+    });
+    document.documentElement.lang = lang;
+    document.documentElement.setAttribute('data-lang', lang);
+    document.querySelectorAll('.lang [data-set]').forEach(function (b) {
+      b.setAttribute('aria-pressed', String(b.getAttribute('data-set') === lang));
+    });
+  }
+
+  document.querySelectorAll('.lang [data-set]').forEach(function (b) {
+    b.addEventListener('click', function () { apply(b.getAttribute('data-set')); });
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>GRAIN — weather-index crop cover that pays without a visit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ─────────────────────────────────────────────────────────────
+   Дизайн-система: Composer (refero 1e675740) — tokens.css дословно
+   ───────────────────────────────────────────────────────────── */
+:root {
+  /* Colors */
+  --color-signal-blue: #1871da;
+  --color-pulse-green: #1ec072;
+  --color-hot-pink: #f6609f;
+  --color-cotton-candy: #ffb4ed;
+  --color-solar-yellow: #ffbb38;
+  --color-ember-orange: #ff5500;
+  --color-forest-moss: #31805a;
+  --color-tangerine: #ffa724;
+  --color-ultraviolet: #9664d7;
+  --color-deep-iris: #0c4cbe;
+  --color-azure: #1f86ff;
+  --color-alert-red: #c60808;
+  --color-deep-moss: #1c372a;
+  --color-concrete: #e5e7eb;
+  --color-obsidian: #000000;
+  --color-paper: #ffffff;
+  --color-carbon: #101516;
+  --color-mist: #f7f7f7;
+  --color-pebble: #bec6cc;
+  --color-ash: #cccccc;
+  --color-smoke: #d7d7d7;
+  --color-stone: #999999;
+  --color-graphite: #262d2f;
+  --color-iron: #666666;
+  --color-slate: #808080;
+
+  /* Typography — Font Families */
+  --font-neue-haas-grotesk-display: 'Neue Haas Grotesk Display', ui-sans-serif, system-ui, sans-serif;
+  --font-inter: 'Inter', ui-sans-serif, system-ui, sans-serif;
+
+  /* Typography — Scale */
+  --text-caption: 12px;       --leading-caption: 1.5;        --tracking-caption: 0.3px;
+  --text-body-sm: 14px;       --leading-body-sm: 1.43;       --tracking-body-sm: 0.35px;
+  --text-body: 16px;          --leading-body: 1.5;           --tracking-body: 0.4px;
+  --text-subheading: 20px;    --leading-subheading: 1.33;    --tracking-subheading: 0.5px;
+  --text-heading-sm: 24px;    --leading-heading-sm: 1.25;    --tracking-heading-sm: 0.6px;
+  --text-heading: 32px;       --leading-heading: 1.2;        --tracking-heading: 0.8px;
+  --text-heading-lg: 56px;    --leading-heading-lg: 1.07;    --tracking-heading-lg: 1.4px;
+  --text-display: 64px;       --leading-display: 1.07;       --tracking-display: 1.28px;
+  --text-display-xl: 244px;   --leading-display-xl: 1;       --tracking-display-xl: 2.44px;
+
+  /* Typography — Weights */
+  --font-weight-regular: 400; --font-weight-medium: 500;
+  --font-weight-semibold: 600; --font-weight-bold: 700;
+
+  /* Spacing */
+  --spacing-4: 4px; --spacing-8: 8px; --spacing-12: 12px; --spacing-16: 16px;
+  --spacing-24: 24px; --spacing-32: 32px; --spacing-36: 36px; --spacing-40: 40px;
+  --spacing-48: 48px; --spacing-56: 56px; --spacing-60: 60px; --spacing-64: 64px;
+  --spacing-80: 80px; --spacing-96: 96px; --spacing-160: 160px;
+
+  /* Layout */
+  --page-max-width: 1200px; --section-gap: 64px; --card-padding: 24px; --element-gap: 8px;
+
+  /* Border Radius */
+  --radius-sm: 2px; --radius-md: 6px; --radius-xl: 12px; --radius-full: 100px;
+  --radius-cards: 6px; --radius-icons: 2px; --radius-buttons: 9999px;
+
+  /* Shadows */
+  --shadow-subtle: rgba(24, 113, 218, 0.25) 0px 1px 2px 0px;
+  --shadow-xl: rgba(0,0,0,0.01) 45px 68px 33px 0px, rgba(0,0,0,0.02) 25px 38px 27px 0px, rgba(0,0,0,0.03) 11px 17px 20px 0px, rgba(0,0,0,0.04) 3px 4px 11px 0px;
+
+  /* Surfaces */
+  --surface-concrete: #e5e7eb; --surface-paper: #ffffff; --surface-mist: #f7f7f7;
+  --surface-graphite: #262d2f; --surface-carbon: #101516;
+}
+
+/* Подстановка шрифта: Neue Haas Grotesk Display недоступен — взят гротеск
+   того же неогротескового класса с кириллицей. Inter в системе уже указан
+   и используется как есть для мелкого UI. */
+:root { --font-neue-haas-grotesk-display: 'Golos Text', 'Neue Haas Grotesk Display', sans-serif; }
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--surface-concrete);
+  color: var(--color-obsidian);
+  font-family: var(--font-neue-haas-grotesk-display);
+  font-size: var(--text-body); line-height: var(--leading-body); letter-spacing: var(--tracking-body);
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, p { margin: 0; }
+a { color: inherit; text-decoration: none; }
+.wrap { max-width: var(--page-max-width); margin: 0 auto; padding-left: var(--spacing-24); padding-right: var(--spacing-24); }
+.ui { font-family: var(--font-inter); }
+
+.btn {
+  display: inline-flex; align-items: center; gap: var(--spacing-8);
+  background: var(--color-obsidian); color: var(--color-paper);
+  border: 0; border-radius: var(--radius-buttons);
+  padding: var(--spacing-12) var(--spacing-24);
+  font-family: inherit; font-size: var(--text-body); font-weight: var(--font-weight-medium);
+  letter-spacing: var(--tracking-body); cursor: pointer;
+}
+.ghost { font-size: var(--text-body); font-weight: var(--font-weight-medium); }
+.ghost:hover { text-decoration: underline; }
+
+/* ── Навигация ─────────────────────────────────────────────────────── */
+.nav {
+  position: sticky; top: 0; z-index: 40;
+  background: var(--surface-paper); border-bottom: 1px solid var(--color-concrete);
+  padding: var(--spacing-16) 0;
+}
+.nav-in { max-width: var(--page-max-width); margin: 0 auto; padding: 0 var(--spacing-24); display: flex; align-items: center; gap: var(--spacing-16); }
+.logo { display: flex; align-items: center; gap: var(--spacing-8); font-weight: var(--font-weight-semibold); font-size: var(--text-subheading); }
+.logo .m { display: inline-flex; gap: 2px; }
+.logo .m i { display: block; width: 4px; border-radius: var(--radius-icons); }
+.nav .sp { flex: 1; }
+.nav a.l { font-size: var(--text-body-sm); font-weight: var(--font-weight-medium); padding: var(--spacing-8) var(--spacing-12); }
+.lang { display: flex; gap: var(--spacing-4); }
+.lang button { background: none; border: 0; padding: 0 2px; cursor: pointer; font-family: inherit; font-size: var(--text-body-sm); color: var(--color-stone); }
+.lang button[aria-pressed="true"] { color: var(--color-obsidian); }
+
+/* ── Герой ─────────────────────────────────────────────────────────── */
+.hero { position: relative; overflow: hidden; padding: var(--spacing-64) 0 var(--spacing-96); }
+.gridlines { position: absolute; inset: 0; pointer-events: none;
+  background-image: linear-gradient(to right, rgba(0,0,0,.06) 1px, transparent 1px);
+  background-size: 180px 100%; }
+.confetti { position: absolute; inset: 0; pointer-events: none; }
+.confetti i { position: absolute; display: block; border-radius: 0; }
+.hero-in { position: relative; z-index: 2; }
+.meet { display: inline-block; font-size: var(--text-heading-lg); line-height: var(--leading-heading-lg); font-weight: var(--font-weight-semibold); letter-spacing: var(--tracking-heading-lg); }
+.display {
+  font-size: var(--text-display-xl); line-height: var(--leading-display-xl); letter-spacing: var(--tracking-display-xl);
+  font-weight: var(--font-weight-semibold);
+}
+.hero p.dek { margin-top: var(--spacing-24); max-width: 520px; font-size: var(--text-heading-sm); line-height: var(--leading-heading-sm); letter-spacing: var(--tracking-heading-sm); }
+.hero p.tag { margin-top: var(--spacing-24); font-size: var(--text-heading-sm); font-weight: var(--font-weight-medium); }
+.hero .cta { margin-top: var(--spacing-32); }
+mark { background: var(--color-cotton-candy); color: inherit; padding: 2px 4px; border-radius: 0; }
+
+/* ── Полосы-разделители ────────────────────────────────────────────── */
+.band { height: 16px; }
+
+/* ── Цифры ─────────────────────────────────────────────────────────── */
+.stats { background: var(--surface-paper); padding: var(--spacing-56) 0; }
+.stats .row { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--spacing-24); text-align: center; }
+.stats .v { font-size: var(--text-display); line-height: var(--leading-display); letter-spacing: var(--tracking-display); font-weight: var(--font-weight-semibold); }
+.stats .l { font-family: var(--font-inter); font-size: var(--text-body-sm); color: var(--color-iron); margin-top: var(--spacing-8); }
+
+/* ── Секции ────────────────────────────────────────────────────────── */
+section { padding: var(--spacing-96) 0; }
+h2 { font-size: var(--text-heading-lg); line-height: var(--leading-heading-lg); letter-spacing: var(--tracking-heading-lg); font-weight: var(--font-weight-semibold); max-width: 900px; }
+.lede { margin-top: var(--spacing-16); max-width: 640px; font-size: var(--text-subheading); line-height: var(--leading-subheading); letter-spacing: var(--tracking-subheading); color: var(--color-graphite); }
+.underline-pink { position: relative; }
+.underline-pink::after { content: ''; position: absolute; left: 0; bottom: -12px; width: 320px; height: 20px; background: linear-gradient(90deg, var(--color-hot-pink), rgba(246,96,159,0)); }
+
+.steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--spacing-24); margin-top: var(--spacing-64); }
+.step .ic { width: 48px; height: 48px; border-radius: var(--radius-icons); display: flex; align-items: center; justify-content: center; color: var(--color-paper); font-weight: var(--font-weight-semibold); font-size: var(--text-subheading); }
+.step h3 { margin-top: var(--spacing-16); font-size: var(--text-heading-sm); line-height: var(--leading-heading-sm); letter-spacing: var(--tracking-heading-sm); font-weight: var(--font-weight-semibold); }
+.step p { margin-top: var(--spacing-8); font-family: var(--font-inter); font-size: var(--text-body-sm); line-height: var(--leading-body-sm); color: var(--color-graphite); }
+
+/* Индекс — столбики без скруглений */
+.chart { background: var(--surface-paper); border: 1px solid var(--color-concrete); border-radius: var(--radius-cards); padding: var(--spacing-32); margin-top: var(--spacing-40); }
+.chart .hd { display: flex; align-items: baseline; gap: var(--spacing-16); }
+.chart .hd .t { font-size: var(--text-heading-sm); font-weight: var(--font-weight-semibold); letter-spacing: var(--tracking-heading-sm); }
+.chart .hd .s { font-family: var(--font-inter); font-size: var(--text-body-sm); color: var(--color-iron); }
+.bars { position: relative; display: grid; grid-template-columns: repeat(24, 1fr); gap: 6px; align-items: end; height: 220px; margin-top: var(--spacing-48); }
+.bars i { display: block; background: var(--color-signal-blue); }
+.bars i.dry { background: var(--color-solar-yellow); }
+.bars i.pay { background: var(--color-hot-pink); }
+.trigger { position: absolute; left: 0; right: 0; bottom: 40%; border-top: 2px dashed var(--color-obsidian); pointer-events: none; }
+.trigger span { position: absolute; right: 0; top: -22px; font-family: var(--font-inter); font-size: var(--text-caption); background: var(--color-paper); padding: 0 var(--spacing-4); }
+.legend { display: flex; gap: var(--spacing-24); margin-top: var(--spacing-24); font-family: var(--font-inter); font-size: var(--text-body-sm); color: var(--color-graphite); }
+.legend span { display: inline-flex; align-items: center; gap: var(--spacing-8); }
+.legend em { width: 12px; height: 12px; display: inline-block; border-radius: var(--radius-icons); font-style: normal; }
+
+/* Карточки */
+.cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-24); margin-top: var(--spacing-64); }
+.card { background: var(--surface-paper); border: 1px solid var(--color-concrete); border-radius: var(--radius-cards); padding: var(--card-padding); box-shadow: var(--shadow-xl); }
+.card .tag { display: inline-block; font-family: var(--font-inter); font-size: var(--text-caption); letter-spacing: var(--tracking-caption); padding: 4px 8px; border-radius: var(--radius-icons); color: var(--color-paper); }
+.card h3 { margin-top: var(--spacing-16); font-size: var(--text-heading); line-height: var(--leading-heading); letter-spacing: var(--tracking-heading); font-weight: var(--font-weight-semibold); }
+.card p { margin-top: var(--spacing-12); font-family: var(--font-inter); font-size: var(--text-body-sm); line-height: var(--leading-body-sm); color: var(--color-graphite); }
+.card ul { margin: var(--spacing-16) 0 0; padding: 0; list-style: none; font-family: var(--font-inter); font-size: var(--text-body-sm); color: var(--color-graphite); }
+.card li { padding: var(--spacing-8) 0; border-top: 1px solid var(--color-concrete); display: flex; justify-content: space-between; gap: var(--spacing-8); }
+
+/* Выплаты */
+.table { margin-top: var(--spacing-40); background: var(--surface-paper); border: 1px solid var(--color-concrete); border-radius: var(--radius-cards); overflow: hidden; }
+.table .r { display: grid; grid-template-columns: 132px 1fr 168px 132px 120px; gap: var(--spacing-16); padding: var(--spacing-16) var(--spacing-24); border-top: 1px solid var(--color-concrete); font-family: var(--font-inter); font-size: var(--text-body-sm); }
+.table .r:first-child { border-top: 0; color: var(--color-iron); font-size: var(--text-caption); letter-spacing: var(--tracking-caption); text-transform: uppercase; }
+.table .r b { font-weight: var(--font-weight-semibold); }
+.table .r .amt { text-align: right; font-weight: var(--font-weight-semibold); }
+.table .r .d { color: var(--color-iron); }
+
+footer { background: var(--surface-carbon); color: var(--color-paper); padding: var(--spacing-64) 0; }
+.foot { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: var(--spacing-32); }
+.foot .h { font-family: var(--font-inter); font-size: var(--text-caption); letter-spacing: var(--tracking-caption); text-transform: uppercase; color: var(--color-pebble); }
+.foot a, .foot span.i { display: block; font-family: var(--font-inter); font-size: var(--text-body-sm); margin-top: var(--spacing-12); color: var(--color-paper); }
+.foot .big { font-size: var(--text-heading); font-weight: var(--font-weight-semibold); letter-spacing: var(--tracking-heading); }
+.foot .moss { color: var(--color-pulse-green); }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-in">
+    <span class="logo"><span class="m"><i style="height:18px;background:#1871da"></i><i style="height:12px;background:#1ec072"></i><i style="height:22px;background:#ffbb38"></i></span>Grain</span>
+    <span class="sp"></span>
+    <a class="l" href="#how" data-i18n="n1">How it pays</a>
+    <a class="l" href="#index" data-i18n="n2">The index</a>
+    <a class="l" href="#covers" data-i18n="n3">Covers</a>
+    <a class="l" href="#paid" data-i18n="n4">Payouts</a>
+    <div class="lang">
+      <button data-set="en" aria-pressed="true">En</button>
+      <button data-set="ru" aria-pressed="false">Ru</button>
+    </div>
+    <a class="ghost" href="#paid" data-i18n="n5">Log in</a>
+    <a class="btn" href="#covers" data-i18n="n6">Get a quote</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="gridlines"></div>
+  <div class="confetti" aria-hidden="true">
+    <i style="left:0;top:40px;width:96px;height:64px;background:#ffb4ed"></i>
+    <i style="left:96px;top:104px;width:56px;height:40px;background:#1ec072"></i>
+    <i style="left:0;top:264px;width:120px;height:130px;background:#ffb4ed"></i>
+    <i style="left:130px;top:120px;width:470px;height:150px;background:#1ec072"></i>
+    <i style="right:0;top:96px;width:150px;height:160px;background:#1ec072"></i>
+    <i style="right:280px;top:330px;width:190px;height:64px;background:#1f86ff"></i>
+    <i style="right:120px;top:394px;width:190px;height:74px;background:#ffb4ed"></i>
+    <i style="right:340px;top:468px;width:96px;height:36px;background:#1f86ff"></i>
+    <i style="right:180px;top:468px;width:120px;height:36px;background:#1ec072"></i>
+    <i style="right:240px;top:504px;width:96px;height:36px;background:#ffbb38"></i>
+    <i style="right:0;top:330px;width:190px;height:64px;background:#ffa724"></i>
+    <i style="right:60px;top:504px;width:96px;height:36px;background:#ffb4ed"></i>
+  </div>
+  <div class="wrap hero-in">
+    <div class="meet" data-i18n="h_meet">Rain misses.</div>
+    <div class="display">Grain</div>
+    <p class="dek" data-i18n="h_dek">Crop cover that pays on a weather index, not on a visit. No adjuster, no photographs of your field, no argument about what the hail did.</p>
+    <p class="tag" data-i18n="h_tag">The rain gauge decides. <mark data-i18n="h_mark">Money in five days.</mark></p>
+    <div class="cta"><a class="btn" href="#covers" data-i18n="h_cta">Get a quote <span>→</span></a></div>
+  </div>
+</header>
+
+<div class="band" style="background:#1ec072"></div>
+
+<div class="stats">
+  <div class="wrap row">
+    <div><div class="v">4 118</div><div class="l" data-i18n="s1">farms covered</div></div>
+    <div><div class="v">€61M</div><div class="l" data-i18n="s2">paid out since 2022</div></div>
+    <div><div class="v">5</div><div class="l" data-i18n="s3">days, median payout</div></div>
+    <div><div class="v">0</div><div class="l" data-i18n="s4">claims forms, ever</div></div>
+  </div>
+</div>
+
+<section class="wrap" id="how">
+  <h2 class="underline-pink" data-i18n="hw_h">Four steps, and none of them is a phone call</h2>
+  <p class="lede" data-i18n="hw_l">A parametric policy is a bet with published rules. You choose the trigger before the season, the weather station reports, and the payout is arithmetic.</p>
+  <div class="steps">
+    <div class="step"><div class="ic" style="background:#1871da">01</div><h3 data-i18n="st1">Pick the station</h3><p data-i18n="st1d">The nearest official gauge to your parcel, named in the policy with its number and its distance in kilometres.</p></div>
+    <div class="step"><div class="ic" style="background:#1ec072">02</div><h3 data-i18n="st2">Set the trigger</h3><p data-i18n="st2d">Rainfall under 42 mm across the flowering window, or four days above 32 °C in a row. You choose the number and see the price move.</p></div>
+    <div class="step"><div class="ic" style="background:#ffbb38">03</div><h3 data-i18n="st3">Grow the season</h3><p data-i18n="st3d">Nothing to report, nothing to photograph. We watch the same public data you can open on your phone.</p></div>
+    <div class="step"><div class="ic" style="background:#f6609f">04</div><h3 data-i18n="st4">Get paid</h3><p data-i18n="st4d">The window closes, the number is read, the transfer goes out. Median five days, longest ever eleven.</p></div>
+  </div>
+</section>
+
+<div class="band" style="background:#ffbb38"></div>
+
+<section class="wrap" id="index">
+  <h2 data-i18n="ix_h">This is the whole product</h2>
+  <p class="lede" data-i18n="ix_l">Rainfall at station DE-4471, ten-day periods across one season. Below the dashed line the policy pays; the height of the pink bar is the money.</p>
+  <div class="chart">
+    <div class="hd"><span class="t" data-i18n="ix_t">Station DE-4471 · Uckermark</span><span class="s" data-i18n="ix_s">season 2026 · trigger 42 mm per 10 days</span></div>
+    <div class="bars">
+      <i style="height:64%"></i><i style="height:78%"></i><i style="height:56%"></i>
+      <i style="height:52%"></i><i class="dry" style="height:44%"></i><i class="pay" style="height:26%"></i>
+      <i class="pay" style="height:15%"></i><i class="dry" style="height:46%"></i><i style="height:58%"></i>
+      <i style="height:72%"></i><i style="height:88%"></i><i style="height:66%"></i>
+      <i style="height:54%"></i><i class="dry" style="height:43%"></i><i class="pay" style="height:22%"></i>
+      <i class="pay" style="height:12%"></i><i class="pay" style="height:18%"></i><i class="dry" style="height:47%"></i>
+      <i style="height:57%"></i><i style="height:69%"></i><i style="height:82%"></i>
+      <i style="height:61%"></i><i style="height:53%"></i><i style="height:74%"></i>
+      <div class="trigger"><span data-i18n="ix_tr">42 mm — trigger</span></div>
+    </div>
+    <div class="legend">
+      <span><em style="background:#1871da"></em><span data-i18n="lg1">above trigger, no payout</span></span>
+      <span><em style="background:#ffbb38"></em><span data-i18n="lg2">within 20% of trigger</span></span>
+      <span><em style="background:#f6609f"></em><span data-i18n="lg3">below trigger, pays</span></span>
+    </div>
+  </div>
+</section>
+
+<section class="wrap" id="covers">
+  <h2 data-i18n="cv_h">Three covers, published prices</h2>
+  <p class="lede" data-i18n="cv_l">Priced per hectare per season. The full wording is four pages and we will not send you anything longer.</p>
+  <div class="cards">
+    <div class="card">
+      <span class="tag" style="background:#1871da" data-i18n="c1t">Drought</span>
+      <h3 data-i18n="c1h">€38 / ha</h3>
+      <p data-i18n="c1p">Pays when rainfall over any declared ten-day window falls under your trigger. Most common cover on cereals and rapeseed.</p>
+      <ul>
+        <li><span data-i18n="c1a">Trigger range</span><b>28—54 mm</b></li>
+        <li><span data-i18n="c1b">Max payout</span><b>€720 / ha</b></li>
+        <li><span data-i18n="c1c">Windows</span><b data-i18n="c1cv">up to 4</b></li>
+      </ul>
+    </div>
+    <div class="card">
+      <span class="tag" style="background:#ff5500" data-i18n="c2t">Heat</span>
+      <h3 data-i18n="c2h">€44 / ha</h3>
+      <p data-i18n="c2p">Pays on consecutive days above your temperature line during flowering. Written for fruit, maize and anything that aborts in a heatwave.</p>
+      <ul>
+        <li><span data-i18n="c2a">Trigger range</span><b>29—35 °C</b></li>
+        <li><span data-i18n="c2b">Max payout</span><b>€960 / ha</b></li>
+        <li><span data-i18n="c2c">Windows</span><b data-i18n="c2cv">flowering only</b></li>
+      </ul>
+    </div>
+    <div class="card">
+      <span class="tag" style="background:#9664d7" data-i18n="c3t">Frost</span>
+      <h3 data-i18n="c3h">€52 / ha</h3>
+      <p data-i18n="c3p">Pays on a single hour below your line after the declared bud date. The most expensive cover because it is the one that ends seasons.</p>
+      <ul>
+        <li><span data-i18n="c3a">Trigger range</span><b>−1 … −6 °C</b></li>
+        <li><span data-i18n="c3b">Max payout</span><b>€1 400 / ha</b></li>
+        <li><span data-i18n="c3c">Windows</span><b data-i18n="c3cv">bud to petal fall</b></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<div class="band" style="background:#f6609f"></div>
+
+<section class="wrap" id="paid">
+  <h2 data-i18n="pd_h">Every payout we have made</h2>
+  <p class="lede" data-i18n="pd_l">Published within a week of the transfer, station by station, since the first season. Names of the farms are not, unless they ask.</p>
+  <div class="table">
+    <div class="r"><span data-i18n="th1">Date</span><span data-i18n="th2">Station and event</span><span data-i18n="th3">Cover</span><span data-i18n="th4">Days to pay</span><span class="amt" data-i18n="th5">Amount</span></div>
+    <div class="r"><b>2026-07-28</b><span data-i18n="p1">DE-4471 Uckermark · 16 mm over 10 days</span><span class="d" data-i18n="p1c">Drought</span><span class="d">4</span><span class="amt">€412 000</span></div>
+    <div class="r"><b>2026-07-04</b><span data-i18n="p2">PL-2210 Wielkopolska · 5 days above 33 °C</span><span class="d" data-i18n="p2c">Heat</span><span class="d">6</span><span class="amt">€268 500</span></div>
+    <div class="r"><b>2026-05-11</b><span data-i18n="p3">FR-7783 Anjou · −3.1 °C at 04:00</span><span class="d" data-i18n="p3c">Frost</span><span class="d">3</span><span class="amt">€1 106 000</span></div>
+    <div class="r"><b>2026-04-22</b><span data-i18n="p4">HU-0912 Békés · 19 mm over 10 days</span><span class="d" data-i18n="p4c">Drought</span><span class="d">5</span><span class="amt">€94 200</span></div>
+    <div class="r"><b>2025-08-30</b><span data-i18n="p5">RO-3340 Dolj · 11 mm over 10 days</span><span class="d" data-i18n="p5c">Drought</span><span class="d">11</span><span class="amt">€540 700</span></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot">
+    <div>
+      <div class="big">Grain</div>
+      <span class="i" data-i18n="fa">Weather-index cover for arable and fruit</span>
+      <span class="i moss" data-i18n="fb">Underwritten by Nordring Re · licence 44-118</span>
+    </div>
+    <div>
+      <div class="h" data-i18n="fh1">Product</div>
+      <a href="#covers" data-i18n="fl1">Covers and prices</a>
+      <a href="#index" data-i18n="fl2">How the index works</a>
+      <a href="#how" data-i18n="fl3">Stations we use</a>
+    </div>
+    <div>
+      <div class="h" data-i18n="fh2">Open</div>
+      <a href="#paid" data-i18n="fl4">Every payout</a>
+      <a href="#paid" data-i18n="fl5">Policy wording, 4 pages</a>
+      <a href="#paid" data-i18n="fl6">Loss ratio by season</a>
+    </div>
+    <div>
+      <div class="h" data-i18n="fh3">Contact</div>
+      <a href="#covers" data-i18n="fl7">gauge@grain.cover</a>
+      <span class="i" data-i18n="fl8">Mon—Fri, 08:00—18:00 CET</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ── RU/EN. Английский — исходный, русский — перевод под него ── */
+var RU = {
+  n1:'Как платит', n2:'Индекс', n3:'Покрытия', n4:'Выплаты', n5:'Войти', n6:'Расчёт',
+  h_meet:'Дождь не пришёл.',
+  h_dek:'Страховка урожая, которая платит по погодному индексу, а не по визиту. Ни оценщика, ни фотографий поля, ни спора о том, что именно натворил град.',
+  h_tag:'Решает дождемер. ', h_mark:'Деньги за пять дней.',
+  h_cta:'Рассчитать <span>→</span>',
+  s1:'хозяйств застраховано', s2:'выплачено с 2022 года', s3:'дней — медиана выплаты', s4:'бланков заявления, никогда',
+  hw_h:'Четыре шага, и ни один из них не телефонный звонок',
+  hw_l:'Параметрический полис — это пари с опубликованными правилами. Порог вы выбираете до сезона, метеостанция сообщает данные, а выплата считается арифметикой.',
+  st1:'Выберите станцию', st1d:'Ближайший к участку официальный дождемер: в полисе стоит его номер и расстояние в километрах.',
+  st2:'Задайте порог', st2d:'Меньше 42 мм осадков за окно цветения или четыре дня подряд выше 32 °C. Вы двигаете число и сразу видите цену.',
+  st3:'Ведите сезон', st3d:'Ничего не нужно сообщать и нечего фотографировать. Мы смотрим те же открытые данные, что открываются у вас в телефоне.',
+  st4:'Получите деньги', st4d:'Окно закрылось, число считано, перевод ушёл. Медиана — пять дней, самый долгий случай — одиннадцать.',
+  ix_h:'Вот и весь продукт',
+  ix_l:'Осадки на станции DE-4471, декадами за один сезон. Ниже пунктира полис платит, а высота розового столбика — это деньги.',
+  ix_t:'Станция DE-4471 · Уккермарк', ix_s:'сезон 2026 · порог 42 мм за декаду',
+  ix_tr:'42 мм — порог',
+  lg1:'выше порога, выплаты нет', lg2:'в пределах 20% от порога', lg3:'ниже порога, платит',
+  cv_h:'Три покрытия, цены опубликованы',
+  cv_l:'Цена за гектар за сезон. Полные условия — четыре страницы, ничего длиннее мы вам не пришлём.',
+  c1t:'Засуха', c1h:'€38 / га', c1p:'Платит, когда осадки за любую заявленную декаду опускаются ниже вашего порога. Самое частое покрытие на зерновых и рапсе.',
+  c1a:'Диапазон порога', c1b:'Максимум выплаты', c1c:'Окон', c1cv:'до 4',
+  c2t:'Жара', c2h:'€44 / га', c2p:'Платит за дни подряд выше вашей температурной черты в цветение. Написано под плодовые, кукурузу и всё, что осыпается в волну жары.',
+  c2a:'Диапазон порога', c2b:'Максимум выплаты', c2c:'Окон', c2cv:'только цветение',
+  c3t:'Заморозок', c3h:'€52 / га', c3p:'Платит за один час ниже вашей черты после заявленной даты набухания почек. Самое дорогое покрытие, потому что именно оно закрывает сезоны.',
+  c3a:'Диапазон порога', c3b:'Максимум выплаты', c3c:'Окно', c3cv:'от почки до опадения лепестка',
+  pd_h:'Все выплаты, которые мы сделали',
+  pd_l:'Публикуются в течение недели после перевода, станция за станцией, с первого сезона. Названия хозяйств — нет, если они сами не попросят.',
+  th1:'Дата', th2:'Станция и событие', th3:'Покрытие', th4:'Дней до выплаты', th5:'Сумма',
+  p1:'DE-4471 Уккермарк · 16 мм за декаду', p1c:'Засуха',
+  p2:'PL-2210 Великопольша · 5 дней выше 33 °C', p2c:'Жара',
+  p3:'FR-7783 Анжу · −3,1 °C в 04:00', p3c:'Заморозок',
+  p4:'HU-0912 Бекеш · 19 мм за декаду', p4c:'Засуха',
+  p5:'RO-3340 Долж · 11 мм за декаду', p5c:'Засуха',
+  fa:'Погодно-индексное покрытие для пашни и садов', fb:'Перестрахование Nordring Re · лицензия 44-118',
+  fh1:'Продукт', fl1:'Покрытия и цены', fl2:'Как устроен индекс', fl3:'Станции, которые мы берём',
+  fh2:'Открыто', fl4:'Все выплаты', fl5:'Условия, 4 страницы', fl6:'Убыточность по сезонам',
+  fh3:'Связь', fl7:'gauge@grain.cover', fl8:'Пн—Пт, 08:00—18:00 CET'
+};
+var EN = {};
+document.querySelectorAll('[data-i18n]').forEach(function (el) { EN[el.dataset.i18n] = el.innerHTML; });
+
+function setLang(l) {
+  var dict = l === 'ru' ? RU : EN;
+  document.querySelectorAll('[data-i18n]').forEach(function (el) {
+    var v = dict[el.dataset.i18n];
+    if (v !== undefined) el.innerHTML = v;
+  });
+  document.documentElement.lang = l;
+  document.documentElement.dataset.lang = l;
+  document.querySelectorAll('.lang button').forEach(function (b) {
+    b.setAttribute('aria-pressed', b.dataset.set === l ? 'true' : 'false');
+  });
+}
+document.querySelectorAll('.lang button').forEach(function (b) {
+  b.addEventListener('click', function () { setLang(b.dataset.set); });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,3 @@
+/* Original keyframes: Animista, Ana Travas. https://animista.net/play/basic/scale-down/scale-down-bottom */
+.scale-down-bottom{animation:scale-down-bottom 0.4s cubic-bezier(.25,.46,.45,.94) 0s 1 normal both;}
+@keyframes scale-down-bottom{0%{-webkit-transform:scale(1);transform:scale(1);-webkit-transform-origin:50% 100%;transform-origin:50% 100%}to{-webkit-transform:scale(.5);transform:scale(.5);-webkit-transform-origin:50% 100%;transform-origin:50% 100%}}

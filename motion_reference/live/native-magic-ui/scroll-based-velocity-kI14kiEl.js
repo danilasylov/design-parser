@@ -1,0 +1,142 @@
+import { r as o, M as k, Q as S, P as q, j as m, c as P, R as B, m as Q } from "./inline-Mcm4wFdg.js";
+import { u as z } from "./use-scroll-CUpCig5d.js";
+import { u as M } from "./use-motion-value-CcTD1FWM.js";
+import { u as D } from "./use-spring-C8QKVjC2.js";
+import { u as j } from "./use-transform-DTx9FOYX.js";
+function X(e, t, n) {
+  o.useInsertionEffect(() => e.on(t, n), [e, t, n]);
+}
+function $(e) {
+  const t = o.useRef(0), { isStatic: n } = o.useContext(k);
+  o.useEffect(() => {
+    if (n)
+      return;
+    const s = ({ timestamp: a, delta: u }) => {
+      t.current || (t.current = a), e(a - t.current, u);
+    };
+    return S.update(s, !0), () => q(s);
+  }, [e]);
+}
+function T(e) {
+  const t = M(e.getVelocity()), n = () => {
+    const s = e.getVelocity();
+    t.set(s), s && S.update(n);
+  };
+  return X(e, "change", () => {
+    S.update(n, !1, !0);
+  }), t;
+}
+const G = (e, t, n) => {
+  const s = t - e;
+  return ((n - e) % s + s) % s + e;
+}, W = B.createContext(
+  null
+);
+function te({
+  children: e,
+  className: t,
+  ...n
+}) {
+  const { scrollY: s } = z(), a = T(s), u = D(a, {
+    damping: 50,
+    stiffness: 400
+  }), p = j(u, (d) => {
+    const x = d < 0 ? -1 : 1, V = Math.min(5, Math.abs(d) / 1e3 * 5);
+    return x * V;
+  });
+  return /* @__PURE__ */ m.jsx(W.Provider, { value: p, children: /* @__PURE__ */ m.jsx("div", { className: P("relative w-full", t), ...n, children: e }) });
+}
+function ne(e) {
+  const t = o.useContext(W);
+  return t ? /* @__PURE__ */ m.jsx(A, { ...e, velocityFactor: t }) : /* @__PURE__ */ m.jsx(H, { ...e });
+}
+function A({
+  children: e,
+  baseVelocity: t = 5,
+  direction: n = 1,
+  className: s,
+  velocityFactor: a,
+  scrollReactivity: u = !0,
+  ...p
+}) {
+  const d = o.useRef(null), x = o.useRef(null), [V, O] = o.useState(1), w = M(0), Y = o.useRef(n >= 0 ? 1 : -1), C = o.useRef(n >= 0 ? 1 : -1), R = M(0), E = o.useRef(!0), F = o.useRef(!0), N = o.useRef(!1);
+  o.useEffect(() => {
+    const f = d.current, c = x.current;
+    let r = null, i = null, l = null;
+    const y = () => {
+      F.current = document.visibilityState === "visible";
+    }, h = () => {
+      l && (N.current = l.matches);
+    };
+    if (f && c) {
+      const b = () => {
+        const v = f.offsetWidth || 0, g = c.scrollWidth || 0;
+        R.set(g);
+        const I = g > 0 ? Math.max(3, Math.ceil(v / g) + 2) : 1;
+        O((L) => L === I ? L : I);
+      };
+      b(), r = new ResizeObserver(b), r.observe(f), r.observe(c), i = new IntersectionObserver(([v]) => {
+        E.current = v.isIntersecting;
+      }), i.observe(f), document.addEventListener("visibilitychange", y, {
+        passive: !0
+      }), y(), l = window.matchMedia("(prefers-reduced-motion: reduce)"), l.addEventListener("change", h), h();
+    }
+    return () => {
+      r && r.disconnect(), i && i.disconnect(), document.removeEventListener("visibilitychange", y), l && l.removeEventListener("change", h);
+    };
+  }, [e, R]);
+  const _ = j([w, R], ([f, c]) => {
+    const r = Number(c) || 1, i = Number(f) || 0;
+    return `${-G(0, r, i)}px`;
+  });
+  return $((f, c) => {
+    if (!E.current || !F.current) return;
+    const r = c / 1e3, i = u ? a.get() : 0, l = Math.min(5, Math.abs(i)), y = N.current ? 1 : 1 + l;
+    if (l > 0.1) {
+      const g = i >= 0 ? 1 : -1;
+      C.current = Y.current * g;
+    }
+    const h = R.get() || 0;
+    if (h <= 0) return;
+    const b = h * t / 100, v = C.current * b * y * r;
+    w.set(w.get() + v);
+  }), /* @__PURE__ */ m.jsx(
+    "div",
+    {
+      ref: d,
+      className: P("w-full overflow-hidden whitespace-nowrap", s),
+      ...p,
+      children: /* @__PURE__ */ m.jsx(
+        Q.div,
+        {
+          className: "inline-flex transform-gpu items-center will-change-transform select-none",
+          style: { x: _ },
+          children: Array.from({ length: V }).map((f, c) => /* @__PURE__ */ m.jsx(
+            "div",
+            {
+              ref: c === 0 ? x : null,
+              "aria-hidden": c !== 0,
+              className: "inline-flex shrink-0 items-center",
+              children: e
+            },
+            c
+          ))
+        }
+      )
+    }
+  );
+}
+function H(e) {
+  const { scrollY: t } = z(), n = T(t), s = D(n, {
+    damping: 50,
+    stiffness: 400
+  }), a = j(s, (u) => {
+    const p = u < 0 ? -1 : 1, d = Math.min(5, Math.abs(u) / 1e3 * 5);
+    return p * d;
+  });
+  return /* @__PURE__ */ m.jsx(A, { ...e, velocityFactor: a });
+}
+export {
+  te as S,
+  ne as a
+};

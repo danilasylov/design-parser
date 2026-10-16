@@ -1,0 +1,3 @@
+/* Original keyframes: Animista, Ana Travas. https://animista.net/play/basic/flip/flip-vertical-fwd */
+.flip-vertical-fwd{animation:flip-vertical-fwd 0.4s cubic-bezier(.455,.03,.515,.955) 0s 1 normal both;}
+@keyframes flip-vertical-fwd{0%{-webkit-transform:translateZ(0) rotateY(0);transform:translateZ(0) rotateY(0)}to{-webkit-transform:translateZ(160px) rotateY(180deg);transform:translateZ(160px) rotateY(180deg)}}

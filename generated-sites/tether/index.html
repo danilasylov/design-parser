@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tether — Walk programs formulated by behaviorists</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=PT+Mono&display=swap" rel="stylesheet">
+<style>
+:root {
+  --color-parchment: #f5f5f5;
+  --color-warm-cream: #f8f4e6;
+  --color-paper-white: #ffffff;
+  --color-mist-gray: #e9e9e9;
+  --color-ink: #1e1e1f;
+  --color-carbon: #000000;
+  --color-sky-blue: #8ec7e2;
+  --color-pollen-yellow: #f7ca50;
+
+  --font-switzer: 'Golos Text', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-geist: 'Golos Text', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-pt-mono: 'PT Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  --text-caption: 12px; --leading-caption: 1.2;
+  --text-body: 15px; --leading-body: 1.35; --tracking-body: -0.75px;
+  --text-subheading: 18px; --leading-subheading: 1.35; --tracking-subheading: -0.9px;
+  --text-heading-sm: 22px; --leading-heading-sm: 1.2; --tracking-heading-sm: -0.66px;
+  --text-heading: 32px; --leading-heading: 1.1; --tracking-heading: -1.6px;
+  --text-heading-lg: 48px; --leading-heading-lg: 1.1; --tracking-heading-lg: -2.4px;
+  --text-display: 76px; --leading-display: 1.1; --tracking-display: -3.8px;
+
+  --font-weight-regular: 400; --font-weight-medium: 500;
+
+  --spacing-4:4px; --spacing-6:6px; --spacing-8:8px; --spacing-10:10px; --spacing-12:12px;
+  --spacing-16:16px; --spacing-20:20px; --spacing-24:24px; --spacing-32:32px; --spacing-48:48px;
+  --spacing-63:63px; --spacing-64:64px; --spacing-80:80px; --spacing-110:110px; --spacing-120:120px; --spacing-150:150px;
+
+  --section-gap: 80px;
+  --card-padding: 12px;
+  --element-gap: 10px;
+
+  --radius-nav: 3px; --radius-cards: 22px; --radius-pills: 22px; --radius-buttons: 22px;
+
+  --surface-canvas: #f5f5f5;
+  --surface-warm-cream-section: #f8f4e6;
+  --surface-mist: #e9e9e9;
+  --surface-paper-white: #ffffff;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-switzer);
+  background: var(--surface-canvas);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+}
+img, svg { display: block; max-width: 100%; }
+a { text-decoration: none; color: inherit; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+.edge { padding: 0 5%; }
+.mono { font-family: var(--font-pt-mono); }
+
+/* ---------- Nav ---------- */
+nav {
+  position: sticky; top: 0; z-index: 10;
+  background: var(--surface-mist);
+  border-radius: var(--radius-nav);
+  margin: 16px 5% 0;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 24px;
+}
+.logo { font-size: 18px; font-weight: 600; letter-spacing: -0.4px; }
+.navlinks { display: flex; gap: 28px; }
+.navlinks a { font-family: var(--font-pt-mono); font-size: 13px; letter-spacing: -0.04em; text-transform: uppercase; }
+.pill-arrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--color-sky-blue); color: var(--color-carbon);
+  border-radius: var(--radius-pills); padding: 10px 18px 10px 20px;
+  font-family: var(--font-geist); font-size: 13px; font-weight: 500;
+}
+.pill-arrow .arrow-dot { width: 22px; height: 22px; border-radius: 50%; background: rgba(0,0,0,0.08); display: flex; align-items: center; justify-content: center; font-size: 13px; }
+.lang-toggle { display: inline-flex; border-radius: var(--radius-pills); overflow: hidden; margin-left: 16px; background: #fff; }
+.lang-toggle button { padding: 8px 14px; font-family: var(--font-pt-mono); font-size: 12px; }
+.lang-toggle button.active { background: var(--color-ink); color: #fff; }
+
+/* ---------- Hero ---------- */
+.hero {
+  position: relative; margin-top: 16px; height: 92vh; min-height: 640px;
+  display: flex; align-items: center; justify-content: center; text-align: center;
+  overflow: hidden;
+}
+.hero-scene {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(circle at 30% 20%, rgba(142,199,226,0.35), transparent 55%),
+    radial-gradient(circle at 75% 70%, rgba(247,202,80,0.25), transparent 55%),
+    linear-gradient(160deg, #d8cdb8 0%, #a89d84 55%, #5c5647 100%);
+}
+.hero-grid { position: absolute; inset: 0; opacity: 0.18; background-image: linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px); background-size: 33.3% 100%, 100% 33.3%; }
+.hero-content { position: relative; z-index: 2; max-width: 780px; padding: 0 24px; }
+.hero h1 {
+  color: #fff; font-size: var(--text-display); line-height: var(--leading-display);
+  letter-spacing: var(--tracking-display); font-weight: var(--font-weight-regular); margin-bottom: 24px;
+}
+.hero p { color: rgba(255,255,255,0.85); font-size: 18px; max-width: 520px; margin: 0 auto 32px; }
+.scroll-cue { position: absolute; bottom: 32px; left: 0; right: 0; text-align: center; color: var(--color-pollen-yellow); font-family: var(--font-pt-mono); font-size: 13px; z-index: 2; }
+
+/* ---------- Editorial body ---------- */
+.section { padding: var(--section-gap) 0; }
+.editorial {
+  max-width: 640px;
+}
+.pollen-label {
+  display: inline-block; background: var(--color-pollen-yellow); color: var(--color-carbon);
+  font-family: var(--font-pt-mono); font-size: 13px; border-radius: var(--radius-pills);
+  padding: 6px 16px; margin-bottom: 24px;
+}
+.editorial p.big { font-size: 22px; line-height: 1.35; letter-spacing: -0.5px; margin-bottom: 28px; }
+
+/* ---------- Section heading ---------- */
+.section-head { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 32px; }
+.section-head h2 { font-size: var(--text-heading-lg); font-weight: var(--font-weight-regular); letter-spacing: var(--tracking-heading-lg); }
+.carousel-arrows { display: flex; gap: 8px; }
+.carousel-arrows button { width: 40px; height: 40px; border-radius: 50%; background: var(--color-mist-gray); display: flex; align-items: center; justify-content: center; }
+
+/* ---------- Application showcase ---------- */
+.showcase-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.showcase-card {
+  aspect-ratio: 3/4; border-radius: var(--radius-cards); position: relative; overflow: hidden;
+  display: flex; align-items: flex-end; padding: 16px;
+}
+.showcase-card .cat-lbl { font-family: var(--font-pt-mono); font-size: 13px; color: #fff; }
+.sc-1 { background: linear-gradient(160deg, #b7a98a, #6b6250); }
+.sc-2 { background: linear-gradient(160deg, #8ec7e2, #345a72); }
+.sc-3 { background: linear-gradient(160deg, #d8b990, #7a5a3a); }
+.dots { display: flex; justify-content: center; gap: 8px; margin-top: 24px; }
+.dots span { width: 6px; height: 6px; border-radius: 50%; background: var(--color-mist-gray); }
+.dots span.active { background: var(--color-carbon); }
+
+/* ---------- Warm cream section ---------- */
+.warm { background: var(--surface-warm-cream-section); }
+.stat-row { display: flex; gap: 64px; }
+.stat { }
+.stat .num { font-size: 48px; font-weight: 500; letter-spacing: -2px; }
+.stat .lbl { font-family: var(--font-pt-mono); font-size: 13px; margin-top: 8px; }
+
+/* ---------- Footer ---------- */
+footer { background: var(--surface-warm-cream-section); padding: 64px 0 32px; }
+.footer-cols { display: flex; justify-content: space-between; margin-bottom: 48px; flex-wrap: wrap; gap: 24px; }
+.footer-cols h5 { font-family: var(--font-pt-mono); font-size: 13px; margin-bottom: 14px; }
+.footer-cols a { display: block; font-size: 14px; margin-bottom: 8px; color: var(--color-ink); }
+.footer-bottom { font-family: var(--font-pt-mono); font-size: 12px; color: #555; border-top: 1px solid #ddd; padding-top: 20px; }
+
+[data-i18n] {}
+html[data-lang="en"] [lang-el="ru"] { display: none; }
+html[data-lang="ru"] [lang-el="en"] { display: none; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Tether ✳</div>
+  <div class="navlinks">
+    <a href="#programs"><span lang-el="en">Programs</span><span lang-el="ru">Программы</span></a>
+    <a href="#method"><span lang-el="en">Method</span><span lang-el="ru">Методика</span></a>
+    <a href="#behaviorists"><span lang-el="en">Behaviorists</span><span lang-el="ru">Специалисты</span></a>
+    <a href="#intel"><span lang-el="en">Intel</span><span lang-el="ru">Отчёты</span></a>
+  </div>
+  <div style="display:flex;align-items:center;">
+    <a href="#programs" class="pill-arrow"><span lang-el="en">Request a Walk</span><span lang-el="ru">Запросить прогулку</span> <span class="arrow-dot">↗</span></a>
+    <div class="lang-toggle">
+      <button data-set-lang="en" class="active">EN</button>
+      <button data-set-lang="ru">RU</button>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-scene"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <h1><span lang-el="en">Walks Formulated for the Dog in Front of You</span><span lang-el="ru">Прогулки, подобранные под конкретную собаку</span></h1>
+    <p><span lang-el="en">Every program is designed with a certified behaviorist — for reactive dogs, senior mobility, and puppies who need structure, not just exercise.</span>
+       <span lang-el="ru">Каждая программа разработана вместе с сертифицированным специалистом по поведению — для реактивных собак, пожилых с ограниченной подвижностью и щенков, которым нужна структура, а не просто нагрузка.</span></p>
+    <a href="#programs" class="pill-arrow"><span lang-el="en">Request a Sample Walk</span><span lang-el="ru">Пробная прогулка</span> <span class="arrow-dot">↗</span></a>
+  </div>
+  <div class="scroll-cue mono"><span lang-el="en">SCROLL DOWN</span><span lang-el="ru">ЛИСТАЙТЕ ВНИЗ</span></div>
+</section>
+
+<section class="section edge">
+  <div class="editorial">
+    <span class="pollen-label mono"><span lang-el="en">Introduction</span><span lang-el="ru">Введение</span></span>
+    <p class="big"><span lang-el="en">Most walking services optimize for distance. Tether optimizes for the dog's nervous system — pace, route, and duration are set by a behaviorist, not a stopwatch.</span>
+       <span lang-el="ru">Большинство сервисов выгула оптимизируют дистанцию. Tether оптимизирует нервную систему собаки — темп, маршрут и длительность задаёт специалист по поведению, а не секундомер.</span></p>
+    <a href="#method" class="pill-arrow"><span lang-el="en">Learn More</span><span lang-el="ru">Подробнее</span> <span class="arrow-dot">↗</span></a>
+  </div>
+</section>
+
+<section class="section edge" id="programs">
+  <div class="section-head">
+    <h2><span lang-el="en">Programs Showcase</span><span lang-el="ru">Наши программы</span></h2>
+    <div class="carousel-arrows"><button>←</button><button>→</button></div>
+  </div>
+  <div class="showcase-grid">
+    <div class="showcase-card sc-1"><span class="cat-lbl" lang-el="en">Reactive Dog Protocol</span><span class="cat-lbl" lang-el="ru">Протокол для реактивных собак</span></div>
+    <div class="showcase-card sc-2"><span class="cat-lbl" lang-el="en">Senior Mobility Walks</span><span class="cat-lbl" lang-el="ru">Прогулки для пожилых собак</span></div>
+    <div class="showcase-card sc-3"><span class="cat-lbl" lang-el="en">Puppy Foundations</span><span class="cat-lbl" lang-el="ru">Основы для щенков</span></div>
+  </div>
+  <div class="dots"><span class="active"></span><span></span><span></span></div>
+</section>
+
+<section class="section warm edge" id="method">
+  <div class="editorial" style="max-width:720px;">
+    <span class="pollen-label mono"><span lang-el="en">Method</span><span lang-el="ru">Методика</span></span>
+    <p class="big"><span lang-el="en">Before the first walk, a behaviorist reviews intake notes and sets a route profile: threshold distance from triggers, pace ceiling, and duration cap. The walker follows the profile, not their own instinct.</span>
+       <span lang-el="ru">Перед первой прогулкой специалист изучает анкету и задаёт профиль маршрута: дистанцию до триггеров, предельный темп и ограничение по длительности. Выгульщик следует профилю, а не собственной интуиции.</span></p>
+  </div>
+  <div class="stat-row" style="margin-top:56px;">
+    <div class="stat"><div class="num">312</div><div class="lbl mono"><span lang-el="en">DOGS ON ACTIVE PROGRAMS</span><span lang-el="ru">СОБАК НА АКТИВНЫХ ПРОГРАММАХ</span></div></div>
+    <div class="stat"><div class="num">14</div><div class="lbl mono"><span lang-el="en">CERTIFIED BEHAVIORISTS</span><span lang-el="ru">СЕРТИФИЦИРОВАННЫХ СПЕЦИАЛИСТОВ</span></div></div>
+    <div class="stat"><div class="num">4.9</div><div class="lbl mono"><span lang-el="en">AVG. PROGRAM RATING</span><span lang-el="ru">СРЕДНЯЯ ОЦЕНКА ПРОГРАММЫ</span></div></div>
+  </div>
+</section>
+
+<section class="section edge" id="behaviorists">
+  <div class="section-head">
+    <h2><span lang-el="en">Behind Every Profile</span><span lang-el="ru">За каждым профилем</span></h2>
+  </div>
+  <div class="showcase-grid">
+    <div class="showcase-card sc-2" style="aspect-ratio:4/3;"><span class="cat-lbl" lang-el="en">Dr. Alina Ford, CDBC</span><span class="cat-lbl" lang-el="ru">Доктор Алина Форд, CDBC</span></div>
+    <div class="showcase-card sc-3" style="aspect-ratio:4/3;"><span class="cat-lbl" lang-el="en">Marcus Oyelaran, KPA-CTP</span><span class="cat-lbl" lang-el="ru">Маркус Ойелэран, KPA-CTP</span></div>
+    <div class="showcase-card sc-1" style="aspect-ratio:4/3;"><span class="cat-lbl" lang-el="en">Priya Nandakumar, CPDT-KA</span><span class="cat-lbl" lang-el="ru">Прия Нандакумар, CPDT-KA</span></div>
+  </div>
+</section>
+
+<footer id="intel">
+  <div class="edge">
+    <div class="footer-cols">
+      <div>
+        <h5 class="mono">TETHER</h5>
+        <a href="#programs"><span lang-el="en">Programs</span><span lang-el="ru">Программы</span></a>
+        <a href="#method"><span lang-el="en">Method</span><span lang-el="ru">Методика</span></a>
+      </div>
+      <div>
+        <h5 class="mono"><span lang-el="en">COMPANY</span><span lang-el="ru">КОМПАНИЯ</span></h5>
+        <a href="#behaviorists"><span lang-el="en">Behaviorists</span><span lang-el="ru">Специалисты</span></a>
+        <a href="#"><span lang-el="en">Careers</span><span lang-el="ru">Вакансии</span></a>
+      </div>
+      <div>
+        <h5 class="mono">INTEL</h5>
+        <a href="#"><span lang-el="en">Case studies</span><span lang-el="ru">Разбор случаев</span></a>
+        <a href="#"><span lang-el="en">Research notes</span><span lang-el="ru">Заметки исследований</span></a>
+      </div>
+      <div>
+        <h5 class="mono"><span lang-el="en">CONTACT</span><span lang-el="ru">КОНТАКТЫ</span></h5>
+        <a href="#"><span lang-el="en">Request a Sample</span><span lang-el="ru">Пробная прогулка</span></a>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2026 TETHER — <span lang-el="en">ALL RIGHTS RESERVED</span><span lang-el="ru">ВСЕ ПРАВА ЗАЩИЩЕНЫ</span></div>
+  </div>
+</footer>
+
+<script>
+document.querySelectorAll('[data-set-lang]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const lang = btn.getAttribute('data-set-lang');
+    document.documentElement.setAttribute('lang', lang);
+    document.documentElement.setAttribute('data-lang', lang);
+    document.querySelectorAll('[data-set-lang]').forEach(b => b.classList.toggle('active', b === btn));
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,3 @@
+/* Original keyframes: Animista, Ana Travas. https://animista.net/play/entrances/swirl-in/swirl-in-top-bck */
+.swirl-in-top-bck{animation:swirl-in-top-bck 0.65s ease-out 0s 1 normal both;}
+@keyframes swirl-in-top-bck{0%{-webkit-transform:rotate(540deg) scale(5);transform:rotate(540deg) scale(5);-webkit-transform-origin:50% 0;transform-origin:50% 0;opacity:0}to{-webkit-transform:rotate(0) scale(1);transform:rotate(0) scale(1);-webkit-transform-origin:50% 0;transform-origin:50% 0;opacity:1}}

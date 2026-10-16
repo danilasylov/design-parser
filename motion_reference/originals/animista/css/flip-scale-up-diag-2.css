@@ -1,0 +1,3 @@
+/* Original keyframes: Animista, Ana Travas. https://animista.net/play/basic/flip-scale/flip-scale-up-diag-2 */
+.flip-scale-up-diag-2{animation:flip-scale-up-diag-2 0.5s linear 0s 1 normal both;}
+@keyframes flip-scale-up-diag-2{0%{-webkit-transform:scale(1) rotate3d(-1,1,0,0deg);transform:scale(1) rotate3d(-1,1,0,0deg)}50%{-webkit-transform:scale(2.5) rotate3d(-1,1,0,90deg);transform:scale(2.5) rotate3d(-1,1,0,90deg)}to{-webkit-transform:scale(1) rotate3d(-1,1,0,180deg);transform:scale(1) rotate3d(-1,1,0,180deg)}}

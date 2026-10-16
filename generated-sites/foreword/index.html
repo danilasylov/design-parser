@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Foreword — the handbook your team actually opens</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ─── Токены дизайн-системы Zendesk — вставлены дословно ──────────────── */
+:root {
+  /* Colors */
+  --color-electric-lime: #d1f470;
+  --color-forest-canopy: #203524;
+  --color-deep-grove: #2d4c33;
+  --color-lime-fade: #d1f470;
+  --gradient-lime-fade: linear-gradient(to right, rgba(0, 0, 0, 0), rgb(209, 244, 112));
+  --color-near-black-ink: #11110d;
+  --color-warm-white: #f5f5f2;
+  --color-pure-white: #ffffff;
+  --color-midnight: #000000;
+  --color-stone-divider: #90918c;
+
+  /* Typography — Font Families */
+  --font-vanilla-sans: 'Vanilla Sans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* Typography — Scale */
+  --text-caption: 14px;
+  --leading-caption: 1.44;
+  --text-body: 16px;
+  --leading-body: 1.56;
+  --text-subheading: 18px;
+  --leading-subheading: 1.4;
+  --text-heading-sm: 26px;
+  --leading-heading-sm: 1.3;
+  --text-heading: 32px;
+  --leading-heading: 1.25;
+  --text-heading-lg: 48px;
+  --leading-heading-lg: 1.15;
+  --text-display: 74px;
+  --leading-display: 1;
+
+  /* Typography — Weights */
+  --font-weight-light: 300;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Spacing */
+  --spacing-unit: 4px;
+  --spacing-4: 4px;
+  --spacing-8: 8px;
+  --spacing-12: 12px;
+  --spacing-16: 16px;
+  --spacing-20: 20px;
+  --spacing-24: 24px;
+  --spacing-32: 32px;
+  --spacing-36: 36px;
+  --spacing-40: 40px;
+  --spacing-48: 48px;
+  --spacing-64: 64px;
+  --spacing-88: 88px;
+  --spacing-92: 92px;
+  --spacing-96: 96px;
+
+  /* Layout */
+  --page-max-width: 1200px;
+  --section-gap: 80-120px;
+  --element-gap: 8-16px;
+
+  /* Border Radius */
+  --radius-md: 4px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-2xl: 16px;
+  --radius-3xl: 40px;
+
+  /* Named Radii */
+  --radius-tags: 4px;
+  --radius-cards: 0px;
+  --radius-inputs: 12px;
+  --radius-buttons: 16px;
+  --radius-iconbuttons: 100%;
+  --radius-eventbannercards: 40px;
+
+  /* Surfaces */
+  --surface-page-canvas: #ffffff;
+  --surface-warm-surface: #f5f5f2;
+  --surface-forest-canopy: #203524;
+  --surface-deep-grove: #2d4c33;
+}
+
+/* Подстановка шрифта: Vanilla Sans — кастомный. DESIGN.md предлагает Inter или
+   DM Sans; у DM Sans нет кириллицы, поэтому Inter. Глобальный трекинг 0.054em —
+   отдельное требование системы: именно он отличает набор от дефолтного Inter. */
+:root { --font-ui: 'Inter', var(--font-vanilla-sans); }
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: var(--font-ui);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  letter-spacing: 0.054em;
+  background: var(--surface-page-canvas);
+  color: var(--color-near-black-ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap { max-width: var(--page-max-width); margin: 0 auto; padding: 0 var(--spacing-24); }
+.band-warm { background: var(--surface-warm-surface); }
+section { padding: var(--spacing-96) 0; }
+
+/* ─── Типографика: дисплей всегда весом 300 ───────────────────────────── */
+.display { font-size: 68px; line-height: var(--leading-display); font-weight: var(--font-weight-light); }
+.h-lg { font-size: var(--text-heading-lg); line-height: var(--leading-heading-lg); font-weight: var(--font-weight-light); }
+.h { font-size: var(--text-heading); line-height: var(--leading-heading); font-weight: var(--font-weight-light); }
+.h-sm { font-size: var(--text-heading-sm); line-height: var(--leading-heading-sm); font-weight: var(--font-weight-medium); }
+.sub { font-size: var(--text-subheading); line-height: var(--leading-subheading); }
+.cap { font-size: var(--text-caption); line-height: var(--leading-caption); }
+.muted { color: var(--color-stone-divider); }
+/* Лайм — только на CTA и ключевых цифрах, и никогда двумя пятнами подряд.
+   На белом лайм текстом нечитаем, поэтому ключевая цифра берёт его подложкой:
+   так используется точный токен, а не затемнённый оттенок вне системы. */
+.figure b.key {
+  display: inline-block; background: var(--color-electric-lime);
+  color: var(--color-near-black-ink); padding: 0 var(--spacing-12);
+  border-radius: var(--radius-tags);
+}
+
+/* ─── Кнопки: радиус 16px, пилюль в системе нет ───────────────────────── */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  font-family: var(--font-ui); font-size: var(--text-body);
+  font-weight: var(--font-weight-medium); letter-spacing: 0.054em;
+  padding: 14px var(--spacing-24); border-radius: var(--radius-buttons);
+  border: 1px solid transparent; text-decoration: none; cursor: pointer;
+  color: var(--color-near-black-ink);
+  transition: background-color .15s linear, border-color .15s linear;
+}
+.btn--lime { background: var(--color-electric-lime); }
+.btn--lime:hover { background: #c4ec52; }
+/* Гост-пара к лайму: равный вес, но без второй заливки */
+.btn--ghost { background: transparent; border-color: var(--color-near-black-ink); }
+.btn--ghost:hover { background: var(--surface-warm-surface); }
+.btn--sm { padding: 10px var(--spacing-20); font-size: var(--text-caption); }
+.btn--onforest { border-color: rgba(245,245,242,.5); color: var(--color-warm-white); }
+.btn--onforest:hover { background: var(--surface-deep-grove); }
+
+.input {
+  font-family: var(--font-ui); font-size: var(--text-body); letter-spacing: 0.054em;
+  padding: 14px var(--spacing-20); border-radius: var(--radius-inputs);
+  border: 1px solid var(--color-stone-divider); background: var(--color-pure-white);
+  color: var(--color-near-black-ink); width: 320px;
+}
+.input:focus { outline: none; border-color: var(--color-near-black-ink); }
+
+.tag {
+  display: inline-block; border-radius: var(--radius-tags);
+  padding: 4px var(--spacing-12); font-size: var(--text-caption);
+  font-weight: var(--font-weight-medium); background: var(--surface-warm-surface);
+}
+
+/* ─── Шапка: полоса объявления + основная навигация ───────────────────── */
+.announce {
+  background: var(--surface-forest-canopy); color: var(--color-warm-white);
+  font-size: var(--text-caption); line-height: var(--leading-caption);
+  padding: var(--spacing-12) var(--spacing-24); text-align: center;
+}
+.announce a { color: var(--color-electric-lime); text-decoration: underline; text-underline-offset: 3px; }
+.nav {
+  position: sticky; top: 0; z-index: 40;
+  background: var(--color-pure-white); border-bottom: 1px solid #e7e7e3;
+}
+.nav__inner {
+  max-width: var(--page-max-width); margin: 0 auto; padding: var(--spacing-16) var(--spacing-24);
+  display: flex; align-items: center; gap: var(--spacing-32);
+}
+.brand { display: inline-flex; align-items: center; gap: var(--spacing-8); text-decoration: none; color: var(--color-near-black-ink); }
+.brand svg { width: 22px; height: 22px; }
+.brand span { font-size: var(--text-subheading); font-weight: var(--font-weight-semibold); }
+.nav__links { display: flex; gap: var(--spacing-24); list-style: none; margin-left: var(--spacing-32); }
+.nav__links a { color: var(--color-near-black-ink); text-decoration: none; font-size: var(--text-caption); }
+.nav__links a:hover { color: var(--color-stone-divider); }
+.nav__right { margin-left: auto; display: flex; align-items: center; gap: var(--spacing-12); }
+.lang { display: inline-flex; border: 1px solid var(--color-stone-divider); border-radius: var(--radius-md); overflow: hidden; }
+.lang button {
+  font-family: var(--font-ui); font-size: var(--text-caption); letter-spacing: 0.054em;
+  padding: 7px 12px; border: none; background: transparent; color: var(--color-near-black-ink); cursor: pointer;
+}
+.lang button[aria-pressed="true"] { background: var(--color-near-black-ink); color: var(--color-pure-white); }
+
+/* ─── Герой: центрированный, экран продукта уходит за фолд ────────────── */
+.hero { text-align: center; padding: var(--spacing-96) 0 0; }
+.hero .display { max-width: 17ch; margin: 0 auto var(--spacing-24); }
+.hero__sub { max-width: 56ch; margin: 0 auto; }
+.hero__form { display: flex; gap: var(--spacing-12); justify-content: center; margin: var(--spacing-32) 0 var(--spacing-16); flex-wrap: wrap; }
+.hero__note { margin-bottom: var(--spacing-64); }
+
+/* ─── Мокап продукта: карточка радиусом 16, без тени ──────────────────── */
+.mock {
+  max-width: 1000px; margin: 0 auto; text-align: left;
+  border: 1px solid #e7e7e3; border-radius: var(--radius-2xl);
+  overflow: hidden; background: var(--color-pure-white);
+}
+.mock__bar {
+  display: flex; align-items: center; gap: var(--spacing-8);
+  padding: var(--spacing-12) var(--spacing-16); border-bottom: 1px solid #e7e7e3;
+  background: var(--surface-warm-surface);
+}
+.mock__dot { width: 9px; height: 9px; border-radius: var(--radius-iconbuttons); background: #d5d5d0; }
+.mock__title { margin-left: var(--spacing-8); font-size: var(--text-caption); color: var(--color-stone-divider); }
+.mock__body { display: grid; grid-template-columns: 210px 1fr 230px; min-height: 340px; }
+.mock__pane { padding: var(--spacing-20); }
+.mock__pane + .mock__pane { border-left: 1px solid #e7e7e3; }
+.mock__lbl { font-size: var(--text-caption); color: var(--color-stone-divider); margin-bottom: var(--spacing-16); }
+.mock__nav { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+.mock__nav li { font-size: var(--text-caption); padding: 7px var(--spacing-12); border-radius: var(--radius-md); }
+.mock__nav li.is-on { background: var(--surface-warm-surface); font-weight: var(--font-weight-medium); }
+.mock__doc h4 { font-size: var(--text-heading-sm); font-weight: var(--font-weight-light); margin-bottom: var(--spacing-12); }
+.mock__doc p { font-size: var(--text-caption); color: #55564f; margin-bottom: var(--spacing-12); }
+.mock__line { height: 8px; background: var(--surface-warm-surface); border-radius: var(--radius-md); margin-bottom: var(--spacing-8); }
+.mock__row { display: flex; justify-content: space-between; font-size: var(--text-caption); padding: 9px 0; border-bottom: 1px solid #f0f0ec; }
+.mock__row span:first-child { color: var(--color-stone-divider); }
+
+/* ─── Полоса доверия ──────────────────────────────────────────────────── */
+.trust { padding: var(--spacing-48) 0; }
+.trust__row { display: flex; justify-content: space-between; align-items: center; margin-top: var(--spacing-24); }
+.trust__row span { font-size: var(--text-subheading); font-weight: var(--font-weight-semibold); color: #b9bab4; }
+
+/* ─── Карточки: радиус 0, высота через цвет поверхности ───────────────── */
+.cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-24); }
+.card {
+  background: var(--color-pure-white); border-radius: var(--radius-cards);
+  padding: var(--spacing-32);
+}
+.card svg { width: 24px; height: 24px; margin-bottom: var(--spacing-20); }
+.card h3 { font-size: var(--text-subheading); font-weight: var(--font-weight-medium); margin-bottom: var(--spacing-12); }
+.card p { font-size: var(--text-caption); color: #55564f; }
+
+/* ─── Полоса-анонс: единственная роль лесного зелёного ────────────────── */
+.event {
+  background: var(--surface-forest-canopy); color: var(--color-warm-white);
+  border-radius: var(--radius-eventbannercards);
+  padding: var(--spacing-64); display: grid; grid-template-columns: 1.3fr 1fr; gap: var(--spacing-48); align-items: center;
+}
+.event h2 { font-weight: var(--font-weight-light); }
+.event p { color: rgba(245,245,242,.75); margin: var(--spacing-16) 0 var(--spacing-32); }
+.event__side { border-left: 1px solid var(--surface-deep-grove); padding-left: var(--spacing-32); }
+.event__side div { padding: var(--spacing-12) 0; border-bottom: 1px solid var(--surface-deep-grove); font-size: var(--text-caption); }
+.event__side div:last-child { border-bottom: none; }
+
+/* ─── Цифры: лайм разрешён как ключевая величина ──────────────────────── */
+.figures { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--spacing-32); }
+.figure b { display: block; font-size: var(--text-heading-lg); line-height: var(--leading-heading-lg); font-weight: var(--font-weight-light); }
+.figure span { display: block; font-size: var(--text-caption); color: #55564f; margin-top: var(--spacing-12); }
+
+/* ─── Отзыв ───────────────────────────────────────────────────────────── */
+.quote { max-width: 760px; margin: 0 auto; text-align: center; }
+.quote blockquote { font-size: var(--text-heading); line-height: var(--leading-heading); font-weight: var(--font-weight-light); }
+.quote figcaption { margin-top: var(--spacing-32); font-size: var(--text-caption); color: #55564f; }
+
+/* ─── Финал ───────────────────────────────────────────────────────────── */
+.final { text-align: center; }
+.final .h-lg { max-width: 20ch; margin: 0 auto var(--spacing-24); }
+.final__actions { display: flex; gap: var(--spacing-12); justify-content: center; margin-top: var(--spacing-32); }
+
+/* ─── Подвал ──────────────────────────────────────────────────────────── */
+.footer { border-top: 1px solid #e7e7e3; padding: var(--spacing-64) 0 var(--spacing-32); }
+.footer__grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: var(--spacing-40); }
+.footer__grid h4 { font-size: var(--text-caption); font-weight: var(--font-weight-semibold); margin-bottom: var(--spacing-16); }
+.footer__grid ul { list-style: none; display: flex; flex-direction: column; gap: var(--spacing-8); }
+.footer__grid a { color: #55564f; text-decoration: none; font-size: var(--text-caption); }
+.footer__grid a:hover { color: var(--color-near-black-ink); }
+.footer__note { font-size: var(--text-caption); color: #55564f; margin-top: var(--spacing-12); max-width: 34ch; }
+.footer__bottom { margin-top: var(--spacing-48); padding-top: var(--spacing-24); border-top: 1px solid #e7e7e3; display: flex; justify-content: space-between; font-size: var(--text-caption); color: #55564f; }
+</style>
+</head>
+<body>
+
+<!-- ─── Полоса объявления: лесной зелёный только под анонсы ────────────── -->
+<div class="announce">
+  <span data-i18n="ann">Foreword Live — one day on writing things down. 14 October, Tbilisi and online.</span>
+  <a href="#event" data-i18n="ann.link">Register free</a>
+</div>
+
+<!-- ─── Навигация ─────────────────────────────────────────────────────── -->
+<header class="nav">
+  <div class="nav__inner">
+    <a class="brand" href="#top">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
+        <path d="M4 5h7a2 2 0 0 1 2 2v12a2 2 0 0 0-2-2H4z"/><path d="M20 5h-7a2 2 0 0 0-2 2v12a2 2 0 0 1 2-2h7z"/>
+      </svg>
+      <span>Foreword</span>
+    </a>
+    <ul class="nav__links">
+      <li><a href="#product" data-i18n="nav.1">Product</a></li>
+      <li><a href="#event" data-i18n="nav.2">Events</a></li>
+      <li><a href="#numbers" data-i18n="nav.3">Customers</a></li>
+      <li><a href="#final" data-i18n="nav.4">Pricing</a></li>
+    </ul>
+    <div class="nav__right">
+      <div class="lang">
+        <button type="button" data-set="en" aria-pressed="true">EN</button>
+        <button type="button" data-set="ru" aria-pressed="false">RU</button>
+      </div>
+      <a class="btn btn--ghost btn--sm" href="#final" data-i18n="nav.login">Sign in</a>
+      <a class="btn btn--lime btn--sm" href="#final" data-i18n="nav.cta">Try for free</a>
+    </div>
+  </div>
+</header>
+
+<!-- ─── Герой ─────────────────────────────────────────────────────────── -->
+<div class="hero" id="top">
+  <div class="wrap">
+    <h1 class="display" data-i18n="hero.title">The handbook your team actually opens</h1>
+    <p class="hero__sub sub" data-i18n="hero.sub">Foreword keeps every process, policy and half-remembered decision in one place — with an owner on each page and a date that tells you when to stop trusting it.</p>
+    <div class="hero__form">
+      <input class="input" type="email" placeholder="Enter work email" data-i18n-ph="hero.ph">
+      <a class="btn btn--lime" href="#final" data-i18n="hero.cta">Try for free</a>
+    </div>
+    <p class="hero__note cap" data-i18n="hero.note">14-day free trial. No credit card required.</p>
+  </div>
+
+  <!-- Мокап продукта уходит вниз за фолд — приглашение к скроллу -->
+  <div class="wrap">
+    <div class="mock">
+      <div class="mock__bar">
+        <span class="mock__dot"></span><span class="mock__dot"></span><span class="mock__dot"></span>
+        <span class="mock__title" data-i18n="mock.title">Foreword — Engineering handbook</span>
+      </div>
+      <div class="mock__body">
+        <div class="mock__pane">
+          <div class="mock__lbl" data-i18n="mock.nav">Sections</div>
+          <ul class="mock__nav">
+            <li class="is-on" data-i18n="mock.n1">First two weeks</li>
+            <li data-i18n="mock.n2">How we ship</li>
+            <li data-i18n="mock.n3">On-call</li>
+            <li data-i18n="mock.n4">Expenses</li>
+            <li data-i18n="mock.n5">Time off</li>
+            <li data-i18n="mock.n6">Security basics</li>
+          </ul>
+        </div>
+        <div class="mock__pane mock__doc">
+          <div class="mock__lbl" data-i18n="mock.doc">Page</div>
+          <h4 data-i18n="mock.h">First two weeks</h4>
+          <p data-i18n="mock.p">Day one is laptop, accounts and lunch with your buddy. Nobody expects a pull request this week — the goal is to know who to ask.</p>
+          <div class="mock__line" style="width:100%"></div>
+          <div class="mock__line" style="width:92%"></div>
+          <div class="mock__line" style="width:78%"></div>
+          <div class="mock__line" style="width:96%"></div>
+          <div class="mock__line" style="width:64%"></div>
+        </div>
+        <div class="mock__pane">
+          <div class="mock__lbl" data-i18n="mock.meta">This page</div>
+          <div class="mock__row"><span data-i18n="mock.r1">Owner</span><span>Marta I.</span></div>
+          <div class="mock__row"><span data-i18n="mock.r2">Reviewed</span><span>11 days ago</span></div>
+          <div class="mock__row"><span data-i18n="mock.r3">Expires</span><span>in 79 days</span></div>
+          <div class="mock__row"><span data-i18n="mock.r4">Opened</span><span>412 times</span></div>
+          <div class="mock__row"><span data-i18n="mock.r5">Asked anyway</span><span>3 times</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── Полоса доверия ────────────────────────────────────────────────── -->
+<div class="wrap trust">
+  <p class="cap muted" style="text-align:center" data-i18n="trust">Keeping the handbooks of 3,200 teams</p>
+  <div class="trust__row">
+    <span>Basalt</span><span>Northwind</span><span>Kestrel</span>
+    <span>Halyard</span><span>Pont</span><span>Ferrous</span><span>Lumen</span>
+  </div>
+</div>
+
+<!-- ─── Возможности на тёплой полосе ──────────────────────────────────── -->
+<div class="band-warm" id="product">
+  <section>
+    <div class="wrap">
+      <h2 class="h-lg" style="max-width:22ch;margin-bottom:var(--spacing-48)" data-i18n="feat.title">A handbook rots quietly. Foreword makes the rot visible.</h2>
+      <div class="cards">
+        <div class="card">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="8" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0"/></svg>
+          <h3 data-i18n="feat.1t">Every page has an owner</h3>
+          <p data-i18n="feat.1d">Not a team, a person. When they leave, the page appears on somebody's list instead of quietly going stale.</p>
+        </div>
+        <div class="card">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3.5 2"/></svg>
+          <h3 data-i18n="feat.2t">Pages expire on purpose</h3>
+          <p data-i18n="feat.2d">Each page carries a review date. Past it, the page says so at the top — readers learn what is fresh without asking anyone.</p>
+        </div>
+        <div class="card">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 6h16M4 12h16M4 18h9"/><circle cx="19" cy="18" r="2.5"/></svg>
+          <h3 data-i18n="feat.3t">Questions become pages</h3>
+          <p data-i18n="feat.3d">When the same thing gets asked in chat three times, Foreword flags it and offers to open a draft with the answer already quoted.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Анонс события ───────────────────────────────────────────────── -->
+  <section style="padding-top:0" id="event">
+    <div class="wrap">
+      <div class="event">
+        <div>
+          <span class="tag" style="background:var(--surface-deep-grove);color:var(--color-warm-white)" data-i18n="ev.tag">Foreword Live</span>
+          <h2 class="h" style="margin-top:var(--spacing-20)" data-i18n="ev.title">One day on writing things down</h2>
+          <p data-i18n="ev.p">Fourteen talks from people who maintain handbooks nobody hates, plus a workshop on deleting pages without upsetting their authors.</p>
+          <a class="btn btn--lime" href="#event" data-i18n="ev.cta">Register free</a>
+        </div>
+        <div class="event__side">
+          <div><span data-i18n="ev.1">14 October 2026</span></div>
+          <div><span data-i18n="ev.2">Tbilisi and online</span></div>
+          <div><span data-i18n="ev.3">14 talks, one workshop</span></div>
+          <div><span data-i18n="ev.4">Free, recorded, no signup wall</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ─── Цифры ─────────────────────────────────────────────────────────── -->
+<section id="numbers">
+  <div class="wrap">
+    <h2 class="h" style="max-width:24ch;margin-bottom:var(--spacing-48)" data-i18n="num.title">What changes in the first quarter</h2>
+    <div class="figures">
+      <div class="figure"><b class="key">41%</b><span data-i18n="num.1">fewer repeat questions in team chat</span></div>
+      <div class="figure"><b>3,200</b><span data-i18n="num.2">teams keep their handbook here</span></div>
+      <div class="figure"><b>79</b><span data-i18n="num.3">days is the default review window</span></div>
+      <div class="figure"><b>0</b><span data-i18n="num.4">pages without a named owner</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Отзыв ─────────────────────────────────────────────────────────── -->
+<div class="band-warm">
+  <section>
+    <figure class="quote">
+      <blockquote data-i18n="q.text">“We had a wiki with four thousand pages and no idea which forty were true. Foreword did not import them — it made us throw most of them away, which was the point.”</blockquote>
+      <figcaption data-i18n="q.who">Marta Ivane · Head of Engineering, Halyard</figcaption>
+    </figure>
+  </section>
+</div>
+
+<!-- ─── Финал ─────────────────────────────────────────────────────────── -->
+<section class="final" id="final">
+  <div class="wrap">
+    <h2 class="h-lg" data-i18n="fin.title">Write it down once. Trust it for a quarter.</h2>
+    <p class="sub" style="max-width:52ch;margin:0 auto" data-i18n="fin.sub">Free for teams under ten people, forever. Everyone else starts with fourteen days and no card.</p>
+    <div class="final__actions">
+      <a class="btn btn--lime" href="#final" data-i18n="fin.cta1">Try for free</a>
+      <a class="btn btn--ghost" href="#product" data-i18n="fin.cta2">Book a walkthrough</a>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Подвал ────────────────────────────────────────────────────────── -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__grid">
+      <div>
+        <a class="brand" href="#top">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
+            <path d="M4 5h7a2 2 0 0 1 2 2v12a2 2 0 0 0-2-2H4z"/><path d="M20 5h-7a2 2 0 0 0-2 2v12a2 2 0 0 1 2-2h7z"/>
+          </svg>
+          <span>Foreword</span>
+        </a>
+        <p class="footer__note" data-i18n="f.note">The handbook platform for teams that keep forgetting what they decided. Built in Tbilisi.</p>
+      </div>
+      <div>
+        <h4 data-i18n="f.c1">Product</h4>
+        <ul>
+          <li><a href="#product" data-i18n="f.c1.1">Handbook</a></li>
+          <li><a href="#product" data-i18n="f.c1.2">Ownership</a></li>
+          <li><a href="#product" data-i18n="f.c1.3">Review dates</a></li>
+          <li><a href="#final" data-i18n="f.c1.4">Pricing</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 data-i18n="f.c2">Resources</h4>
+        <ul>
+          <li><a href="#event" data-i18n="f.c2.1">Foreword Live</a></li>
+          <li><a href="#product" data-i18n="f.c2.2">Templates</a></li>
+          <li><a href="#product" data-i18n="f.c2.3">Docs</a></li>
+          <li><a href="#product" data-i18n="f.c2.4">Changelog</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 data-i18n="f.c3">Company</h4>
+        <ul>
+          <li><a href="#top" data-i18n="f.c3.1">About</a></li>
+          <li><a href="#top" data-i18n="f.c3.2">Security</a></li>
+          <li><a href="#top" data-i18n="f.c3.3">Careers</a></li>
+          <li><a href="#top" data-i18n="f.c3.4">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span data-i18n="f.copy">© 2026 Foreword</span>
+      <span data-i18n="f.legal">Terms · Privacy · DPA</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* Английский — исходный; русский — перевод. Дефолт EN, без автодетекта. */
+var I18N = {
+  ru: {
+    "ann": "Foreword Live — один день про то, как записывать. 14 октября, Тбилиси и онлайн.",
+    "ann.link": "Бесплатная регистрация",
+
+    "nav.1": "Продукт", "nav.2": "События", "nav.3": "Клиенты", "nav.4": "Тарифы",
+    "nav.login": "Войти", "nav.cta": "Попробовать",
+
+    "hero.title": "Справочник, который команда правда открывает",
+    "hero.sub": "Foreword держит каждый процесс, правило и наполовину забытое решение в одном месте — с владельцем на каждой странице и датой, после которой ей больше не стоит верить.",
+    "hero.ph": "Рабочая почта",
+    "hero.cta": "Попробовать",
+    "hero.note": "14 дней бесплатно. Карта не нужна.",
+
+    "mock.title": "Foreword — Инженерный справочник",
+    "mock.nav": "Разделы",
+    "mock.n1": "Первые две недели",
+    "mock.n2": "Как мы релизим",
+    "mock.n3": "Дежурства",
+    "mock.n4": "Расходы",
+    "mock.n5": "Отпуска",
+    "mock.n6": "Основы безопасности",
+    "mock.doc": "Страница",
+    "mock.h": "Первые две недели",
+    "mock.p": "Первый день — ноутбук, доступы и обед с напарником. Пул-реквеста на этой неделе никто не ждёт: задача — понять, к кому идти с вопросом.",
+    "mock.meta": "Об этой странице",
+    "mock.r1": "Владелец", "mock.r2": "Проверена", "mock.r3": "Истекает",
+    "mock.r4": "Открывали", "mock.r5": "Всё равно спросили",
+
+    "trust": "Держим справочники 3 200 команд",
+
+    "feat.title": "Справочник гниёт тихо. Foreword делает гниение видимым.",
+    "feat.1t": "У каждой страницы есть владелец",
+    "feat.1d": "Не команда, а человек. Когда он уходит, страница появляется у кого-то в списке, а не тихо протухает.",
+    "feat.2t": "Страницы истекают намеренно",
+    "feat.2d": "У каждой есть дата пересмотра. После неё страница сама пишет об этом сверху — читатель понимает, что свежо, не спрашивая никого.",
+    "feat.3t": "Вопросы превращаются в страницы",
+    "feat.3d": "Когда одно и то же спрашивают в чате третий раз, Foreword замечает и предлагает открыть черновик с уже процитированным ответом.",
+
+    "ev.tag": "Foreword Live",
+    "ev.title": "Один день про то, как записывать",
+    "ev.p": "Четырнадцать докладов от людей, чьи справочники никто не ненавидит, плюс воркшоп о том, как удалять страницы, не обидев их авторов.",
+    "ev.cta": "Бесплатная регистрация",
+    "ev.1": "14 октября 2026",
+    "ev.2": "Тбилиси и онлайн",
+    "ev.3": "14 докладов, один воркшоп",
+    "ev.4": "Бесплатно, с записью, без стены регистрации",
+
+    "num.title": "Что меняется за первый квартал",
+    "num.1": "меньше повторных вопросов в рабочем чате",
+    "num.2": "команд держат справочник здесь",
+    "num.3": "дней — окно пересмотра по умолчанию",
+    "num.4": "страниц без названного владельца",
+
+    "q.text": "«У нас была вики на четыре тысячи страниц и никакого понимания, какие сорок из них правда. Foreword их не импортировал — он заставил нас большую часть выбросить, в чём и был смысл».",
+    "q.who": "Марта Иване · руководитель разработки, Halyard",
+
+    "fin.title": "Запишите один раз. Верьте этому квартал.",
+    "fin.sub": "Бесплатно навсегда для команд меньше десяти человек. Остальные начинают с четырнадцати дней и без карты.",
+    "fin.cta1": "Попробовать",
+    "fin.cta2": "Заказать демо",
+
+    "f.note": "Платформа справочников для команд, которые всё время забывают, о чём договорились. Сделано в Тбилиси.",
+    "f.c1": "Продукт",
+    "f.c1.1": "Справочник", "f.c1.2": "Владельцы", "f.c1.3": "Даты пересмотра", "f.c1.4": "Тарифы",
+    "f.c2": "Материалы",
+    "f.c2.1": "Foreword Live", "f.c2.2": "Шаблоны", "f.c2.3": "Документация", "f.c2.4": "Changelog",
+    "f.c3": "Компания",
+    "f.c3.1": "О нас", "f.c3.2": "Безопасность", "f.c3.3": "Вакансии", "f.c3.4": "Контакты",
+    "f.copy": "© 2026 Foreword",
+    "f.legal": "Условия · Приватность · DPA"
+  }
+};
+
+(function () {
+  var nodes = document.querySelectorAll('[data-i18n]');
+  var phNodes = document.querySelectorAll('[data-i18n-ph]');
+  var EN = {}, ENPH = {};
+  nodes.forEach(function (n) { EN[n.getAttribute('data-i18n')] = n.textContent; });
+  phNodes.forEach(function (n) { ENPH[n.getAttribute('data-i18n-ph')] = n.placeholder; });
+
+  function apply(lang) {
+    nodes.forEach(function (n) {
+      var k = n.getAttribute('data-i18n');
+      var v = lang === 'ru' ? I18N.ru[k] : EN[k];
+      if (v) n.textContent = v;
+    });
+    phNodes.forEach(function (n) {
+      var k = n.getAttribute('data-i18n-ph');
+      var v = lang === 'ru' ? I18N.ru[k] : ENPH[k];
+      if (v) n.placeholder = v;
+    });
+    document.documentElement.lang = lang;
+    document.documentElement.setAttribute('data-lang', lang);
+    document.querySelectorAll('.lang [data-set]').forEach(function (b) {
+      b.setAttribute('aria-pressed', String(b.getAttribute('data-set') === lang));
+    });
+  }
+  document.querySelectorAll('.lang [data-set]').forEach(function (b) {
+    b.addEventListener('click', function () { apply(b.getAttribute('data-set')); });
+  });
+})();
+</script>
+</body>
+</html>

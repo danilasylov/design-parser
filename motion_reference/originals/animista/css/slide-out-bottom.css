@@ -1,0 +1,3 @@
+/* Original keyframes: Animista, Ana Travas. https://animista.net/play/exits/slide-out/slide-out-bottom */
+.slide-out-bottom{animation:slide-out-bottom 0.5s cubic-bezier(.55,.085,.68,.53) 0s 1 normal both;}
+@keyframes slide-out-bottom{0%{-webkit-transform:translateY(0);transform:translateY(0);opacity:1}to{-webkit-transform:translateY(1000px);transform:translateY(1000px);opacity:0}}

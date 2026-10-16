@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>БИВАК — приюты Приэльбрусья</title>
+<meta name="description" content="Семь высокогорных приютов на склонах Приэльбрусья: ночёвка, печь, вода, размеченные тропы. Бронирование мест и маршруты от 22 до 52 км.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%23fe3a3a'/%3E%3Cpath d='M16 8 L25 24 H7 Z' fill='none' stroke='%23fff' stroke-width='2.4' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ================================================================
+   БИВАК — дизайн-система LE CAMP (styles.refero.design)
+   North star: alpine summit base camp at dusk — one red signal flare,
+   everything else is topo-line restraint.
+   Палитра ровно 4 цвета + 3 поверхности. Радиусы только 10/20/35.
+   Границы 1px. Тени только под красным CTA и патчами героя.
+   Градиентов нет.
+   ================================================================ */
+:root{
+  --color-signal-red:#fe3a3a;
+  --color-carbon-ink:#000000;
+  --color-summit-white:#ffffff;
+  --color-ridge-gray:#767676;
+
+  --surface-glacier-mist:#f5f5f5;
+  --surface-trail-cream:#f5f0e8;
+  --surface-base-camp-dark:#0a1628;
+
+  --font-display:'Golos Text',ui-sans-serif,system-ui,sans-serif;   /* замена Agrandir, с кириллицей */
+  --font-text:'Inter',ui-sans-serif,system-ui,sans-serif;           /* fallback DM Sans, указан системой */
+  --font-mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace; /* fallback DM Mono */
+
+  --text-caption:10px;   --leading-caption:1.3;  --tracking-caption:.04em;
+  --text-body:16px;      --leading-body:1.4;
+  --text-subheading:26px;--leading-subheading:1.2;
+  --text-section:62px;
+  --text-display:90px;   --leading-display:1;
+
+  --spacing-5:5px; --spacing-10:10px; --spacing-15:15px; --spacing-20:20px;
+  --spacing-30:30px; --spacing-40:40px; --spacing-60:60px;
+
+  --page-max-width:1200px;
+  --section-gap:60px;
+  --card-padding:40px;
+
+  --radius-lg:10px; --radius-2xl:20px; --radius-3xl:35px;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{
+  margin:0;background:var(--color-summit-white);color:var(--color-carbon-ink);
+  font-family:var(--font-text);font-weight:400;font-size:var(--text-body);
+  line-height:var(--leading-body);letter-spacing:normal;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+img,svg{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button,input,select{font:inherit;color:inherit}
+::selection{background:var(--color-signal-red);color:var(--color-summit-white)}
+
+.wrap{max-width:var(--page-max-width);margin:0 auto;padding:0 var(--spacing-30)}
+section{padding:var(--section-gap) 0}
+
+/* --- моно-метка: голос экспедиционной навигации ------------------ */
+.mono{
+  font-family:var(--font-mono);font-weight:400;font-size:var(--text-caption);
+  line-height:var(--leading-caption);letter-spacing:var(--tracking-caption);
+  text-transform:uppercase;
+}
+.mono-14{font-size:14px}
+.sec-label{display:block;margin-bottom:var(--spacing-15)}
+
+/* --- дисплей-типографика ---------------------------------------- */
+.display,.sec-title{
+  font-family:var(--font-display);font-weight:600;line-height:var(--leading-display);
+  letter-spacing:normal;margin:0;
+}
+.display{font-size:clamp(38px,9.2vw,var(--text-display))}
+.sec-title{font-size:clamp(32px,6.4vw,var(--text-section))}
+.sub{
+  font-family:var(--font-display);font-weight:600;
+  font-size:var(--text-subheading);line-height:var(--leading-subheading);margin:0;
+}
+p{margin:0 0 var(--spacing-15)}
+p:last-child{margin-bottom:0}
+.lede{font-size:18px;line-height:1.4}
+.muted-rule{border:0;border-top:1px solid var(--color-carbon-ink);margin:0}
+
+/* --- кнопки ------------------------------------------------------ */
+.btn-primary{
+  display:inline-block;background:var(--color-signal-red);color:var(--color-summit-white);
+  font-family:var(--font-text);font-size:14px;line-height:1.3;
+  padding:var(--spacing-10) var(--spacing-20);border:0;border-radius:var(--radius-3xl);
+  box-shadow:0 2px 12px rgba(254,58,58,.25);cursor:pointer;
+  transition:transform .18s ease,box-shadow .18s ease;
+}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 4px 18px rgba(254,58,58,.32)}
+.btn-secondary{
+  display:inline-block;background:transparent;color:var(--color-carbon-ink);
+  font-family:var(--font-text);font-size:14px;line-height:1.3;
+  padding:var(--spacing-10) var(--spacing-20);
+  border:1px solid var(--color-carbon-ink);border-radius:var(--radius-lg);
+  cursor:pointer;transition:background .18s ease,color .18s ease;
+}
+.btn-secondary:hover{background:var(--color-carbon-ink);color:var(--color-summit-white)}
+.on-dark .btn-secondary{color:var(--color-summit-white);border-color:var(--color-summit-white)}
+.on-dark .btn-secondary:hover{background:var(--color-summit-white);color:var(--color-carbon-ink)}
+
+/* ================================================================
+   NAV — fixed, прозрачный над героем, белый с 1px рамкой ниже
+   ================================================================ */
+.nav{
+  position:fixed;inset:0 0 auto;z-index:60;
+  padding:var(--spacing-15) 0;border-bottom:1px solid transparent;
+  transition:background .25s ease,border-color .25s ease,color .25s ease;
+}
+.nav-in{display:flex;align-items:center;gap:var(--spacing-20)}
+.brand{display:flex;align-items:center;gap:var(--spacing-10);margin-right:auto}
+.brand-mark{width:34px;height:34px;flex:0 0 34px}
+.brand-name{
+  font-family:var(--font-display);font-weight:600;font-size:18px;line-height:1;
+  letter-spacing:normal;
+}
+.nav-actions{display:flex;align-items:center;gap:var(--spacing-10)}
+.lang{display:flex;border:1px solid currentColor;border-radius:var(--radius-lg);overflow:hidden}
+.lang button{
+  background:transparent;border:0;cursor:pointer;padding:6px 10px;
+  font-family:var(--font-mono);font-size:var(--text-caption);letter-spacing:var(--tracking-caption);
+  text-transform:uppercase;color:inherit;
+}
+.lang button[aria-pressed="true"]{background:currentColor}
+.lang button[aria-pressed="true"] span{color:var(--surface-base-camp-dark);mix-blend-mode:normal}
+.nav.solid .lang button[aria-pressed="true"] span{color:var(--color-summit-white)}
+.menu-trigger{
+  display:flex;align-items:center;gap:8px;background:transparent;
+  border:1px solid transparent;border-radius:var(--radius-lg);
+  padding:var(--spacing-10) var(--spacing-20);cursor:pointer;font-size:14px;
+}
+.menu-trigger .bars{display:block;width:16px}
+.menu-trigger .bars i{display:block;height:1px;background:currentColor;margin:3px 0}
+.nav.on-dark{color:var(--color-summit-white)}
+.nav.solid{
+  background:var(--color-summit-white);color:var(--color-carbon-ink);
+  border-bottom-color:var(--color-carbon-ink);
+}
+
+/* полноэкранное меню */
+.overlay{
+  position:fixed;inset:0;z-index:70;background:var(--color-summit-white);
+  display:none;padding:var(--spacing-30) 0;
+}
+.overlay.open{display:flex;flex-direction:column}
+.overlay .wrap{width:100%}
+.overlay-head{display:flex;align-items:center;justify-content:space-between}
+.overlay-nav{
+  flex:1;display:flex;flex-direction:column;justify-content:center;
+  border-bottom:1px solid var(--color-carbon-ink);
+}
+.overlay-nav a{
+  font-family:var(--font-display);font-weight:600;line-height:1;letter-spacing:normal;
+  font-size:clamp(30px,7vw,var(--text-section));display:flex;align-items:baseline;gap:var(--spacing-20);
+  padding:var(--spacing-20) 0;border-top:1px solid var(--color-carbon-ink);
+}
+.overlay-nav a:hover{color:var(--color-signal-red)}
+.overlay-nav .n{font-family:var(--font-mono);font-size:var(--text-caption);letter-spacing:var(--tracking-caption)}
+.overlay-foot{display:flex;flex-wrap:wrap;gap:var(--spacing-20);justify-content:space-between;padding-top:var(--spacing-20)}
+
+/* ================================================================
+   HERO — тёмное топографическое поле + созвездие патчей
+   ================================================================ */
+.hero{
+  position:relative;background:var(--surface-base-camp-dark);
+  color:var(--color-summit-white);min-height:100svh;padding:0;
+  display:flex;flex-direction:column;justify-content:center;overflow:hidden;
+}
+.hero-field{position:absolute;inset:0;width:100%;height:100%}
+.hero-in{position:relative;z-index:2;text-align:center;padding:120px 0 100px}
+.hero h1{max-width:14ch;margin:0 auto}
+.hero-corners{
+  position:absolute;inset:auto 0 var(--spacing-30);z-index:2;
+  display:flex;justify-content:space-between;gap:var(--spacing-20);
+}
+.scroll-dot{
+  position:absolute;left:50%;bottom:var(--spacing-60);transform:translateX(-50%);z-index:3;
+  width:44px;height:44px;border-radius:var(--radius-3xl);
+  background:var(--color-summit-white);color:var(--surface-base-camp-dark);
+  display:flex;align-items:center;justify-content:center;
+}
+.patch{position:absolute;z-index:2;width:132px;filter:drop-shadow(0 4px 20px rgba(10,22,40,.4))}
+.patch text{font-family:var(--font-mono);font-size:8.6px;letter-spacing:.04em;text-transform:uppercase}
+.p1{top:16%;left:4%}
+.p2{top:5%;left:47%;width:120px}
+.p3{top:20%;right:4%}
+.p4{bottom:16%;left:8%}
+.p5{bottom:14%;right:6%}
+
+/* ================================================================
+   INTRO — асимметрия 40/55: reading-text против poster-text
+   ================================================================ */
+.intro-grid{display:grid;grid-template-columns:40% 55%;gap:5%;align-items:start}
+.intro-grid .col-read p{max-width:44ch}
+.hl{color:var(--color-signal-red)}
+
+/* --- статистика: текст прямо на поверхности, без карточек -------- */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--color-carbon-ink)}
+.stat{padding:var(--spacing-20) var(--spacing-20) var(--spacing-20) 0;border-bottom:1px solid var(--color-carbon-ink)}
+.stat .num{font-family:var(--font-display);font-weight:600;font-size:var(--text-subheading);line-height:var(--leading-subheading)}
+.stat .cap{display:block;margin-top:var(--spacing-5);color:var(--color-carbon-ink)}
+
+/* ================================================================
+   ПРИЮТЫ — glacier mist, карточки 20px с 1px обводкой
+   ================================================================ */
+.shelters{background:var(--surface-glacier-mist)}
+.sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:var(--spacing-20);margin-bottom:var(--spacing-40)}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--spacing-20)}
+.card{
+  background:var(--color-summit-white);border:1px solid var(--color-carbon-ink);
+  border-radius:var(--radius-2xl);overflow:hidden;display:flex;flex-direction:column;
+}
+.card-map{height:132px;border-bottom:1px solid var(--color-carbon-ink);background:var(--color-summit-white)}
+.card-body{padding:var(--spacing-20) var(--spacing-20) var(--spacing-20)}
+.card-title{display:flex;align-items:baseline;justify-content:space-between;gap:var(--spacing-10);margin-bottom:var(--spacing-15)}
+.card-title .sub{font-size:22px}
+.specs{list-style:none;margin:0 0 var(--spacing-20);padding:0}
+.specs li{
+  display:flex;justify-content:space-between;gap:var(--spacing-10);
+  padding:8px 0;border-top:1px solid var(--color-carbon-ink);font-size:14px;
+}
+.specs li span:first-child{color:var(--color-carbon-ink);opacity:.55}
+.card-foot{display:flex;align-items:center;justify-content:space-between;gap:var(--spacing-10);margin-top:auto;padding-top:var(--spacing-5)}
+.price{font-family:var(--font-display);font-weight:600;font-size:18px}
+.price small{font-family:var(--font-text);font-weight:400;font-size:14px;opacity:.55}
+
+/* ================================================================
+   МАРШРУТЫ — профиль высоты как инструмент, а не декор
+   ================================================================ */
+.routes-grid{display:grid;grid-template-columns:280px 1fr;gap:var(--spacing-40);align-items:start}
+.route-list{list-style:none;margin:0;padding:0;border-top:1px solid var(--color-carbon-ink)}
+.route-list li{border-bottom:1px solid var(--color-carbon-ink)}
+.route-btn{
+  width:100%;text-align:left;background:transparent;border:0;cursor:pointer;
+  padding:var(--spacing-15) 0;display:flex;gap:var(--spacing-15);align-items:baseline;
+}
+.route-btn .rn{font-family:var(--font-mono);font-size:var(--text-caption);letter-spacing:var(--tracking-caption);opacity:.55}
+.route-btn .rt{font-family:var(--font-display);font-weight:600;font-size:20px;line-height:1.2}
+.route-btn .rd{display:block;font-size:14px;opacity:.55;margin-top:4px}
+.route-btn[aria-selected="true"] .rt{color:var(--color-signal-red)}
+.route-btn[aria-selected="true"] .rn{opacity:1;color:var(--color-signal-red)}
+.profile{
+  border:1px solid var(--color-carbon-ink);border-radius:var(--radius-2xl);
+  padding:var(--spacing-20);background:var(--color-summit-white);
+}
+.profile-head{display:flex;flex-wrap:wrap;gap:var(--spacing-20);justify-content:space-between;margin-bottom:var(--spacing-15)}
+.facts{display:flex;flex-wrap:wrap;gap:var(--spacing-30)}
+.fact .fv{font-family:var(--font-display);font-weight:600;font-size:18px;line-height:1.2}
+.fact .fk{display:block;opacity:.55;margin-top:2px}
+.chart{width:100%;height:auto}
+.chart .grid-line{stroke:var(--color-carbon-ink);stroke-width:1;opacity:.14}
+.chart .fill{fill:var(--surface-glacier-mist)}
+.chart .line{fill:none;stroke:var(--color-carbon-ink);stroke-width:1.5;stroke-linejoin:round}
+.chart .axis{font-family:var(--font-mono);font-size:9px;letter-spacing:.04em;fill:var(--color-carbon-ink);opacity:.55}
+.chart .peak{fill:var(--color-signal-red)}
+.chart .peak-label{font-family:var(--font-mono);font-size:9px;letter-spacing:.04em;fill:var(--color-signal-red)}
+.stops{display:flex;flex-wrap:wrap;gap:var(--spacing-10);margin-top:var(--spacing-15);padding-top:var(--spacing-15);border-top:1px solid var(--color-carbon-ink)}
+.stop{border:1px solid var(--color-carbon-ink);border-radius:var(--radius-lg);padding:6px 12px;font-size:14px}
+
+/* ================================================================
+   СЕЗОН — cream feature card, заголовок красный (тёплый/холодный)
+   ================================================================ */
+.cream{
+  background:var(--surface-trail-cream);border-radius:var(--radius-2xl);
+  padding:var(--card-padding);display:grid;grid-template-columns:1fr 1fr;gap:var(--spacing-40);
+}
+.cream h2{color:var(--color-signal-red)}
+.steps{list-style:none;margin:0;padding:0}
+.steps li{display:grid;grid-template-columns:34px 1fr;gap:var(--spacing-10);padding:var(--spacing-15) 0;border-top:1px solid var(--color-carbon-ink)}
+.steps li:first-child{border-top:0;padding-top:0}
+.steps .sn{font-family:var(--font-mono);font-size:var(--text-caption);letter-spacing:var(--tracking-caption);padding-top:4px}
+.steps .st{font-family:var(--font-display);font-weight:600;font-size:18px;line-height:1.2;margin-bottom:4px}
+.steps p{font-size:14px}
+
+/* ================================================================
+   БРОНЬ
+   ================================================================ */
+.booking{background:var(--surface-glacier-mist)}
+.form-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--spacing-15);align-items:end}
+.field{display:flex;flex-direction:column;gap:var(--spacing-5)}
+.field label{opacity:.7}
+.field input,.field select{
+  background:var(--color-summit-white);border:1px solid var(--color-ridge-gray);
+  border-radius:var(--radius-lg);padding:var(--spacing-10) var(--spacing-15);
+  font-family:var(--font-text);font-size:var(--text-body);width:100%;
+  appearance:none;-webkit-appearance:none;
+}
+.field select{background-image:none}
+.field input:focus,.field select:focus{outline:0;border-color:var(--color-carbon-ink)}
+.field input::placeholder{color:var(--color-ridge-gray)}
+.form-foot{display:flex;flex-wrap:wrap;align-items:center;gap:var(--spacing-20);margin-top:var(--spacing-20)}
+.form-note{font-size:14px;opacity:.7;max-width:52ch}
+.form-reply{display:none;font-size:14px;border:1px solid var(--color-carbon-ink);border-radius:var(--radius-lg);padding:var(--spacing-10) var(--spacing-15)}
+.form-reply.show{display:block}
+
+/* ================================================================
+   FOOTER
+   ================================================================ */
+.foot{border-top:1px solid var(--color-carbon-ink);padding:var(--spacing-40) 0 var(--spacing-30)}
+.foot-top{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:var(--spacing-30);margin-bottom:var(--spacing-40)}
+.foot h3{font-family:var(--font-mono);font-size:var(--text-caption);letter-spacing:var(--tracking-caption);text-transform:uppercase;font-weight:400;margin:0 0 var(--spacing-15)}
+.foot ul{list-style:none;margin:0;padding:0}
+.foot li{margin-bottom:8px;font-size:14px}
+.foot a:hover{color:var(--color-signal-red)}
+.sub-form{display:flex;gap:var(--spacing-10);margin-top:var(--spacing-15);max-width:420px}
+.sub-form input{flex:1}
+.foot-bottom{display:flex;flex-wrap:wrap;gap:var(--spacing-20);justify-content:space-between;padding-top:var(--spacing-20);border-top:1px solid var(--color-carbon-ink)}
+
+/* ================================================================
+   АДАПТИВ
+   ================================================================ */
+@media (max-width:960px){
+  .intro-grid{grid-template-columns:1fr;gap:var(--spacing-30)}
+  .cards{grid-template-columns:repeat(2,1fr)}
+  .routes-grid{grid-template-columns:1fr}
+  .cream{grid-template-columns:1fr}
+  .form-grid{grid-template-columns:repeat(2,1fr)}
+  .foot-top{grid-template-columns:1fr 1fr}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .patch{width:104px}
+  .p1{top:11%;left:2%}.p2{top:4%;left:56%}.p3{display:none}.p4{bottom:19%;left:3%}.p5{bottom:17%;right:2%}
+}
+@media (max-width:640px){
+  .wrap{padding:0 var(--spacing-20)}
+  .cards{grid-template-columns:1fr}
+  .form-grid{grid-template-columns:1fr}
+  .foot-top{grid-template-columns:1fr}
+  .stats{grid-template-columns:1fr}
+  .sec-head{flex-direction:column;align-items:flex-start}
+  .brand-name{font-size:16px}
+  /* шапка на узком экране: логотип + язык + CTA + меню в одну строку */
+  .nav-in{gap:var(--spacing-5)}
+  .nav-actions{gap:var(--spacing-5)}
+  .brand{gap:6px}
+  .btn-primary{padding:var(--spacing-10) 14px}
+  .lang button{padding:5px 7px}
+  .menu-trigger{padding:var(--spacing-10) 6px}
+  .menu-trigger .label{display:none}
+  .patch{width:88px}
+  .p1{top:9%;left:-2%}.p2{top:3%;left:58%}.p4{bottom:21%;left:-3%}.p5{bottom:19%;right:-2%}
+  .hero-in{padding:130px 0 120px}
+  .sub-form{flex-direction:column;max-width:none}
+  .card-map{height:112px}
+}
+</style>
+</head>
+<body>
+
+<!-- ============================ NAV ============================ -->
+<header class="nav on-dark" id="nav">
+  <div class="wrap nav-in">
+    <a class="brand" href="#top">
+      <svg class="brand-mark" viewBox="0 0 34 34" aria-hidden="true">
+        <circle cx="17" cy="17" r="17" fill="#fe3a3a"/>
+        <path d="M17 8.5 L26 25 H8 Z" fill="none" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"/>
+        <path d="M17 16.5 L21 25 H13 Z" fill="none" stroke="#fff" stroke-width="1.4" stroke-linejoin="round"/>
+      </svg>
+      <span class="brand-name" data-i18n="brand">БИВАК</span>
+    </a>
+    <div class="nav-actions">
+      <div class="lang" role="group" aria-label="Язык / Language">
+        <button type="button" id="lang-ru" aria-pressed="true"><span>RU</span></button>
+        <button type="button" id="lang-en" aria-pressed="false"><span>EN</span></button>
+      </div>
+      <a class="btn-primary" href="#booking" data-i18n="nav.book">Забронировать</a>
+      <button class="menu-trigger" type="button" id="menu-open">
+        <span class="bars" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="label" data-i18n="nav.menu">Меню</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- полноэкранная навигация -->
+<div class="overlay" id="overlay" aria-hidden="true">
+  <div class="wrap overlay-head">
+    <span class="mono" data-i18n="menu.label">Навигация · Приэльбрусье</span>
+    <button class="btn-secondary" type="button" id="menu-close" data-i18n="menu.close">Закрыть</button>
+  </div>
+  <nav class="wrap overlay-nav">
+    <a href="#shelters" data-menu><span class="n">01</span><span data-i18n="menu.1">Приюты</span></a>
+    <a href="#routes" data-menu><span class="n">02</span><span data-i18n="menu.2">Маршруты</span></a>
+    <a href="#season" data-menu><span class="n">03</span><span data-i18n="menu.3">Зимний сезон</span></a>
+    <a href="#booking" data-menu><span class="n">04</span><span data-i18n="menu.4">Бронирование</span></a>
+  </nav>
+  <div class="wrap overlay-foot">
+    <span class="mono" data-i18n="menu.phone">Диспетчер · +7 866 38 41 20</span>
+    <span class="mono">43°21′N 42°26′E</span>
+  </div>
+</div>
+
+<main id="top">
+
+<!-- ============================ HERO =========================== -->
+<section class="hero on-dark">
+  <!-- топографическое поле: изолинии, хребет, отражение в озере -->
+  <svg class="hero-field" viewBox="0 0 1440 820" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <rect width="1440" height="820" fill="#0a1628"/>
+    <g fill="#ffffff">
+      <circle cx="120" cy="70" r="1.2" opacity=".5"/><circle cx="260" cy="140" r="1" opacity=".35"/>
+      <circle cx="390" cy="60" r="1.4" opacity=".6"/><circle cx="470" cy="180" r="1" opacity=".3"/>
+      <circle cx="580" cy="90" r="1.1" opacity=".45"/><circle cx="700" cy="40" r="1.5" opacity=".55"/>
+      <circle cx="760" cy="150" r="1" opacity=".3"/><circle cx="850" cy="80" r="1.2" opacity=".5"/>
+      <circle cx="960" cy="170" r="1" opacity=".35"/><circle cx="1040" cy="60" r="1.4" opacity=".55"/>
+      <circle cx="1150" cy="130" r="1.1" opacity=".4"/><circle cx="1260" cy="70" r="1.3" opacity=".5"/>
+      <circle cx="1350" cy="180" r="1" opacity=".3"/><circle cx="60" cy="210" r="1.1" opacity=".4"/>
+      <circle cx="200" cy="260" r="1" opacity=".28"/><circle cx="330" cy="230" r="1.2" opacity=".38"/>
+      <circle cx="620" cy="230" r="1" opacity=".3"/><circle cx="900" cy="245" r="1.1" opacity=".34"/>
+      <circle cx="1090" cy="255" r="1" opacity=".28"/><circle cx="1300" cy="240" r="1.2" opacity=".4"/>
+      <circle cx="500" cy="35" r="1" opacity=".3"/><circle cx="1180" cy="35" r="1" opacity=".3"/>
+    </g>
+
+    <!-- изолинии: одна форма, вложенные масштабы вокруг двух вершин -->
+    <defs>
+      <path id="iso-a" d="M-150 0 C-90 -46 -34 -66 6 -40 C40 -18 74 -44 116 -26 C158 -8 178 22 150 44 C104 80 20 92 -46 74 C-108 58 -150 30 -150 0 Z"/>
+      <clipPath id="hero-clip"><rect width="1440" height="820"/></clipPath>
+    </defs>
+    <g clip-path="url(#hero-clip)" fill="none" stroke="#ffffff" stroke-width="1">
+      <g transform="translate(330 470)">
+        <use href="#iso-a" transform="scale(2.6)" opacity=".05"/>
+        <use href="#iso-a" transform="scale(2.1)" opacity=".07"/>
+        <use href="#iso-a" transform="scale(1.65)" opacity=".085"/>
+        <use href="#iso-a" transform="scale(1.25)" opacity=".1"/>
+        <use href="#iso-a" transform="scale(.9)" opacity=".12"/>
+        <use href="#iso-a" transform="scale(.55)" opacity=".14"/>
+      </g>
+      <g transform="translate(1130 430) rotate(14)">
+        <use href="#iso-a" transform="scale(2.3)" opacity=".045"/>
+        <use href="#iso-a" transform="scale(1.8)" opacity=".06"/>
+        <use href="#iso-a" transform="scale(1.35)" opacity=".08"/>
+        <use href="#iso-a" transform="scale(.95)" opacity=".1"/>
+        <use href="#iso-a" transform="scale(.6)" opacity=".13"/>
+      </g>
+    </g>
+
+    <!-- хребет: дальний, средний, ближний + зеркальное отражение -->
+    <g>
+      <path d="M0 470 L150 392 L245 436 L360 330 L470 420 L560 372 L690 300 L800 386 L900 340 L1010 404 L1130 320 L1250 392 L1350 350 L1440 402 L1440 560 L0 560 Z"
+            fill="#ffffff" opacity=".05"/>
+      <path d="M0 520 L120 452 L230 500 L330 430 L430 492 L540 440 L640 498 L760 424 L880 486 L980 446 L1090 500 L1200 448 L1320 502 L1440 456 L1440 600 L0 600 Z"
+            fill="#ffffff" opacity=".075"/>
+      <path d="M0 566 L140 522 L260 566 L380 512 L500 560 L620 520 L740 568 L860 524 L980 570 L1100 528 L1220 572 L1340 530 L1440 566 L1440 604 L0 604 Z"
+            fill="#ffffff" opacity=".1"/>
+      <!-- озеро -->
+      <rect x="0" y="604" width="1440" height="216" fill="#ffffff" opacity=".025"/>
+      <g transform="translate(0 1208) scale(1 -1)" opacity=".45">
+        <path d="M0 566 L140 522 L260 566 L380 512 L500 560 L620 520 L740 568 L860 524 L980 570 L1100 528 L1220 572 L1340 530 L1440 566 L1440 604 L0 604 Z"
+              fill="#ffffff" opacity=".08"/>
+      </g>
+      <g stroke="#ffffff" stroke-width="1" opacity=".08">
+        <line x1="0" y1="648" x2="1440" y2="648"/>
+        <line x1="0" y1="700" x2="1440" y2="700"/>
+        <line x1="0" y1="758" x2="1440" y2="758"/>
+      </g>
+    </g>
+  </svg>
+
+  <!-- патчи-нашивки: линейная иконография 2px, текст по дуге -->
+  <svg class="patch p1" viewBox="0 0 132 142" aria-hidden="true">
+    <defs><path id="arc1" d="M26 74 A40 40 0 0 1 106 74"/><path id="arc1b" d="M28 92 A38 38 0 0 0 104 92"/></defs>
+    <path d="M10 34 Q10 10 34 10 H98 Q122 10 122 34 V100 Q122 120 66 134 Q10 120 10 100 Z" fill="none" stroke="#f5f0e8" stroke-width="2"/>
+    <path d="M18 38 Q18 18 38 18 H94 Q114 18 114 38 V98 Q114 114 66 126 Q18 114 18 98 Z" fill="none" stroke="#f5f0e8" stroke-width="1" opacity=".55"/>
+    <g fill="none" stroke="#f5f0e8" stroke-width="2" stroke-linejoin="round">
+      <path d="M40 84 L58 56 L70 72 L80 60 L94 84 Z"/>
+      <path d="M52 66 L58 62 L64 68"/>
+    </g>
+    <text fill="#f5f0e8"><textPath href="#arc1" startOffset="50%" text-anchor="middle" data-i18n="patch.1a">Хребет</textPath></text>
+    <text fill="#f5f0e8"><textPath href="#arc1b" startOffset="50%" text-anchor="middle" data-i18n="patch.1b">34 км · 3 дня</textPath></text>
+  </svg>
+
+  <svg class="patch p2" viewBox="0 0 132 142" aria-hidden="true">
+    <defs><path id="arc2" d="M26 72 A40 40 0 0 1 106 72"/><path id="arc2b" d="M28 90 A38 38 0 0 0 104 90"/></defs>
+    <path d="M10 34 Q10 10 34 10 H98 Q122 10 122 34 V100 Q122 120 66 134 Q10 120 10 100 Z" fill="none" stroke="#4a7fc5" stroke-width="2"/>
+    <g fill="none" stroke="#4a7fc5" stroke-width="2" stroke-linecap="round">
+      <circle cx="66" cy="70" r="20"/>
+      <path d="M58 78 L72 62 M72 62 L74 74 M72 62 L60 64"/>
+    </g>
+    <text fill="#4a7fc5"><textPath href="#arc2" startOffset="50%" text-anchor="middle" data-i18n="patch.2a">Перевал</textPath></text>
+    <text fill="#4a7fc5"><textPath href="#arc2b" startOffset="50%" text-anchor="middle" data-i18n="patch.2b">3 667 м</textPath></text>
+  </svg>
+
+  <svg class="patch p3" viewBox="0 0 132 142" aria-hidden="true">
+    <defs><path id="arc3" d="M26 74 A40 40 0 0 1 106 74"/><path id="arc3b" d="M28 92 A38 38 0 0 0 104 92"/></defs>
+    <path d="M10 34 Q10 10 34 10 H98 Q122 10 122 34 V100 Q122 120 66 134 Q10 120 10 100 Z" fill="none" stroke="#ffffff" stroke-width="2"/>
+    <g fill="none" stroke="#ffffff" stroke-width="2" stroke-linejoin="round">
+      <path d="M44 86 L66 52 L88 86 Z"/>
+      <path d="M66 52 L66 86"/>
+      <path d="M56 86 L66 74 L76 86"/>
+    </g>
+    <text fill="#ffffff"><textPath href="#arc3" startOffset="50%" text-anchor="middle" data-i18n="patch.3a">Базовый</textPath></text>
+    <text fill="#ffffff"><textPath href="#arc3b" startOffset="50%" text-anchor="middle" data-i18n="patch.3b">2 040 м</textPath></text>
+  </svg>
+
+  <svg class="patch p4" viewBox="0 0 132 142" aria-hidden="true">
+    <defs><path id="arc4" d="M26 74 A40 40 0 0 1 106 74"/><path id="arc4b" d="M28 92 A38 38 0 0 0 104 92"/></defs>
+    <path d="M10 34 Q10 10 34 10 H98 Q122 10 122 34 V100 Q122 120 66 134 Q10 120 10 100 Z" fill="none" stroke="#4a7fc5" stroke-width="2"/>
+    <g fill="none" stroke="#4a7fc5" stroke-width="2" stroke-linecap="round">
+      <path d="M46 88 L66 54 L86 88"/>
+      <path d="M52 76 L80 76"/>
+      <path d="M66 44 L66 54"/>
+      <path d="M40 88 L92 88"/>
+    </g>
+    <text fill="#4a7fc5"><textPath href="#arc4" startOffset="50%" text-anchor="middle" data-i18n="patch.4a">Ски-тур</textPath></text>
+    <text fill="#4a7fc5"><textPath href="#arc4b" startOffset="50%" text-anchor="middle" data-i18n="patch.4b">Февраль</textPath></text>
+  </svg>
+
+  <svg class="patch p5" viewBox="0 0 132 142" aria-hidden="true">
+    <defs><path id="arc5" d="M26 74 A40 40 0 0 1 106 74"/><path id="arc5b" d="M28 92 A38 38 0 0 0 104 92"/></defs>
+    <path d="M10 34 Q10 10 34 10 H98 Q122 10 122 34 V100 Q122 120 66 134 Q10 120 10 100 Z" fill="none" stroke="#fe3a3a" stroke-width="2"/>
+    <path d="M18 38 Q18 18 38 18 H94 Q114 18 114 38 V98 Q114 114 66 126 Q18 114 18 98 Z" fill="none" stroke="#fe3a3a" stroke-width="1" opacity=".55"/>
+    <g fill="none" stroke="#fe3a3a" stroke-width="2" stroke-linecap="round">
+      <path d="M66 88 C56 80 54 70 60 60 C62 66 66 66 66 60 C68 68 76 72 74 82"/>
+      <path d="M48 90 L84 90"/>
+    </g>
+    <text fill="#fe3a3a"><textPath href="#arc5" startOffset="50%" text-anchor="middle" data-i18n="patch.5a">Печь</textPath></text>
+    <text fill="#fe3a3a"><textPath href="#arc5b" startOffset="50%" text-anchor="middle" data-i18n="patch.5b">Круглый год</textPath></text>
+  </svg>
+
+  <div class="wrap hero-in">
+    <h1 class="display" data-i18n="hero.title">Ночлег там,<br>где кончается<br>дорога</h1>
+  </div>
+
+  <div class="wrap hero-corners">
+    <span class="mono" data-i18n="hero.left">Приюты и тропы · Приэльбрусье</span>
+    <span class="mono" data-i18n="hero.right">С 2011 года · 43°21′N 42°26′E</span>
+  </div>
+  <a class="scroll-dot" href="#intro" aria-label="Вниз">
+    <svg width="14" height="16" viewBox="0 0 14 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+      <path d="M7 1 V14 M2 9 L7 14 L12 9"/>
+    </svg>
+  </a>
+</section>
+
+<!-- =========================== INTRO =========================== -->
+<section id="intro">
+  <div class="wrap intro-grid">
+    <div class="col-read">
+      <span class="mono sec-label" data-i18n="intro.label">01 / Кто мы</span>
+      <p data-i18n="intro.p1">БИВАК — семь приютов на северных и южных склонах Приэльбрусья, от Тегенекли на 2 040 м до Северного на 3 200 м. Мы держим печи тёплыми, воду проточной, а тропы размеченными.</p>
+      <p data-i18n="intro.p2">Место в общем зале — от 1 400 ₽ за ночь, комната на четверых — от 4 800 ₽. Заявку на группу до 12 человек подтверждаем в тот же день, <span class="hl">регистрацию в МЧС оформляем сами</span>. Заброска УАЗом до 2 040 м, дальше пешком.</p>
+      <p data-i18n="intro.p3">Смотрителей четырнадцать, все живут в долине круглый год. По рации отвечают с 6:00 до 23:00.</p>
+    </div>
+    <div class="col-poster">
+      <h2 class="sec-title" data-i18n="intro.poster">Крыша, печь и точка на карте. Остальное — ваше дело.</h2>
+    </div>
+  </div>
+</section>
+
+<!-- =========================== СТАТЫ =========================== -->
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="stats">
+      <div class="stat"><div class="num" data-i18n="stat.1v">7</div><span class="mono cap" data-i18n="stat.1k">приютов на хребте</span></div>
+      <div class="stat"><div class="num" data-i18n="stat.2v">340 км</div><span class="mono cap" data-i18n="stat.2k">размеченных троп</span></div>
+      <div class="stat"><div class="num" data-i18n="stat.3v">2 040 — 3 200 м</div><span class="mono cap" data-i18n="stat.3k">высоты ночёвок</span></div>
+      <div class="stat"><div class="num" data-i18n="stat.4v">14 лет</div><span class="mono cap" data-i18n="stat.4k">без пропущенной смены</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================== ПРИЮТЫ ========================== -->
+<section class="shelters" id="shelters">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <span class="mono sec-label" data-i18n="shelters.label">02 / Приюты</span>
+        <h2 class="sec-title" data-i18n="shelters.title">Семь крыш<br>на хребте</h2>
+      </div>
+      <p class="mono mono-14" style="max-width:34ch" data-i18n="shelters.note">Высота · места · сезон. Цена за место в сутки.</p>
+    </div>
+
+    <!-- топо-миниатюра карточки: одна форма в разных масштабах -->
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+      <symbol id="topo-mini" viewBox="0 0 300 132">
+        <g fill="none" stroke="#000000" stroke-width="1">
+          <g transform="translate(150 66)">
+            <use href="#iso-a" transform="scale(.92)" opacity=".16"/>
+            <use href="#iso-a" transform="scale(.72)" opacity=".24"/>
+            <use href="#iso-a" transform="scale(.52)" opacity=".34"/>
+            <use href="#iso-a" transform="scale(.32)" opacity=".5"/>
+            <use href="#iso-a" transform="scale(.16)" opacity=".7"/>
+          </g>
+        </g>
+      </symbol>
+    </svg>
+
+    <div class="cards">
+      <!-- 1 -->
+      <article class="card">
+        <svg class="card-map" viewBox="0 0 300 132" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <use href="#topo-mini" transform="rotate(0 150 66)"/>
+          <circle cx="150" cy="66" r="3.5" fill="#fe3a3a"/>
+          <path d="M20 112 H280" stroke="#000" stroke-width="1" opacity=".25" stroke-dasharray="3 5"/>
+        </svg>
+        <div class="card-body">
+          <div class="card-title"><h3 class="sub" data-i18n="sh.1n">Тегенекли</h3><span class="mono" data-i18n="sh.1alt">2 040 м</span></div>
+          <ul class="specs">
+            <li><span data-i18n="sh.k.beds">Мест</span><span data-i18n="sh.1b">24 · общий зал и 3 комнаты</span></li>
+            <li><span data-i18n="sh.k.season">Сезон</span><span data-i18n="sh.1s">круглый год</span></li>
+            <li><span data-i18n="sh.k.water">Вода</span><span data-i18n="sh.1w">родник, 40 м</span></li>
+          </ul>
+          <div class="card-foot">
+            <span class="price"><span data-i18n="sh.1p">1 400 ₽</span> <small data-i18n="sh.k.night">/ ночь</small></span>
+            <a class="btn-secondary" href="#booking" data-i18n="sh.k.book">Забронировать</a>
+          </div>
+        </div>
+      </article>
+      <!-- 2 -->
+      <article class="card">
+        <svg class="card-map" viewBox="0 0 300 132" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <use href="#topo-mini" transform="rotate(52 150 66)"/>
+          <circle cx="176" cy="52" r="3.5" fill="#fe3a3a"/>
+          <path d="M20 26 H280" stroke="#000" stroke-width="1" opacity=".25" stroke-dasharray="3 5"/>
+        </svg>
+        <div class="card-body">
+          <div class="card-title"><h3 class="sub" data-i18n="sh.2n">Адыл-Су</h3><span class="mono" data-i18n="sh.2alt">2 150 м</span></div>
+          <ul class="specs">
+            <li><span data-i18n="sh.k.beds">Мест</span><span data-i18n="sh.2b">20 · общий зал</span></li>
+            <li><span data-i18n="sh.k.season">Сезон</span><span data-i18n="sh.2s">круглый год</span></li>
+            <li><span data-i18n="sh.k.water">Вода</span><span data-i18n="sh.2w">река, фильтр в доме</span></li>
+          </ul>
+          <div class="card-foot">
+            <span class="price"><span data-i18n="sh.2p">1 400 ₽</span> <small data-i18n="sh.k.night">/ ночь</small></span>
+            <a class="btn-secondary" href="#booking" data-i18n="sh.k.book">Забронировать</a>
+          </div>
+        </div>
+      </article>
+      <!-- 3 -->
+      <article class="card">
+        <svg class="card-map" viewBox="0 0 300 132" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <use href="#topo-mini" transform="rotate(128 150 66) scale(1.1) translate(-14 -6)"/>
+          <circle cx="126" cy="78" r="3.5" fill="#fe3a3a"/>
+          <path d="M20 100 H280" stroke="#000" stroke-width="1" opacity=".25" stroke-dasharray="3 5"/>
+        </svg>
+        <div class="card-body">
+          <div class="card-title"><h3 class="sub" data-i18n="sh.3n">Джилы-Су</h3><span class="mono" data-i18n="sh.3alt">2 380 м</span></div>
+          <ul class="specs">
+            <li><span data-i18n="sh.k.beds">Мест</span><span data-i18n="sh.3b">30 · два корпуса</span></li>
+            <li><span data-i18n="sh.k.season">Сезон</span><span data-i18n="sh.3s">круглый год</span></li>
+            <li><span data-i18n="sh.k.water">Вода</span><span data-i18n="sh.3w">нарзан, 120 м</span></li>
+          </ul>
+          <div class="card-foot">
+            <span class="price"><span data-i18n="sh.3p">1 600 ₽</span> <small data-i18n="sh.k.night">/ ночь</small></span>
+            <a class="btn-secondary" href="#booking" data-i18n="sh.k.book">Забронировать</a>
+          </div>
+        </div>
+      </article>
+      <!-- 4 -->
+      <article class="card">
+        <svg class="card-map" viewBox="0 0 300 132" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <use href="#topo-mini" transform="rotate(200 150 66)"/>
+          <circle cx="132" cy="58" r="3.5" fill="#fe3a3a"/>
+          <path d="M20 40 H280" stroke="#000" stroke-width="1" opacity=".25" stroke-dasharray="3 5"/>
+        </svg>
+        <div class="card-body">
+          <div class="card-title"><h3 class="sub" data-i18n="sh.4n">Куллумкол</h3><span class="mono" data-i18n="sh.4alt">2 610 м</span></div>
+          <ul class="specs">
+            <li><span data-i18n="sh.k.beds">Мест</span><span data-i18n="sh.4b">14 · нары в два яруса</span></li>
+            <li><span data-i18n="sh.k.season">Сезон</span><span data-i18n="sh.4s">июнь — октябрь</span></li>
+            <li><span data-i18n="sh.k.water">Вода</span><span data-i18n="sh.4w">ручей, 200 м</span></li>
+          </ul>
+          <div class="card-foot">
+            <span class="price"><span data-i18n="sh.4p">1 800 ₽</span> <small data-i18n="sh.k.night">/ ночь</small></span>
+            <a class="btn-secondary" href="#booking" data-i18n="sh.k.book">Забронировать</a>
+          </div>
+        </div>
+      </article>
+      <!-- 5 -->
+      <article class="card">
+        <svg class="card-map" viewBox="0 0 300 132" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <use href="#topo-mini" transform="rotate(276 150 66) scale(1.06) translate(-9 -4)"/>
+          <circle cx="188" cy="84" r="3.5" fill="#fe3a3a"/>
+          <path d="M20 112 H280" stroke="#000" stroke-width="1" opacity=".25" stroke-dasharray="3 5"/>
+        </svg>
+        <div class="card-body">
+          <div class="card-title"><h3 class="sub" data-i18n="sh.5n">Ирик-Чат</h3><span class="mono" data-i18n="sh.5alt">2 780 м</span></div>
+          <ul class="specs">
+            <li><span data-i18n="sh.k.beds">Мест</span><span data-i18n="sh.5b">16 · общий зал</span></li>
+            <li><span data-i18n="sh.k.season">Сезон</span><span data-i18n="sh.5s">май — октябрь</span></li>
+            <li><span data-i18n="sh.k.water">Вода</span><span data-i18n="sh.5w">ледниковый ручей</span></li>
+          </ul>
+          <div class="card-foot">
+            <span class="price"><span data-i18n="sh.5p">2 000 ₽</span> <small data-i18n="sh.k.night">/ ночь</small></span>
+            <a class="btn-secondary" href="#booking" data-i18n="sh.k.book">Забронировать</a>
+          </div>
+        </div>
+      </article>
+      <!-- 6 -->
+      <article class="card">
+        <svg class="card-map" viewBox="0 0 300 132" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <use href="#topo-mini" transform="rotate(320 150 66) scale(1.14) translate(-18 -8)"/>
+          <circle cx="158" cy="44" r="3.5" fill="#fe3a3a"/>
+          <path d="M20 22 H280" stroke="#000" stroke-width="1" opacity=".25" stroke-dasharray="3 5"/>
+        </svg>
+        <div class="card-body">
+          <div class="card-title"><h3 class="sub" data-i18n="sh.6n">Северный</h3><span class="mono" data-i18n="sh.6alt">3 200 м</span></div>
+          <ul class="specs">
+            <li><span data-i18n="sh.k.beds">Мест</span><span data-i18n="sh.6b">12 · только по заявке</span></li>
+            <li><span data-i18n="sh.k.season">Сезон</span><span data-i18n="sh.6s">июнь — сентябрь</span></li>
+            <li><span data-i18n="sh.k.water">Вода</span><span data-i18n="sh.6w">снежник, топим сами</span></li>
+          </ul>
+          <div class="card-foot">
+            <span class="price"><span data-i18n="sh.6p">2 600 ₽</span> <small data-i18n="sh.k.night">/ ночь</small></span>
+            <a class="btn-secondary" href="#booking" data-i18n="sh.k.book">Забронировать</a>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ========================== МАРШРУТЫ ========================= -->
+<section id="routes">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <span class="mono sec-label" data-i18n="routes.label">03 / Маршруты</span>
+        <h2 class="sec-title" data-i18n="routes.title">Профиль<br>до вершины</h2>
+      </div>
+      <p class="mono mono-14" style="max-width:34ch" data-i18n="routes.note">Выберите нитку — покажем набор высоты и ночёвки.</p>
+    </div>
+
+    <div class="routes-grid">
+      <ul class="route-list" id="route-list">
+        <li><button class="route-btn" type="button" data-route="0" aria-selected="true">
+          <span class="rn">01</span>
+          <span><span class="rt" data-i18n="rt.0n">Хребет</span><span class="rd" data-i18n="rt.0d">34 км · 3 дня · н/к</span></span>
+        </button></li>
+        <li><button class="route-btn" type="button" data-route="1" aria-selected="false">
+          <span class="rn">02</span>
+          <span><span class="rt" data-i18n="rt.1n">Ирик-Чат</span><span class="rd" data-i18n="rt.1d">46 км · 4 дня · 1А</span></span>
+        </button></li>
+        <li><button class="route-btn" type="button" data-route="2" aria-selected="false">
+          <span class="rn">03</span>
+          <span><span class="rt" data-i18n="rt.2n">Кольцо Джилы-Су</span><span class="rd" data-i18n="rt.2d">22 км · 2 дня · н/к</span></span>
+        </button></li>
+        <li><button class="route-btn" type="button" data-route="3" aria-selected="false">
+          <span class="rn">04</span>
+          <span><span class="rt" data-i18n="rt.3n">Зимний траверс</span><span class="rd" data-i18n="rt.3d">52 км · 5 дней · ски-тур</span></span>
+        </button></li>
+      </ul>
+
+      <div class="profile">
+        <div class="profile-head">
+          <div>
+            <span class="mono" data-i18n="routes.profile">Профиль высоты</span>
+            <h3 class="sub" id="r-name" style="margin-top:6px">Хребет</h3>
+          </div>
+          <div class="facts">
+            <div class="fact"><div class="fv" id="r-len">34 км</div><span class="mono fk" data-i18n="routes.f1">длина</span></div>
+            <div class="fact"><div class="fv" id="r-gain">1 640 м</div><span class="mono fk" data-i18n="routes.f2">набор</span></div>
+            <div class="fact"><div class="fv" id="r-max">3 180 м</div><span class="mono fk" data-i18n="routes.f3">верхняя точка</span></div>
+            <div class="fact"><div class="fv" id="r-season">Июнь — октябрь</div><span class="mono fk" data-i18n="routes.f4">сезон</span></div>
+          </div>
+        </div>
+
+        <svg class="chart" id="chart" viewBox="0 0 1000 300" preserveAspectRatio="none" role="img" aria-label="Профиль высоты маршрута">
+          <g id="chart-grid"></g>
+          <path id="chart-fill" class="fill" d=""/>
+          <polyline id="chart-line" class="line" points=""/>
+          <g id="chart-peak"></g>
+        </svg>
+        <div style="display:flex;justify-content:space-between;margin-top:6px">
+          <span class="mono" style="opacity:.55">0 км</span>
+          <span class="mono" style="opacity:.55" id="r-km-end">34 км</span>
+        </div>
+
+        <div class="stops" id="r-stops"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================== СЕЗОН =========================== -->
+<section id="season">
+  <div class="wrap">
+    <div class="cream">
+      <div>
+        <span class="mono sec-label" data-i18n="season.label">04 / Зимний сезон</span>
+        <h2 class="sec-title" data-i18n="season.title">Зима<br>на хребте</h2>
+        <p style="margin-top:var(--spacing-20)" data-i18n="season.p">С декабря по апрель работают четыре приюта из семи. Тропы не чистят: идут на лыжах или снегоступах. Лавинную обстановку смотритель передаёт по рации в 7:00 и 16:00, сводку дублируем в рассылке.</p>
+      </div>
+      <ul class="steps">
+        <li>
+          <span class="sn">01</span>
+          <div>
+            <div class="st" data-i18n="season.s1t">Заявка за 10 дней</div>
+            <p data-i18n="season.s1p">Зимой приют топят под конкретную группу: дрова завозят снегоходом, печь выходит на режим за четыре часа.</p>
+          </div>
+        </li>
+        <li>
+          <span class="sn">02</span>
+          <div>
+            <div class="st" data-i18n="season.s2t">Лавинный минимум</div>
+            <p data-i18n="season.s2p">На группу — бипер, лопата, щуп и один человек с курсом AL-1. Проверяем на выходе, без снаряжения не выпускаем.</p>
+          </div>
+        </li>
+        <li>
+          <span class="sn">03</span>
+          <div>
+            <div class="st" data-i18n="season.s3t">Контрольный срок</div>
+            <p data-i18n="season.s3p">Назначаем время возврата. Не вышли на связь через два часа после срока — поднимаем спасотряд в Терсколе.</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ========================= БРОНИРОВАНИЕ ====================== -->
+<section class="booking" id="booking">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <span class="mono sec-label" data-i18n="book.label">05 / Бронирование</span>
+        <h2 class="sec-title" data-i18n="book.title">Оставьте<br>заявку</h2>
+      </div>
+      <p class="mono mono-14" style="max-width:34ch" data-i18n="book.note">Отвечаем в тот же день, до 20:00 по московскому времени.</p>
+    </div>
+
+    <form id="book-form" novalidate>
+      <div class="form-grid">
+        <div class="field">
+          <label class="mono" for="f-shelter" data-i18n="book.f1">Приют</label>
+          <select id="f-shelter">
+            <option data-i18n="sh.1n">Тегенекли</option>
+            <option data-i18n="sh.2n">Адыл-Су</option>
+            <option data-i18n="sh.3n">Джилы-Су</option>
+            <option data-i18n="sh.4n">Куллумкол</option>
+            <option data-i18n="sh.5n">Ирик-Чат</option>
+            <option data-i18n="sh.6n">Северный</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="mono" for="f-date" data-i18n="book.f2">Дата заезда</label>
+          <input id="f-date" type="date" value="2026-08-14">
+        </div>
+        <div class="field">
+          <label class="mono" for="f-people" data-i18n="book.f3">Человек</label>
+          <input id="f-people" type="number" min="1" max="12" value="4">
+        </div>
+        <div class="field">
+          <label class="mono" for="f-contact" data-i18n="book.f4">Телефон или почта</label>
+          <input id="f-contact" type="text" placeholder="+7 900 000 00 00" data-i18n-ph="book.f4ph">
+        </div>
+      </div>
+      <div class="form-foot">
+        <button class="btn-primary" type="submit" data-i18n="book.submit">Отправить заявку</button>
+        <p class="form-note" data-i18n="book.small">Предоплата 30 % после подтверждения мест. Отмена за 5 дней — возврат полностью, позже — переносим на другую дату.</p>
+      </div>
+      <div class="form-reply" id="book-reply" role="status"></div>
+    </form>
+  </div>
+</section>
+
+</main>
+
+<!-- =========================== FOOTER ========================== -->
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot-top">
+      <div>
+        <h3 data-i18n="foot.subLabel">Сводка с хребта</h3>
+        <p style="font-size:14px;max-width:38ch" data-i18n="foot.subText">Раз в две недели: состояние троп, снег, свободные места на ближайший месяц. Без рекламы.</p>
+        <form class="sub-form" id="sub-form">
+          <input type="email" placeholder="почта" aria-label="почта" data-i18n-ph="foot.subPh">
+          <button class="btn-primary" type="submit" data-i18n="foot.subBtn">Подписаться</button>
+        </form>
+        <p class="mono" style="margin-top:var(--spacing-10);display:none" id="sub-reply" data-i18n="foot.subOk">Готово — первое письмо придёт в понедельник</p>
+      </div>
+      <div>
+        <h3 data-i18n="foot.c1">Приюты</h3>
+        <ul>
+          <li><a href="#shelters" data-i18n="sh.1n">Тегенекли</a></li>
+          <li><a href="#shelters" data-i18n="sh.3n">Джилы-Су</a></li>
+          <li><a href="#shelters" data-i18n="sh.5n">Ирик-Чат</a></li>
+          <li><a href="#shelters" data-i18n="sh.6n">Северный</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 data-i18n="foot.c2">Маршруты</h3>
+        <ul>
+          <li><a href="#routes" data-i18n="rt.0n">Хребет</a></li>
+          <li><a href="#routes" data-i18n="rt.1n">Ирик-Чат</a></li>
+          <li><a href="#routes" data-i18n="rt.2n">Кольцо Джилы-Су</a></li>
+          <li><a href="#routes" data-i18n="rt.3n">Зимний траверс</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 data-i18n="foot.c3">Связь</h3>
+        <ul>
+          <li><a href="tel:+78663841200">+7 866 38 41 20</a></li>
+          <li><a href="mailto:hut@bivak.example">hut@bivak.example</a></li>
+          <li><span data-i18n="foot.addr">Терскол, ул. Мусукова, 6</span></li>
+          <li><span data-i18n="foot.hours">Диспетчер 6:00 — 23:00</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span class="mono" data-i18n="foot.copy">© 2026 БИВАК · Кабардино-Балкария</span>
+      <span class="mono" data-i18n="foot.legal">Регистрация групп в МЧС обязательна · Учебный проект</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* =================================================================
+   1. Данные маршрутов и отрисовка профиля высоты
+   ================================================================= */
+var ROUTES = [
+  { name:{ru:'Хребет',en:'The Ridge'},
+    len:{ru:'34 км',en:'34 km'}, gain:{ru:'1 640 м',en:'1,640 m'}, max:{ru:'3 180 м',en:'3,180 m'},
+    season:{ru:'Июнь — октябрь',en:'June — October'}, kmEnd:{ru:'34 км',en:'34 km'},
+    pts:[[0,2040],[4,2260],[8,2180],[12,2540],[16,2760],[20,3180],[24,2900],[28,2480],[31,2200],[34,2040]],
+    stops:{ru:['Ночь 1 · Адыл-Су','Ночь 2 · Куллумкол','Спуск · Тегенекли'],
+           en:['Night 1 · Adyl-Su','Night 2 · Kullumkol','Descent · Tegenekli']} },
+  { name:{ru:'Ирик-Чат',en:'Irik-Chat'},
+    len:{ru:'46 км',en:'46 km'}, gain:{ru:'2 100 м',en:'2,100 m'}, max:{ru:'3 667 м',en:'3,667 m'},
+    season:{ru:'Июль — сентябрь',en:'July — September'}, kmEnd:{ru:'46 км',en:'46 km'},
+    pts:[[0,2040],[6,2380],[12,2620],[18,2980],[24,3667],[30,3120],[36,2740],[41,2380],[46,2040]],
+    stops:{ru:['Ночь 1 · Ирик-Чат','Ночь 2 · Северный','Ночь 3 · Куллумкол'],
+           en:['Night 1 · Irik-Chat','Night 2 · Severny','Night 3 · Kullumkol']} },
+  { name:{ru:'Кольцо Джилы-Су',en:'Dzhily-Su Loop'},
+    len:{ru:'22 км',en:'22 km'}, gain:{ru:'900 м',en:'900 m'}, max:{ru:'2 780 м',en:'2,780 m'},
+    season:{ru:'Май — октябрь',en:'May — October'}, kmEnd:{ru:'22 км',en:'22 km'},
+    pts:[[0,2380],[3,2480],[6,2700],[9,2780],[12,2640],[15,2520],[18,2420],[22,2380]],
+    stops:{ru:['Ночь 1 · Джилы-Су','Возврат в тот же приют'],
+           en:['Night 1 · Dzhily-Su','Back to the same hut']} },
+  { name:{ru:'Зимний траверс',en:'Winter Traverse'},
+    len:{ru:'52 км',en:'52 km'}, gain:{ru:'2 400 м',en:'2,400 m'}, max:{ru:'3 420 м',en:'3,420 m'},
+    season:{ru:'Февраль — март',en:'February — March'}, kmEnd:{ru:'52 км',en:'52 km'},
+    pts:[[0,2150],[7,2460],[14,2680],[21,3080],[28,3420],[35,3160],[42,2820],[47,2440],[52,2150]],
+    stops:{ru:['Ночь 1 · Адыл-Су','Ночь 2 · Куллумкол','Ночь 3 · Ирик-Чат','Ночь 4 · Джилы-Су'],
+           en:['Night 1 · Adyl-Su','Night 2 · Kullumkol','Night 3 · Irik-Chat','Night 4 · Dzhily-Su']} }
+];
+
+var W = 1000, H = 300, PADL = 46, PADR = 16, PADT = 18, PADB = 26;
+var LOW = 1900, HIGH = 3800;
+var current = 0, lang = 'ru';
+
+function fmtAlt(m){ return lang === 'en' ? m.toLocaleString('en-US') : String(m).replace(/\B(?=(\d{3})+(?!\d))/g, ' '); }
+
+function drawChart(i){
+  var r = ROUTES[i], pts = r.pts;
+  var maxKm = pts[pts.length - 1][0];
+  var x = function(km){ return PADL + (km / maxKm) * (W - PADL - PADR); };
+  var y = function(alt){ return PADT + (1 - (alt - LOW) / (HIGH - LOW)) * (H - PADT - PADB); };
+
+  /* сетка высот 1px + подписи */
+  var grid = '';
+  [2000, 2500, 3000, 3500].forEach(function(alt){
+    var yy = y(alt).toFixed(1);
+    grid += '<line class="grid-line" x1="' + PADL + '" y1="' + yy + '" x2="' + (W - PADR) + '" y2="' + yy + '"/>';
+    grid += '<text class="axis" x="0" y="' + (+yy + 3).toFixed(1) + '">' + fmtAlt(alt) + '</text>';
+  });
+  document.getElementById('chart-grid').innerHTML = grid;
+
+  var poly = pts.map(function(p){ return x(p[0]).toFixed(1) + ',' + y(p[1]).toFixed(1); }).join(' ');
+  document.getElementById('chart-line').setAttribute('points', poly);
+  document.getElementById('chart-fill').setAttribute('d',
+    'M' + x(0).toFixed(1) + ',' + (H - PADB) + ' L' + poly.split(' ').join(' L') + ' L' + x(maxKm).toFixed(1) + ',' + (H - PADB) + ' Z');
+
+  /* верхняя точка — единственный красный акцент графика */
+  var peak = pts.reduce(function(a, b){ return b[1] > a[1] ? b : a; }, pts[0]);
+  var px = x(peak[0]), py = y(peak[1]);
+  var anchor = px > W * 0.72 ? 'end' : (px < W * 0.2 ? 'start' : 'middle');
+  document.getElementById('chart-peak').innerHTML =
+    '<circle class="peak" cx="' + px.toFixed(1) + '" cy="' + py.toFixed(1) + '" r="4"/>' +
+    '<text class="peak-label" x="' + px.toFixed(1) + '" y="' + (py - 12).toFixed(1) + '" text-anchor="' + anchor + '">' +
+    fmtAlt(peak[1]) + (lang === 'en' ? ' M' : ' М') + '</text>';
+
+  document.getElementById('r-name').textContent = r.name[lang];
+  document.getElementById('r-len').textContent = r.len[lang];
+  document.getElementById('r-gain').textContent = r.gain[lang];
+  document.getElementById('r-max').textContent = r.max[lang];
+  document.getElementById('r-season').textContent = r.season[lang];
+  document.getElementById('r-km-end').textContent = r.kmEnd[lang];
+  document.getElementById('r-stops').innerHTML = r.stops[lang].map(function(s){
+    return '<span class="stop">' + s + '</span>';
+  }).join('');
+}
+
+document.getElementById('route-list').addEventListener('click', function(e){
+  var btn = e.target.closest('.route-btn');
+  if(!btn) return;
+  current = +btn.dataset.route;
+  [].forEach.call(document.querySelectorAll('.route-btn'), function(b){
+    b.setAttribute('aria-selected', b === btn ? 'true' : 'false');
+  });
+  drawChart(current);
+});
+
+/* =================================================================
+   2. Двуязычность RU / EN
+   ================================================================= */
+var I18N = { en: {
+  'brand':'BIVAK',
+  'nav.book':'Book a bunk', 'nav.menu':'Menu',
+  'menu.label':'Navigation · Elbrus region', 'menu.close':'Close',
+  'menu.1':'Huts', 'menu.2':'Routes', 'menu.3':'Winter season', 'menu.4':'Booking',
+  'menu.phone':'Dispatcher · +7 866 38 41 20',
+
+  'hero.title':'A bed where<br>the road<br>ends',
+  'hero.left':'Huts and trails · Elbrus region',
+  'hero.right':'Since 2011 · 43°21′N 42°26′E',
+
+  'patch.1a':'Ridge', 'patch.1b':'34 km · 3 days',
+  'patch.2a':'Pass', 'patch.2b':'3,667 m',
+  'patch.3a':'Base', 'patch.3b':'2,040 m',
+  'patch.4a':'Ski tour', 'patch.4b':'February',
+  'patch.5a':'Stove', 'patch.5b':'All year',
+
+  'intro.label':'01 / Who we are',
+  'intro.p1':'BIVAK is seven huts on the northern and southern slopes of the Elbrus region, from Tegenekli at 2,040 m to Severny at 3,200 m. We keep the stoves warm, the water running and the trails marked.',
+  'intro.p2':'A bunk in the common room costs from ₽1,400 a night, a room for four from ₽4,800. Requests for groups of up to 12 are confirmed the same day, and <span class="hl">we file the mountain-rescue registration ourselves</span>. A UAZ shuttle runs to 2,040 m; above that you walk.',
+  'intro.p3':'There are fourteen wardens, all of them living in the valley year-round. They answer the radio from 6:00 to 23:00.',
+  'intro.poster':'A roof, a stove and a point on the map. The rest is yours.',
+
+  'stat.1v':'7', 'stat.1k':'huts on the ridge',
+  'stat.2v':'340 km', 'stat.2k':'of marked trails',
+  'stat.3v':'2,040 — 3,200 m', 'stat.3k':'sleeping altitudes',
+  'stat.4v':'14 years', 'stat.4k':'without a missed shift',
+
+  'shelters.label':'02 / Huts', 'shelters.title':'Seven roofs<br>on the ridge',
+  'shelters.note':'Altitude · beds · season. Price per bunk, per night.',
+  'sh.k.beds':'Beds', 'sh.k.season':'Season', 'sh.k.water':'Water', 'sh.k.night':'/ night', 'sh.k.book':'Book',
+  'sh.1n':'Tegenekli', 'sh.1b':'24 · common room and 3 bedrooms', 'sh.1s':'all year', 'sh.1w':'spring, 40 m',
+  'sh.1alt':'2,040 m', 'sh.1p':'₽1,400',
+  'sh.2n':'Adyl-Su', 'sh.2b':'20 · common room', 'sh.2s':'all year', 'sh.2w':'river, filter indoors',
+  'sh.2alt':'2,150 m', 'sh.2p':'₽1,400',
+  'sh.3n':'Dzhily-Su', 'sh.3b':'30 · two buildings', 'sh.3s':'all year', 'sh.3w':'mineral spring, 120 m',
+  'sh.3alt':'2,380 m', 'sh.3p':'₽1,600',
+  'sh.4n':'Kullumkol', 'sh.4b':'14 · double-tier bunks', 'sh.4s':'June — October', 'sh.4w':'creek, 200 m',
+  'sh.4alt':'2,610 m', 'sh.4p':'₽1,800',
+  'sh.5n':'Irik-Chat', 'sh.5b':'16 · common room', 'sh.5s':'May — October', 'sh.5w':'glacier creek',
+  'sh.5alt':'2,780 m', 'sh.5p':'₽2,000',
+  'sh.6n':'Severny', 'sh.6b':'12 · by request only', 'sh.6s':'June — September', 'sh.6w':'snowfield, melted on site',
+  'sh.6alt':'3,200 m', 'sh.6p':'₽2,600',
+
+  'routes.label':'03 / Routes', 'routes.title':'Profile<br>to the top',
+  'routes.note':'Pick a line — we show the climb and the overnight stops.',
+  'routes.profile':'Elevation profile',
+  'routes.f1':'length', 'routes.f2':'ascent', 'routes.f3':'high point', 'routes.f4':'season',
+  'rt.0n':'The Ridge', 'rt.0d':'34 km · 3 days · easy',
+  'rt.1n':'Irik-Chat', 'rt.1d':'46 km · 4 days · 1A',
+  'rt.2n':'Dzhily-Su Loop', 'rt.2d':'22 km · 2 days · easy',
+  'rt.3n':'Winter Traverse', 'rt.3d':'52 km · 5 days · ski tour',
+
+  'season.label':'04 / Winter season', 'season.title':'Winter<br>on the ridge',
+  'season.p':'From December to April four huts out of seven stay open. Trails are not cleared: you go on skis or snowshoes. The warden reports the avalanche situation over the radio at 7:00 and 16:00, and we repeat it in the newsletter.',
+  'season.s1t':'Request ten days ahead',
+  'season.s1p':'In winter a hut is heated for a specific group: firewood arrives by snowmobile and the stove takes four hours to come up to temperature.',
+  'season.s2t':'Avalanche minimum',
+  'season.s2p':'Per group: a transceiver, a shovel, a probe and one person with AL-1 training. We check it at the door and will not let you out without the kit.',
+  'season.s3t':'Check-in deadline',
+  'season.s3p':'We agree on a return time. Two hours past it with no radio contact and we call out the rescue team in Terskol.',
+
+  'book.label':'05 / Booking', 'book.title':'Send<br>a request',
+  'book.note':'We reply the same day, before 20:00 Moscow time.',
+  'book.f1':'Hut', 'book.f2':'Arrival', 'book.f3':'People', 'book.f4':'Phone or email',
+  'book.f4ph':'+7 900 000 00 00',
+  'book.submit':'Send request',
+  'book.small':'A 30% deposit is due once the beds are confirmed. Cancel five days ahead for a full refund; later than that we move the dates.',
+
+  'foot.subLabel':'Ridge bulletin',
+  'foot.subText':'Every two weeks: trail conditions, snow, beds free for the month ahead. No advertising.',
+  'foot.subPh':'email', 'foot.subBtn':'Subscribe',
+  'foot.subOk':'Done — the first letter arrives on Monday',
+  'foot.c1':'Huts', 'foot.c2':'Routes', 'foot.c3':'Contact',
+  'foot.addr':'Terskol, Musukova st. 6', 'foot.hours':'Dispatcher 6:00 — 23:00',
+  'foot.copy':'© 2026 BIVAK · Kabardino-Balkaria',
+  'foot.legal':'Mountain-rescue registration is mandatory · Student project',
+
+  'reply.ok':'Request accepted. The dispatcher will call back within a day and confirm the beds.',
+  'reply.err':'Leave a phone number or an email so we can reply.'
+}};
+
+var TITLES = { ru:'БИВАК — приюты Приэльбрусья', en:'BIVAK — huts of the Elbrus region' };
+
+function apply(l){
+  lang = l;
+  document.documentElement.lang = l;
+  document.title = TITLES[l];
+
+  [].forEach.call(document.querySelectorAll('[data-i18n]'), function(el){
+    var k = el.getAttribute('data-i18n');
+    if(el.dataset.ru === undefined) el.dataset.ru = el.innerHTML;
+    el.innerHTML = (l === 'en' && I18N.en[k] !== undefined) ? I18N.en[k] : el.dataset.ru;
+  });
+  [].forEach.call(document.querySelectorAll('[data-i18n-ph]'), function(el){
+    var k = el.getAttribute('data-i18n-ph');
+    if(el.dataset.ruPh === undefined) el.dataset.ruPh = el.getAttribute('placeholder') || '';
+    el.setAttribute('placeholder', (l === 'en' && I18N.en[k] !== undefined) ? I18N.en[k] : el.dataset.ruPh);
+  });
+
+  document.getElementById('lang-ru').setAttribute('aria-pressed', l === 'ru' ? 'true' : 'false');
+  document.getElementById('lang-en').setAttribute('aria-pressed', l === 'en' ? 'true' : 'false');
+  drawChart(current);
+}
+document.getElementById('lang-ru').addEventListener('click', function(){ apply('ru'); });
+document.getElementById('lang-en').addEventListener('click', function(){ apply('en'); });
+
+/* =================================================================
+   3. Навигация: смена фона шапки, полноэкранное меню
+   ================================================================= */
+var nav = document.getElementById('nav');
+var hero = document.querySelector('.hero');
+function onScroll(){
+  var solid = window.scrollY > hero.offsetHeight - 140;
+  nav.classList.toggle('solid', solid);
+  nav.classList.toggle('on-dark', !solid);
+}
+window.addEventListener('scroll', onScroll, { passive:true });
+onScroll();
+
+var overlay = document.getElementById('overlay');
+function setMenu(open){
+  overlay.classList.toggle('open', open);
+  overlay.setAttribute('aria-hidden', open ? 'false' : 'true');
+  document.body.style.overflow = open ? 'hidden' : '';
+}
+document.getElementById('menu-open').addEventListener('click', function(){ setMenu(true); });
+document.getElementById('menu-close').addEventListener('click', function(){ setMenu(false); });
+[].forEach.call(document.querySelectorAll('[data-menu]'), function(a){
+  a.addEventListener('click', function(){ setMenu(false); });
+});
+document.addEventListener('keydown', function(e){ if(e.key === 'Escape') setMenu(false); });
+
+/* =================================================================
+   4. Формы
+   ================================================================= */
+document.getElementById('book-form').addEventListener('submit', function(e){
+  e.preventDefault();
+  var reply = document.getElementById('book-reply');
+  var contact = document.getElementById('f-contact').value.trim();
+  var ok = contact.length > 4;
+  var text = ok
+    ? (lang === 'en' ? I18N.en['reply.ok'] : 'Заявка принята. Диспетчер перезвонит в течение дня и подтвердит места.')
+    : (lang === 'en' ? I18N.en['reply.err'] : 'Оставьте телефон или почту — иначе мы не сможем ответить.');
+  reply.textContent = text;
+  reply.classList.add('show');
+  reply.style.borderColor = ok ? '#000000' : '#fe3a3a';
+});
+
+document.getElementById('sub-form').addEventListener('submit', function(e){
+  e.preventDefault();
+  document.getElementById('sub-reply').style.display = 'block';
+});
+
+/* старт */
+drawChart(0);
+</script>
+</body>
+</html>

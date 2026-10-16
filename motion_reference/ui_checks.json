@@ -1,0 +1,41 @@
+{
+  "landing": {
+    "title": "База веб-анимаций — оригинальные примеры",
+    "cards": 24,
+    "total": "1 944",
+    "classes": "213",
+    "errors": []
+  },
+  "magicFilter": "79 найдено",
+  "magicModal": {
+    "title": "Android",
+    "iframe": "live/magic-ui/index.html?demo=android-demo"
+  },
+  "search": "21 найдено",
+  "cursorFilter": "78 найдено",
+  "mobileOverflow": false,
+  "animista": {
+    "count": 662,
+    "failed": [],
+    "keyframes": 671
+  },
+  "animistaSample": {
+    "name": "flip-scale-up-hor",
+    "objectId": "card-object-hf",
+    "animation": "flip-scale-up-hor",
+    "valid": true
+  },
+  "localMagicMedia": {
+    "images": 24,
+    "loaded": 24,
+    "animations": 8
+  },
+  "legacyButton": {
+    "afterClick": "Subscribed",
+    "errors": []
+  },
+  "dottedMap": {
+    "svg": 1,
+    "errors": []
+  }
+}

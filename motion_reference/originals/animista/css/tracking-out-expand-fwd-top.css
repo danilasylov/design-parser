@@ -1,0 +1,3 @@
+/* Original keyframes: Animista, Ana Travas. https://animista.net/play/text/tracking-out/tracking-out-expand-fwd-top */
+.tracking-out-expand-fwd-top{animation:tracking-out-expand-fwd-top 0.8s cubic-bezier(.55,.085,.68,.53) 0s 1 normal both;}
+@keyframes tracking-out-expand-fwd-top{0%{-webkit-transform:translateZ(0) translateY(0);transform:translateZ(0) translateY(0);opacity:1}60%{opacity:.8}to{letter-spacing:1em;-webkit-transform:translateZ(300px) translateY(-200px);transform:translateZ(300px) translateY(-200px);opacity:0}}
