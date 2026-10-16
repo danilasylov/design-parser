@@ -52,7 +52,10 @@ def download_archive(part, destination):
                 headers = {"User-Agent": "DesignParser-MediaInstaller/1.0"}
                 if offset:
                     headers["Range"] = f"bytes={offset}-"
-                request = urllib.request.Request(part["url"], headers=headers)
+                # A newly published asset can inherit a cached 404 from its draft URL.
+                # Use GitHub's explicit download query, also supported by manual links.
+                url = part["url"] + ("&" if "?" in part["url"] else "?") + "download=1"
+                request = urllib.request.Request(url, headers=headers)
                 with urllib.request.urlopen(request, timeout=60) as response:
                     append = offset > 0 and response.status == 206
                     if append and not response.headers.get("Content-Range", "").startswith(f"bytes {offset}-"):
